@@ -11,8 +11,6 @@ Others       :
 Log          :
 *******************************************************************************/
 
-#pragma once
-
 #include "line_segmt2d.h"
 #include "AABB2d.h"
 #include "circle2d.h"

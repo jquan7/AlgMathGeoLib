@@ -28,3 +28,4 @@ class TRM_rect2d_c;
 
 GEO_END_NAMESPACE
 
+using namespace trm::math;
