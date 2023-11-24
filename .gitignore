@@ -1,0 +1,14 @@
+*.o
+Debug/
+Release/
+*.filters
+*.user
+CMakeFiles/
+CMakeCache.txt
+*.smproj
+Makefile
+doc/build/
+doc/xml/
+*.log
+build/
+
