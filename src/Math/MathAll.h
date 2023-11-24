@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file MathAll.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A conveniency file to include all files in the folder Math/. */
 
 #pragma once
@@ -21,7 +21,6 @@
 #include "../MathBuildConfig.h"
 #include "MathNamespace.h"
 
-#include "BitOps.h"
 #include "FixedPoint.h"
 #include "float2.h"
 #include "float3.h"
