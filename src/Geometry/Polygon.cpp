@@ -41,7 +41,6 @@
 #include "../Math/Quat.h"
 #include "../Math/float2.h"
 #include "../Math/MathConstants.h"
-#include "../Algorithm/GJK.h"
 
 MATH_BEGIN_NAMESPACE
 
@@ -538,21 +537,6 @@ bool Polygon::Intersects(const Plane &plane) const
 	}
 	// Allow a very small epsilon tolerance.
 	return minD <= 1e-4f && maxD >= -1e-4f;
-}
-
-bool Polygon::ConvexIntersects(const AABB &aabb) const
-{
-	return GJKIntersect(*this, aabb);
-}
-
-bool Polygon::ConvexIntersects(const OBB &obb) const
-{
-	return GJKIntersect(*this, obb);
-}
-
-bool Polygon::ConvexIntersects(const Frustum &frustum) const
-{
-	return GJKIntersect(*this, frustum);
 }
 
 template<typename Convex /* = AABB, OBB, Frustum. */>

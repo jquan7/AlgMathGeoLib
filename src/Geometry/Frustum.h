@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Frustum.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Frustum geometry object. */
 #pragma once
 
@@ -33,7 +33,7 @@ enum FrustumType
 
 	/// Set the Frustum type to this value to define the orthographic projection formula. In orthographic projection,
 	/// 3D images are projected onto a 2D plane essentially by flattening the object along one direction (the plane normal).
-	/// The size of the projected images appear the same independent of their distance to the camera, and distant objects will 
+	/// The size of the projected images appear the same independent of their distance to the camera, and distant objects will
 	/// not appear smaller. The shape of the Frustum is identical to an oriented bounding box (OBB).
 	OrthographicFrustum,
 
@@ -45,7 +45,7 @@ enum FrustumType
 	PerspectiveFrustum
 };
 
-/// The Frustum class offers choosing between the two common conventions for the value ranges in 
+/// The Frustum class offers choosing between the two common conventions for the value ranges in
 /// post-projection space. If you are using either the OpenGL or Diret3D API, you must feed the API data that matches
 /// the correct convention.
 enum FrustumProjectiveSpace
@@ -363,9 +363,6 @@ public:
 			of this Frustum. This pointer may not be null. */
 	void GetCornerPoints(vec *outPointArray) const;
 
-	/// Quickly returns an arbitrary point inside this Frustum. Used in GJK intersection test.
-	inline vec AnyPointFast() const { return CornerPoint(0); }
-
 	/// Computes an extreme point of this Frustum in the given direction.
 	/** An extreme point is a farthest point of this Frustum in the given direction. Given a direction,
 		this point is not necessarily unique.
@@ -547,7 +544,7 @@ public:
 	/// Returns the tightest AABB that contains this Frustum.
 	/** This function computes the optimal minimum volume AABB that encloses this Frustum.
 		@note Since an AABB cannot generally represent a Frustum, this conversion is not exact, but the returned AABB
-			specifies a larger volume.			
+			specifies a larger volume.
 		@see MinimalEnclosingOBB(), ToPolyhedron(). */
 	AABB MinimalEnclosingAABB() const;
 
@@ -599,7 +596,7 @@ public:
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec &point) const;
 
-	/// Tests whether this Frustum and the given object intersect.	
+	/// Tests whether this Frustum and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this Frustum,
 		or this Frustum is contained inside a Sphere, etc.)

@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Triangle.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Triangle geometry object. */
 #pragma once
 
@@ -184,9 +184,6 @@ public:
 		@see PlaneCCW(), PlaneCW(), NormalCCW(), NormalCW(). */
 	vec UnnormalizedNormalCW() const;
 
-	/// Quickly returns an arbitrary point inside this Triangle. Used in GJK intersection test.
-	inline vec AnyPointFast() const { return a; }
-
 	/// Computes an extreme point of this Triangle in the given direction.
 	/** An extreme point is a farthest point of this Triangle in the given direction. Given a direction,
 		this point is not necessarily unique.
@@ -272,7 +269,7 @@ public:
 	float DistanceSq(const vec &point) const;
 	double DistanceSqD(const vec &point) const;
 
-	/// Tests whether this triangle and the given object intersect.	
+	/// Tests whether this triangle and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this triangle,
 		or this triangle is contained inside a sphere, etc.)

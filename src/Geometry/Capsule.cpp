@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Capsule.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Capsule geometry object. */
 #include "Capsule.h"
 #include "../Math/MathConstants.h"
@@ -36,7 +36,6 @@
 #include "Circle.h"
 #include "Triangle.h"
 #include "../Algorithm/Random/LCG.h"
-#include "../Algorithm/GJK.h"
 #include "../Math/assume.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
@@ -402,16 +401,6 @@ bool Capsule::Intersects(const LineSegment &lineSegment) const
 bool Capsule::Intersects(const Plane &plane) const
 {
 	return l.Distance(plane) <= r;
-}
-
-bool Capsule::Intersects(const AABB &aabb) const
-{
-	return FloatingPointOffsetedGJKIntersect(*this, aabb);
-}
-
-bool Capsule::Intersects(const OBB &obb) const
-{
-	return GJKIntersect(*this, obb);
 }
 
 /// [groupSyntax]

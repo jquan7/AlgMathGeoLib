@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Capsule.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Capsule geometry object. */
 #pragma once
 
@@ -93,9 +93,6 @@ public:
 		@see l, Bottom(), Top(). */
 	vec Center() const;
 	vec Centroid() const { return l.CenterPoint(); } ///< [similarOverload: Center]
-
-	/// Quickly returns an arbitrary point inside this Capsule. Used in GJK intersection test.
-	inline vec AnyPointFast() const { return l.a; }
 
 	/// Computes the extreme point of this Capsule in the given direction.
 	/** An extreme point is a farthest point of this Capsule in the given direction. Given a direction,
@@ -259,7 +256,7 @@ public:
 	bool Contains(const Frustum &frustum) const;
 	bool Contains(const Polyhedron &polyhedron) const;
 
-	/// Tests whether this capsule and the given object intersect.	
+	/// Tests whether this capsule and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this capsule,
 		or this capsule is contained inside a Sphere, etc.)

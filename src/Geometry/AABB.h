@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file AABB.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Axis-Aligned Bounding Box (AABB) geometry object. */
 #pragma once
 
@@ -161,9 +161,6 @@ public:
 	vec CenterPoint() const;
 	/// [similarOverload: CenterPoint]
 	vec Centroid() const { return CenterPoint(); }
-
-	/// Quickly returns an arbitrary point inside this AABB. Used in GJK intersection test.
-	vec AnyPointFast() const { return minPoint; }
 
 	/// Generates a point inside this AABB.
 	/** @param x A normalized value between [0,1]. This specifies the point position along the world x axis.

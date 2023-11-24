@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file LineSegment.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The LineSegment geometry object. */
 #pragma once
 
@@ -79,9 +79,6 @@ public:
 	/** @note The returned vector is normalized, meaning that its length is 1, not |b-a|.
 		@see a, b. */
 	vec Dir() const;
-
-	/// Quickly returns an arbitrary point inside this LineSegment. Used in GJK intersection test.
-	inline vec AnyPointFast() const { return a; }
 
 	/// Computes an extreme point of this LineSegment in the given direction.
 	/** An extreme point is a farthest point along this LineSegment in the given direction. Given a direction,
@@ -192,7 +189,7 @@ public:
 	float DistanceSq(const LineSegment &other) const;
 	double DistanceSqD(const vec &point) const;
 
-	/// Tests whether this line segment and the given object intersect.	
+	/// Tests whether this line segment and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (for example, if this line segment is contained inside a sphere)
 		@todo Output intersection point. */

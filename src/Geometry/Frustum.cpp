@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Frustum.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Frustum geometry object. */
 #include "Frustum.h"
 #include "AABB.h"
@@ -37,7 +37,6 @@
 #include "../Math/float4.h"
 #include "../Math/Quat.h"
 #include "../Algorithm/Random/LCG.h"
-#include "../Algorithm/GJK.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>
@@ -1051,49 +1050,14 @@ bool Frustum::Intersects(const Line &line) const
 	return this->ToPolyhedron().Intersects(line);
 }
 
-bool Frustum::Intersects(const LineSegment &lineSegment) const
-{
-	return GJKIntersect(*this, lineSegment);
-}
-
-bool Frustum::Intersects(const AABB &aabb) const
-{
-	return GJKIntersect(*this, aabb);
-}
-
-bool Frustum::Intersects(const OBB &obb) const
-{
-	return GJKIntersect(*this, obb);
-}
-
 bool Frustum::Intersects(const Plane &plane) const
 {
 	return plane.Intersects(*this);
 }
 
-bool Frustum::Intersects(const Triangle &triangle) const
-{
-	return GJKIntersect(*this, triangle);
-}
-
 bool Frustum::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool Frustum::Intersects(const Sphere &sphere) const
-{
-	return GJKIntersect(*this, sphere);
-}
-
-bool Frustum::Intersects(const Capsule &capsule) const
-{
-	return GJKIntersect(*this, capsule);
-}
-
-bool Frustum::Intersects(const Frustum &frustum) const
-{
-	return GJKIntersect(*this, frustum);
 }
 
 bool Frustum::Intersects(const Polyhedron &polyhedron) const

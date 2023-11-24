@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Polygon.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Polygon geometry object. */
 #pragma once
 
@@ -60,9 +60,6 @@ public:
 	/// @note Do NOT hold on to this pointer, since it is an alias to the underlying std::vector owned by this polygon. Calling any non-const Polygon member function may invalidate the pointer!
 	vec *VertexArrayPtr() { return !p.empty() ? (vec*)&p[0] : 0; }
 	const vec *VertexArrayPtr() const { return !p.empty() ? (vec*)&p[0] : 0; }
-
-	/// Quickly returns an arbitrary point inside this AABB. Used in GJK intersection test.
-	vec AnyPointFast() const { return !p.empty() ? p[0] : vec::nan; }
 
 	/// Returns a vertex of this polygon.
 	/** @param vertexIndex The index of the vertex to get, in the range [0, NumVertices()-1].
@@ -138,7 +135,7 @@ public:
 		@param i Index of the first endpoint of the diagonal LineSegment, in the range [0, NumVertices-1].
 		@param j Index of the second endpoint of the diagonal LineSegment, in the range [0, NumVertices-1].
 		@note Whereas it is invalid to call DiagonalExists() with values |i-j|<=1, it is acceptable for this function. This is to
-			simplify generation of code that iterates over diagonal vertex pairs.	
+			simplify generation of code that iterates over diagonal vertex pairs.
 		@return LineSegment(Vertex(i), Vertex(j)) without checking if this actually is a valid diagonal of this polygon. If
 			indices outside the valid range are passed, LineSegment(nan, nan) is returned.
 		@see Vertex(), NumVertices(), DiagonalExists(). */
@@ -323,7 +320,7 @@ public:
 	/// Tests whether this convex polygon and the given object intersect.
 	/** @note These functions make an implicit assumption that this polygon is convex. If you call these functions on
 		a convex polygon, the intersection test is effectively performed on the convex hull of this polygon, meaning
-		that it can result in false positives, so these functions can still be useful as an approximate or an early-out 
+		that it can result in false positives, so these functions can still be useful as an approximate or an early-out
 		test for concave polygons. */
 	bool ConvexIntersects(const AABB &aabb) const;
 	bool ConvexIntersects(const OBB &obb) const;
