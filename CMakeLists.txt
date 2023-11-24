@@ -9,8 +9,8 @@ if (MATH_TESTS_EXECUTABLE)
 	add_definitions(-DMATH_TESTS_EXECUTABLE)
 endif()
 
-file(GLOB_RECURSE sourceFiles ./src/*.cpp ./src/*.c)
-file(GLOB_RECURSE headerFiles ./src/*.h)
+file(GLOB_RECURSE sourceFiles ./src/line2d.cpp)
+file(GLOB_RECURSE headerFiles ./src/line2d.h)
 
 if (MATH_TESTS_EXECUTABLE)
 	# Tests use C++11 syntax.
