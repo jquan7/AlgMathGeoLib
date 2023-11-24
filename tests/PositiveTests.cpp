@@ -4,7 +4,6 @@
 #include "../src/MathGeoLib.h"
 #include "../src/Math/myassert.h"
 #include "TestRunner.h"
-#include "../src/Algorithm/GJK.h"
 #include "../src/Algorithm/SAT.h"
 
 MATH_IGNORE_UNUSED_VARS_WARNING
@@ -358,20 +357,6 @@ RANDOMIZED_TEST(AABBRayIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-UNIQUE_TEST(TrickyAABBLineSegmentIntersectGJK)
-{
-	AABB a;
-	a.minPoint = POINT_VEC(-60.895836f, 18.743414f, -17.829493f);
-	a.maxPoint = POINT_VEC(-60.294441f, 23.510536f, -10.694467f);
-	LineSegment b;
-	b.a = POINT_VEC(-61.331539f, 16.955204f, -18.561975f);
-	b.b = POINT_VEC(-53.097103f, 40.628937f, 30.422394f);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-}
-
 RANDOMIZED_TEST(AABBLineSegmentIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -580,24 +565,6 @@ BENCHMARK(BM_OBBOBBIntersect_SAT, "OBB-OBB SAT Intersection")
 		if (SATIntersect(a, b))
 			++xxxxx;
 		if (SATIntersect(b, a))
-			++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-BENCHMARK(BM_OBBOBBIntersect_GJK, "OBB-OBB GJK Intersection")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-		vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-		OBB a = RandomOBBContainingPoint(pt, 10.f);
-		OBB b = RandomOBBContainingPoint(pt, 10.f);
-		if (GJKIntersect(a, b))
-			++xxxxx;
-		if (GJKIntersect(b, a))
 			++xxxxx;
 #ifdef FAIL_USING_EXCEPTIONS
 	} catch(...) {};
@@ -1089,24 +1056,6 @@ BENCHMARK(BM_FrustumFrustumIntersect_SAT, "Frustum-Frustum SAT")
 }
 BENCHMARK_END;
 
-BENCHMARK(BM_FrustumFrustumIntersect_GJK, "Frustum-Frustum GJK")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-		vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-		Frustum a = RandomFrustumContainingPoint(rng, pt);
-		Frustum b = RandomFrustumContainingPoint(rng, pt);
-		if (GJKIntersect(a, b))
-			++xxxxx;
-		if (GJKIntersect(b, a))
-			++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
 RANDOMIZED_TEST(FrustumPolyhedronIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -1529,7 +1478,7 @@ UNIQUE_TEST(PolygonContainsPointCase)
 	a.p.push_back(POINT_VEC(15.0997639f,-67.2276688f,12.971736f));
 	a.p.push_back(POINT_VEC(15.062994f,-67.2823105f,12.9826784f));
 	a.p.push_back(POINT_VEC(-27.6450062f,-17.8819065f,116.161354f));
-	
+
 	vec pt = POINT_VEC(12.1201611f,-63.8624725f,20.105011f);
 	assert(a.Contains(pt, 1e-2f));
 }

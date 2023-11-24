@@ -5,7 +5,6 @@
 #include "../src/Math/myassert.h"
 #include "TestRunner.h"
 #include "TestData.h"
-#include "../src/Algorithm/GJK.h"
 #include "../src/Algorithm/SAT.h"
 
 MATH_IGNORE_UNUSED_VARS_WARNING
@@ -55,13 +54,6 @@ BENCHMARK_END
 BENCHMARK(OBBIntersectsOBB_Positive, "OBB::Intersects(OBB) Positive")
 {
 	if (obb[i].Intersects(obb[i]))
-		++dummyResultInt;
-}
-BENCHMARK_END
-
-BENCHMARK(OBBIntersectsOBB_GJK, "OBB::Intersects(OBB)_GJK")
-{
-	if (GJKIntersect(obb[i], obb[i+1]))
 		++dummyResultInt;
 }
 BENCHMARK_END

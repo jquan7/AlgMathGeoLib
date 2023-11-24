@@ -4,7 +4,6 @@
 #include "../src/MathGeoLib.h"
 #include "../src/Math/myassert.h"
 #include "TestRunner.h"
-#include "../src/Algorithm/GJK.h"
 #include "../src/Algorithm/SAT.h"
 
 MATH_IGNORE_UNUSED_VARS_WARNING
@@ -253,7 +252,7 @@ Polyhedron RandomPolyhedronInHalfspace(const Plane &plane)
 	extremePoint = p.ExtremePoint(-plane.normal);
 	assert(plane.SignedDistance(extremePoint) > 0.f);
 	assert(plane.SignedDistance(p) > 0.f);
-	
+
 	return p;
 }
 
@@ -558,19 +557,6 @@ BENCHMARK(OBBOBBNoIntersect_SAT, "OBB-OBB SAT No Intersection")
 	if (!SATIntersect(a, b))
 		++xxxxx;
 	if (!SATIntersect(b, a))
-		++xxxxx;
-}
-BENCHMARK_END;
-
-BENCHMARK(OBBOBBNoIntersect_GJK, "OBB-OBB GJK No Intersection")
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	OBB a = RandomOBBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	OBB b = RandomOBBInHalfspace(p, 10.f);
-	if (!GJKIntersect(a, b))
-		++xxxxx;
-	if (!GJKIntersect(b, a))
 		++xxxxx;
 }
 BENCHMARK_END;
@@ -1086,26 +1072,6 @@ BENCHMARK(BM_FrustumFrustumNoIntersect_SAT, "Frustum-Frustum SAT No Intersection
 		++xxxxx;
 	if (!SATIntersect(b, a))
 		++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-BENCHMARK(BM_FrustumFrustumNoIntersect_GJK, "Frustum-Frustum GJK No Intersection")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-		Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-		Frustum a = RandomFrustumInHalfspace(p);
-		p.ReverseNormal();
-		Frustum b = RandomFrustumInHalfspace(p);
-
-		if (!GJKIntersect(a, b))
-			++xxxxx;
-		if (!GJKIntersect(b, a))
-			++xxxxx;
 #ifdef FAIL_USING_EXCEPTIONS
 	} catch(...) {};
 #endif
@@ -1747,12 +1713,12 @@ UNIQUE_TEST(AABB_Capsule_NoIntersect_Case)
 	vec minPoint = POINT_VEC(438.420929f, 805.586670f, 493.709167f);
 	vec maxPoint = POINT_VEC(443.420929f, 810.586670f, 498.709167f);
 	AABB aabb(minPoint, maxPoint);
-	
+
 	vec a = POINT_VEC(479.665222f,  -30.f, 509.737244f);
 	vec b = POINT_VEC(479.665222f, 1530.f, 509.737244f);
-	
+
 	Capsule cylinder(a, b, 37.6882935f);
-	
+
 	assert(!cylinder.Intersects(aabb));
 }
 
@@ -1763,12 +1729,12 @@ UNIQUE_TEST(AABB_Capsule_NoIntersect_Case_2)
 	vec minPoint = POINT_VEC(438.f,        0.f, 493.f);
 	vec maxPoint = POINT_VEC(443.420929f, 10.f, 499.f);
 	AABB aabb(minPoint, maxPoint);
-	
+
 	vec a = POINT_VEC(479.665222f,  0.f, 509.737244f);
 	vec b = POINT_VEC(479.665222f, 10.f, 509.737244f);
-	
+
 	Capsule cylinder(a, b, 37.6882935f);
-	
+
 	assert(!cylinder.Intersects(aabb));
 }
 
@@ -1784,7 +1750,6 @@ UNIQUE_TEST(AABB_Capsule_NoIntersect_Case_3)
 
 	Capsule cylinder(a, b, 4.36077833f);
 
-	// TODO: The Cylinder and AABB should not intersect, but the GJK algorithm
-	// does not produce the right result.
+	// TODO: The Cylinder and AABB should not intersect.
 	assert(!cylinder.Intersects(aabb));
 }

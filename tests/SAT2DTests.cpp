@@ -5,7 +5,6 @@
 #include "../src/Math/myassert.h"
 #include "TestRunner.h"
 #include "TestData.h"
-#include "../src/Algorithm/GJK.h"
 #include "../src/Algorithm/SAT.h"
 
 MATH_IGNORE_UNUSED_VARS_WARNING
