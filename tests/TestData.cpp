@@ -99,36 +99,6 @@ OBB *OBBArray()
 	return arr;
 }
 
-Frustum *FrustumArray()
-{
-	LCG lcg(Clock::TickU32());
-	static Frustum *arr;
-	if (!arr)
-	{
-		arr = AlignedNew<Frustum>(testrunner_numItersPerTest + UNROLL_LOOP_PADDING);
-		for (int i = 0; i < testrunner_numItersPerTest + UNROLL_LOOP_PADDING; ++i)
-		{
-			arr[i] = RandomFrustumContainingPoint(lcg, POINT_VEC_SCALAR(0.f));
-		}
-	}
-	return arr;
-}
-
-Circle2D *Circle2DArray()
-{
-    LCG lcg(Clock::TickU32());
-    static Circle2D *arr;
-    if (!arr)
-    {
-        arr = AlignedNew<Circle2D>(testrunner_numItersPerTest + UNROLL_LOOP_PADDING);
-        for (int i = 0; i < testrunner_numItersPerTest + UNROLL_LOOP_PADDING; ++i)
-        {
-            arr[i] = RandomCircle2DContainingPoint(lcg, float2::zero, lcg.Float(0.1f, 10.f));
-        }
-    }
-    return arr;
-}
-
 float *FloatArray()
 {
 	LCG lcg;
@@ -405,9 +375,6 @@ void InitTestData()
 	q2 = QuatArray2();
 	aabb = AABBArray();
 	obb = OBBArray();
-	frustum = FrustumArray();
-	circle2d = Circle2DArray();
-	ucircle2d = Circle2DArray();
 	poly2DsContainingZero = Poly2DsContainingZero();
 	poly2DsAwayFromZero = Poly2DsAwayFromZero();
 }
@@ -436,7 +403,6 @@ public:
 		AlignedFree(VectorArrayWithW0Or1());
 		AlignedFree(AABBArray());
 		AlignedFree(OBBArray());
-		AlignedFree(FrustumArray());
 		AlignedFree(VecArray2());
 	}
 };

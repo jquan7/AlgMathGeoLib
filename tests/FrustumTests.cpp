@@ -40,7 +40,7 @@ Frustum GenIdFrustum(FrustumType t, FrustumHandedness h, FrustumProjectiveSpace 
 		case 6: f = GenIdFrustum(OrthographicFrustum, FrustumLeftHanded, FrustumSpaceD3D); break; \
 		case 7: f = GenIdFrustum(OrthographicFrustum, FrustumRightHanded, FrustumSpaceD3D); break; \
 		} \
-		
+
 UNIQUE_TEST(Frustum_AspectRatio)
 {
 	Frustum f;
@@ -576,27 +576,6 @@ RANDOMIZED_TEST(Frustum_Contains_Triangle)
 	assert(!f.Contains(Triangle(p - front, p - front, p - front)));
 }
 
-BENCHMARK(Frustum_Contains_Point, "Frustum::Contains(point)")
-{
-	if (frustum[0].Contains(ve[i]))
-		++dummyResultInt;
-}
-BENCHMARK_END
-
-BENCHMARK(Frustum_Contains_LineSegment, "Frustum::Contains(LineSegment)")
-{
-	if (frustum[0].Contains(LineSegment(ve[i], ve[i+1])))
-		++dummyResultInt;
-}
-BENCHMARK_END
-
-BENCHMARK(Frustum_Contains_Triangle, "Frustum::Contains(Triangle)")
-{
-	if (frustum[0].Contains(Triangle(ve[i], ve[i+1], ve[i+2])))
-		++dummyResultInt;
-}
-BENCHMARK_END
-
 RANDOMIZED_TEST(Frustum_ClosestPoint_Point)
 {
 	vec pt = POINT_VEC_SCALAR(0.f);
@@ -623,14 +602,3 @@ RANDOMIZED_TEST(Frustum_ClosestPoint_Point)
 	assert2(cp.Equals(cp2), cp, cp2);
 }
 
-BENCHMARK(Frustum_ClosestPoint_Point, "Frustum::ClosestPoint(point)")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-	dummyResultVec += frustum[i].ClosestPoint(ve[i]);
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;

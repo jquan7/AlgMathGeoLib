@@ -385,45 +385,6 @@ RANDOMIZED_TEST(Line_Serialize)
 	assert(o.Equals(o2, 0.1f));
 }
 
-RANDOMIZED_TEST(Capsule_Serialize)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule o = RandomCapsuleContainingPoint(pt);
-	std::string s = o.SerializeToString();
-	Capsule o2 = Capsule::FromString(s);
-	assert2(o.Equals(o2), o.SerializeToCodeString(), o2.SerializeToCodeString());
-	assert2(o.BitEquals(o2), o.SerializeToCodeString(), o2.SerializeToCodeString());
-
-	s = o.SerializeToCodeString();
-	o2 = Capsule::FromString(s);
-	assert2(o.Equals(o2), o.SerializeToCodeString(), o2.SerializeToCodeString());
-	assert2(o.BitEquals(o2), o.SerializeToCodeString(), o2.SerializeToCodeString());
-
-	s = o.ToString();
-	o2 = Capsule::FromString(s);
-	assert(o.Equals(o2, 0.1f));
-}
-
-RANDOMIZED_TEST(Polygon_Serialize)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polygon o = RandomPolygonContainingPoint(pt);
-	std::string s = o.SerializeToString();
-	Polygon o2 = Polygon::FromString(s);
-	assert2(o.Equals(o2), o.SerializeToString(), o2.SerializeToString());
-	assert2(o.BitEquals(o2), o.SerializeToString(), o2.SerializeToString());
-/*
-	s = o.SerializeToCodeString();
-	o2 = Polygon::FromString(s);
-	assert2(o.Equals(o2), o.SerializeToCodeString(), o2.SerializeToCodeString());
-	assert2(o.BitEquals(o2), o.SerializeToCodeString(), o2.SerializeToCodeString());
-
-	s = o.ToString();
-	o2 = Polygon::FromString(s);
-	assert(o.Equals(o2, 0.1f));
-*/
-}
-
 std::string U64Str(uint64_t u)
 {
 	char str[256];

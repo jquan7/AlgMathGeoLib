@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file AABB.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Axis-Aligned Bounding Box (AABB) geometry object. */
 #include "AABB.h"
 #include "../Math/MathFunc.h"
@@ -137,7 +137,7 @@ Polyhedron AABB::ToPolyhedron() const
 			face.v.push_back(faces[f][v]);
 		p.f.push_back(face);
 	}
-	
+
 	assume(p.IsClosed());
 	assume(p.IsConvex());
 	assume(p.EulerFormulaHolds());
@@ -985,29 +985,9 @@ bool AABB::Intersects(const Sphere &sphere, vec *closestPointOnAABB) const
 	return pt.DistanceSq(sphere.pos) <= sphere.r * sphere.r;
 }
 
-bool AABB::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
-}
-
-bool AABB::Intersects(const Triangle &triangle) const
-{
-	return triangle.Intersects(*this);
-}
-
 bool AABB::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool AABB::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
-}
-
-bool AABB::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
 }
 
 void AABB::ProjectToAxis(const vec &axis, float &dMin, float &dMax) const
