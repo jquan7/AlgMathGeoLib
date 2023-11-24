@@ -13,7 +13,7 @@ file(GLOB_RECURSE sourceFiles ./src/*.cpp ./src/*.c)
 file(GLOB_RECURSE headerFiles ./src/*.h)
 
 if (MATH_TESTS_EXECUTABLE)
-	# Tests use C++11 syntax. (at least for now the main library does not need to)
+	# Tests use C++11 syntax.
 	set (CMAKE_CXX_STANDARD 11)
 	file(GLOB_RECURSE testSourceFiles ./tests/*.cpp)
 	file(GLOB_RECURSE testHeaderFiles ./tests/*.h)
@@ -22,10 +22,5 @@ if (MATH_TESTS_EXECUTABLE)
 	add_executable(AlgMathGeoLib ${sourceFiles} ${headerFiles})
 else()
 	add_library(AlgMathGeoLib STATIC ${sourceFiles} ${headerFiles})
-endif()
-
-if (LINUX)
-	# clock_gettime() is found from the library librt on linux.
-	target_link_libraries(AlgMathGeoLib rt)
 endif()
 
