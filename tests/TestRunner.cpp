@@ -6,7 +6,6 @@
 #include <cstring>
 #include <stdexcept>
 #include "TestData.h"
-#include "JSONReport.h"
 
 #include "../src/Math/myassert.h"
 
@@ -115,7 +114,7 @@ void LOGI_NL(const char *format, ...)
 #endif
 
 /// Returns 0: passed, 1: passed with warnings, -1: failed.
-int RunTest(Test &t, int numTimesToRun, int numTrialsPerRun, JSONReport &jsonReport)
+int RunTest(Test &t, int numTimesToRun, int numTrialsPerRun)
 {
 	if (t.runOnlyOnce)
 		numTimesToRun = numTrialsPerRun = 1;
@@ -222,8 +221,6 @@ int RunTest(Test &t, int numTimesToRun, int numTrialsPerRun, JSONReport &jsonRep
 	}
 	float successRate = (t.numPasses + t.numFails > 0) ? (float)t.numPasses * 100.f / (t.numPasses + t.numFails) : 0.f;
 
-	jsonReport.Report(t);
-
 	if (t.isBenchmark && t.numFails == 0) // Benchmarks print themselves.
 		return 0; // 0: Success
 
@@ -288,7 +285,7 @@ bool StringContainsOneOf(const char *str, const char * const *prefixes)
 	return false;
 }
 
-int RunOneTest(int numTimes, int numTrials, const char * const *prefixes, JSONReport &jsonReport)
+int RunOneTest(int numTimes, int numTrials, const char * const *prefixes)
 {
 	std::vector<Test> &tests = Tests();
 	while(nextTestToRun < (int)tests.size())
@@ -296,7 +293,7 @@ int RunOneTest(int numTimes, int numTrials, const char * const *prefixes, JSONRe
 		if (StringBeginsWithOneOf(tests[nextTestToRun].name.c_str(), prefixes) || StringContainsOneOf(tests[nextTestToRun].description.c_str(), prefixes)
 			|| StringContainsOneOf(tests[nextTestToRun].file.c_str(), prefixes))
 		{
-			int ret = RunTest(tests[nextTestToRun], numTimes, numTrials, jsonReport);
+			int ret = RunTest(tests[nextTestToRun], numTimes, numTrials);
 
 			if (ret == 0 || ret == 1)
 				++numTestsPassed;
@@ -369,11 +366,10 @@ int numTotalRuns = 0;
 int numTrialsPerTimedBlock = 0;
 // A list of test prefixes to include in the run.
 std::vector<const char *> prefixes;
-JSONReport jsonReport;
 
 void RunNextTest()
 {
-	RunOneTest(numTotalRuns, numTrialsPerTimedBlock, &prefixes[0], jsonReport);
+	RunOneTest(numTotalRuns, numTrialsPerTimedBlock, &prefixes[0]);
 #ifdef __EMSCRIPTEN__
 	if (nextTestToRun >= (int)Tests().size())
 	{
@@ -418,9 +414,9 @@ int main(int argc, char **argv)
 
 	if (numTotalRuns == 0 || numTrialsPerTimedBlock == 0)
 	{
-		LOGI("Usage: %s <numTotalRuns> <numTrialsPerTimedBlock>", argv[0]); 
+		LOGI("Usage: %s <numTotalRuns> <numTrialsPerTimedBlock>", argv[0]);
 		LOGI("   Runs all tests.");
-		LOGI("       %s <numTotalRuns> <numTrialsPerTimedBlock> prefix1 prefix2 prefix3...", argv[0]); 
+		LOGI("       %s <numTotalRuns> <numTrialsPerTimedBlock> prefix1 prefix2 prefix3...", argv[0]);
 		LOGI("   Runs all tests starting with one of the given prefixes, or residing in one of the named code files.");
 		return 0;
 	}
@@ -430,7 +426,6 @@ int main(int argc, char **argv)
 		for(int i = 1; i+1 < argc; ++i)
 			if (!strcmp(argv[i], "--json"))
 				jsonFilename = argv[i+1]; // Allow overriding the output file name from command line.
-		jsonReport.Create(jsonFilename.c_str());
 	}
 
 	numTestsRun = numTestsPassed = numTestsWarnings = numTestsFailed = 0;

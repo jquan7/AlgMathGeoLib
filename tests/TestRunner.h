@@ -61,8 +61,6 @@ struct Test
 	double fastestCycles; ///< Raw clock cycles/high-resolution counter times.
 };
 
-class JSONReport;
-
 extern volatile int globalPokedData;
 extern int globalTestExpectedToFail;
 extern std::string globalTestFailureDescription;
@@ -72,7 +70,7 @@ void AddTest(std::string name, TestFunctionPtr function, std::string file = "", 
 void AddBenchmark(std::string name, TestFunctionPtr function, std::string file = "", std::string description = "");
 int RunTests(int numTimes);
 /// Returns -2: no tests left to run, -1: failed, 0: success, 1: success with warnings.
-int RunOneTest(int numTimes, int numTrials, const char * const *prefixes, JSONReport &jsonReport);
+int RunOneTest(int numTimes, int numTrials, const char * const *prefixes);
 void PrintTestRunSummary();
 std::string FormatTime(double ticks);
 
