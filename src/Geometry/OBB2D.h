@@ -120,17 +120,6 @@ public:
 	AABB MaximalContainedAABB() const;
 #endif
 
-	/// Returns the smallest sphere that contains this OBB.
-	/** This function computes the optimal minimum volume sphere that encloses this OBB.
-		@see MinimalEnclosingAABB(), MaximalContainedAABB(), MaximalContainedSphere(). */
-	Sphere MinimalEnclosingSphere() const;
-
-	/// Returns the largest sphere that can fit inside this OBB. [similarOverload: MinimalEnclosingSphere]
-	/** This function computes the largest sphere that can fit inside this OBB. This sphere is unique up to the center point
-		of the sphere. The returned sphere will be positioned to the same center point as this OBB.
-		@see MinimalEnclosingSphere(), MaximalContainedAABB(), MaximalContainedSphere(). */
-	Sphere MaximalContainedSphere() const;
-
 	/// Returns the side lengths of this OBB in its local x, y and z directions.
 	/** @return 2*r. */
 	vec Size() const;
@@ -373,7 +362,6 @@ public:
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec &point) const;
-	float Distance(const Sphere &sphere) const;
 
 	/// Tests if the given object is fully contained inside this OBB.
 	/** This function returns true if the given object lies inside this OBB, and false otherwise.
@@ -390,7 +378,7 @@ public:
 	/// Tests whether this OBB and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this OBB,
-		or this OBB is contained inside a Sphere, etc.)
+		or this OBB is contained inside a AABB, etc.)
 		The first parameter of this function specifies the other object to test against.
 		The OBB-OBB intersection test is from Christer Ericson's book Real-Time Collision Detection, p. 101-106.
 		See http://realtimecollisiondetection.net/ [groupSyntax]
@@ -412,9 +400,6 @@ public:
 	bool Intersects(const Line &line) const;
 	bool Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) const;
 	bool Intersects(const LineSegment &lineSegment) const;
-	/** @param closestPointOnOBB [out] If specified, receives the closest point on this OBB To the given sphere. This
-			pointer may be null. */
-	bool Intersects(const Sphere &sphere, vec *closestPointOnOBB = 0) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
 

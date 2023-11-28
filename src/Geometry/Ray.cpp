@@ -26,7 +26,6 @@
 #include "Plane.h"
 #include "Polygon.h"
 #include "../Math/Quat.h"
-#include "Sphere.h"
 #include "Triangle.h"
 #include "Circle.h"
 #include "../Math/MathFunc.h"
@@ -130,11 +129,6 @@ float Ray::Distance(const LineSegment &other, float &d, float &d2) const
 {
 	vec c = ClosestPoint(other, d, d2);
 	return c.Distance(other.GetPoint(d2));
-}
-
-float Ray::Distance(const Sphere &sphere) const
-{
-	return Max(0.f, Distance(sphere.pos) - sphere.r);
 }
 
 vec Ray::ClosestPoint(const vec &targetPoint, float &d) const
@@ -269,16 +263,6 @@ bool Ray::Intersects(const Plane &plane, float *d) const
 bool Ray::Intersects(const Plane &plane) const
 {
 	return plane.Intersects(*this, 0);
-}
-
-bool Ray::Intersects(const Sphere &sphere, vec *intersectionPoint, vec *intersectionNormal, float *d) const
-{
-	return sphere.Intersects(*this, intersectionPoint, intersectionNormal, d) > 0;
-}
-
-bool Ray::Intersects(const Sphere &sphere) const
-{
-	return sphere.Intersects(*this, 0, 0, 0) > 0;
 }
 
 bool Ray::Intersects(const AABB &aabb) const

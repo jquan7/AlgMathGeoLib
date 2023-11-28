@@ -30,7 +30,6 @@
 #include "Line.h"
 #include "LineSegment.h"
 #include "Ray.h"
-#include "Sphere.h"
 #include "AABB.h"
 #include "OBB.h"
 #include "../Algorithm/Random/LCG.h"
@@ -367,11 +366,6 @@ double Triangle::DistanceSqD(const vec &point) const
     return ClosestPointD(point).DistanceSq(point);
 }
 
-float Triangle::Distance(const Sphere &sphere) const
-{
-	return Max(0.f, Distance(sphere.pos) - sphere.r);
-}
-
 /** Calculates the intersection between a line and a triangle. The facing is not accounted for, so
 	rays are reported to intersect triangles that are both front and backfacing.
 	According to "T. M&ouml;ller, B. Trumbore. Fast, Minimum Storage Ray/Triangle Intersection. 2005."
@@ -480,23 +474,6 @@ bool Triangle::Intersects(const Ray &r, float *d, vec *intersectionPoint) const
 bool Triangle::Intersects(const Plane &plane) const
 {
 	return plane.Intersects(*this);
-}
-
-/// [groupSyntax]
-/** For Triangle-Sphere intersection code, see Christer Ericson's Real-Time Collision Detection, p.167. */
-bool Triangle::Intersects(const Sphere &sphere, vec *closestPointOnTriangle) const
-{
-	vec pt = ClosestPoint(sphere.pos);
-
-	if (closestPointOnTriangle)
-		*closestPointOnTriangle = pt;
-
-	return pt.DistanceSq(sphere.pos) <= sphere.r * sphere.r;
-}
-
-bool Triangle::Intersects(const Sphere &sphere) const
-{
-	return Intersects(sphere, 0);
 }
 
 static void FindIntersectingLineSegments(const Triangle &t, float da, float db, float dc, LineSegment &l1, LineSegment &l2)

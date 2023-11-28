@@ -29,7 +29,6 @@
 #include "Ray.h"
 #include "LineSegment.h"
 #include "Triangle.h"
-#include "Sphere.h"
 #include "../Algorithm/Random/LCG.h"
 #include "../Math/MathFunc.h"
 #include "../Math/Swap.h"
@@ -679,17 +678,6 @@ bool Polygon::Intersects(const Triangle &triangle, float polygonThickness) const
 bool Polygon::Intersects(const Polygon &polygon, float polygonThickness) const
 {
 	return Polygon_Intersects_Polygon(*this, polygon, polygonThickness);
-}
-
-bool Polygon::Intersects(const Sphere &sphere) const
-{
-	///@todo Optimize.
-	TriangleArray tris = Triangulate();
-	for(size_t i = 0; i < tris.size(); ++i)
-		if (TRIANGLE(tris[i]).Intersects(sphere))
-			return true;
-
-	return false;
 }
 
 vec Polygon::ClosestPoint(const vec &point) const

@@ -59,13 +59,12 @@ public:
 		@see pos, r, IsFinite(), SetNegativeInfinity(). */
 	bool IsDegenerate() const;
 
-	/// Tests if the given object is fully contained inside this sphere.
-	/** @see Distance(), Intersects(), ClosestPoint().
-		@todo Add Sphere::Contains(Circle/Disc). */
+	/// Tests if the given object is fully contained inside this Circle2D.
+	/** @see Distance(), Intersects(), ClosestPoint().  */
 	bool Contains(const float2 &point) const;
 	bool Contains(const float2 &point, float epsilon) const;
 
-	/// Returns the distance between this sphere and the given object.
+	/// Returns the distance between this Circle2D and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
 		@see Contains(), Intersects(), ClosestPoint(). */
@@ -87,14 +86,13 @@ public:
 		@see FastEnclosingCircle(). */
 	static Circle2D OptimalEnclosingCircle(const float2 *pointArray, int numPoints);
 
-	/// Generates a random point inside this sphere.
+	/// Generates a random point inside this Circle2D.
 	/** The points are distributed uniformly.
-		This function uses the rejection method to generate a uniform distribution of points inside a sphere. Therefore
-		it is assumed that this sphere is not degenerate, i.e. it has a positive radius.
-		A fixed number of 1000 tries is performed, after which the sphere center position is returned as a fallback.
+		This function uses the rejection method to generate a uniform distribution of points inside a Circle2D. Therefore
+		it is assumed that this Circle2D is not degenerate, i.e. it has a positive radius.
+		A fixed number of 1000 tries is performed, after which the Circle2D center position is returned as a fallback.
 		@param lcg A pre-seeded random number generator object that is to be used by this function to generate random values.
-		@see class LCG, RandomPointOnSurface(), IsDegenerate().
-		@todo Add Sphere::Point(polarYaw, polarPitch, radius). */
+		@see class LCG, RandomPointOnSurface(), IsDegenerate(). */
 	float2 RandomPointInside(LCG &lcg);
 
 #if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)

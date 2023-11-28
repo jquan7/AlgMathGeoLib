@@ -119,7 +119,6 @@ public:
 	float Distance(const LineSegment &other) const { float d, d2; return Distance(other, d, d2); }
 	float Distance(const LineSegment &other, float &d) const { float d2; return Distance(other, d, d2); }
 	float Distance(const LineSegment &other, float &d, float &d2) const;
-	float Distance(const Sphere &sphere) const;
 
 	/// Computes the closest point on this ray to the given object.
 	/** If the other object intersects this ray, this function will return an arbitrary point inside
@@ -155,10 +154,6 @@ public:
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Plane &plane, float *d) const;
 	bool Intersects(const Plane &plane) const;
-	/** @param intersectionNormal [out] If specified, receives the surface normal of the other object at
-		the point of intersection. This pointer may be null. */
-	bool Intersects(const Sphere &s, vec *intersectionPoint, vec *intersectionNormal, float *d) const;
-	bool Intersects(const Sphere &s) const;
 	/** @param dNear [out] If specified, receives the distance along this ray to where the ray enters
 		the bounding box.
 		@param dFar [out] If specified, receives the distance along this ray to where the ray exits

@@ -1,4 +1,4 @@
-/* Copyright 2011 Jukka Jylänki
+/* Copyright 2011 Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float4.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A 4D (x,y,z,w) homogeneous vector. */
 #pragma once
 
@@ -134,7 +134,7 @@ public:
 		assume(index < Size);
 		return ptr()[index];
 	}
-	
+
 	FORCE_INLINE float &At(int index)
 	{
 		assume(index >= 0);
@@ -250,7 +250,7 @@ public:
 	/// Divides this vector by a scalar. [similarOverload: Add] [hideIndex]
 	/// @return (x/s, y/s, z/s, w/s).
 	float4 Div(float s) const { return *this / s; }
-	
+
 	/// Divides the vector (s,s,s,s) by this vector, element-wise. [similarOverload: Add] [hideIndex]
 	/// @note Mathematically, the division of a scalar by a vector is not defined in linear space structures,
 	///	 but this function is provided here for syntactical convenience.
@@ -744,29 +744,6 @@ public:
 	/// Compares whether this float4 and the given float4 are identical bit-by-bit in the underlying representation.
 	/** @note Prefer using this over e.g. memcmp, since there can be SSE-related padding in the structures. */
 	bool BitEquals(const float4 &other) const;
-
-	/// Generates a direction vector of the given length pointing at a uniformly random direction.
-	/* The w-component for the returned vector is 0.
-	@see RandomSphere(), RandomBox(). */
-	static MUST_USE_RESULT float4 RandomDir(LCG &lcg, float length = 1.f);
-	/// Generates a random point inside a sphere.
-	/** The returned point is generated uniformly inside the sphere.
-	@see RandomDir(), RandomBox(). */
-	static MUST_USE_RESULT float4 RandomSphere(LCG &lcg, const float4 &center, float radius);
-	/// Generates a random point inside an axis-aligned box.
-	/** The returned point is generated uniformly inside the box.
-	@see RandomDir(), RandomSphere(). */
-	static MUST_USE_RESULT float4 RandomBox(LCG &lcg, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
-	static MUST_USE_RESULT float4 RandomBox(LCG &lcg, const float4 &minValues, const float4 &maxValues);
-
-	/// Returns a random float3 with each entry randomized between the range [minElem, maxElem].
-	static MUST_USE_RESULT float4 RandomBox(LCG &lcg, float minElem, float maxElem);
-
-	/// Returns a random float4 with each entry randomized between the range [minElem, maxElem].
-	/** Warning: The vectors returned by this function generally have w != 0 or 1, so they don't do not represent
-		well-formed 3D points or direction vectors.
-		This function is mostly used for testing and debugging purposes only. */
-	static float4 RandomGeneral(LCG &lcg, float minElem, float maxElem);
 
 	/// Specifies a compile-time constant float4 with value (0, 0, 0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this

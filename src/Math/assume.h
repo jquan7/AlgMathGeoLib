@@ -180,7 +180,7 @@ MATH_END_NAMESPACE
 #define assume_failed(message) do { \
 		LOGE("Assumption %s failed! in file %s, line %d!", message, __FILE__, __LINE__); \
 		assert(false); \
-	} while(0) 
+	} while(0)
 #elif defined(MATH_SILENT_ASSUME)
 #define assume(x) ((void)0)
 #define assume_failed(message) ((void)0)

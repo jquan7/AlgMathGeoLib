@@ -495,7 +495,6 @@ public:
 	float Distance(const Triangle &triangle) const;
 	float Distance(const AABB &aabb) const;
 	float Distance(const OBB &obb) const;
-	float Distance(const Sphere &sphere) const;
 
 	/// Computes the squared distance between this and the given point.
 	/** Calling this function is faster than calling Distance(), since this function avoids computing a square root.
@@ -632,26 +631,6 @@ public:
 	/** @see Orthogonalize(), AreOrthogonal(), Orthonormalize(), AreCollinear(). */
 	static MUST_USE_RESULT bool AreOrthonormal(const float3 &a, const float3 &b, float epsilon = 1e-3f);
 	static MUST_USE_RESULT bool AreOrthonormal(const float3 &a, const float3 &b, const float3 &c, float epsilon = 1e-3f);
-
-	/// Generates a direction vector of the given length.
-	/** The returned vector points at a uniformly random direction.
-		@see RandomSphere(), RandomBox(). */
-	static MUST_USE_RESULT float3 RandomDir(LCG &lcg, float length = 1.f);
-	/// Generates a random point inside a sphere.
-	/** The returned point is generated uniformly inside the sphere.
-		@see RandomDir(), RandomBox(). */
-	static MUST_USE_RESULT float3 RandomSphere(LCG &lcg, const float3 &center, float radius);
-	/// Generates a random point inside an axis-aligned box.
-	/** The returned point is generated uniformly inside the box.
-		@see RandomDir(), RandomSphere(). */
-	static MUST_USE_RESULT float3 RandomBox(LCG &lcg, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
-	static MUST_USE_RESULT float3 RandomBox(LCG &lcg, const float3 &minValues, const float3 &maxValues);
-
-	/// Returns a random float3 with each entry randomized between the range [minElem, maxElem].
-	static MUST_USE_RESULT float3 RandomBox(LCG &lcg, float minElem, float maxElem);
-
-	// Identical to RandomBox, but provided for generic API between float3 and float4 in templates.
-	static inline float3 RandomGeneral(LCG &lcg, float minElem, float maxElem) { return RandomBox(lcg, minElem, maxElem); }
 
 	/// Specifies a compile-time constant float3 with value (0, 0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this

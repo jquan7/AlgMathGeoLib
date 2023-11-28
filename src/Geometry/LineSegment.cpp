@@ -29,7 +29,6 @@
 #include "OBB.h"
 #include "../Math/Quat.h"
 #include "../Math/Swap.h"
-#include "Sphere.h"
 #include "Triangle.h"
 #include "Circle.h"
 
@@ -329,11 +328,6 @@ float LineSegment::Distance(const Plane &other) const
 	return Min(Abs(aDist), Abs(bDist));
 }
 
-float LineSegment::Distance(const Sphere &other) const
-{
-	return Max(0.f, Distance(other.pos) - other.r);
-}
-
 bool LineSegment::Intersects(const Plane &plane) const
 {
 	float d = plane.SignedDistance(a);
@@ -349,11 +343,6 @@ bool LineSegment::Intersects(const Plane &plane, float *d) const
 bool LineSegment::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const
 {
 	return triangle.Intersects(*this, d, intersectionPoint);
-}
-
-bool LineSegment::Intersects(const Sphere &s, vec *intersectionPoint, vec *intersectionNormal, float *d) const
-{
-	return s.Intersects(*this, intersectionPoint, intersectionNormal, d) > 0;
 }
 
 bool LineSegment::Intersects(const AABB &aabb) const

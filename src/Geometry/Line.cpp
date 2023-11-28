@@ -26,7 +26,6 @@
 #include "Triangle.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Sphere.h"
 #include "AABB.h"
 #include "Circle.h"
 #include "../Math/MathFunc.h"
@@ -175,11 +174,6 @@ float Line::Distance(const LineSegment &other, float &d, float &d2) const
 	return c.Distance(other.GetPoint(d2));
 }
 
-float Line::Distance(const Sphere &other) const
-{
-	return Max(0.f, Distance(other.pos) - other.r);
-}
-
 bool Line::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const
 {
 	return triangle.Intersects(*this, d, intersectionPoint);
@@ -188,11 +182,6 @@ bool Line::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint
 bool Line::Intersects(const Plane &plane, float *d) const
 {
 	return plane.Intersects(*this, d);
-}
-
-bool Line::Intersects(const Sphere &s, vec *intersectionPoint, vec *intersectionNormal, float *d) const
-{
-	return s.Intersects(*this, intersectionPoint, intersectionNormal, d) > 0;
 }
 
 bool Line::Intersects(const AABB &aabb) const

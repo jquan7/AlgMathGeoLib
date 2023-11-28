@@ -315,7 +315,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Triangle &triangle, float polygonThickness = 1e-3f) const;
 	bool Intersects(const Polygon &polygon, float polygonThickness = 1e-3f) const;
-	bool Intersects(const Sphere &sphere) const;
 
 	/// Tests whether this convex polygon and the given object intersect.
 	/** @note These functions make an implicit assumption that this polygon is convex. If you call these functions on

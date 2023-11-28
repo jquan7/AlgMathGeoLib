@@ -194,7 +194,7 @@ public:
 #if 0
 	/// Tests whether this line segment and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
-		another, this function still returns true. (for example, if this line segment is contained inside a sphere)
+		another, this function still returns true. (for example, if this line segment is contained inside a LineSegment)
 		@todo Output intersection point. */
 	/** @param intersectionPoint [out] If specified, receives the point of intersection. This pointer may be null. */
 	bool Intersects(const Triangle2D &triangle, float *d, vec2d *intersectionPoint) const;

@@ -258,8 +258,6 @@ public:
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec &point) const;
-	float Distance(const Sphere &sphere) const;
-
 	float DistanceSq(const vec &point) const;
 	double DistanceSqD(const vec &point) const;
 
@@ -278,11 +276,6 @@ public:
 	bool Intersects(const Line &line, float *d = 0, vec *intersectionPoint = 0) const;
 	bool Intersects(const Ray &ray, float *d = 0, vec *intersectionPoint = 0) const;
 	bool Intersects(const Plane &plane) const;
-	/** @param closestPointOnTriangle [out] If specified, receives the point of intersection between the Sphere
-			and this Triangle. Even if no intersection occurred, this parameter will receive the closest point on
-			the Triangle to the Sphere. This pointer may be null. */
-	bool Intersects(const Sphere &sphere, vec *closestPointOnTriangle) const;
-	bool Intersects(const Sphere &sphere) const;
 	/** @param outLine [out] If specified, receives the line segment of the common points shared by the two
 			intersecting triangles. If the two triangles do not intersect, this pointer is not written to.
 			This pointer may be null. */

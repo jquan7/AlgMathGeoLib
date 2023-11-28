@@ -24,7 +24,6 @@
 #include "OBB.h"
 #include "Polygon.h"
 #include "Ray.h"
-#include "Sphere.h"
 #include "Triangle.h"
 #include "LineSegment.h"
 #include "../Math/float3x3.h"
@@ -206,11 +205,6 @@ float Plane::Distance(const LineSegment &lineSegment) const
 	return lineSegment.Distance(*this);
 }
 
-float Plane::Distance(const Sphere &sphere) const
-{
-	return Max(0.f, Distance(sphere.pos) - sphere.r);
-}
-
 float Plane::SignedDistance(const vec &point) const
 {
 	assume2(normal.IsNormalized(), normal, normal.Length());
@@ -241,7 +235,6 @@ float Plane::SignedDistance(const LineSegment &lineSegment) const { return Plane
 float Plane::SignedDistance(const Ray &ray) const { return Plane_SignedDistance(*this, ray); }
 //float Plane::SignedDistance(const Plane &plane) const { return Plane_SignedDistance(*this, plane); }
 float Plane::SignedDistance(const Polygon &polygon) const { return Plane_SignedDistance(*this, polygon); }
-float Plane::SignedDistance(const Sphere &sphere) const { return Plane_SignedDistance(*this, sphere); }
 float Plane::SignedDistance(const Triangle &triangle) const { return Plane_SignedDistance(*this, triangle); }
 
 float3x4 Plane::OrthoProjection() const
@@ -649,11 +642,6 @@ bool Plane::Intersects(const LineSegment &lineSegment, float *dist) const
 	if (dist)
 		*dist = t / lineSegmentLength;
 	return success && t >= 0.f && t <= lineSegmentLength;
-}
-
-bool Plane::Intersects(const Sphere &sphere) const
-{
-	return Distance(sphere.pos) <= sphere.r;
 }
 
 /// The Plane-AABB intersection is implemented according to Christer Ericson's Real-Time Collision Detection, p.164. [groupSyntax]

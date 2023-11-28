@@ -121,7 +121,6 @@ public:
 	float Distance(const LineSegment &other) const { float d, d2; return Distance(other, d, d2); }
 	float Distance(const LineSegment &other, float &d) const { float d2; return Distance(other, d, d2); }
 	float Distance(const LineSegment &other, float &d, float &d2) const;
-	float Distance(const Sphere &other) const;
 
 	/// Computes the closest point on this line to the given object.
 	/** If the other object intersects this line, this function will return an arbitrary point inside
@@ -161,9 +160,6 @@ public:
 		@see Contains(), Distance(), ClosestPoint(), GetPoint(). */
 	bool Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const;
 	bool Intersects(const Plane &plane, float *d) const;
-	/** @param intersectionNormal [out] If specified, receives the surface normal of the other object at
-		the point of intersection. This pointer may be null. */
-	bool Intersects(const Sphere &s, vec *intersectionPoint = 0, vec *intersectionNormal = 0, float *d = 0) const;
 	/** @param dNear [out] If specified, receives the distance along this line to where the line enters
 		the bounding box.
 		@param dFar [out] If specified, receives the distance along this line to where the line exits

@@ -154,7 +154,6 @@ public:
 		@see SignedDistance(), Intersects(), Contains(). */
 	float Distance(const vec &point) const;
 	float Distance(const LineSegment &lineSegment) const;
-	float Distance(const Sphere &sphere) const;
 
 	/// Returns the signed distance of this plane to the given point.
 	/** If this function returns a negative value, the given point lies in the negative halfspace of this plane.
@@ -170,7 +169,6 @@ public:
 	float SignedDistance(const Ray &ray) const;
 //	float SignedDistance(const Plane &plane) const;
 	float SignedDistance(const Polygon &polygon) const;
-	float SignedDistance(const Sphere &sphere) const;
 	float SignedDistance(const Triangle &triangle) const;
 
 	/// Computes the affine transformation matrix that projects orthographically onto this plane.
@@ -303,7 +301,6 @@ public:
 	bool Intersects(const Ray &ray, float *dist = 0) const;
 	bool Intersects(const Line &line, float *dist = 0) const;
 	bool Intersects(const LineSegment &lineSegment, float *dist = 0) const;
-	bool Intersects(const Sphere &sphere) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;

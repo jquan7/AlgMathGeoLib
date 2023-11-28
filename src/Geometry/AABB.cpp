@@ -28,7 +28,6 @@
 #include "OBB.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Sphere.h"
 #include "../Math/float2.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
@@ -56,11 +55,6 @@ AABB::AABB(const OBB &obb)
 	SetFrom(obb);
 }
 
-AABB::AABB(const Sphere &s)
-{
-	SetFrom(s);
-}
-
 void AABB::SetNegativeInfinity()
 {
 	minPoint.SetFromScalar(FLOAT_INF);
@@ -80,13 +74,6 @@ void AABB::SetFrom(const OBB &obb)
 	SetFromCenterAndSize(obb.pos, 2.f*halfSize);
 }
 
-void AABB::SetFrom(const Sphere &s)
-{
-	vec d = DIR_VEC_SCALAR(s.r);
-	minPoint = s.pos - d;
-	maxPoint = s.pos + d;
-}
-
 void AABB::SetFrom(const vec *pointArray, int numPoints)
 {
 	assume(pointArray || numPoints == 0);
@@ -100,17 +87,6 @@ void AABB::SetFrom(const vec *pointArray, int numPoints)
 OBB AABB::ToOBB() const
 {
 	return OBB(*this);
-}
-
-Sphere AABB::MinimalEnclosingSphere() const
-{
-	return Sphere(CenterPoint(), Size().Length() * 0.5f);
-}
-
-Sphere AABB::MaximalContainedSphere() const
-{
-	vec halfSize = HalfSize();
-	return Sphere(CenterPoint(), Min(halfSize.x, halfSize.y, halfSize.z));
 }
 
 bool AABB::IsFinite() const
@@ -532,11 +508,6 @@ float AABB::Distance(const vec &point) const
 	return ClosestPoint(point).Distance(point);
 }
 
-float AABB::Distance(const Sphere &sphere) const
-{
-	return Max(0.f, Distance(sphere.pos) - sphere.r);
-}
-
 bool AABB::Contains(const vec &point) const
 {
 // Benchmarking this code is very difficult, since branch prediction makes the scalar version
@@ -591,11 +562,6 @@ bool AABB::Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const
 bool AABB::Contains(const OBB &obb) const
 {
 	return Contains(obb.MinimalEnclosingAABB());
-}
-
-bool AABB::Contains(const Sphere &sphere) const
-{
-	return Contains(sphere.pos - DIR_VEC_SCALAR(sphere.r), sphere.pos + DIR_VEC_SCALAR(sphere.r));
 }
 
 bool AABB::Contains(const Triangle &triangle) const
@@ -908,18 +874,6 @@ bool AABB::Intersects(const OBB &obb) const
 	return obb.Intersects(*this);
 }
 
-bool AABB::Intersects(const Sphere &sphere, vec *closestPointOnAABB) const
-{
-	// Find the point on this AABB closest to the sphere center.
-	vec pt = ClosestPoint(sphere.pos);
-
-	// If that point is inside sphere, the AABB and sphere intersect.
-	if (closestPointOnAABB)
-		*closestPointOnAABB = pt;
-
-	return pt.DistanceSq(sphere.pos) <= sphere.r * sphere.r;
-}
-
 bool AABB::Intersects(const Triangle &triangle) const
 {
 	return triangle.Intersects(*this);
@@ -988,12 +942,6 @@ void AABB::Enclose(const OBB &obb)
 	vec absAxis2 = obb.axis[2].Abs();
 	vec d = obb.r.x * absAxis0 + obb.r.y * absAxis1 + obb.r.z * absAxis2;
 	Enclose(obb.pos - d, obb.pos + d);
-}
-
-void AABB::Enclose(const Sphere &sphere)
-{
-	vec d = DIR_VEC_SCALAR(sphere.r);
-	Enclose(sphere.pos - d, sphere.pos + d);
 }
 
 void AABB::Enclose(const Triangle &triangle)

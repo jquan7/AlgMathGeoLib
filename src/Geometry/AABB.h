@@ -62,10 +62,6 @@ public:
 		@see class OBB. */
 	explicit AABB(const OBB &obb);
 
-	/// Constructs this AABB to enclose the given Sphere.
-	/** @see class Sphere. */
-	explicit AABB(const Sphere &s);
-
 	FORCE_INLINE static int NumFaces() { return 6; }
 	FORCE_INLINE static int NumEdges() { return 12; }
 	FORCE_INLINE static int NumVertices() { return 8; }
@@ -98,10 +94,6 @@ public:
 		@see SetCenter(), class OBB. */
 	void SetFrom(const OBB &obb);
 
-	/// Sets this AABB to enclose the given sphere.
-	/** This function computes the smallest possible AABB (in terms of volume) that contains the given sphere, and stores the result in this structure. */
-	void SetFrom(const Sphere &s);
-
 	/// Sets this AABB to enclose the given set of points.
 	/** @param pointArray A pointer to an array of points to enclose inside an AABB.
 		@param numPoints The number of elements in the pointArray list.
@@ -113,17 +105,6 @@ public:
 		OBB represents the same set of points than this AABB.
 		@see class OBB, ToPBVolume(). */
 	OBB ToOBB() const;
-
-	/// Returns the smallest sphere that contains this AABB.
-	/** This function computes the minimal volume sphere that contains all the points inside this AABB.
-		@see MaximalContainedSphere(). */
-	Sphere MinimalEnclosingSphere() const;
-
-	/// Returns the largest sphere that can fit inside this AABB.
-	/** This function computes the largest sphere that can fit inside this AABB. This sphere is unique up to the center point
-		of the sphere. The returned sphere will be positioned to the same center point as this AABB.
-		@see MinimalEnclosingSphere(). */
-	Sphere MaximalContainedSphere() const;
 
 	/// Tests if this AABB is finite.
 	/** @return True if the member variables of this AABB are valid floats and do not contain NaNs or infs, and false otherwise.
@@ -349,7 +330,6 @@ public:
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec &point) const;
-	float Distance(const Sphere &sphere) const;
 
 	/// Tests if the given object is fully contained inside this AABB.
 	/** This function returns true if the given object lies inside this AABB, and false otherwise.
@@ -361,14 +341,13 @@ public:
 	bool Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const;
 	bool Contains(const AABB &aabb) const { return Contains(aabb.minPoint, aabb.maxPoint); }
 	bool Contains(const OBB &obb) const;
-	bool Contains(const Sphere &sphere) const;
 	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
 
 	/// Tests whether this AABB and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this AABB,
-		or this AABB is contained inside a Sphere, etc.)
+		or this AABB is contained inside a OBB, etc.)
 		@param ray The first parameter of this function specifies the other object to test against.
 		@param dNear [out] If specified, receives the parametric distance along the line denoting where the
 			line entered this AABB.
@@ -387,11 +366,6 @@ public:
 	bool Intersects(const Plane &plane) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
-	/** For reference documentation on the Sphere-AABB intersection test, see Christer Ericson's Real-Time Collision Detection, p. 165. [groupSyntax]
-		@param sphere The first parameter of this function specifies the other object to test against.
-		@param closestPointOnAABB [out] Returns the closest point on this AABB to the given sphere. This pointer
-			may be null. */
-	bool Intersects(const Sphere &sphere, vec *closestPointOnAABB = 0) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
 
@@ -413,7 +387,6 @@ public:
 	void Enclose(const LineSegment &lineSegment);
 	void Enclose(const AABB &aabb) { Enclose(aabb.minPoint, aabb.maxPoint); }
 	void Enclose(const OBB &obb);
-	void Enclose(const Sphere &sphere);
 	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
 	void Enclose(const vec *pointArray, int numPoints);

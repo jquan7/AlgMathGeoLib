@@ -37,5 +37,4 @@
 #include "Polygon.h"
 #include "QuadTree.h"
 #include "Ray.h"
-#include "Sphere.h"
 #include "Triangle.h"

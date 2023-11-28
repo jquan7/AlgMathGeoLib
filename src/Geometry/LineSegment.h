@@ -180,7 +180,6 @@ public:
 	float Distance(const LineSegment &other, float &d) const { float d2; return Distance(other, d, d2); }
 	float Distance(const LineSegment &other, float &d, float &d2) const;
 	float Distance(const Plane &other) const;
-	float Distance(const Sphere &other) const;
 
 	float DistanceSq(const vec &point) const;
 	float DistanceSq(const LineSegment &other) const;
@@ -188,7 +187,7 @@ public:
 
 	/// Tests whether this line segment and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
-		another, this function still returns true. (for example, if this line segment is contained inside a sphere)
+		another, this function still returns true. (for example, if this line segment is contained inside a LineSegment)
 		@todo Output intersection point. */
 	bool Intersects(const Plane &plane) const;
 	/** @param d [out] If specified, this parameter receives the normalized distance along
@@ -197,9 +196,6 @@ public:
 	bool Intersects(const Plane &plane, float *d) const;
 	/** @param intersectionPoint [out] If specified, receives the point of intersection. This pointer may be null. */
 	bool Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const;
-	/** @param intersectionNormal [out] If specified, receives the normal vector of the other object at the point of intersection.
-			This pointer may be null. */
-	bool Intersects(const Sphere &s, vec *intersectionPoint = 0, vec *intersectionNormal = 0, float *d = 0) const;
 	/** @param dNear [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
 			bounding box object.
 		@param dFar [out] If specified, receives the parametric distance along this line segment denoting where the line exited the

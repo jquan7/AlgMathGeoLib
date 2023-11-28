@@ -27,7 +27,6 @@
 #include "Line.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Sphere.h"
 #include "../Math/float2.inl"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
@@ -151,15 +150,6 @@ void OBB::SetFrom(const AABB &aabb, const Quat &transform)
 	OBBSetFrom(*this, aabb, float3x3(transform));
 }
 
-void OBB::SetFrom(const Sphere &sphere)
-{
-	pos = sphere.pos;
-	r.SetFromScalar(sphere.r);
-	axis[0] = DIR_VEC(1,0,0);
-	axis[1] = DIR_VEC(0,1,0);
-	axis[2] = DIR_VEC(0,0,1);
-}
-
 AABB OBB::MinimalEnclosingAABB() const
 {
 	AABB aabb;
@@ -180,22 +170,6 @@ AABB OBB::MaximalContainedAABB() const
 	return AABB();
 }
 #endif
-
-Sphere OBB::MinimalEnclosingSphere() const
-{
-	Sphere s;
-	s.pos = pos;
-	s.r = HalfDiagonal().Length();
-	return s;
-}
-
-Sphere OBB::MaximalContainedSphere() const
-{
-	Sphere s;
-	s.pos = pos;
-	s.r = r.MinElement();
-	return s;
-}
 
 bool OBB::IsFinite() const
 {
@@ -1006,11 +980,6 @@ float OBB::Distance(const vec &point) const
 	return point.Distance(closestPoint);
 }
 
-float OBB::Distance(const Sphere &sphere) const
-{
-	return Max(0.f, Distance(sphere.pos) - sphere.r);
-}
-
 bool OBB::Contains(const vec &point) const
 {
 #if defined(MATH_SSE) && defined(MATH_AUTOMATIC_SSE)
@@ -1362,19 +1331,6 @@ bool OBB::Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) 
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
 	LineSegment l = WorldToLocal() * lineSegment;
 	return aabb.Intersects(l, dNear, dFar);
-}
-
-/// The implementation of the OBB-Sphere intersection test follows Christer Ericson's Real-Time Collision Detection, p. 166. [groupSyntax]
-bool OBB::Intersects(const Sphere &sphere, vec *closestPointOnOBB) const
-{
-	// Find the point on this AABB closest to the sphere center.
-	vec pt = ClosestPoint(sphere.pos);
-
-	// If that point is inside sphere, the AABB and sphere intersect.
-	if (closestPointOnOBB)
-		*closestPointOnOBB = pt;
-
-	return pt.DistanceSq(sphere.pos) <= sphere.r * sphere.r;
 }
 
 bool OBB::Intersects(const Triangle &triangle) const
