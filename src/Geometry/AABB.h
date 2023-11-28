@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file AABB.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Axis-Aligned Bounding Box (AABB) geometry object. */
 #pragma once
 
@@ -123,12 +123,6 @@ public:
 		polyhedron represents the same set of points that this AABB does.
 		@see class Polyhedron, ToPBVolume(), ToOBB(). */
 	Polyhedron ToPolyhedron() const;
-
-	/// Converts this AABB to a PBVolume.
-	/** This function returns a plane-bounded volume representation of this AABB. The conversion is exact, meaning that the
-		returned PBVolume<6> represents exactly the same set of points that this AABB does.
-		@see ToPolyhedron(), ToOBB(). */
-	PBVolume<6> ToPBVolume() const;
 
 	/// Converts this AABB to an OBB.
 	/** This function returns an OBB representation of this AABB. This conversion is exact, meaning that the returned

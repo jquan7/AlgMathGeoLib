@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file MathFwd.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #pragma once
 
@@ -73,9 +73,6 @@ class Quat;
 
 class TranslateOp;
 class ScaleOp;
-
-template<int N>
-class PBVolume;
 
 class AABB;
 class Capsule;
@@ -218,7 +215,6 @@ REGISTER_POD(MATH_NS::float4x4);
 REGISTER_POD(MATH_NS::Quat);
 REGISTER_POD(MATH_NS::TranslateOp);
 REGISTER_POD(MATH_NS::ScaleOp);
-//REGISTER_POD(MATH_NS::PBVolume<N>);
 REGISTER_POD(MATH_NS::AABB);
 REGISTER_POD(MATH_NS::Capsule);
 REGISTER_POD(MATH_NS::Circle);

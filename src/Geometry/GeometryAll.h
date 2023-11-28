@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file GeometryAll.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A conveniency file to include all files in the folder Geometry/. */
 
 #pragma once
@@ -46,4 +46,3 @@
 #include "Triangle.h"
 #include "TriangleMesh.h"
 #include "GeomType.h"
-#include "PBVolume.h"

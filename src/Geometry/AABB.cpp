@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file AABB.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Axis-Aligned Bounding Box (AABB) geometry object. */
 #include "AABB.h"
 #include "../Math/MathFunc.h"
@@ -31,7 +31,6 @@
 #include "Polygon.h"
 #include "Polyhedron.h"
 #include "Sphere.h"
-#include "PBVolume.h"
 #include "../Math/float2.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
@@ -101,15 +100,6 @@ void AABB::SetFrom(const vec *pointArray, int numPoints)
 		Enclose(pointArray[i]);
 }
 
-PBVolume<6> AABB::ToPBVolume() const
-{
-	PBVolume<6> pbVolume;
-	for(int i = 0; i < 6; ++i)
-		pbVolume.p[i] = FacePlane(i);
-
-	return pbVolume;
-}
-
 Polyhedron AABB::ToPolyhedron() const
 {
 	// Note to maintainer: This function is an exact copy of OBB:ToPolyhedron() and Frustum::ToPolyhedron().
@@ -137,7 +127,7 @@ Polyhedron AABB::ToPolyhedron() const
 			face.v.push_back(faces[f][v]);
 		p.f.push_back(face);
 	}
-	
+
 	assume(p.IsClosed());
 	assume(p.IsConvex());
 	assume(p.EulerFormulaHolds());

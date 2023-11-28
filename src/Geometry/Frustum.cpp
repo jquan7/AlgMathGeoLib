@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Frustum.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Frustum geometry object. */
 #include "Frustum.h"
 #include "AABB.h"
@@ -29,7 +29,6 @@
 #include "Capsule.h"
 #include "Triangle.h"
 #include "LineSegment.h"
-#include "PBVolume.h"
 #include "../Math/float2.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
@@ -1024,19 +1023,6 @@ Polyhedron Frustum::ToPolyhedron() const
 	}
 
 	return p;
-}
-
-PBVolume<6> Frustum::ToPBVolume() const
-{
-	PBVolume<6> frustumVolume;
-	frustumVolume.p[0] = NearPlane();
-	frustumVolume.p[1] = LeftPlane();
-	frustumVolume.p[2] = RightPlane();
-	frustumVolume.p[3] = TopPlane();
-	frustumVolume.p[4] = BottomPlane();
-	frustumVolume.p[5] = FarPlane();
-
-	return frustumVolume;
 }
 
 bool Frustum::Intersects(const Ray &ray) const

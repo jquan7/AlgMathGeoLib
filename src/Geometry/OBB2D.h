@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file OBB2D.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The 2D Oriented Bounding Box (OBB2D) geometry object. */
 #pragma once
 
@@ -97,7 +97,7 @@ public:
 
 #if 0
 #ifdef MATH_CONTAINERLIB_SUPPORT
-	/// Sets this OBB to enclose the given polyhedron.		
+	/// Sets this OBB to enclose the given polyhedron.
 	/** This function computes the smallest OBB (in terms of volume) that contains the given polyhedron, and stores the result in this structure.
 		@note An OBB cannot generally exactly represent a polyhedron. Converting a polyhedron to an OBB loses some features of the polyhedron.
 		@return True if the resulting OBB is not degenerate, false otherwise. In either case, the old values of this OBB are destroyed.
@@ -120,16 +120,10 @@ public:
 		@see MinimalEnclosingAABB(), ToPBVolume(). */
 	Polyhedron ToPolyhedron() const;
 
-	/// Converts this OBB to a PBVolume.
-	/** This function returns a plane-bounded volume representation of this OBB. The conversion is exact, meaning that the
-		returned PBVolume<6> represents exactly the same set of points that this OBB does.
-		@see MinimalEnclosingAABB(), ToPolyhedron(). */
-	PBVolume<6> ToPBVolume() const;
-
 	/// Returns the tightest AABB that contains this OBB.
 	/** This function computes the optimal minimum volume AABB that encloses this OBB.
 		@note Since an AABB cannot generally represent an OBB, this conversion is not exact, but the returned AABB
-			specifies a larger volume.			
+			specifies a larger volume.
 		@see SetFrom(), MaximalContainedAABB(), MinimalEnclosingSphere(), MaximalContainedSphere(). */
 	AABB MinimalEnclosingAABB() const;
 
@@ -186,7 +180,7 @@ public:
 		@return A matrix that transforms from the local space of this OBB to the global (world) space of this OBB.
 		@see pos, r, axis. */
 	float3x4 LocalToWorld() const;
-	
+
 	/// Tests if this OBB is finite.
 	/** @return True if the member variables of this OBB are valid floats and do not contain NaNs or infs, and false otherwise.
 		@see IsDegenerate(). */
@@ -194,8 +188,8 @@ public:
 
 	/// Tests if this OBB is degenerate.
 	/** @return True if this OBB does not span a strictly positive volume.
-		@note This function only checks that the axis radius member of this OBB denotes a strictly positive volume, and ignores 
-			the position and axis direction vectors of this OBB. Be sure to check those manually for NaNs and +/-infs if that 
+		@note This function only checks that the axis radius member of this OBB denotes a strictly positive volume, and ignores
+			the position and axis direction vectors of this OBB. Be sure to check those manually for NaNs and +/-infs if that
 			is desired.
 		@see r, Volume(). */
 	bool IsDegenerate() const;
@@ -327,7 +321,7 @@ public:
 
 	/// Computes the smallest OBB by volume that encloses the given point set.
 	/** This function implements the algorithm from the paper
-		An Exact Algorithm for Finding Minimum Oriented Bounding Boxes, Jukka Jylänki, 2015. Available at http://clb.demon.fi/minobb/ */
+		An Exact Algorithm for Finding Minimum Oriented Bounding Boxes, Jukka Jylï¿½nki, 2015. Available at http://clb.demon.fi/minobb/ */
 	static OBB OptimalEnclosingOBB(const vec *pointArray, int numPoints);
 	static OBB OptimalEnclosingOBB(const Polyhedron &convexPolyhedron);
 
