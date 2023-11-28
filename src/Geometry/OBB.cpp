@@ -35,7 +35,6 @@
 #include "Ray.h"
 #include "Triangle.h"
 #include <stdlib.h>
-#include "../Time/Clock.h"
 
 #include <set>
 #ifdef MATH_CONTAINERLIB_SUPPORT
