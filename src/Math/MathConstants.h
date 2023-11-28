@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file MathConstants.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Common mathematical constants.
 
 	See
@@ -34,7 +34,7 @@
 #define NOT_NECESSARILY_USED
 #endif
 
-#if defined(_MSC_VER) || defined(__EMSCRIPTEN__)
+#if defined(_MSC_VER)
 #define FLOAT_NAN ((float)std::numeric_limits<float>::quiet_NaN())
 #define FLOAT_INF ((float)std::numeric_limits<float>::infinity())
 #else

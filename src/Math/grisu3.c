@@ -380,15 +380,7 @@ int dtoa_grisu3(double v, char *dst)
 	// Prehandle NaNs
 	if ((u64 << 1) > 0xFFE0000000000000ULL)
 	{
-#ifdef __EMSCRIPTEN__
-		*dst++ = 'N';
-		*dst++ = 'a';
-		*dst++ = 'N';
-		*dst = '\0';
-		return 3;
-#else
 		return sprintf(dst, "NaN(%08X%08X)", (uint32_t)(u64 >> 32), (uint32_t)u64);
-#endif
 	}
 	// Prehandle negative values.
 	if ((u64 & D64_SIGN) != 0) { *s2++ = '-'; v = -v; u64 ^= D64_SIGN; }
@@ -401,11 +393,7 @@ int dtoa_grisu3(double v, char *dst)
 	// If grisu3 was not able to convert the number to a string, then use old sprintf (suboptimal).
 	if (!success)
 	{
-#ifdef __EMSCRIPTEN__
-		return js_double_to_string(v, dst);
-#else
 		return sprintf(s2, "%.17g", v) + (int)(s2 - dst);
-#endif
 	}
 
     // We now have an integer string of form "151324135" and a base-10 exponent for that number.

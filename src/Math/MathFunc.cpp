@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file MathFunc.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Common mathematical functions. */
 #include "MathFunc.h"
 #include "Swap.h"
@@ -36,11 +36,6 @@
 
 #ifdef MATH_SSE2
 #include "sse_mathfun.h"
-#endif
-
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#include <emscripten/em_math.h>
 #endif
 
 MATH_BEGIN_NAMESPACE
@@ -70,11 +65,6 @@ bool AssumeFailed()
 	{
 #if defined(WIN32) && !defined(WIN8RT) // Win8 metro apps don't have DebugBreak.
 		DebugBreak();
-#elif defined(__EMSCRIPTEN__)
-		emscripten_debugger();
-// TODO: Test locally on Linux GCC and enable
-//#elif defined(__clang__) && __has_builtin(__builtin_debugtrap)
-//		__builtin_debugtrap();
 #endif
 	}
 #endif
@@ -83,11 +73,6 @@ bool AssumeFailed()
 	// up the callstack to find the offending code that raised the error.
 	return mathBreakOnAssume;
 }
-
-#if defined(__EMSCRIPTEN__) && !defined(MATH_USE_SINCOS_LOOKUPTABLE)
-// On Emscripten using lookup tables has been profiled to be significantly faster.
-#define MATH_USE_SINCOS_LOOKUPTABLE
-#endif
 
 #define MAX_CIRCLE_ANGLE           65536
 #define HALF_MAX_CIRCLE_ANGLE     (MAX_CIRCLE_ANGLE/2)
@@ -107,11 +92,7 @@ public:
 	{
 		// Build cossin table
 		for(int i = 0; i < MAX_CIRCLE_ANGLE; i++)
-#ifdef __EMSCRIPTEN__
-			fast_cossin_table[i] = (float)emscripten_math_sin((double)i * PI / HALF_MAX_CIRCLE_ANGLE);
-#else
 			fast_cossin_table[i] = (float)sin((double)i * PI / HALF_MAX_CIRCLE_ANGLE);
-#endif
 	}
 };
 Init_fast_cossin_table static_initializer;
@@ -176,12 +157,7 @@ float Cos(float angleRadians)
 
 float Tan(float angleRadians)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.tan() for minimal code size
-	return emscripten_math_tan(angleRadians);
-#else
 	return tanf(angleRadians);
-#endif
 }
 
 void SinCos(float angleRadians, float &outSin, float &outCos)
@@ -256,72 +232,37 @@ void SinCos4(const float4 &angleRadians, float4 &outSin, float4 &outCos)
 
 float Asin(float x)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.asin() for minimal code size
-	return emscripten_math_asin(x);
-#else
 	return asinf(x);
-#endif
 }
 
 float Acos(float x)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.acos() for minimal code size
-	return emscripten_math_acos(x);
-#else
 	return acosf(x);
-#endif
 }
 
 float Atan(float x)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.atan() for minimal code size
-	return emscripten_math_atan(x);
-#else
 	return atanf(x);
-#endif
 }
 
 float Atan2(float y, float x)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.atan2() for minimal code size
-	return emscripten_math_atan2(y, x);
-#else
 	return atan2f(y, x);
-#endif
 }
 
 float Sinh(float x)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.sinh() for minimal code size
-	return emscripten_math_sinh(x);
-#else
 	return sinhf(x);
-#endif
 }
 
 float Cosh(float x)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.atan() for minimal code size
-	return emscripten_math_cosh(x);
-#else
 	return coshf(x);
-#endif
 }
 
 float Tanh(float x)
 {
-#ifdef __EMSCRIPTEN__
-	// Use Math.tanh() for minimal code size
-	return emscripten_math_tanh(x);
-#else
 	return tanhf(x);
-#endif
 }
 
 bool IsPow2(u32 number)
@@ -737,7 +678,7 @@ double DeserializeDouble(const char *str, const char **outEndStr)
 		return ReinterpretAsDouble(u);
 	}
 	double f;
-	
+
 	if (!strncmp(str, "-inf", 4)) { f = (double)-FLOAT_INF; str += 4; }
 	else if (!strncmp(str, "inf", 3)) { f = (double)FLOAT_INF; str += 3; }
 	else f = strtod(str, const_cast<char**>(&str));

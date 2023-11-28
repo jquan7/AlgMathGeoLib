@@ -35,18 +35,6 @@ UNIQUE_TEST(Clock_RdTsc)
 
 UNIQUE_TEST(SubMillisecondPrecision)
 {
-#ifdef __EMSCRIPTEN__
-	if (IsChromeBrowserOnWin32())
-	{
-		// Newest version failure was observed in is 31.0.1600.1.
-		WARN_AND_EXPECT_FAIL("Chrome on Win32 has bad timer resolution: https://code.google.com/p/chromium/issues/detail?id=158234");
-	}
-	if (IsOperaBrowser() && GetOperaVersion() <= BrowserVersion("12.16"))
-		WARN_AND_EXPECT_FAIL("Opera has bad timer resolution and doesn't support window.performance.now().");
-	if (IsSafariBrowser() && GetSafariVersion() <= BrowserVersion("6.0.5"))
-		WARN_AND_EXPECT_FAIL("Safari has bad timer resolution and doesn't support window.performance.now().");
-#endif
-
 	tick_t ticksPerMillisecond = Clock::TicksPerMillisecond();
 	MARK_UNUSED(ticksPerMillisecond);
 #ifndef MATH_TICK_IS_FLOAT
@@ -69,7 +57,7 @@ UNIQUE_TEST(SubMillisecondPrecision)
 		prev = now;
 	}
 
-	LOGI("Smallest observed non-zero delta in Clock::Tick() is %d ticks. A zero delta was observed %d times (out of %d tests)", 
+	LOGI("Smallest observed non-zero delta in Clock::Tick() is %d ticks. A zero delta was observed %d times (out of %d tests)",
 		(int)minDiff, numTimesZeroDiff, numIters);
 	assert(minDiff > 0);
 	assert(minDiff < ticksPerMillisecond/2); // Smallest met quantity must be less than half a millisecond.

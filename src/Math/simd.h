@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file simd.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Generic abstraction layer over different SIMD instruction sets. */
 #pragma once
 
@@ -318,30 +318,6 @@ static inline __m128 rsqrt_ps(__m128 x)
 #define set_ps_hex(w, z, y, x) _mm_castsi128_ps(_mm_set_epi32(w, z, y, x))
 #define set1_ps_hex(x) _mm_castsi128_ps(_mm_set1_epi32(x))
 
-#elif defined(__EMSCRIPTEN__)
-// Workaround a JS engine limitation that it's not possible to store arbitrary bit patterns in floats since JS engines destroy them while canonicalizing NaNs.
-FORCE_INLINE __m128 set_ps_hex(u32 w, u32 z, u32 y, u32 x)
-{
-	union {
-		u32 v[4];
-		__m128 m;
-	} u;
-	u.v[0] = x;
-	u.v[1] = y;
-	u.v[2] = z;
-	u.v[3] = w;
-	return u.m;
-}
-FORCE_INLINE __m128 set1_ps_hex(u32 x)
-{
-	union {
-		u32 v[4];
-		__m128 m;
-	} u;
-	u.v[0] = u.v[1] = u.v[2] = u.v[3] = x;
-	return u.m;
-}
-
 #else
 
 #define set_ps_hex(w, z, y, x) _mm_set_ps(ReinterpretAsFloat(w), ReinterpretAsFloat(z), ReinterpretAsFloat(y), ReinterpretAsFloat(x))
@@ -351,7 +327,7 @@ FORCE_INLINE __m128 set1_ps_hex(u32 x)
 
 /// Returns the simd vector [_, _, _, f], that is, a SSE variable with the given float f in the lowest index.
 /** The three higher indices should all be treated undefined.
-	@note When compiling with /arch:SSE or newer, it is expected that this function is a no-op "cast" if the given 
+	@note When compiling with /arch:SSE or newer, it is expected that this function is a no-op "cast" if the given
 	float is already in a register, since it will lie in an XMM register already. Check the disassembly to confirm!
 	@note Never use this function if you need to generate a 4-vector [f,f,f,f]. Instead, use set1_ps(f), which
 		generates a vmovss+vhufps and no redundant vxorps+vmovss! */

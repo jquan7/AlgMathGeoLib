@@ -14,10 +14,6 @@
 extern "C" {
 #endif
 
-#ifdef __EMSCRIPTEN__
-int js_double_to_string(double d, char *dst);
-#endif
-
 /// Converts the given double-precision floating point number to a string representation.
 /** For most inputs, this string representation is the
 	shortest such, which deserialized again, returns the same bit

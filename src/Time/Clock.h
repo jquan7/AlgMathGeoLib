@@ -16,15 +16,6 @@
 /** @file Clock.h
 	@brief The Clock class. Supplies timing facilities. */
 
-#ifdef __EMSCRIPTEN__
-
-// The native type for high-resolution timing is double, use
-// that instead of uint64, which is not natively supported but
-// must be emulated, which is slow.
-#define MATH_TICK_IS_FLOAT
-#include <limits>
-#endif
-
 #include "../Math/MathNamespace.h"
 
 MATH_BEGIN_NAMESPACE

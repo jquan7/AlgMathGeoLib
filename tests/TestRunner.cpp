@@ -8,10 +8,6 @@
 
 #include "../src/Math/myassert.h"
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten/emscripten.h>
-#endif
-
 LCG rng(Clock::TickU32());
 
 std::vector<Test> &Tests()
@@ -367,14 +363,6 @@ std::vector<const char *> prefixes;
 void RunNextTest()
 {
 	RunOneTest(numTotalRuns, numTrialsPerTimedBlock, &prefixes[0]);
-#ifdef __EMSCRIPTEN__
-	if (nextTestToRun >= (int)Tests().size())
-	{
-		emscripten_cancel_main_loop();
-		TestsFinished();
-		exit(numTestsFailed);
-	}
-#endif
 }
 
 #ifdef MATH_TESTS_EXECUTABLE
@@ -385,9 +373,7 @@ int main(int argc, char **argv)
 
 	numTotalRuns = (argc >= 2) ? atoi(argv[1]) : 100;
 	numTrialsPerTimedBlock = (argc >= 3) ? atoi(argv[2]) : 100;
-#ifdef __EMSCRIPTEN__
-	numTotalRuns = numTrialsPerTimedBlock = 10;
-#endif
+
 	for(int i = 3; i < argc; ++i)
 	{
 		if (argv[i][0] != '-' && argv[i][0] != '/')
@@ -415,13 +401,9 @@ int main(int argc, char **argv)
 
 	numTestsRun = numTestsPassed = numTestsWarnings = numTestsFailed = 0;
 
-#ifdef __EMSCRIPTEN__
-	emscripten_set_main_loop(&RunNextTest, 0, 0);
-#else
 	while(nextTestToRun < (int)Tests().size())
 		RunNextTest();
 	TestsFinished();
 	return numTestsFailed; // exit code of 0 denotes a successful run.
-#endif
 }
 #endif

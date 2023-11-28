@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file MathFunc.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Common mathematical functions. */
 #pragma once
 
@@ -256,7 +256,7 @@ FORCE_INLINE float RSqrt(float x)
 	// e_n = e + 0.5 * (e - x * e^3)
 	simd4f e3 = _mm_mul_ss(_mm_mul_ss(e,e), e);
 	simd4f half = _mm_set_ss(0.5f);
-	
+
 	return s4f_x(_mm_add_ss(e, _mm_mul_ss(half, _mm_sub_ss(e, _mm_mul_ss(X, e3)))));
 #else
 	return 1.f / sqrtf(x);
@@ -446,9 +446,7 @@ FORCE_INLINE bool Equal(const T &a, const T &b)
 /** Compares the two values for equality up to a small epsilon. */
 template<> bool FORCE_INLINE Equal(const float &a, const float &b) { return Abs(a-b) <= c_eps; }
 template<> bool FORCE_INLINE Equal(const double &a, const double &b) { return Abs(a-b) <= c_eps; }
-#ifndef __EMSCRIPTEN__ // long double is not supported.
 template<> bool FORCE_INLINE Equal(const long double &a, const long double &b) { return Abs(a-b) <= c_eps; }
-#endif
 
 /** Compares the two values for equality, allowing the given amount of absolute error. */
 bool EqualAbs(float a, float b, float epsilon = 1e-4f);
@@ -483,7 +481,7 @@ FORCE_INLINE bool IsInf(double d) { return (ReinterpretAsU64(d) << 1) == 0xFFE00
 template<> FORCE_INLINE bool IsFinite<long double>(long double value) { return _finite((double)value) != 0; }
 FORCE_INLINE bool IsInf(long double value) { return IsInf((double)value); }
 FORCE_INLINE bool IsNan(long double value) { return IsNan((double)value); }
-#elif !defined(__EMSCRIPTEN__) // long double is not supported.
+#else
 //template<> FORCE_INLINE bool IsFinite<long double>(long double value) { asserteq(sizeof(long double), 16); u64 val[2]; memcpy(val, &value, sizeof(u64)*2); return (val[1] & 0x7FFF) != 0x7FFF || val[0] < 0x8000000000000000ULL; }
 //FORCE_INLINE bool IsInf(long double value) { asserteq(sizeof(long double), 16); u64 val[2]; memcpy(val, &value, sizeof(u64)*2); return (val[1] & 0x7FFF) == 0x7FFF && val[0] == 0x8000000000000000ULL; }
 //FORCE_INLINE bool IsNan(long double value) { asserteq(sizeof(long double), 16); u64 val[2]; memcpy(val, &value, sizeof(u64)*2); return (val[1] & 0x7FFF) == 0x7FFF && val[0] >  0x8000000000000000ULL; }

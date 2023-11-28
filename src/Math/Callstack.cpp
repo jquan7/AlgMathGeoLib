@@ -169,19 +169,6 @@ StringT NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 	return stack;
 }
 
-#elif defined(__EMSCRIPTEN__)
-
-#include <emscripten.h>
-
-StringT GetCallstack(const char *indent, const char *ignoreFilter)
-{
-	MARK_UNUSED(indent); // TODO Proper indentation
-	MARK_UNUSED(ignoreFilter); // TODO Support ignoreFilter
-	char str[1024] = {};
-	emscripten_get_callstack(EM_LOG_JS_STACK, str, sizeof(str));
-	return str;
-}
-
 #else
 
 StringT GetCallstack(const char *indent, const char *ignoreFilter)

@@ -15,7 +15,7 @@
 /** @file Clock.cpp
 	@brief */
 
-#if defined(__unix__) || defined(__EMSCRIPTEN__) || defined (__CYGWIN__)
+#if defined(__unix__) || defined (__CYGWIN__)
 #include <time.h>
 #include <errno.h>
 #include <string.h>
@@ -24,10 +24,6 @@
 
 #ifdef WIN32
 #include "../Math/InclWindows.h"
-#endif
-
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
 #endif
 
 #include "Clock.h"
@@ -70,26 +66,12 @@ Clock::Clock()
 
 void Clock::Sleep(int milliseconds)
 {
-#ifdef WIN8RT
-#pragma warning(Clock::Sleep has not been implemented!)
-#elif defined(WIN32)
-	::Sleep(milliseconds);
-#elif !defined(__EMSCRIPTEN__)
-	// http://linux.die.net/man/2/nanosleep
 	timespec ts;
 	ts.tv_sec = milliseconds / 1000;
 	ts.tv_nsec = (milliseconds - ts.tv_sec * 1000) * 1000 * 1000;
 	int ret = nanosleep(&ts, NULL);
 	if (ret == -1)
 		LOGI("nanosleep returned -1! Reason: %s(%d).", strerror(errno), (int)errno);
-#elif defined(__EMSCRIPTEN_PTHREADS__)
-	emscripten_thread_sleep(milliseconds);
-#elif defined(__EMSCRIPTEN__)
-	/*NO-OP, cannot sleep*/
-	MARK_UNUSED(milliseconds);
-#else
-#warning Clock::Sleep has not been implemented!
-#endif
 }
 
 int Clock::Year()
@@ -185,33 +167,9 @@ unsigned long Clock::Time()
 
 tick_t Clock::Tick()
 {
-#if defined(__EMSCRIPTEN__)
-
-#ifdef MATH_TICK_IS_FLOAT
-	return (tick_t)emscripten_get_now();
-#else
-	// emscripten_get_now() returns a wallclock time as a float in milliseconds (1e-3).
-	// scale it to microseconds (1e-6) and return as a tick.
-	return (tick_t)(((double)emscripten_get_now()) * 1e3);
-#endif
-
-#elif defined(WIN32)
-	LARGE_INTEGER ddwTimer;
-	BOOL success = QueryPerformanceCounter(&ddwTimer);
-	assume(success != 0);
-	MARK_UNUSED(success);
-	return ddwTimer.QuadPart;
-#elif defined(_POSIX_MONOTONIC_CLOCK)
-	timespec t;
-	clock_gettime(CLOCK_MONOTONIC, &t);
-	return (tick_t)t.tv_sec * 1000 * 1000 * 1000 + (tick_t)t.tv_nsec;
-#elif defined(_POSIX_C_SOURCE)
 	timeval t;
 	gettimeofday(&t, NULL);
 	return (tick_t)t.tv_sec * 1000 * 1000 + (tick_t)t.tv_usec;
-#else
-	return (tick_t)clock();
-#endif
 }
 
 unsigned long Clock::TickU32()
@@ -229,37 +187,15 @@ unsigned long Clock::TickU32()
 
 tick_t Clock::TicksPerSec()
 {
-#if defined(__EMSCRIPTEN__)
-
-#ifdef MATH_TICK_IS_FLOAT
-	return (tick_t)1000.0;
-#else
-	return 1000000ULL; // 1e6 == microseconds.
-#endif
-
-#elif defined(WIN32)
-	return ddwTimerFrequency;
-#elif defined(_POSIX_MONOTONIC_CLOCK)
-	return 1000 * 1000 * 1000;
-#elif defined(_POSIX_C_SOURCE)
 	return 1000 * 1000;
-#else
-	return CLOCKS_PER_SEC;
-#endif
 }
 
 unsigned long long Clock::Rdtsc()
 {
-#if defined(_MSC_VER) && !defined(WIN8PHONE)
-	return __rdtsc();
-#elif defined(__x86_64__)
+#if defined(__x86_64__)
 	unsigned hi, lo;
 	__asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
 	return ((unsigned long long)lo) | (((unsigned long long)hi) << 32);
-#elif defined(__i386__) || defined(__X86__) || defined(_X86_)
-	unsigned long long int x;
-	__asm__ volatile ("rdtsc" : "=A" (x));
-	return x;
 #else
 	return Clock::Tick();
 #endif
