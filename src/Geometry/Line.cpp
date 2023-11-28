@@ -29,7 +29,6 @@
 #include "Polyhedron.h"
 #include "Sphere.h"
 #include "AABB.h"
-#include "Capsule.h"
 #include "Circle.h"
 #include "../Math/MathFunc.h"
 
@@ -182,11 +181,6 @@ float Line::Distance(const Sphere &other) const
 	return Max(0.f, Distance(other.pos) - other.r);
 }
 
-float Line::Distance(const Capsule &other) const
-{
-	return Max(0.f, Distance(other.l) - other.r);
-}
-
 bool Line::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const
 {
 	return triangle.Intersects(*this, d, intersectionPoint);
@@ -220,11 +214,6 @@ bool Line::Intersects(const OBB &obb) const
 bool Line::Intersects(const OBB &obb, float &dNear, float &dFar) const
 {
 	return obb.Intersects(*this, dNear, dFar);
-}
-
-bool Line::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
 }
 
 bool Line::Intersects(const Polygon &polygon) const

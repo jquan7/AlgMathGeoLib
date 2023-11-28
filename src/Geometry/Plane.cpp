@@ -25,7 +25,6 @@
 #include "Polygon.h"
 #include "Polyhedron.h"
 #include "Ray.h"
-#include "Capsule.h"
 #include "Sphere.h"
 #include "Triangle.h"
 #include "LineSegment.h"
@@ -213,11 +212,6 @@ float Plane::Distance(const Sphere &sphere) const
 	return Max(0.f, Distance(sphere.pos) - sphere.r);
 }
 
-float Plane::Distance(const Capsule &capsule) const
-{
-	return Max(0.f, Distance(capsule.l) - capsule.r);
-}
-
 float Plane::SignedDistance(const vec &point) const
 {
 	assume2(normal.IsNormalized(), normal, normal.Length());
@@ -242,7 +236,6 @@ float Plane_SignedDistance(const Plane &plane, const T &object)
 
 float Plane::SignedDistance(const AABB &aabb) const { return Plane_SignedDistance(*this, aabb); }
 float Plane::SignedDistance(const OBB &obb) const { return Plane_SignedDistance(*this, obb); }
-float Plane::SignedDistance(const Capsule &capsule) const { return Plane_SignedDistance(*this, capsule); }
 //float Plane::SignedDistance(const Circle &circle) const { return Plane_SignedDistance(*this, circle); }
 float Plane::SignedDistance(const Line &line) const { return Plane_SignedDistance(*this, line); }
 float Plane::SignedDistance(const LineSegment &lineSegment) const { return Plane_SignedDistance(*this, lineSegment); }
@@ -663,11 +656,6 @@ bool Plane::Intersects(const LineSegment &lineSegment, float *dist) const
 bool Plane::Intersects(const Sphere &sphere) const
 {
 	return Distance(sphere.pos) <= sphere.r;
-}
-
-bool Plane::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
 }
 
 /// The Plane-AABB intersection is implemented according to Christer Ericson's Real-Time Collision Detection, p.164. [groupSyntax]

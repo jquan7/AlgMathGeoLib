@@ -371,7 +371,6 @@ public:
 	/** This function returns true if the given object lies inside this AABB, and false otherwise.
 		@note The comparison is performed using less-or-equal, so the faces of this AABB count as being inside, but
 			due to float inaccuracies, this cannot generally be relied upon.
-		@todo Add Contains(Circle/Disc/Sphere/Capsule).
 		@see Distance(), Intersects(), ClosestPoint(). */
 	bool Contains(const vec &point) const;
 	bool Contains(const LineSegment &lineSegment) const;
@@ -382,7 +381,6 @@ public:
 	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
 	bool Contains(const Polyhedron &polyhedron) const;
-	bool Contains(const Capsule &capsule) const;
 
 	/// Tests whether this AABB and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
@@ -411,7 +409,6 @@ public:
 		@param closestPointOnAABB [out] Returns the closest point on this AABB to the given sphere. This pointer
 			may be null. */
 	bool Intersects(const Sphere &sphere, vec *closestPointOnAABB = 0) const;
-	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
@@ -436,7 +433,6 @@ public:
 	void Enclose(const OBB &obb);
 	void Enclose(const Sphere &sphere);
 	void Enclose(const Triangle &triangle);
-	void Enclose(const Capsule &capsule);
 	void Enclose(const Polygon &polygon);
 	void Enclose(const Polyhedron &polyhedron);
 	void Enclose(const vec *pointArray, int numPoints);

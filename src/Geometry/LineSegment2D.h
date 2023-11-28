@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file LineSegment2D.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The LineSegment2D geometry object. */
 #pragma once
 
@@ -136,11 +136,6 @@ public:
 	bool BitEquals(const LineSegment2D &other) const { return a.BitEquals(other.a) && b.BitEquals(other.b); }
 
 	/// Tests if the given point or line segment is contained on this line segment.
-	/** @param distanceThreshold Because a line segment is an one-dimensional object in 3D space, an epsilon value
-			is used as a threshold for this test. This effectively transforms this line segment to a capsule with
-			the radius indicated by this value.
-		@return True if this line segment contains the given point or line segment.
-		@see Intersects, ClosestPoint(), Distance(). */
 	bool Contains(const vec2d &point, float distanceThreshold = 1e-3f) const;
 	bool Contains(const LineSegment2D &lineSegment, float distanceThreshold = 1e-3f) const;
 
@@ -191,14 +186,13 @@ public:
 	float Distance(const LineSegment2D &other, float &d, float &d2) const;
 #if 0
 	float Distance(const Sphere2D &other) const;
-	float Distance(const Capsule2D &other) const;
 #endif
 
 	float DistanceSq(const vec2d &point) const;
 	float DistanceSq(const LineSegment2D &other) const;
 
 #if 0
-	/// Tests whether this line segment and the given object intersect.	
+	/// Tests whether this line segment and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (for example, if this line segment is contained inside a sphere)
 		@todo Output intersection point. */
@@ -218,7 +212,6 @@ public:
 	bool Intersects(const AABB2D &aabb) const;
 	bool Intersects(const OBB2D &obb, float &dNear, float &dFar) const;
 	bool Intersects(const OBB2D &obb) const;
-	bool Intersects(const Capsule2D &capsule) const;
 	bool Intersects(const Polygon2D &polygon) const;
 #endif
 	/** @param epsilon If testing intersection between two line segments, a distance threshold value is used to account

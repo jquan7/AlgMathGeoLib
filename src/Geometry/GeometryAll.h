@@ -27,7 +27,6 @@
 
 #include "AABB.h"
 #include "AABB2D.h"
-#include "Capsule.h"
 #include "Circle.h"
 #include "Circle2D.h"
 #include "GeometryAll.h"
@@ -44,4 +43,3 @@
 #include "Sphere.h"
 #include "Triangle.h"
 #include "TriangleMesh.h"
-#include "GeomType.h"

@@ -401,7 +401,6 @@ public:
 	/** This function returns true if the given object lies inside this OBB, and false otherwise.
 		@note The comparison is performed using less-or-equal, so the faces of this OBB count as being inside, but
 			due to float inaccuracies, this cannot generally be relied upon.
-		@todo Add Contains(Circle/Disc/Sphere/Capsule).
 		@see Distance(), Intersects(), ClosestPoint(). */
 	bool Contains(const vec &point) const;
 	bool Contains(const LineSegment &lineSegment) const;
@@ -439,7 +438,6 @@ public:
 	/** @param closestPointOnOBB [out] If specified, receives the closest point on this OBB To the given sphere. This
 			pointer may be null. */
 	bool Intersects(const Sphere &sphere, vec *closestPointOnOBB = 0) const;
-	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
 	bool Intersects(const Polyhedron &polyhedron) const;

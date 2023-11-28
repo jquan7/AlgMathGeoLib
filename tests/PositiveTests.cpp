@@ -137,26 +137,6 @@ LineSegment RandomLineSegmentContainingPoint(const vec &pt)
 	return l;
 }
 
-Capsule RandomCapsuleContainingPoint(const vec &pt)
-{
-	vec dir = vec::RandomDir(rng);
-	float a = rng.Float(0, SCALE);
-	float b = rng.Float(0, SCALE);
-	float r = rng.Float(0.001f, SCALE);
-	Capsule c(pt + a*dir, pt - b*dir, r);
-	vec d = vec::RandomSphere(rng, vec::zero, c.r);
-	c.l.a += d;
-	c.l.b += d;
-	assert(c.IsFinite());
-	assert(c.Contains(pt));
-#ifdef MATH_AUTOMATIC_SSE
-	asserteq(c.l.a.w, 1.f);
-	asserteq(c.l.b.w, 1.f);
-#endif
-
-	return c;
-}
-
 Plane RandomPlaneContainingPoint(const vec &pt)
 {
 	vec dir = vec::RandomDir(rng);
@@ -378,21 +358,6 @@ RANDOMIZED_TEST(AABBSphereIntersect)
 	assert(b.Distance(a) == 0.f);
 
 
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(AABBCapsuleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	AABB a = RandomAABBContainingPoint(pt, 10.f);
-	Capsule b = RandomCapsuleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
 //	assert(a.Contains(a.ClosestPoint(b)));
 //	assert(b.Contains(a.ClosestPoint(b)));
 //	assert(a.Contains(b.ClosestPoint(a)));
@@ -628,23 +593,6 @@ RANDOMIZED_TEST(OBBSphereIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(OBBCapsuleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	OBB a = RandomOBBContainingPoint(pt, 10.f);
-	Capsule b = RandomCapsuleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(OBBTriangleIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -777,23 +725,6 @@ RANDOMIZED_TEST(SpherePlaneIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(SphereCapsuleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Sphere a = RandomSphereContainingPoint(pt, 10.f);
-	Capsule b = RandomCapsuleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-	assert(a.Distance(b) == 0.f);
-	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(SphereTriangleIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -840,136 +771,6 @@ RANDOMIZED_TEST(SpherePolygonIntersect)
 //	assert(a.Contains(b.ClosestPoint(a)));
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
-
-RANDOMIZED_TEST(CapsuleLineIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	Line b = RandomLineContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-	assert(a.Distance(b) == 0.f);
-	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleRayIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	Ray b = RandomRayContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-	assert(a.Distance(b) == 0.f);
-	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleLineSegmentIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	LineSegment b = RandomLineSegmentContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-	assert(a.Distance(b) == 0.f);
-	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsulePlaneIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	Plane b = RandomPlaneContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-	assert(a.Distance(b) == 0.f);
-	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleCapsuleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	Capsule b = RandomCapsuleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-	assert(a.Distance(b) == 0.f);
-	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleTriangleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	Triangle b = RandomTriangleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-///	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsulePolyhedronIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	Polyhedron b = RandomPolyhedronContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-///	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsulePolygonIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Capsule a = RandomCapsuleContainingPoint(pt);
-	Polygon b = RandomPolygonContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
-
 
 RANDOMIZED_TEST(PolyhedronLineIntersect)
 {

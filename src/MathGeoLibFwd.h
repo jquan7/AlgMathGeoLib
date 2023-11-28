@@ -75,7 +75,6 @@ class TranslateOp;
 class ScaleOp;
 
 class AABB;
-class Capsule;
 class Circle;
 class Circle2D;
 class Cone;
@@ -215,7 +214,6 @@ REGISTER_POD(MATH_NS::Quat);
 REGISTER_POD(MATH_NS::TranslateOp);
 REGISTER_POD(MATH_NS::ScaleOp);
 REGISTER_POD(MATH_NS::AABB);
-REGISTER_POD(MATH_NS::Capsule);
 REGISTER_POD(MATH_NS::Circle);
 REGISTER_POD(MATH_NS::Cone);
 REGISTER_POD(MATH_NS::Cylinder);

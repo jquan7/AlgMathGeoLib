@@ -154,7 +154,6 @@ public:
 	bool Contains(const Polyhedron &polyhedron) const;
 	bool Contains(const Sphere &sphere) const;
 	bool Contains(const Sphere &sphere, float epsilon) const;
-	bool Contains(const Capsule &capsule) const;
 
 	/// Computes a Sphere that bounds the given point array.
 	/** This functions implements a fast approximate (though rather crude) algorithm of Jack Ritter.
@@ -237,7 +236,6 @@ public:
 		@see Contains(), Intersects(), ClosestPoint().  */
 	float Distance(const vec &point) const;
 	float Distance(const Sphere &sphere) const;
-	float Distance(const Capsule &capsule) const;
 	float Distance(const AABB &aabb) const;
 	float Distance(const OBB &obb) const;
 	float Distance(const Plane &plane) const;
@@ -273,7 +271,6 @@ public:
 	bool Intersects(const AABB &aabb, vec *closestPointOnAABB = 0) const;
 	bool Intersects(const OBB &obb, vec *closestPointOnOBB = 0) const;
 	bool Intersects(const Triangle &triangle, vec *closestPointOnTriangle = 0) const;
-	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Polygon &polygon) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	bool Intersects(const Sphere &sphere) const;
@@ -298,7 +295,6 @@ public:
 	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
 	void Enclose(const Polyhedron &polyhedron);
-	void Enclose(const Capsule &capsule);
 
 	/// Expands the radius of this Sphere until it encloses the given object.
 	/** @param epsilon A small amount to extrude the given object by for numerical precision.

@@ -230,7 +230,6 @@ public:
 	float Distance(const vec2d &point) const;
 #if 0
 	float Distance(const Sphere2D &sphere) const;
-	float Distance(const Capsule2D &capsule) const;
 #endif
 
 	float DistanceSq(const vec2d &point) const;
@@ -262,7 +261,6 @@ public:
 	bool Intersects(const AABB2D &aabb) const;
 	bool Intersects(const OBB2D &obb) const;
 	bool Intersects(const Polygon2D &polygon) const;
-	bool Intersects(const Capsule2D &capsule) const;
 #endif
 
 	/// A helper function used in line-triangle tests.

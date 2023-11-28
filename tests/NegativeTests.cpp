@@ -123,31 +123,6 @@ LineSegment RandomLineSegmentInHalfspace(const Plane &plane)
 	return ls;
 }
 
-Capsule RandomCapsuleInHalfspace(const Plane &plane)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	vec dir = vec::RandomDir(rng);
-	float a = rng.Float(0, SCALE);
-	float b = rng.Float(0, SCALE);
-	float r = rng.Float(0.001f, SCALE);
-	Capsule c(pt + a*dir, pt - b*dir, r);
-	assert(c.IsFinite());
-
-	vec extremePoint = c.ExtremePoint(-plane.normal);
-	float distance = plane.Distance(extremePoint);
-	c.Translate((distance + GUARDBAND) * plane.normal);
-
-	assert(c.IsFinite());
-//	assert(!c.IsDegenerate());
-	assert(!c.Intersects(plane));
-//	assert(c.SignedDistance(plane) > 0.f);
-	extremePoint = c.ExtremePoint(-plane.normal);
-	assert(plane.SignedDistance(extremePoint) > 0.f);
-	assert(plane.SignedDistance(c) > 0.f);
-
-	return c;
-}
-
 Plane RandomPlaneInHalfspace(Plane &plane)
 {
 	Plane p2;
@@ -369,24 +344,6 @@ RANDOMIZED_TEST(AABBSphereNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(AABBCapsuleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	AABB a = RandomAABBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Capsule b = RandomCapsuleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(AABBTriangleNoIntersect)
 {
 	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
@@ -599,24 +556,6 @@ RANDOMIZED_TEST(OBBSphereNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(OBBCapsuleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	OBB a = RandomOBBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Capsule b = RandomCapsuleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(OBBTriangleNoIntersect)
 {
 	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
@@ -757,24 +696,6 @@ RANDOMIZED_TEST(SpherePlaneNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(SphereCapsuleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Sphere a = RandomSphereInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Capsule b = RandomCapsuleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-	assert(a.Distance(b) > 0.f);
-	assert(b.Distance(a) > 0.f);
-
-
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(SphereTriangleNoIntersect)
 {
 	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
@@ -840,144 +761,6 @@ UNIQUE_TEST(PlaneLineNoIntersectCase2)
 	Line l(POINT_VEC(36.2179184f,88.9618607f,29.178812f),DIR_VEC(0.775070965f,0.459497392f,0.433736295f));
 	assert(!p.Intersects(l));
 }
-
-RANDOMIZED_TEST(CapsuleLineNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	Line b = RandomLineInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-	assert(a.Distance(b) > 0.f);
-	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleRayNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	Ray b = RandomRayInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-	assert(a.Distance(b) > 0.f);
-	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleLineSegmentNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	LineSegment b = RandomLineSegmentInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-	assert(a.Distance(b) > 0.f);
-	assert(b.Distance(a) > 0.f);
-
-
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsulePlaneNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	Plane b = RandomPlaneInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-	assert(a.Distance(b) > 0.f);
-	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleCapsuleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	Capsule b = RandomCapsuleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-	assert(a.Distance(b) > 0.f);
-	assert(b.Distance(a) > 0.f);
-
-
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsuleTriangleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	Triangle b = RandomTriangleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-///	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsulePolyhedronNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	Polyhedron b = RandomPolyhedronInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-///	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(CapsulePolygonNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Capsule a = RandomCapsuleInHalfspace(p);
-	p.ReverseNormal();
-	Polygon b = RandomPolygonInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
-
 
 RANDOMIZED_TEST(PolyhedronLineNoIntersect)
 {
@@ -1421,52 +1204,4 @@ RANDOMIZED_TEST(RayKdTreeNoIntersect)
 	assert(result.triangleIndex == KdTree<Triangle>::BUCKET_SENTINEL);
 	assert(!result.pos.IsFinite());
 	assert(!result.barycentricUV.IsFinite());
-}
-
-// https://github.com/juj/MathGeoLib/issues/55
-UNIQUE_TEST(AABB_Capsule_NoIntersect_Case)
-{
-	vec minPoint = POINT_VEC(438.420929f, 805.586670f, 493.709167f);
-	vec maxPoint = POINT_VEC(443.420929f, 810.586670f, 498.709167f);
-	AABB aabb(minPoint, maxPoint);
-
-	vec a = POINT_VEC(479.665222f,  -30.f, 509.737244f);
-	vec b = POINT_VEC(479.665222f, 1530.f, 509.737244f);
-
-	Capsule cylinder(a, b, 37.6882935f);
-
-	assert(!cylinder.Intersects(aabb));
-}
-
-// https://github.com/juj/MathGeoLib/issues/55
-UNIQUE_TEST(AABB_Capsule_NoIntersect_Case_2)
-{
-	// Slightly simplified numbers from above
-	vec minPoint = POINT_VEC(438.f,        0.f, 493.f);
-	vec maxPoint = POINT_VEC(443.420929f, 10.f, 499.f);
-	AABB aabb(minPoint, maxPoint);
-
-	vec a = POINT_VEC(479.665222f,  0.f, 509.737244f);
-	vec b = POINT_VEC(479.665222f, 10.f, 509.737244f);
-
-	Capsule cylinder(a, b, 37.6882935f);
-
-	assert(!cylinder.Intersects(aabb));
-}
-
-// https://github.com/juj/MathGeoLib/issues/56
-UNIQUE_TEST(AABB_Capsule_NoIntersect_Case_3)
-{
-	vec minPoint = POINT_VEC(1549.69849f, 639.203125f, 1115.08582f);
-	vec maxPoint = POINT_VEC(1554.69849f, 644.203125f, 1120.08582f);
-	AABB aabb(minPoint, maxPoint);
-
-	vec a = POINT_VEC(1072.35388f, 1130.68018f, -477.690887f);
-	vec b = POINT_VEC(1699.54614f, 490.913147f, 1637.29395f);
-
-	Capsule cylinder(a, b, 4.36077833f);
-
-	// TODO: The Cylinder and AABB should not intersect, but the GJK algorithm
-	// does not produce the right result.
-	assert(!cylinder.Intersects(aabb));
 }

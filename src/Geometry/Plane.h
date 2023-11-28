@@ -155,7 +155,6 @@ public:
 	float Distance(const vec &point) const;
 	float Distance(const LineSegment &lineSegment) const;
 	float Distance(const Sphere &sphere) const;
-	float Distance(const Capsule &capsule) const;
 
 	/// Returns the signed distance of this plane to the given point.
 	/** If this function returns a negative value, the given point lies in the negative halfspace of this plane.
@@ -165,7 +164,6 @@ public:
 
 	float SignedDistance(const AABB &aabb) const;
 	float SignedDistance(const OBB &obb) const;
-	float SignedDistance(const Capsule &capsule) const;
 //	float SignedDistance(const Circle &circle) const;
 	float SignedDistance(const Line &line) const;
 	float SignedDistance(const LineSegment &lineSegment) const;
@@ -313,7 +311,6 @@ public:
 	bool Intersects(const Polyhedron &polyhedron) const;
 	/// @todo Add a version of Plane-Triangle intersection which returns the line segment of intersection.
 	bool Intersects(const Triangle &triangle) const;
-	bool Intersects(const Capsule &capsule) const;
 	/// Tests if this plane intersects with the given circle.
 	/** @param pt1 [out] If specified, receives the first point of intersection. This pointer may be null.
 		@param pt2 [out] If specified, receives the second point of intersection. This pointer may be null.

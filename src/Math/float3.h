@@ -496,7 +496,6 @@ public:
 	float Distance(const AABB &aabb) const;
 	float Distance(const OBB &obb) const;
 	float Distance(const Sphere &sphere) const;
-	float Distance(const Capsule &capsule) const;
 
 	/// Computes the squared distance between this and the given point.
 	/** Calling this function is faster than calling Distance(), since this function avoids computing a square root.

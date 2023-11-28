@@ -31,7 +31,6 @@
 #include "../Math/Quat.h"
 #include "../Math/Swap.h"
 #include "Sphere.h"
-#include "Capsule.h"
 #include "Triangle.h"
 #include "Circle.h"
 
@@ -336,21 +335,11 @@ float LineSegment::Distance(const Sphere &other) const
 	return Max(0.f, Distance(other.pos) - other.r);
 }
 
-float LineSegment::Distance(const Capsule &other) const
-{
-	return Max(0.f, Distance(other.l) - other.r);
-}
-
 bool LineSegment::Intersects(const Plane &plane) const
 {
 	float d = plane.SignedDistance(a);
 	float d2 = plane.SignedDistance(b);
 	return d * d2 <= 0.f;
-}
-
-bool LineSegment::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
 }
 
 bool LineSegment::Intersects(const Plane &plane, float *d) const

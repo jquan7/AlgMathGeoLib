@@ -34,12 +34,6 @@ Sphere RandomSphereNearOrigin(float maxDistanceFromOrigin, float maxRadius)
 	return RandomSphereContainingPoint(RandomPointNearOrigin(maxDistanceFromOrigin), maxRadius);
 }
 
-Capsule RandomCapsuleContainingPoint(const vec &pt);
-Capsule RandomCapsuleNearOrigin(float maxDistanceFromOrigin)
-{
-	return RandomCapsuleContainingPoint(RandomPointNearOrigin(maxDistanceFromOrigin));
-}
-
 Triangle RandomTriangleNearOrigin(float maxDistanceFromOrigin)
 {
 	return Triangle(RandomPointNearOrigin(maxDistanceFromOrigin), RandomPointNearOrigin(maxDistanceFromOrigin), RandomPointNearOrigin(maxDistanceFromOrigin));
@@ -125,14 +119,6 @@ RANDOMIZED_TEST(AABB_Enclose_Triangle)
 	assert(aabb.Contains(t));
 }
 
-RANDOMIZED_TEST(AABB_Enclose_Capsule)
-{
-	AABB aabb = RandomAABBNearOrigin(DISTSCALE, SIZESCALE);
-	Capsule c = RandomCapsuleNearOrigin(DISTSCALE);
-	aabb.Enclose(c);
-
-	assert(aabb.Contains(c));
-}
 
 RANDOMIZED_TEST(AABB_Enclose_Polygon)
 {
@@ -204,15 +190,6 @@ RANDOMIZED_TEST(Sphere_Enclose_Triangle)
 	s.Enclose(t);
 
 	assert(s.Contains(t));
-}
-
-RANDOMIZED_TEST(Sphere_Enclose_Capsule)
-{
-	Sphere s = RandomSphereNearOrigin(DISTSCALE, SIZESCALE);
-	Capsule c = RandomCapsuleNearOrigin(DISTSCALE);
-	s.Enclose(c);
-
-	assert2(s.Contains(c), s.SerializeToCodeString(), c.SerializeToCodeString());
 }
 
 RANDOMIZED_TEST(Sphere_Enclose_Polygon)

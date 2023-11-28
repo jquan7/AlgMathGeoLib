@@ -311,8 +311,7 @@ public:
 	/** This function treats this polyhedron as a non-convex object. If you know this polyhedron
 		to be convex, you can use the faster ContainsConvex() function.
 		@note This function assumes that this polyhedron is closed and its edges are not self-intersecting.
-		@see ContainsConvex(), ClosestPoint(), ClosestPointConvex(), Distance(), Intersects(), IntersectsConvex().
-		@todo Add Contains(Circle/Disc/Sphere/Capsule). */
+		@see ContainsConvex(), ClosestPoint(), ClosestPointConvex(), Distance(), Intersects(), IntersectsConvex().  */
 	bool Contains(const vec &point) const;
 	bool Contains(const LineSegment &lineSegment) const;
 	bool Contains(const Triangle &triangle) const;
@@ -385,7 +384,6 @@ public:
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
 	bool Intersects(const Sphere &sphere) const;
-	bool Intersects(const Capsule &capsule) const;
 
 	/// Tests whether this <b>convex</b> polyhedron and the given object intersect.
 	/** This function is exactly like Intersects(), but this version assumes that this polyhedron is convex,
@@ -425,9 +423,6 @@ public:
 	static Polyhedron Hexahedron(const vec &centerPos = POINT_VEC_SCALAR(0.f), float scale = 1.f, bool ccwIsFrontFacing = true);
 	static Polyhedron Icosahedron(const vec &centerPos = POINT_VEC_SCALAR(0.f), float scale = 1.f, bool ccwIsFrontFacing = true);
 	static Polyhedron Dodecahedron(const vec &centerPos = POINT_VEC_SCALAR(0.f), float scale = 1.f, bool ccwIsFrontFacing = true);
-
-	static Polyhedron CreateCapsule(const vec &a, const vec &b, float r, int verticesPerCap, bool ccwIsFrontFacing = true);
-	static Polyhedron CreateSharpCapsule(const vec &a, const vec &b, float r, float capPointDistance, int verticesPerCap, bool ccwIsFrontFacing = true);
 
 	/// Tests if these two polyhedrons represent the same set of points.
 	/// @note This function is very slow, and should be used only for debugging purposes.

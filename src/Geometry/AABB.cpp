@@ -38,7 +38,6 @@
 #include "../Math/Quat.h"
 #include "../Math/Swap.h"
 #include "Triangle.h"
-#include "Capsule.h"
 
 #include "../Math/float4x4_neon.h"
 
@@ -637,11 +636,6 @@ bool AABB::Contains(const Sphere &sphere) const
 	return Contains(sphere.pos - DIR_VEC_SCALAR(sphere.r), sphere.pos + DIR_VEC_SCALAR(sphere.r));
 }
 
-bool AABB::Contains(const Capsule &capsule) const
-{
-	return Contains(capsule.MinimalEnclosingAABB());
-}
-
 bool AABB::Contains(const Triangle &triangle) const
 {
 	return Contains(triangle.BoundingAABB());
@@ -969,11 +963,6 @@ bool AABB::Intersects(const Sphere &sphere, vec *closestPointOnAABB) const
 	return pt.DistanceSq(sphere.pos) <= sphere.r * sphere.r;
 }
 
-bool AABB::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
-}
-
 bool AABB::Intersects(const Triangle &triangle) const
 {
 	return triangle.Intersects(*this);
@@ -1058,13 +1047,6 @@ void AABB::Enclose(const Sphere &sphere)
 void AABB::Enclose(const Triangle &triangle)
 {
 	Enclose(Min(triangle.a, triangle.b, triangle.c), Max(triangle.a, triangle.b, triangle.c));
-}
-
-void AABB::Enclose(const Capsule &capsule)
-{
-	vec d = DIR_VEC_SCALAR(capsule.r);
-	minPoint = Min(minPoint, Min(capsule.l.a, capsule.l.b) - d);
-	maxPoint = Max(maxPoint, Max(capsule.l.a, capsule.l.b) + d);
 }
 
 void AABB::Enclose(const Polygon &polygon)

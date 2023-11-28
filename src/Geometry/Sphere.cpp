@@ -29,7 +29,6 @@
 #include "../Math/MathFunc.h"
 #include "OBB.h"
 #include "AABB.h"
-#include "Capsule.h"
 #include "../Algorithm/Random/LCG.h"
 #include "LineSegment.h"
 #include "Line.h"
@@ -239,12 +238,6 @@ bool Sphere::Contains(const Sphere &sphere, float epsilon) const
 	return pos.Distance(sphere.pos) + sphere.r -r <= epsilon;
 }
 
-bool Sphere::Contains(const Capsule &capsule) const
-{
-	return pos.Distance(capsule.l.a) + capsule.r <= r &&
-		pos.Distance(capsule.l.b) + capsule.r <= r;
-}
-
 Sphere Sphere::FastEnclosingSphere(const vec *pts, int numPoints)
 {
 	Sphere s;
@@ -384,11 +377,6 @@ float Sphere::Distance(const Sphere &sphere) const
 	return Max(0.f, pos.Distance(sphere.pos) - r - sphere.r);
 }
 
-float Sphere::Distance(const Capsule &capsule) const
-{
-	return capsule.Distance(*this);
-}
-
 float Sphere::Distance(const AABB &aabb) const
 {
 	return aabb.Distance(*this);
@@ -448,11 +436,6 @@ Circle Sphere::Intersect(const Plane &plane) const
 bool Sphere::Intersects(const Sphere &sphere) const
 {
 	return (pos - sphere.pos).LengthSq() <= (r + sphere.r) * (r + sphere.r);
-}
-
-bool Sphere::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
 }
 
 int Sphere::IntersectLine(const vec &linePos, const vec &lineDir, const vec &sphereCenter,
@@ -788,27 +771,6 @@ void Sphere::Enclose(const Polygon &polygon)
 void Sphere::Enclose(const Polyhedron &polyhedron)
 {
 	Enclose(polyhedron.VertexArrayPtr(), polyhedron.NumVertices());
-}
-
-void Sphere::Enclose(const Capsule &capsule)
-{
-	// Capsule is a convex object spanned by the endpoint spheres - enclosing
-	// the endpoint spheres will also cause this Sphere to enclose the middle
-	// section since Sphere is convex as well.
-	float da = pos.DistanceSq(capsule.l.a);
-	float db = pos.DistanceSq(capsule.l.b);
-
-	// Enclose the farther Sphere of the Capsule first, and the closer one second to retain the tightest fit.
-	if (da > db)
-	{
-		Enclose(capsule.SphereA());
-		Enclose(capsule.SphereB());
-	}
-	else
-	{
-		Enclose(capsule.SphereB());
-		Enclose(capsule.SphereA());
-	}
 }
 
 void Sphere::ExtendRadiusToContain(const vec &point, float epsilon)

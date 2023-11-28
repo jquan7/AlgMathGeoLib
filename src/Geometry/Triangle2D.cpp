@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Triangle2D.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Triangle2D geometry object. */
 #include "Triangle2D.h"
 #include "../Math/MathFunc.h"
@@ -26,7 +26,6 @@
 #include "../Math/Quat.h"
 #include "LineSegment2D.h"
 #if 0
-#include "Capsule2D.h"
 #include "Polygon2D.h"
 #include "Line2D.h"
 #include "Ray2D.h"
@@ -294,13 +293,6 @@ float Triangle2D::Distance(const Sphere2D &sphere) const
 	return Max(0.f, Distance(sphere.pos) - sphere.r);
 }
 
-float Triangle2D::Distance(const Capsule2D &capsule) const
-{
-	vec2d otherPt;
-	vec2d thisPt = ClosestPoint(capsule.l, &otherPt);
-	return Max(0.f, thisPt.Distance(otherPt) - capsule.r);
-}
-
 /** Calculates the intersection between a line and a triangle. The facing is not accounted for, so
 	rays are reported to intersect triangles that are both front and backfacing.
 	According to "T. M&ouml;ller, B. Trumbore. Fast, Minimum Storage Ray2D/Triangle2D Intersection. 2005."
@@ -354,7 +346,7 @@ float Triangle2D::IntersectLineTri(const vec2d &linePos, const vec2d &lineDir,
 		return FLOAT_INF;
 
 	// Barycentric u and v are in limits, the ray intersects the triangle.
-	
+
 	// Output signed distance from ray to triangle.
 	return vE2.Dot(vQ) * recipDet;
 //	return (det < 0.f) ? IntersectBackface : IntersectFrontface;
@@ -660,11 +652,6 @@ bool Triangle2D::Intersects(const Polygon2D &polygon) const
 	return polygon.Intersects(*this);
 }
 
-bool Triangle2D::Intersects(const Capsule2D &capsule) const
-{
-	return capsule.Intersects(*this);
-}
-
 #endif
 void Triangle2D::ProjectToAxis(const vec2d &axis, float &dMin, float &dMax) const
 {
@@ -778,7 +765,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 
 	vec2d pt2 = ClosestPoint(lineSegment.a);
 	vec2d pt3 = ClosestPoint(lineSegment.b);
-	
+
 	float D1 = pt1.DistanceSq(lineSegment.GetPoint(d1));
 	float D2 = pt2.DistanceSq(lineSegment.a);
 	float D3 = pt3.DistanceSq(lineSegment.b);

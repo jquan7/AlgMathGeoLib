@@ -266,7 +266,6 @@ public:
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec &point) const;
 	float Distance(const Sphere &sphere) const;
-	float Distance(const Capsule &capsule) const;
 
 	float DistanceSq(const vec &point) const;
 	double DistanceSqD(const vec &point) const;
@@ -299,7 +298,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
-	bool Intersects(const Capsule &capsule) const;
 
 	/// A helper function used in line-triangle tests.
 	static float IntersectLineTri(const vec &linePos, const vec &lineDir,

@@ -134,11 +134,6 @@ public:
 	bool BitEquals(const LineSegment &other) const { return a.BitEquals(other.a) && b.BitEquals(other.b); }
 
 	/// Tests if the given point or line segment is contained on this line segment.
-	/** @param distanceThreshold Because a line segment is an one-dimensional object in 3D space, an epsilon value
-			is used as a threshold for this test. This effectively transforms this line segment to a capsule with
-			the radius indicated by this value.
-		@return True if this line segment contains the given point or line segment.
-		@see Intersects, ClosestPoint(), Distance(). */
 	bool Contains(const vec &point, float distanceThreshold = 1e-3f) const;
 	bool Contains(const LineSegment &lineSegment, float distanceThreshold = 1e-3f) const;
 
@@ -186,7 +181,6 @@ public:
 	float Distance(const LineSegment &other, float &d, float &d2) const;
 	float Distance(const Plane &other) const;
 	float Distance(const Sphere &other) const;
-	float Distance(const Capsule &other) const;
 
 	float DistanceSq(const vec &point) const;
 	float DistanceSq(const LineSegment &other) const;
@@ -214,7 +208,6 @@ public:
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb, float &dNear, float &dFar) const;
 	bool Intersects(const OBB &obb) const;
-	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Polygon &polygon) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	/** @param epsilon If testing intersection between two line segments, a distance threshold value is used to account

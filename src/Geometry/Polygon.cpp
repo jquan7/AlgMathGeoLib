@@ -698,17 +698,6 @@ bool Polygon::Intersects(const Sphere &sphere) const
 	return false;
 }
 
-bool Polygon::Intersects(const Capsule &capsule) const
-{
-	///@todo Optimize.
-	TriangleArray tris = Triangulate();
-	for(size_t i = 0; i < tris.size(); ++i)
-		if (TRIANGLE(tris[i]).Intersects(capsule))
-			return true;
-
-	return false;
-}
-
 vec Polygon::ClosestPoint(const vec &point) const
 {
 	assume(IsPlanar());

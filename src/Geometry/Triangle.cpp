@@ -25,7 +25,6 @@
 #include "../Math/float4x4.h"
 #include "../Math/Quat.h"
 #include "../Math/float4d.h"
-#include "Capsule.h"
 #include "Plane.h"
 #include "Polygon.h"
 #include "Polyhedron.h"
@@ -377,13 +376,6 @@ double Triangle::DistanceSqD(const vec &point) const
 float Triangle::Distance(const Sphere &sphere) const
 {
 	return Max(0.f, Distance(sphere.pos) - sphere.r);
-}
-
-float Triangle::Distance(const Capsule &capsule) const
-{
-	vec otherPt;
-	vec thisPt = ClosestPoint(capsule.l, &otherPt);
-	return Max(0.f, thisPt.Distance(otherPt) - capsule.r);
 }
 
 /** Calculates the intersection between a line and a triangle. The facing is not accounted for, so
@@ -844,11 +836,6 @@ bool Triangle::Intersects(const Polygon &polygon) const
 bool Triangle::Intersects(const Polyhedron &polyhedron) const
 {
 	return polyhedron.Intersects(*this);
-}
-
-bool Triangle::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
 }
 
 void Triangle::ProjectToAxis(const vec &axis, float &dMin, float &dMax) const

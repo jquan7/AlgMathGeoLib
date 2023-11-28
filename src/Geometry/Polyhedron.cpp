@@ -40,7 +40,6 @@
 #include "LineSegment.h"
 #include "Triangle.h"
 #include "Sphere.h"
-#include "Capsule.h"
 #include "../Algorithm/Random/LCG.h"
 #include "../Time/Clock.h"
 
@@ -1248,13 +1247,6 @@ bool Polyhedron::Intersects(const Sphere &sphere) const
 {
 	vec closestPt = ClosestPoint(sphere.pos);
 	return closestPt.DistanceSq(sphere.pos) <= sphere.r * sphere.r;
-}
-
-bool Polyhedron::Intersects(const Capsule &capsule) const
-{
-	vec pt, ptOnLineSegment;
-	pt = ClosestPoint(capsule.l, &ptOnLineSegment);
-	return pt.DistanceSq(ptOnLineSegment) <= capsule.r * capsule.r;
 }
 
 bool Polyhedron::IntersectsConvex(const Line &line) const
@@ -2485,108 +2477,6 @@ Polyhedron Polyhedron::Dodecahedron(const vec &centerPos, float scale, bool ccwI
 
 	assume(p.Contains(centerPos));
 
-	return p;
-}
-
-Polyhedron Polyhedron::CreateCapsule(const vec &a, const vec &b, float r, int verticesPerCap, bool ccwIsFrontFacing)
-{
-	Polyhedron p;
-	float angleIncrement = pi*2.f / verticesPerCap;
-	vec basisU, basisV;
-	vec dir = (b-a).Normalized();
-	dir.PerpendicularBasis(basisU, basisV);
-	if (basisU.Cross(basisV).Dot(dir) < 0.f)
-		basisU = -basisU;
-	if (!ccwIsFrontFacing)
-		basisU = -basisU;
-
-	Face f;
-	float angle = 0.f;
-	for(int i = 0; i < verticesPerCap; ++i, angle += angleIncrement)
-	{
-		p.v.push_back(b + Cos(angle) * r * basisU + Sin(angle) * r * basisV);
-		f.v.push_back(i);
-	}
-	p.f.push_back(f);
-	f.v.clear();
-	angle = 0.f;
-	for(int i = 0; i < verticesPerCap; ++i, angle += angleIncrement)
-	{
-		p.v.push_back(a + Cos(angle) * r * basisU + Sin(angle) * r * basisV);
-		f.v.push_back(2*verticesPerCap-1 - i);
-	}
-	p.f.push_back(f);
-
-	for(int i = 0; i < verticesPerCap; ++i)
-	{
-		f.v.clear();
-		f.v.push_back((i+1)%verticesPerCap);
-		f.v.push_back(i);
-		f.v.push_back(verticesPerCap+i);
-		f.v.push_back(verticesPerCap+(i+1)%verticesPerCap);
-		p.f.push_back(f);
-	}
-#ifdef MATH_VEC_IS_FLOAT4
-	for(size_t i = 0; i < p.v.size(); ++i)
-		p.v[i].w = 1.f;
-#endif
-
-	return p;
-}
-
-Polyhedron Polyhedron::CreateSharpCapsule(const vec &a, const vec &b, float r, float capPointDistance, int verticesPerCap, bool ccwIsFrontFacing)
-{
-	Polyhedron p;
-	float angleIncrement = pi*2.f / verticesPerCap;
-	vec basisU, basisV;
-	vec dir = (b-a).Normalized();
-	dir.PerpendicularBasis(basisU, basisV);
-	if (basisU.Cross(basisV).Dot(dir) < 0.f)
-		basisU = -basisU;
-	if (!ccwIsFrontFacing)
-		basisU = -basisU;
-
-	float angle = 0.f;
-	for(int i = 0; i < verticesPerCap; ++i, angle += angleIncrement)
-		p.v.push_back(b + Cos(angle) * r * basisU + Sin(angle) * r * basisV);
-
-	angle = 0.f;
-	for(int i = 0; i < verticesPerCap; ++i, angle += angleIncrement)
-		p.v.push_back(a + Cos(angle) * r * basisU + Sin(angle) * r * basisV);
-
-	p.v.push_back(b + dir * capPointDistance);
-	p.v.push_back(a - dir * capPointDistance);
-#ifdef MATH_VEC_IS_FLOAT4
-	for(size_t i = 0; i < p.v.size(); ++i)
-		p.v[i].w = 1.f;
-#endif
-
-	Face f;
-	for(int i = 0; i < verticesPerCap; ++i)
-	{
-		f.v.clear();
-		f.v.push_back(i);
-		f.v.push_back((i+1)%verticesPerCap);
-		f.v.push_back((int)p.v.size()-2);
-		p.f.push_back(f);
-	}
-	for(int i = 0; i < verticesPerCap; ++i)
-	{
-		f.v.clear();
-		f.v.push_back(verticesPerCap+(i+1)%verticesPerCap);
-		f.v.push_back(verticesPerCap+i);
-		f.v.push_back((int)p.v.size()-1);
-		p.f.push_back(f);
-	}
-	for(int i = 0; i < verticesPerCap; ++i)
-	{
-		f.v.clear();
-		f.v.push_back((i+1)%verticesPerCap);
-		f.v.push_back(i);
-		f.v.push_back(verticesPerCap+i);
-		f.v.push_back(verticesPerCap+(i+1)%verticesPerCap);
-		p.f.push_back(f);
-	}
 	return p;
 }
 

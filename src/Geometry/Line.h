@@ -122,7 +122,6 @@ public:
 	float Distance(const LineSegment &other, float &d) const { float d2; return Distance(other, d, d2); }
 	float Distance(const LineSegment &other, float &d, float &d2) const;
 	float Distance(const Sphere &other) const;
-	float Distance(const Capsule &other) const;
 
 	/// Computes the closest point on this line to the given object.
 	/** If the other object intersects this line, this function will return an arbitrary point inside
@@ -173,7 +172,6 @@ public:
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb, float &dNear, float &dFar) const;
 	bool Intersects(const OBB &obb) const;
-	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Polygon &polygon) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	/// Tests if this ray intersects the given disc.

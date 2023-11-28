@@ -28,7 +28,6 @@
 #include "Polyhedron.h"
 #include "../Math/Quat.h"
 #include "Sphere.h"
-#include "Capsule.h"
 #include "Triangle.h"
 #include "Circle.h"
 #include "../Math/MathFunc.h"
@@ -137,11 +136,6 @@ float Ray::Distance(const LineSegment &other, float &d, float &d2) const
 float Ray::Distance(const Sphere &sphere) const
 {
 	return Max(0.f, Distance(sphere.pos) - sphere.r);
-}
-
-float Ray::Distance(const Capsule &capsule) const
-{
-	return Max(0.f, Distance(capsule.l) - capsule.r);
 }
 
 vec Ray::ClosestPoint(const vec &targetPoint, float &d) const
@@ -306,11 +300,6 @@ bool Ray::Intersects(const OBB &obb, float &dNear, float &dFar) const
 bool Ray::Intersects(const OBB &obb) const
 {
 	return obb.Intersects(*this);
-}
-
-bool Ray::Intersects(const Capsule &capsule) const
-{
-	return capsule.Intersects(*this);
 }
 
 bool Ray::Intersects(const Polygon &polygon) const

@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file LineSegment2D.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the LineSegment2D geometry object. */
 #include "LineSegment2D.h"
 #include "../Math/MathFunc.h"
@@ -29,7 +29,6 @@
 #include "Line2D.h"
 #include "Polygon2D.h"
 #include "Sphere2D.h"
-#include "Capsule2D.h"
 #endif
 #include "Triangle2D.h"
 
@@ -414,16 +413,6 @@ float LineSegment2D::DistanceSq(const LineSegment2D &other) const
 float LineSegment2D::Distance(const Sphere2D &other) const
 {
 	return Max(0.f, Distance(other.pos) - other.r);
-}
-
-float LineSegment2D::Distance(const Capsule2D &other) const
-{
-	return Max(0.f, Distance(other.l) - other.r);
-}
-
-bool LineSegment2D::Intersects(const Capsule2D &capsule) const
-{
-	return capsule.Intersects(*this);
 }
 
 bool LineSegment2D::Intersects(const Triangle2D &triangle, float *d, vec2d *intersectionPoint) const
