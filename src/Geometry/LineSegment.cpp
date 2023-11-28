@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file LineSegment.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the LineSegment geometry object. */
 #include "LineSegment.h"
 #include "../Math/MathFunc.h"
@@ -23,7 +23,6 @@
 #include "Plane.h"
 #include "Polygon.h"
 #include "Polyhedron.h"
-#include "Frustum.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
 #include "../Math/float4x4.h"
@@ -397,11 +396,6 @@ bool LineSegment::Intersects(const LineSegment &lineSegment, float epsilon) cons
 bool LineSegment::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool LineSegment::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
 }
 
 bool LineSegment::Intersects(const Polyhedron &polyhedron) const

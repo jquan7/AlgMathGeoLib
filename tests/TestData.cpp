@@ -99,21 +99,6 @@ OBB *OBBArray()
 	return arr;
 }
 
-Frustum *FrustumArray()
-{
-	LCG lcg(Clock::TickU32());
-	static Frustum *arr;
-	if (!arr)
-	{
-		arr = AlignedNew<Frustum>(testrunner_numItersPerTest + UNROLL_LOOP_PADDING);
-		for (int i = 0; i < testrunner_numItersPerTest + UNROLL_LOOP_PADDING; ++i)
-		{
-			arr[i] = RandomFrustumContainingPoint(lcg, POINT_VEC_SCALAR(0.f));
-		}
-	}
-	return arr;
-}
-
 Circle2D *Circle2DArray()
 {
     LCG lcg(Clock::TickU32());
@@ -376,7 +361,6 @@ Quat *q = 0;
 Quat *q2 = 0;
 AABB *aabb = 0;
 OBB *obb = 0;
-Frustum *frustum = 0;
 const Circle2D *circle2d = 0;
 Circle2D *ucircle2d = 0;
 std::vector<float2> *poly2DsContainingZero;
@@ -405,7 +389,6 @@ void InitTestData()
 	q2 = QuatArray2();
 	aabb = AABBArray();
 	obb = OBBArray();
-	frustum = FrustumArray();
 	circle2d = Circle2DArray();
 	ucircle2d = Circle2DArray();
 	poly2DsContainingZero = Poly2DsContainingZero();
@@ -436,7 +419,6 @@ public:
 		AlignedFree(VectorArrayWithW0Or1());
 		AlignedFree(AABBArray());
 		AlignedFree(OBBArray());
-		AlignedFree(FrustumArray());
 		AlignedFree(VecArray2());
 	}
 };

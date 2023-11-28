@@ -389,14 +389,12 @@ public:
 
 	/// Computes the closest point inside this OBB to the given point.
 	/** If the target point lies inside this OBB, then that point is returned.
-		@see Distance(), Contains(), Intersects().
-		@todo Add ClosestPoint(Line/Ray/LineSegment/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron). */
+		@see Distance(), Contains(), Intersects().  */
 	vec ClosestPoint(const vec &point) const;
 
 	/// Computes the distance between this OBB and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
-		@todo Add OBB::Distance(Line/Ray/LineSegment/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Capsule/Frustum/Polyhedron).
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec &point) const;
 	float Distance(const Sphere &sphere) const;
@@ -413,7 +411,6 @@ public:
 	bool Contains(const OBB &obb) const;
 	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
-	bool Contains(const Frustum &frustum) const;
 	bool Contains(const Polyhedron &polyhedron) const;
 
 	/// Tests whether this OBB and the given object intersect.
@@ -447,7 +444,6 @@ public:
 	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 
 	/// Expands this OBB to enclose the given object. The axis directions of this OBB remain intact.

@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Ray.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Ray geometry object. */
 #include "Ray.h"
 #include "AABB.h"
@@ -26,7 +26,6 @@
 #include "Plane.h"
 #include "Polygon.h"
 #include "Polyhedron.h"
-#include "Frustum.h"
 #include "../Math/Quat.h"
 #include "Sphere.h"
 #include "Capsule.h"
@@ -317,11 +316,6 @@ bool Ray::Intersects(const Capsule &capsule) const
 bool Ray::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool Ray::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
 }
 
 bool Ray::Intersects(const Polyhedron &polyhedron) const

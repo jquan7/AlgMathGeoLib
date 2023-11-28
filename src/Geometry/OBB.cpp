@@ -22,7 +22,6 @@
 #endif
 #include "../Math/MathFunc.h"
 #include "AABB.h"
-#include "Frustum.h"
 #include "../Algorithm/Random/LCG.h"
 #include "LineSegment.h"
 #include "Line.h"
@@ -181,7 +180,7 @@ bool OBB::SetFrom(const Polyhedron &polyhedron)
 
 Polyhedron OBB::ToPolyhedron() const
 {
-	// Note to maintainer: This function is an exact copy of AABB:ToPolyhedron() and Frustum::ToPolyhedron().
+	// Note to maintainer: This function is an exact copy of AABB:ToPolyhedron() .
 
 	Polyhedron p;
 	// Populate the corners of this OBB.
@@ -2446,15 +2445,6 @@ bool OBB::Contains(const Polygon &polygon) const
 	return true;
 }
 
-bool OBB::Contains(const Frustum &frustum) const
-{
-	for(int i = 0; i < 8; ++i)
-		if (!Contains(frustum.CornerPoint(i)))
-			return false;
-
-	return true;
-}
-
 bool OBB::Contains(const Polyhedron &polyhedron) const
 {
 	assume(polyhedron.IsClosed());
@@ -2781,11 +2771,6 @@ bool OBB::Intersects(const Triangle &triangle) const
 bool OBB::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool OBB::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
 }
 
 bool OBB::Intersects(const Polyhedron &polyhedron) const

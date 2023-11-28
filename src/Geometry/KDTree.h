@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
    limitations under the License. */
 
 /** @file KdTree.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A KD-tree acceleration structure for static geometry. */
 #pragma once
 
 #include "../Math/MathTypes.h"
 #include "../Math/myassert.h"
 #include "Triangle.h"
+#include "Ray.h"
 
 #ifdef MATH_CONTAINERLIB_SUPPORT
 #include "Container/MaxHeap.h"
@@ -75,7 +76,7 @@ public:
 	{}
 
 	~KdTree();
-	
+
 	/// Adds a given number of objects to this kD-tree.
 	/// Call this function repeatedly as many times as necessary to prepare the data. Then
 	/// call Build() to create the tree data structure.

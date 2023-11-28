@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Polyhedron.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Polyhedron geometry object. */
 #include "Polyhedron.h"
 #include <set>
@@ -33,7 +33,6 @@
 #include "../Math/Swap.h"
 #include "AABB.h"
 #include "OBB.h"
-#include "Frustum.h"
 #include "Plane.h"
 #include "Polygon.h"
 #include "Line.h"
@@ -128,7 +127,7 @@ vec Polyhedron::Vertex(int vertexIndex) const
 {
 	assume(vertexIndex >= 0);
 	assume(vertexIndex < (int)v.size());
-	
+
 	return v[vertexIndex];
 }
 
@@ -342,7 +341,7 @@ vec Polyhedron::ExtremePoint(const vec &direction, float &projectionDistance) co
 	return extremePoint;
 }
 
-int Polyhedron::ExtremeVertexConvex(const std::vector<std::vector<int> > &adjacencyData, const vec &direction, 
+int Polyhedron::ExtremeVertexConvex(const std::vector<std::vector<int> > &adjacencyData, const vec &direction,
 	std::vector<unsigned int> &floodFillVisited, unsigned int floodFillVisitColor,
 	float &mostExtremeDistance, int startingVertex) const
 {
@@ -938,15 +937,6 @@ bool Polyhedron::Contains(const OBB &obb) const
 	return true;
 }
 
-bool Polyhedron::Contains(const Frustum &frustum) const
-{
-	for(int i = 0; i < 8; ++i)
-		if (!Contains(frustum.CornerPoint(i)))
-			return false;
-
-	return true;
-}
-
 bool Polyhedron::Contains(const Polyhedron &polyhedron) const
 {
 	assume(polyhedron.IsClosed());
@@ -1074,7 +1064,7 @@ bool Polyhedron::ClipLineSegmentToConvexPolyhedron(const vec &ptA, const vec &di
 		   The points P on the plane p satisfy the equation <P, p.normal> == p.d.
 		   The points P on the line have the parametric equation P = ptA + dir * t.
 		   Solving for the distance along the line for intersection gives
-		
+
 		   t = (p.d - <p.normal, ptA>) / <p.normal, dir>.
 		*/
 
@@ -1254,11 +1244,6 @@ bool Polyhedron::Intersects(const Polygon &polygon) const
 	return Intersects(polygon.ToPolyhedron());
 }
 
-bool Polyhedron::Intersects(const Frustum &frustum) const
-{
-	return PolyhedronIntersectsAABB_OBB(*this, frustum);
-}
-
 bool Polyhedron::Intersects(const Sphere &sphere) const
 {
 	vec closestPt = ClosestPoint(sphere.pos);
@@ -1401,7 +1386,7 @@ void Polyhedron::MergeConvex(const vec &point)
 			assert(existing != remainingEdges.end());
 			MARK_UNUSED(existing);
 
-#if 0			
+#if 0
 			int adjoiningFace = existing->second;
 
 			if (FaceNormal(adjoiningFace).Dot(newTriangleNormal) >= 0.99999f) ///\todo vec::IsCollinear
@@ -1973,7 +1958,7 @@ Polyhedron Polyhedron::ConvexHull(const vec *pointArray, int numPoints, LCG &rng
 				}
 				else // v0<->v1 is a boundary edge.
 				{
-					C_LOG("Neighbor face %d (%s) of face %d (%s) does not see vertex %d. Edge %d->%d is then a boundary edge.", 
+					C_LOG("Neighbor face %d (%s) of face %d (%s) does not see vertex %d. Edge %d->%d is then a boundary edge.",
 						adjFace, p.f[adjFace].ToString().c_str(), fi, p.f[f].ToString().c_str(), extremeI, v0, v1);
 					boundaryEdges.push_back(std::make_pair(v0, v1));
 				}
@@ -2007,7 +1992,7 @@ Polyhedron Polyhedron::ConvexHull(const vec *pointArray, int numPoints, LCG &rng
 					//assert(iter3 != conflictListVertices[*iter].end());
 					if (iter != conflictListVertices[v].end())
 					{
-						C_LOG("Vertex %d no longer with face %d, because the face was removed.", 
+						C_LOG("Vertex %d no longer with face %d, because the face was removed.",
 							v, *fi);
 						conflictListVertices[v].erase(iter);
 					}
@@ -2691,7 +2676,7 @@ void Polyhedron::RemoveRedundantVertices()
 	for(size_t i = 0; i < usedVerticesArray.size(); ++i)
 		v[i] = v[usedVerticesArray[i]];
 	v.resize(usedVerticesArray.size());
-	
+
 	assert(FaceIndicesValid());
 }
 
@@ -2765,7 +2750,7 @@ int Polyhedron::MergeAdjacentPlanarFaces(bool snapVerticesToMergedPlanes, bool c
 						{
 #if 0
 							LOGI("Face normal for i: %d (%s) is %s, face normal for nf: %d (%s) is %s. Extremes: %f to %f, and %f to %f. Extreme spread after merging: %f",
-								(int)i, f[i].ToString().c_str(), thisNormal.ToFloat4().ToString().c_str(), (int)nf, 
+								(int)i, f[i].ToString().c_str(), thisNormal.ToFloat4().ToString().c_str(), (int)nf,
 								f[nf].ToString().c_str(),
 								nghbNormal.ToFloat4().ToString().c_str(),
 								eNeg, ePos, nNeg, nPos, Max(ePos, nPos) - Min(eNeg, nNeg));
@@ -2870,7 +2855,7 @@ int Polyhedron::MergeAdjacentPlanarFaces(bool snapVerticesToMergedPlanes, bool c
 						// On nghb face, vertices v0 and v1 are found at indices n0, n1, and n1 -> n0 goes CCW
 						size_t n0 = std::find(nghb.v.begin(), nghb.v.end(), v0) - nghb.v.begin();
 						size_t n1 = std::find(nghb.v.begin(), nghb.v.end(), v1) - nghb.v.begin();
-						
+
 						// It is possible that the two faces share multiple edges, so need to find all edges that these share in addition to v0->v1.
 						// Scan forward
 						int numVerticesToErase = 0;

@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Plane.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Plane geometry object. */
 #include "Plane.h"
 #include "../Math/MathFunc.h"
@@ -34,7 +34,6 @@
 #include "../Math/float4x4.h"
 #include "../Math/float4.h"
 #include "../Math/Quat.h"
-#include "Frustum.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>
@@ -245,7 +244,6 @@ float Plane::SignedDistance(const AABB &aabb) const { return Plane_SignedDistanc
 float Plane::SignedDistance(const OBB &obb) const { return Plane_SignedDistance(*this, obb); }
 float Plane::SignedDistance(const Capsule &capsule) const { return Plane_SignedDistance(*this, capsule); }
 //float Plane::SignedDistance(const Circle &circle) const { return Plane_SignedDistance(*this, circle); }
-float Plane::SignedDistance(const Frustum &frustum) const { return Plane_SignedDistance(*this, frustum); }
 float Plane::SignedDistance(const Line &line) const { return Plane_SignedDistance(*this, line); }
 float Plane::SignedDistance(const LineSegment &lineSegment) const { return Plane_SignedDistance(*this, lineSegment); }
 float Plane::SignedDistance(const Ray &ray) const { return Plane_SignedDistance(*this, ray); }
@@ -609,7 +607,7 @@ bool Plane::IntersectLinePlane(const vec &planeNormal, float planeD, const vec &
 	                     <planeNormal, linePos + t*lineDir> == planeD, or
 	    <planeNormal, linePos> + t * <planeNormal, lineDir> == planeD, or
 	                                                      t == (planeD - <planeNormal, linePos>) / <planeNormal, lineDir>,
-	
+
 	                                                           assuming that <planeNormal, lineDir> != 0.
 
 	If <planeNormal, lineDir> == 0, then the line is parallel to the plane, and either no intersection occurs, or the whole line
@@ -697,15 +695,6 @@ bool Plane::Intersects(const Triangle &triangle) const
 	float b = SignedDistance(triangle.b);
 	float c = SignedDistance(triangle.c);
 	return (a*b <= 0.f || a*c <= 0.f);
-}
-
-bool Plane::Intersects(const Frustum &frustum) const
-{
-	bool sign = IsOnPositiveSide(frustum.CornerPoint(0));
-	for(int i = 1; i < 8; ++i)
-		if (sign != IsOnPositiveSide(frustum.CornerPoint(i)))
-			return true;
-	return false;
 }
 
 bool Plane::Intersects(const Polyhedron &polyhedron) const

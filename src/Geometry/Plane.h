@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Plane.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Plane geometry object. */
 #pragma once
 
@@ -167,7 +167,6 @@ public:
 	float SignedDistance(const OBB &obb) const;
 	float SignedDistance(const Capsule &capsule) const;
 //	float SignedDistance(const Circle &circle) const;
-	float SignedDistance(const Frustum &frustum) const;
 	float SignedDistance(const Line &line) const;
 	float SignedDistance(const LineSegment &lineSegment) const;
 	float SignedDistance(const Ray &ray) const;
@@ -197,7 +196,7 @@ public:
 	Polygon Project(const Polygon &polygon) const;
 
 	/// Projects the given point to the negative half-space of this plane.
-	/** This means that if the point lies on the plane, or in the negative half-space, the same point is 
+	/** This means that if the point lies on the plane, or in the negative half-space, the same point is
 		returned unchanged. If the point lies on the positive half-space, it is projected orthographically onto the plane.
 		@see ProjectToPositiveHalf(), Project() */
 	vec ProjectToNegativeHalf(const vec &point) const;
@@ -314,7 +313,6 @@ public:
 	bool Intersects(const Polyhedron &polyhedron) const;
 	/// @todo Add a version of Plane-Triangle intersection which returns the line segment of intersection.
 	bool Intersects(const Triangle &triangle) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Capsule &capsule) const;
 	/// Tests if this plane intersects with the given circle.
 	/** @param pt1 [out] If specified, receives the first point of intersection. This pointer may be null.

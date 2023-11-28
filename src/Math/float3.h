@@ -1,4 +1,4 @@
-/* Copyright 2011 Jukka Jylänki
+/* Copyright 2011 Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float3.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A 3D (x,y,z) ordered tuple. */
 #pragma once
 
@@ -105,7 +105,7 @@ public:
 		assume(index < Size);
 		return ptr()[index];
 	}
-	
+
 	FORCE_INLINE float &At(int index)
 	{
 		assume(index >= 0);
@@ -210,7 +210,7 @@ public:
 	/// Divides this vector by a scalar. [similarOverload: Add] [hideIndex]
 	/// @return (x/s, y/s, z/s).
 	float3 Div(float s) const { return *this / s; }
-	
+
 	/// Divides the vector (s,s,s) by this vector, element-wise. [similarOverload: Add] [hideIndex]
 	/// @note Mathematically, the division of a scalar by a vector is not defined in linear space structures,
 	///	 but this function is provided here for syntactical convenience.
@@ -481,12 +481,11 @@ public:
 	/// Returns a copy of this vector, with its length scaled between minLength and maxLength.
 	/** @see Clamp(). */
 	float3 ClampLength(float minLength, float maxLength) const;
-				
+
 	/// Computes the distance between this point and the given object.
 	/** This function finds the nearest point to this point on the given object, and computes its distance
 		to this point.
 		If this point lies inside the given object, a distance of 0 is returned.
-		@todo Add float3::Distance(Polygon/Circle/Disc/Frustum/Polyhedron).
 		@see DistanceSq(), Length(), LengthSq(). */
 	float Distance(const float3 &point) const;
 	float Distance(const Line &line) const;
@@ -582,7 +581,7 @@ public:
 	/// Returns the angle between this vector and the specified vector, in radians.
 	/** @note This function takes into account that this vector or the other vector can be unnormalized, and normalizes the computations.
 			If you are computing the angle between two normalized vectors, it is better to use AngleBetweenNorm().
-		@see AngleBetweenNorm(). */		
+		@see AngleBetweenNorm(). */
 	float AngleBetween(const float3 &other) const;
 
 	/// Returns the angle between this vector and the specified normalized vector, in radians.

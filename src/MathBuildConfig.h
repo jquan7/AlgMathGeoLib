@@ -1,4 +1,4 @@
-/* Copyright 2011 Jukka Jylänki
+/* Copyright 2011 Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file MathBuildConfig.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Specifies all build flags for the library. */
 #pragma once
 
@@ -81,24 +81,6 @@
 // graphics engine. Do not enable, only for internal use.
 #ifndef MATH_GRAPHICSENGINE_INTEROP
 //#define MATH_GRAPHICSENGINE_INTEROP
-#endif
-
-// If MATH_USE_DIRECT3D is defined, the Frustum class defaults to creating Frustums with projectiveSpace = FrustumSpaceD3D.
-#ifndef MATH_USE_DIRECT3D
-//#define MATH_USE_DIRECT3D
-#endif
-// If MATH_USE_OPENGL is defined, the Frustum class defaults to creating Frustums with projectiveSpace = FrustumSpaceGL.
-#ifndef MATH_USE_OPENGL
-//#define MATH_USE_OPENGL
-#endif
-
-// If MATH_LEFTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumLeftHanded.
-#ifndef MATH_LEFTHANDED_CAMERA
-//#define MATH_LEFTHANDED_CAMERA
-#endif
-// If MATH_RIGHTHANDED_CAMERA is defined, the Frustum class defaults to creating Frustums with handedness = FrustumRightHanded.
-#ifndef MATH_RIGHTHANDED_CAMERA
-//#define MATH_RIGHTHANDED_CAMERA
 #endif
 
 // If MATH_COLMAJOR_MATRICES is defined, matrices use a column-major memory layout. If undefined, matrices

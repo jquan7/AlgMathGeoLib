@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Triangle2D.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Triangle2D geometry object. */
 #pragma once
 
@@ -226,7 +226,6 @@ public:
 	/// Computes the distance between this triangle and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
-		@todo Add Triangle2D::Distance(Line2D/Ray2D/LineSegment2D/Plane/Triangle2D/Polygon2D/Circle/Disc/AABB2D/OBB2D/Capsule2D/Frustum/Polyhedron).
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec2d &point) const;
 #if 0
@@ -237,7 +236,7 @@ public:
 	float DistanceSq(const vec2d &point) const;
 
 #if 0
-	/// Tests whether this triangle and the given object intersect.	
+	/// Tests whether this triangle and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this triangle,
 		or this triangle is contained inside a sphere, etc.)
@@ -296,7 +295,6 @@ public:
 			This pointer may be null. TODO Add this parameter back.
 		@param outD [out] If specified, receives the distance along the line of the closest point on the line to this triangle. TODO Add this parameter back.
 		@return The closest point on this triangle to the given object.
-		@todo Add ClosestPoint(Ray2D/Plane/Polygon2D/Circle/Disk/AABB2D/OBB2D/Sphere2D/Capsule2D/Frustum/Polyhedron).
 		@see Distance(), Contains(), Intersects(), ClosestPointToTriangleEdge(), Line2D::GetPoint. */
 #if 0
 	vec2d ClosestPoint(const Line2D &line, vec2d *otherPt = 0) const;
@@ -310,7 +308,6 @@ public:
 			This pointer may be null.
 		@param outD [out] If specified, receives the distance along the line of the closest point on the line to the edge of this triangle.
 		@return The closest point on the edge of this triangle to the given object.
-		@todo Add ClosestPointToTriangleEdge(Point/Ray2D/Triangle2D/Plane/Polygon2D/Circle/Disk/AABB2D/OBB2D/Sphere2D/Capsule2D/Frustum/Polyhedron).
 		@see Distance(), Contains(), Intersects(), ClosestPointToTriangleEdge(), Line2D::GetPoint. */
 #if 0
 	vec2d ClosestPointToTriangleEdge(const Line2D &line, float *outU, float *outV, float *outD) const;

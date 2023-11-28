@@ -24,7 +24,6 @@
 
 #include "AABB.h"
 #include "OBB.h"
-#include "Frustum.h"
 #include "Polyhedron.h"
 #include "Plane.h"
 #include "Line.h"
@@ -550,12 +549,7 @@ bool Polygon::ConvexIntersects(const OBB &obb) const
 	return GJKIntersect(*this, obb);
 }
 
-bool Polygon::ConvexIntersects(const Frustum &frustum) const
-{
-	return GJKIntersect(*this, frustum);
-}
-
-template<typename Convex /* = AABB, OBB, Frustum. */>
+template<typename Convex /* = AABB, OBB. */>
 bool Convex_Intersects_Polygon(const Convex &c, const Polygon &p)
 {
 	LineSegment l;
@@ -597,16 +591,6 @@ bool Polygon::Intersects(const OBB &obb) const
 		return false;
 
 	return Convex_Intersects_Polygon(obb, *this);
-}
-
-bool Polygon::Intersects(const Frustum &frustum) const
-{
-	// Because GJK test is so fast, use that as an early-out. (computes intersection between the convex hull of this poly, and the frustum)
-	bool convexIntersects = ConvexIntersects(frustum);
-	if (!convexIntersects)
-		return false;
-
-	return Convex_Intersects_Polygon(frustum, *this);
 }
 
 template<typename T /* = Polygon or Triangle */>

@@ -21,7 +21,6 @@
 #include <iostream>
 #include <utility>
 #endif
-#include "Frustum.h"
 #include "LineSegment.h"
 #include "Line.h"
 #include "Ray.h"
@@ -102,7 +101,7 @@ void AABB::SetFrom(const vec *pointArray, int numPoints)
 
 Polyhedron AABB::ToPolyhedron() const
 {
-	// Note to maintainer: This function is an exact copy of OBB:ToPolyhedron() and Frustum::ToPolyhedron().
+	// Note to maintainer: This function is an exact copy of OBB:ToPolyhedron().
 	Polyhedron p;
 	// Populate the corners of this AABB.
 	// The will be in the order 0: ---, 1: --+, 2: -+-, 3: -++, 4: +--, 5: +-+, 6: ++-, 7: +++.
@@ -653,11 +652,6 @@ bool AABB::Contains(const Polygon &polygon) const
 	return Contains(polygon.MinimalEnclosingAABB());
 }
 
-bool AABB::Contains(const Frustum &frustum) const
-{
-	return Contains(frustum.MinimalEnclosingAABB());
-}
-
 bool AABB::Contains(const Polyhedron &polyhedron) const
 {
 	return Contains(polyhedron.MinimalEnclosingAABB());
@@ -990,11 +984,6 @@ bool AABB::Intersects(const Polygon &polygon) const
 	return polygon.Intersects(*this);
 }
 
-bool AABB::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
-}
-
 bool AABB::Intersects(const Polyhedron &polyhedron) const
 {
 	return polyhedron.Intersects(*this);
@@ -1076,11 +1065,6 @@ void AABB::Enclose(const Capsule &capsule)
 	vec d = DIR_VEC_SCALAR(capsule.r);
 	minPoint = Min(minPoint, Min(capsule.l.a, capsule.l.b) - d);
 	maxPoint = Max(maxPoint, Max(capsule.l.a, capsule.l.b) + d);
-}
-
-void AABB::Enclose(const Frustum &frustum)
-{
-	Enclose(frustum.MinimalEnclosingAABB());
 }
 
 void AABB::Enclose(const Polygon &polygon)

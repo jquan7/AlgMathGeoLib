@@ -45,11 +45,6 @@ Triangle RandomTriangleNearOrigin(float maxDistanceFromOrigin)
 	return Triangle(RandomPointNearOrigin(maxDistanceFromOrigin), RandomPointNearOrigin(maxDistanceFromOrigin), RandomPointNearOrigin(maxDistanceFromOrigin));
 }
 
-Frustum RandomFrustumNearOrigin(float maxDistanceFromOrigin)
-{
-	return RandomFrustumContainingPoint(rng, RandomPointNearOrigin(maxDistanceFromOrigin));
-}
-
 Polygon RandomPolygonContainingPoint(const vec &pt);
 Polygon RandomPolygonNearOrigin(float maxDistanceFromOrigin)
 {
@@ -74,7 +69,7 @@ RANDOMIZED_TEST(AABB_Enclose_point)
 	assert(aabb.Contains(pt));
 }
 
-/** @bug Improve numerical stability of the test with epsilon and enable this test. 
+/** @bug Improve numerical stability of the test with epsilon and enable this test.
 RANDOMIZED_TEST(OBB_Enclose_point)
 {
 	OBB obb = RandomOBBNearOrigin(DISTSCALE, SIZESCALE);
@@ -102,7 +97,7 @@ RANDOMIZED_TEST(AABB_Enclose_AABB)
 	assert(aabb.Contains(aabb2));
 }
 
-/** @bug Improve numerical stability of the test with epsilon and enable this test. 
+/** @bug Improve numerical stability of the test with epsilon and enable this test.
 RANDOMIZED_TEST(AABB_Enclose_OBB)
 {
 	AABB aabb = RandomAABBNearOrigin(DISTSCALE, SIZESCALE);
@@ -137,15 +132,6 @@ RANDOMIZED_TEST(AABB_Enclose_Capsule)
 	aabb.Enclose(c);
 
 	assert(aabb.Contains(c));
-}
-
-RANDOMIZED_TEST(AABB_Enclose_Frustum)
-{
-	AABB aabb = RandomAABBNearOrigin(DISTSCALE, SIZESCALE);
-	Frustum f = RandomFrustumNearOrigin(DISTSCALE);
-	aabb.Enclose(f);
-
-	assert(aabb.Contains(f));
 }
 
 RANDOMIZED_TEST(AABB_Enclose_Polygon)
@@ -227,15 +213,6 @@ RANDOMIZED_TEST(Sphere_Enclose_Capsule)
 	s.Enclose(c);
 
 	assert2(s.Contains(c), s.SerializeToCodeString(), c.SerializeToCodeString());
-}
-
-RANDOMIZED_TEST(Sphere_Enclose_Frustum)
-{
-	Sphere s = RandomSphereNearOrigin(DISTSCALE, SIZESCALE);
-	Frustum f = RandomFrustumNearOrigin(DISTSCALE);
-	s.Enclose(f);
-
-	assert2(s.Contains(f), s, f);
 }
 
 RANDOMIZED_TEST(Sphere_Enclose_Polygon)

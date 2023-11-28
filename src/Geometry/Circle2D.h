@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
    /** @file Circle.h
-	   @author Jukka Jylänki
+	   @author Jukka Jylï¿½nki
 	   @brief The Circle geometry object. */
 #pragma once
 
@@ -68,8 +68,7 @@ public:
 	/// Returns the distance between this sphere and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
-		@see Contains(), Intersects(), ClosestPoint().
-		@todo Add Sphere::Distance(Polygon/Circle/Disc/Frustum/Polyhedron). */
+		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const float2 &point) const;
 	float SignedDistance(const float2 &point) const;
 

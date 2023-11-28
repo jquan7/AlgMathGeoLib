@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Polygon.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Polygon geometry object. */
 #pragma once
 
@@ -138,7 +138,7 @@ public:
 		@param i Index of the first endpoint of the diagonal LineSegment, in the range [0, NumVertices-1].
 		@param j Index of the second endpoint of the diagonal LineSegment, in the range [0, NumVertices-1].
 		@note Whereas it is invalid to call DiagonalExists() with values |i-j|<=1, it is acceptable for this function. This is to
-			simplify generation of code that iterates over diagonal vertex pairs.	
+			simplify generation of code that iterates over diagonal vertex pairs.
 		@return LineSegment(Vertex(i), Vertex(j)) without checking if this actually is a valid diagonal of this polygon. If
 			indices outside the valid range are passed, LineSegment(nan, nan) is returned.
 		@see Vertex(), NumVertices(), DiagonalExists(). */
@@ -315,7 +315,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Triangle &triangle, float polygonThickness = 1e-3f) const;
 	bool Intersects(const Polygon &polygon, float polygonThickness = 1e-3f) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	bool Intersects(const Sphere &sphere) const;
 	bool Intersects(const Capsule &capsule) const;
@@ -323,11 +322,10 @@ public:
 	/// Tests whether this convex polygon and the given object intersect.
 	/** @note These functions make an implicit assumption that this polygon is convex. If you call these functions on
 		a convex polygon, the intersection test is effectively performed on the convex hull of this polygon, meaning
-		that it can result in false positives, so these functions can still be useful as an approximate or an early-out 
+		that it can result in false positives, so these functions can still be useful as an approximate or an early-out
 		test for concave polygons. */
 	bool ConvexIntersects(const AABB &aabb) const;
 	bool ConvexIntersects(const OBB &obb) const;
-	bool ConvexIntersects(const Frustum &frustum) const;
 
 	/// Computes the closest point on this polygon to the given object.
 	/** If the other object intersects this polygon, this function will return an arbitrary point inside
@@ -335,8 +333,7 @@ public:
 		@param lineSegment The line segment to find the closest point to.
 		@param lineSegmentPt [out] If specified, receives the closest point on the line segment to this polygon. This
 			pointer may be null.
-		@see Contains(), Distance(), Intersects().
-		@todo Add ClosestPoint(Line/Ray/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron). */
+		@see Contains(), Distance(), Intersects().  */
 	vec ClosestPoint(const LineSegment &lineSegment, vec *lineSegmentPt) const;
 	vec ClosestPoint(const LineSegment &lineSegment) const;
 	vec ClosestPoint(const vec &point) const;

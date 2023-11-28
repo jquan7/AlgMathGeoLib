@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Triangle.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Triangle geometry object. */
 #pragma once
 
@@ -263,7 +263,6 @@ public:
 	/// Computes the distance between this triangle and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
-		@todo Add Triangle::Distance(Line/Ray/LineSegment/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Capsule/Frustum/Polyhedron).
 		@see Contains(), Intersects(), ClosestPoint(). */
 	float Distance(const vec &point) const;
 	float Distance(const Sphere &sphere) const;
@@ -272,7 +271,7 @@ public:
 	float DistanceSq(const vec &point) const;
 	double DistanceSqD(const vec &point) const;
 
-	/// Tests whether this triangle and the given object intersect.	
+	/// Tests whether this triangle and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this triangle,
 		or this triangle is contained inside a sphere, etc.)
@@ -299,7 +298,6 @@ public:
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	bool Intersects(const Capsule &capsule) const;
 
@@ -334,7 +332,6 @@ public:
 			This pointer may be null. TODO Add this parameter back.
 		@param outD [out] If specified, receives the distance along the line of the closest point on the line to this triangle. TODO Add this parameter back.
 		@return The closest point on this triangle to the given object.
-		@todo Add ClosestPoint(Ray/Plane/Polygon/Circle/Disk/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron).
 		@see Distance(), Contains(), Intersects(), ClosestPointToTriangleEdge(), Line::GetPoint. */
 	vec ClosestPoint(const Line &line, vec *otherPt = 0) const;
 	vec ClosestPoint(const Triangle &triangle, vec *otherPt = 0) const;
@@ -346,7 +343,6 @@ public:
 			This pointer may be null.
 		@param outD [out] If specified, receives the distance along the line of the closest point on the line to the edge of this triangle.
 		@return The closest point on the edge of this triangle to the given object.
-		@todo Add ClosestPointToTriangleEdge(Point/Ray/Triangle/Plane/Polygon/Circle/Disk/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron).
 		@see Distance(), Contains(), Intersects(), ClosestPointToTriangleEdge(), Line::GetPoint. */
 	vec ClosestPointToTriangleEdge(const Line &line, float *outU, float *outV, float *outD) const;
 	vec ClosestPointToTriangleEdge(const LineSegment &lineSegment, float *outU, float *outV, float *outD) const;

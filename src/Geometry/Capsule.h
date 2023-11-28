@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Capsule.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Capsule geometry object. */
 #pragma once
 
@@ -227,8 +227,7 @@ public:
 
 	/// Computes the closest point inside this capsule to the given point.
 	/** If the target point lies inside this capsule, then that point is returned.
-		@see Distance(), Contains(), Intersects().
-		@todo Add ClosestPoint(Line/Ray/LineSegment/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron). */
+		@see Distance(), Contains(), Intersects().  */
 	vec ClosestPoint(const vec &targetPoint) const;
 
 	/// Computes the distance between this capsule and the given object.
@@ -256,10 +255,9 @@ public:
 	bool Contains(const Polygon &polygon) const;
 	bool Contains(const AABB &aabb) const;
 	bool Contains(const OBB &obb) const;
-	bool Contains(const Frustum &frustum) const;
 	bool Contains(const Polyhedron &polyhedron) const;
 
-	/// Tests whether this capsule and the given object intersect.	
+	/// Tests whether this capsule and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this capsule,
 		or this capsule is contained inside a Sphere, etc.)
@@ -276,7 +274,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)

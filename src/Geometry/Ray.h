@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Ray.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Ray geometry object. */
 #pragma once
 
@@ -142,7 +142,7 @@ public:
 	vec ClosestPoint(const LineSegment &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
 	vec ClosestPoint(const LineSegment &other, float &d, float &d2) const;
 
-	/// Tests whether this ray and the given object intersect.	
+	/// Tests whether this ray and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true.
 		@param d [out] If specified, this parameter will receive the parametric distance of
@@ -170,7 +170,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	/// Tests if this ray intersects the given disc.
 	/// @todo This signature will be moved to bool Intersects(const Disc &disc) const;

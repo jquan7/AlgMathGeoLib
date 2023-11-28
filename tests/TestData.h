@@ -29,7 +29,6 @@ float4 *VectorArray3();
 float4 *VectorArrayWithW0Or1();
 AABB *AABBArray();
 OBB *OBBArray();
-Frustum *FrustumArray();
 Circle2D *Circle2DArray();
 
 void InitTestData();
@@ -59,7 +58,6 @@ extern Quat *q;
 extern Quat *q2;
 extern AABB *aabb;
 extern OBB *obb;
-extern Frustum *frustum;
 extern Circle2D *circle2d;
 extern Circle2D *ucircle2d;
 

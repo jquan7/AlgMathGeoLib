@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Line.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Line geometry object. */
 #include "Line.h"
 #include "Ray.h"
@@ -23,7 +23,6 @@
 #include "../Math/float4x4.h"
 #include "OBB.h"
 #include "../Math/Quat.h"
-#include "Frustum.h"
 #include "Triangle.h"
 #include "Plane.h"
 #include "Polygon.h"
@@ -231,11 +230,6 @@ bool Line::Intersects(const Capsule &capsule) const
 bool Line::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool Line::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
 }
 
 bool Line::Intersects(const Polyhedron &polyhedron) const

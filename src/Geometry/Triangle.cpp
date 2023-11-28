@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Triangle.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Triangle geometry object. */
 #include "Triangle.h"
 #include "../Math/MathFunc.h"
@@ -26,7 +26,6 @@
 #include "../Math/Quat.h"
 #include "../Math/float4d.h"
 #include "Capsule.h"
-#include "Frustum.h"
 #include "Plane.h"
 #include "Polygon.h"
 #include "Polyhedron.h"
@@ -440,7 +439,7 @@ float Triangle::IntersectLineTri(const vec &linePos, const vec &lineDir,
 		return FLOAT_INF;
 
 	// Barycentric u and v are in limits, the ray intersects the triangle.
-	
+
 	// Output signed distance from ray to triangle.
 	return vE2.Dot(vQ) * recipDet;
 //	return (det < 0.f) ? IntersectBackface : IntersectFrontface;
@@ -842,11 +841,6 @@ bool Triangle::Intersects(const Polygon &polygon) const
 	return polygon.Intersects(*this);
 }
 
-bool Triangle::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
-}
-
 bool Triangle::Intersects(const Polyhedron &polyhedron) const
 {
 	return polyhedron.Intersects(*this);
@@ -1029,7 +1023,7 @@ vec Triangle::ClosestPoint(const LineSegment &lineSegment, vec *otherPt) const
 
 	vec pt2 = ClosestPoint(lineSegment.a);
 	vec pt3 = ClosestPoint(lineSegment.b);
-	
+
 	float D1 = pt1.DistanceSq(lineSegment.GetPoint(d1));
 	float D2 = pt2.DistanceSq(lineSegment.a);
 	float D3 = pt3.DistanceSq(lineSegment.b);

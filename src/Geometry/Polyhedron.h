@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Polyhedron.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Polyhedron geometry object. */
 #pragma once
 
@@ -319,7 +319,6 @@ public:
 	bool Contains(const Polygon &polygon) const;
 	bool Contains(const AABB &aabb) const;
 	bool Contains(const OBB &obb) const;
-	bool Contains(const Frustum &frustum) const;
 	bool Contains(const Polyhedron &polyhedron) const;
 
 	/// Tests if the given face of this Polyhedron contains the given point.
@@ -335,8 +334,7 @@ public:
 	/** This function behaves exactly like Contains(), except this version of the containment test
 		assumes this polyhedron is convex, and uses a faster method of testing containment.
 		@note This function assumes that this polyhedron is closed and its edges are not self-intersecting.
-		@see Contains(), ClosestPoint(), ClosestPointConvex(), Distance(), Intersects(), IntersectsConvex().
-		@todo Add ContainsConvex(Polygon/AABB/OBB/Frustum/Polyhedron/Circle/Disc/Sphere/Capsule). */
+		@see Contains(), ClosestPoint(), ClosestPointConvex(), Distance(), Intersects(), IntersectsConvex().  */
 	bool ContainsConvex(const vec &point, float epsilon = 1e-4f) const;
 	bool ContainsConvex(const LineSegment &lineSegment) const;
 	bool ContainsConvex(const Triangle &triangle) const;
@@ -349,8 +347,7 @@ public:
 		polyhedron. This pointer may be null.
 		@todo Make lineSegmentPt an out-reference instead of an out-pointer.
 		@note This function assumes that this polyhedron is closed and the edges are not self-intersecting.
-		@see Contains(), ContainsConvex(), ClosestPointConvex(), Distance(), Intersects(), IntersectsConvex().
-		@todo Add ClosestPoint(Line/Ray/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron). */
+		@see Contains(), ContainsConvex(), ClosestPointConvex(), Distance(), Intersects(), IntersectsConvex().  */
 	vec ClosestPoint(const LineSegment &lineSegment, vec *lineSegmentPt) const;
 	vec ClosestPoint(const LineSegment &lineSegment) const;
 	/** @param point The point to find the closest point to. */
@@ -360,16 +357,14 @@ public:
 	/** This function behaves exactly like ClosestPoint(), except this version of the test assumes
 		this polyhedron is convex, and uses a faster method of finding the closest point.
 		@note This function assumes that this polyhedron is closed and the edges are not self-intersecting.
-		@see Contains(), ContainsConvex(), ClosestPoint(), Distance(), Intersects(), IntersectsConvex().
-		@todo Add ClosestPointConvex(Line/LineSegment/Ray/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron). */
+		@see Contains(), ContainsConvex(), ClosestPoint(), Distance(), Intersects(), IntersectsConvex().  */
 	vec ClosestPointConvex(const vec &point) const;
 
 	/// Returns the distance between this polyhedron and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
 		@note This function assumes that this polyhedron is closed and the edges are not self-intersecting.
-		@see Contains(), ContainsConvex(), ClosestPoint(), ClosestPointConvex(), Intersects(), IntersectsConvex().
-		@todo Add Distance(Line/LineSegment/Ray/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron). */
+		@see Contains(), ContainsConvex(), ClosestPoint(), ClosestPointConvex(), Intersects(), IntersectsConvex().  */
 	float Distance(const vec &point) const;
 
 	/// Tests whether this polyhedron and the given object intersect.
@@ -389,7 +384,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Sphere &sphere) const;
 	bool Intersects(const Capsule &capsule) const;
 

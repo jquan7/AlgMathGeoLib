@@ -75,46 +75,6 @@ Sphere RandomSphereInHalfspace(const Plane &plane, float maxRadius)
 	return s;
 }
 
-Frustum RandomFrustumInHalfspace(const Plane &plane)
-{
-	Frustum f;
-	if (rng.Int(0,1))
-	{
-		f.SetOrthographic(rng.Float(0.001f, SCALE), rng.Float(0.001f, SCALE));
-	}
-	else
-	{
-		// Really random Frustum could have fov as ]0, pi[, but limit
-		// to much narrower fovs to not cause the corner vertices
-		// shoot too far when farPlaneDistance is very large.
-		f.SetPerspective(rng.Float(0.001f, 3.f*pi / 4.f), rng.Float(0.001f, 3.f*pi / 4.f));
-	}
-	float nearPlaneDistance = rng.Float(0.1f, SCALE);
-	f.SetViewPlaneDistances(nearPlaneDistance, nearPlaneDistance + rng.Float(0.1f, SCALE));
-	vec front = vec::RandomDir(rng);
-	f.SetFrame(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)),
-		front,
-		front.RandomPerpendicular(rng));
-
-	f.SetKind((rng.Int(0, 1) == 1) ? FrustumSpaceD3D : FrustumSpaceGL, (rng.Int(0, 1) == 1) ? FrustumRightHanded : FrustumLeftHanded);
-
-//	assert(!f.IsDegenerate());
-
-	vec extremePoint = f.ExtremePoint(-plane.normal);
-	float distance = plane.Distance(extremePoint);
-	f.Translate((distance + GUARDBAND) * plane.normal);
-
-	assert(f.IsFinite());
-//	assert(!f.IsDegenerate());
-	assert(!f.Intersects(plane));
-//	assert(s.SignedDistance(plane) > 0.f);
-	extremePoint = f.ExtremePoint(-plane.normal);
-	assert(plane.SignedDistance(extremePoint) > 0.f);
-	assert(plane.SignedDistance(f) > 0.f);
-
-	return f;
-}
-
 Line RandomLineInHalfspace(const Plane &plane)
 {
 	vec linePos = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -231,7 +191,7 @@ Polyhedron RandomPolyhedronInHalfspace(const Plane &plane)
 	{
 	case 0: p = RandomAABBInHalfspace(plane, SCALE).ToPolyhedron();
 	case 1: p = RandomOBBInHalfspace(plane, SCALE).ToPolyhedron();
-	case 2: p = RandomFrustumInHalfspace(plane).ToPolyhedron();
+	// case 2: p = RandomFrustumInHalfspace(plane).ToPolyhedron();
 	case 3: p = Polyhedron::Tetrahedron(pt, SCALE); break;
 	case 4: p = Polyhedron::Octahedron(pt, SCALE); break;
 	case 5: p = Polyhedron::Hexahedron(pt, SCALE); break;
@@ -253,7 +213,7 @@ Polyhedron RandomPolyhedronInHalfspace(const Plane &plane)
 	extremePoint = p.ExtremePoint(-plane.normal);
 	assert(plane.SignedDistance(extremePoint) > 0.f);
 	assert(plane.SignedDistance(p) > 0.f);
-	
+
 	return p;
 }
 
@@ -433,26 +393,6 @@ RANDOMIZED_TEST(AABBTriangleNoIntersect)
 	AABB a = RandomAABBInHalfspace(p, 10.f);
 	p.ReverseNormal();
 	Triangle b = RandomTriangleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-	assert(!SATIntersect(a, b));
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(AABBFrustumNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	AABB a = RandomAABBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Frustum b = RandomFrustumInHalfspace(p);
 	assert2(!a.Intersects(b), a, b);
 	assert(!b.Intersects(a));
 
@@ -697,26 +637,6 @@ RANDOMIZED_TEST(OBBTriangleNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(OBBFrustumNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	OBB a = RandomOBBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Frustum b = RandomFrustumInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-	assert(!SATIntersect(a, b));
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(OBBPolyhedronNoIntersect)
 {
 	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
@@ -873,24 +793,6 @@ RANDOMIZED_TEST(SphereTriangleNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(SphereFrustumNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Sphere a = RandomSphereInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Frustum b = RandomFrustumInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(SpherePolyhedronNoIntersect)
 {
 	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
@@ -923,227 +825,7 @@ RANDOMIZED_TEST(SpherePolygonNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-
-
-
-RANDOMIZED_TEST(FrustumLineNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Line b = RandomLineInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumRayNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Ray b = RandomRayInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumLineSegmentNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	LineSegment b = RandomLineSegmentInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumPlaneNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Plane b = RandomPlaneInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumCapsuleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Capsule b = RandomCapsuleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumTriangleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Triangle b = RandomTriangleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-	assert(!SATIntersect(a, b));
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumFrustumNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Frustum b = RandomFrustumInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-
-
-	assert(!SATIntersect(a, b));
-
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 extern int xxxxx;
-
-BENCHMARK(BM_FrustumFrustumNoIntersect, "Frustum-Frustum No Intersection")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-		Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-		Frustum a = RandomFrustumInHalfspace(p);
-		p.ReverseNormal();
-		Frustum b = RandomFrustumInHalfspace(p);
-
-		if (!a.Intersects(b))
-			++xxxxx;
-		if (!b.Intersects(a))
-			++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-BENCHMARK(BM_FrustumFrustumNoIntersect_SAT, "Frustum-Frustum SAT No Intersection")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Frustum b = RandomFrustumInHalfspace(p);
-
-	if (!SATIntersect(a, b))
-		++xxxxx;
-	if (!SATIntersect(b, a))
-		++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-BENCHMARK(BM_FrustumFrustumNoIntersect_GJK, "Frustum-Frustum GJK No Intersection")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-		Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-		Frustum a = RandomFrustumInHalfspace(p);
-		p.ReverseNormal();
-		Frustum b = RandomFrustumInHalfspace(p);
-
-		if (!GJKIntersect(a, b))
-			++xxxxx;
-		if (!GJKIntersect(b, a))
-			++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-RANDOMIZED_TEST(FrustumPolyhedronNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Polyhedron b = RandomPolyhedronInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumPolygonNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Frustum a = RandomFrustumInHalfspace(p);
-	p.ReverseNormal();
-	Polygon b = RandomPolygonInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 
 UNIQUE_TEST(PlaneLineNoIntersectCase)
 {
@@ -1747,12 +1429,12 @@ UNIQUE_TEST(AABB_Capsule_NoIntersect_Case)
 	vec minPoint = POINT_VEC(438.420929f, 805.586670f, 493.709167f);
 	vec maxPoint = POINT_VEC(443.420929f, 810.586670f, 498.709167f);
 	AABB aabb(minPoint, maxPoint);
-	
+
 	vec a = POINT_VEC(479.665222f,  -30.f, 509.737244f);
 	vec b = POINT_VEC(479.665222f, 1530.f, 509.737244f);
-	
+
 	Capsule cylinder(a, b, 37.6882935f);
-	
+
 	assert(!cylinder.Intersects(aabb));
 }
 
@@ -1763,12 +1445,12 @@ UNIQUE_TEST(AABB_Capsule_NoIntersect_Case_2)
 	vec minPoint = POINT_VEC(438.f,        0.f, 493.f);
 	vec maxPoint = POINT_VEC(443.420929f, 10.f, 499.f);
 	AABB aabb(minPoint, maxPoint);
-	
+
 	vec a = POINT_VEC(479.665222f,  0.f, 509.737244f);
 	vec b = POINT_VEC(479.665222f, 10.f, 509.737244f);
-	
+
 	Capsule cylinder(a, b, 37.6882935f);
-	
+
 	assert(!cylinder.Intersects(aabb));
 }
 

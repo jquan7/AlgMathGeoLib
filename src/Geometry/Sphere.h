@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Sphere.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Sphere geometry object. */
 #pragma once
 
@@ -98,7 +98,7 @@ public:
 	/// @return 2*r.
 	/// @see r, SurfaceArea(), Volume().
 	float Diameter() const { return 2.f * r; }
-			
+
 	/// Returns the center of mass of this sphere.
 	/** @return pos.
 		@see pos */
@@ -151,7 +151,6 @@ public:
 	bool Contains(const Polygon &polygon) const;
 	bool Contains(const AABB &aabb) const;
 	bool Contains(const OBB &obb) const;
-	bool Contains(const Frustum &frustum) const;
 	bool Contains(const Polyhedron &polyhedron) const;
 	bool Contains(const Sphere &sphere) const;
 	bool Contains(const Sphere &sphere, float epsilon) const;
@@ -235,8 +234,7 @@ public:
 	/// Returns the distance between this sphere and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
 		If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
-		@see Contains(), Intersects(), ClosestPoint().
-		@todo Add Sphere::Distance(Polygon/Circle/Disc/Frustum/Polyhedron). */
+		@see Contains(), Intersects(), ClosestPoint().  */
 	float Distance(const vec &point) const;
 	float Distance(const Sphere &sphere) const;
 	float Distance(const Capsule &capsule) const;
@@ -255,8 +253,7 @@ public:
 	/// Computes the closest point on this sphere to the given object.
 	/** If the other object intersects this sphere, this function will return an arbitrary point inside
 		the region of intersection.
-		@see Contains(), Distance(), Intersects().
-		@todo Add Sphere::ClosestPoint(Line/Ray/LineSegment/Plane/Triangle/Polygon/Circle/Disc/AABB/OBB/Sphere/Capsule/Frustum/Polyhedron). */
+		@see Contains(), Distance(), Intersects().  */
 	vec ClosestPoint(const vec &point) const;
 
 	/// Tests whether this sphere and the given object intersect.
@@ -278,7 +275,6 @@ public:
 	bool Intersects(const Triangle &triangle, vec *closestPointOnTriangle = 0) const;
 	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	bool Intersects(const Sphere &sphere) const;
 
@@ -302,7 +298,6 @@ public:
 	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
 	void Enclose(const Polyhedron &polyhedron);
-	void Enclose(const Frustum &frustum);
 	void Enclose(const Capsule &capsule);
 
 	/// Expands the radius of this Sphere until it encloses the given object.

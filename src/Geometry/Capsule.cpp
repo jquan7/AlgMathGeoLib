@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Capsule.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Capsule geometry object. */
 #include "Capsule.h"
 #include "../Math/MathConstants.h"
@@ -25,7 +25,6 @@
 #include "../Math/Quat.h"
 #include "AABB.h"
 #include "OBB.h"
-#include "Frustum.h"
 #include "Plane.h"
 #include "Ray.h"
 #include "Line.h"
@@ -365,15 +364,6 @@ bool Capsule::Contains(const OBB &obb) const
 	return true;
 }
 
-bool Capsule::Contains(const Frustum &frustum) const
-{
-	for(int i = 0; i < 8; ++i)
-		if (!Contains(frustum.CornerPoint(i)))
-			return false;
-
-	return true;
-}
-
 bool Capsule::Contains(const Polyhedron &polyhedron) const
 {
 	assume(polyhedron.IsClosed());
@@ -438,11 +428,6 @@ bool Capsule::Intersects(const Triangle &triangle) const
 bool Capsule::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool Capsule::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
 }
 
 bool Capsule::Intersects(const Polyhedron &polyhedron) const

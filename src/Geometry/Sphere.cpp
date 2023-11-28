@@ -30,7 +30,6 @@
 #include "OBB.h"
 #include "AABB.h"
 #include "Capsule.h"
-#include "Frustum.h"
 #include "../Algorithm/Random/LCG.h"
 #include "LineSegment.h"
 #include "Line.h"
@@ -215,15 +214,6 @@ bool Sphere::Contains(const OBB &obb) const
 {
 	for(int i = 0; i < 8; ++i)
 		if (!Contains(obb.CornerPoint(i)))
-			return false;
-
-	return true;
-}
-
-bool Sphere::Contains(const Frustum &frustum) const
-{
-	for(int i = 0; i < 8; ++i)
-		if (!Contains(frustum.CornerPoint(i)))
 			return false;
 
 	return true;
@@ -636,11 +626,6 @@ bool Sphere::Intersects(const Polygon &polygon) const
 	return polygon.Intersects(*this);
 }
 
-bool Sphere::Intersects(const Frustum &frustum) const
-{
-	return frustum.Intersects(*this);
-}
-
 bool Sphere::Intersects(const Polyhedron &polyhedron) const
 {
 	return polyhedron.Intersects(*this);
@@ -803,11 +788,6 @@ void Sphere::Enclose(const Polygon &polygon)
 void Sphere::Enclose(const Polyhedron &polyhedron)
 {
 	Enclose(polyhedron.VertexArrayPtr(), polyhedron.NumVertices());
-}
-
-void Sphere::Enclose(const Frustum &frustum)
-{
-	Sphere_Enclose<Frustum, 8>(*this, frustum);
 }
 
 void Sphere::Enclose(const Capsule &capsule)

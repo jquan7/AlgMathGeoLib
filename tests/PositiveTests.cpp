@@ -94,43 +94,6 @@ Circle2D RandomCircle2DContainingPoint(LCG &lcg, const float2 &pt, float maxRadi
 	return c;
 }
 
-Frustum RandomFrustumContainingPoint(LCG &lcg, const vec &pt)
-{
-	Frustum f;
-	f.SetKind((lcg.Int(0, 1) == 1) ? FrustumSpaceD3D : FrustumSpaceGL, (lcg.Int(0, 1) == 1) ? FrustumRightHanded : FrustumLeftHanded);
-
-	if (lcg.Int(0,1))
-	{
-		f.SetOrthographic(lcg.Float(0.1f, SCALE), lcg.Float(0.1f, SCALE));
-	}
-	else
-	{
-		// Really random Frustum could have fov as ]0, pi[, but limit
-		// to much narrower fovs to not cause the corner vertices
-		// shoot too far when farPlaneDistance is very large.
-		f.SetPerspective(lcg.Float(0.1f, 3.f*pi / 4.f), lcg.Float(0.1f, 3.f*pi / 4.f));
-	}
-	float nearPlaneDistance = lcg.Float(0.1f, SCALE);
-	f.SetViewPlaneDistances(nearPlaneDistance, nearPlaneDistance + lcg.Float(0.1f, SCALE));
-	vec front = vec::RandomDir(lcg);
-	f.SetFrame(POINT_VEC_SCALAR(0.f),
-		front,
-		front.RandomPerpendicular(lcg));
-
-	vec pt2 = f.UniformRandomPointInside(lcg);
-	f.SetPos(f.Pos() + pt - pt2);
-
-	assert(f.IsFinite());
-//	assert(!f.IsDegenerate());
-	assert(f.Contains(pt));
-#ifdef MATH_AUTOMATIC_SSE
-	asserteq(f.Pos().w, 1.f);
-	asserteq(f.Front().w, 0.f);
-	asserteq(f.Up().w, 0.f);
-#endif
-	return f;
-}
-
 Line RandomLineContainingPoint(const vec &pt)
 {
 	vec dir = vec::RandomDir(rng);
@@ -238,7 +201,7 @@ Polyhedron RandomPolyhedronContainingPoint(const vec &pt)
 	{
 	case 0: p = RandomAABBContainingPoint(pt, SCALE).ToPolyhedron(); break;
 	case 1: p = RandomOBBContainingPoint(pt, SCALE).ToPolyhedron(); break;
-	case 2: p = RandomFrustumContainingPoint(rng, pt).ToPolyhedron(); break;
+	// case 2: p = RandomFrustumContainingPoint(rng, pt).ToPolyhedron(); break;
 	case 3: p = Polyhedron::Tetrahedron(pt, SCALE); break;
 	case 4: p = Polyhedron::Octahedron(pt, SCALE); break;
 	case 5: p = Polyhedron::Hexahedron(pt, SCALE); break;
@@ -441,25 +404,6 @@ RANDOMIZED_TEST(AABBTriangleIntersect)
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
 	AABB a = RandomAABBContainingPoint(pt, 10.f);
 	Triangle b = RandomTriangleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-	assert(SATIntersect(a, b));
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(AABBFrustumIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	AABB a = RandomAABBContainingPoint(pt, 10.f);
-	Frustum b = RandomFrustumContainingPoint(rng, pt);
 	assert(a.Intersects(b));
 	assert(b.Intersects(a));
 
@@ -720,25 +664,6 @@ RANDOMIZED_TEST(OBBTriangleIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(OBBFrustumIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	OBB a = RandomOBBContainingPoint(pt, 10.f);
-	Frustum b = RandomFrustumContainingPoint(rng, pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-	assert(SATIntersect(a, b));
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(OBBPolyhedronIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -886,23 +811,6 @@ RANDOMIZED_TEST(SphereTriangleIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(SphereFrustumIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Sphere a = RandomSphereContainingPoint(pt, 10.f);
-	Frustum b = RandomFrustumContainingPoint(rng, pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 RANDOMIZED_TEST(SpherePolyhedronIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -932,213 +840,6 @@ RANDOMIZED_TEST(SpherePolygonIntersect)
 //	assert(a.Contains(b.ClosestPoint(a)));
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
-
-
-
-
-RANDOMIZED_TEST(FrustumLineIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Line b = RandomLineContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumRayIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Ray b = RandomRayContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumLineSegmentIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	LineSegment b = RandomLineSegmentContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumPlaneIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Plane b = RandomPlaneContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumCapsuleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Capsule b = RandomCapsuleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumTriangleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Triangle b = RandomTriangleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-	assert(SATIntersect(a, b));
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumFrustumIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Frustum b = RandomFrustumContainingPoint(rng, pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-
-
-	assert(SATIntersect(a, b));
-
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-BENCHMARK(BM_FrustumFrustumIntersect, "Frustum-Frustum Intersects")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-		vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-		Frustum a = RandomFrustumContainingPoint(rng, pt);
-		Frustum b = RandomFrustumContainingPoint(rng, pt);
-		if (a.Intersects(b))
-			++xxxxx;
-		if (b.Intersects(a))
-			++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-BENCHMARK(BM_FrustumFrustumIntersect_SAT, "Frustum-Frustum SAT")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Frustum b = RandomFrustumContainingPoint(rng, pt);
-	if (SATIntersect(a, b))
-		++xxxxx;
-	if (SATIntersect(b, a))
-		++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-BENCHMARK(BM_FrustumFrustumIntersect_GJK, "Frustum-Frustum GJK")
-{
-#ifdef FAIL_USING_EXCEPTIONS
-	try { // Ignore failures in this benchmark.
-#endif
-		vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-		Frustum a = RandomFrustumContainingPoint(rng, pt);
-		Frustum b = RandomFrustumContainingPoint(rng, pt);
-		if (GJKIntersect(a, b))
-			++xxxxx;
-		if (GJKIntersect(b, a))
-			++xxxxx;
-#ifdef FAIL_USING_EXCEPTIONS
-	} catch(...) {};
-#endif
-}
-BENCHMARK_END;
-
-RANDOMIZED_TEST(FrustumPolyhedronIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Polyhedron b = RandomPolyhedronContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(FrustumPolygonIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Frustum a = RandomFrustumContainingPoint(rng, pt);
-	Polygon b = RandomPolygonContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
 
 RANDOMIZED_TEST(CapsuleLineIntersect)
 {
@@ -1529,7 +1230,7 @@ UNIQUE_TEST(PolygonContainsPointCase)
 	a.p.push_back(POINT_VEC(15.0997639f,-67.2276688f,12.971736f));
 	a.p.push_back(POINT_VEC(15.062994f,-67.2823105f,12.9826784f));
 	a.p.push_back(POINT_VEC(-27.6450062f,-17.8819065f,116.161354f));
-	
+
 	vec pt = POINT_VEC(12.1201611f,-63.8624725f,20.105011f);
 	assert(a.Contains(pt, 1e-2f));
 }

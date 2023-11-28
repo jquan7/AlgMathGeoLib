@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file LineSegment.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The LineSegment geometry object. */
 #pragma once
 
@@ -192,7 +192,7 @@ public:
 	float DistanceSq(const LineSegment &other) const;
 	double DistanceSqD(const vec &point) const;
 
-	/// Tests whether this line segment and the given object intersect.	
+	/// Tests whether this line segment and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (for example, if this line segment is contained inside a sphere)
 		@todo Output intersection point. */
@@ -216,7 +216,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Capsule &capsule) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Frustum &frustum) const;
 	bool Intersects(const Polyhedron &polyhedron) const;
 	/** @param epsilon If testing intersection between two line segments, a distance threshold value is used to account
 			for floating-point inaccuracies. */
