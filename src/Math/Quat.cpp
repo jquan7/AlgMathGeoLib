@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Quat.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #include "Quat.h"
 #include <stdlib.h>
@@ -22,7 +22,6 @@
 #include "float3x3.h"
 #include "float3x4.h"
 #include "float4x4.h"
-#include "../Algorithm/Random/LCG.h"
 #include "assume.h"
 #include "MathFunc.h"
 #include "SSEMath.h"
@@ -701,23 +700,6 @@ Quat MUST_USE_RESULT Quat::FromEulerYXZ(float y, float x, float z) { return (Qua
 Quat MUST_USE_RESULT Quat::FromEulerYZX(float y, float z, float x) { return (Quat::RotateY(y) * Quat::RotateZ(z) * Quat::RotateX(x)).Normalized(); }
 Quat MUST_USE_RESULT Quat::FromEulerZXY(float z, float x, float y) { return (Quat::RotateZ(z) * Quat::RotateX(x) * Quat::RotateY(y)).Normalized(); }
 Quat MUST_USE_RESULT Quat::FromEulerZYX(float z, float y, float x) { return (Quat::RotateZ(z) * Quat::RotateY(y) * Quat::RotateX(x)).Normalized(); }
-
-Quat MUST_USE_RESULT Quat::RandomRotation(LCG &lcg)
-{
-	// Generate a random point on the 4D unitary hypersphere using the rejection sampling method.
-	for(int i = 0; i < 1000; ++i)
-	{
-		float x = lcg.Float(-1, 1);
-		float y = lcg.Float(-1, 1);
-		float z = lcg.Float(-1, 1);
-		float w = lcg.Float(-1, 1);
-		float lenSq = x*x + y*y + z*z + w*w;
-		if (lenSq >= 1e-6f && lenSq <= 1.f)
-			return Quat(x, y, z, w) / Sqrt(lenSq);
-	}
-	assume(false && "Quat::RandomRotation failed!");
-	return Quat::identity;
-}
 
 ///@todo the following could be heavily optimized. Don't route through float3x3 conversion.
 

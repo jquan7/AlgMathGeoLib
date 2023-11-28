@@ -26,7 +26,6 @@
 #include "float4x4.h"
 #include "Matrix.inl"
 #include "Quat.h"
-#include "../Algorithm/Random/LCG.h"
 #include "../Geometry/Plane.h"
 #include "TransformOps.h"
 
@@ -130,22 +129,6 @@ float3x3 float3x3::RotateFromTo(const float3 &sourceDirection, const float3 &tar
 		r[2][0] = hvx * v.z - v.y; r[2][1] = hvy * v.z + v.x; r[2][2] = hvz * v.z + dot;
 	}
 	return r;
-}
-
-float3x3 float3x3::RandomRotation(LCG &lcg)
-{
-	// The easiest way to generate a random orientation is through quaternions, so convert a
-	// random quaternion to a rotation matrix.
-	return FromQuat(Quat::RandomRotation(lcg));
-}
-
-float3x3 float3x3::RandomGeneral(LCG &lcg, float minElem, float maxElem)
-{
-	float3x3 m;
-	for(int y = 0; y < 3; ++y)
-		for(int x = 0; x < 3; ++x)
-			m[y][x] = lcg.Float(minElem, maxElem);
-	return m;
 }
 
 float3x3 float3x3::FromQuat(const Quat &orientation)

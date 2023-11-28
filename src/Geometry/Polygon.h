@@ -362,13 +362,6 @@ public:
 		@see p, RandomPointOnEdge(). */
 	vec PointOnEdge(float normalizedDistance) const;
 
-	/// Computes a random point on the perimeter of this polygon.
-	/** This function generates points with uniform distribution.
-		@see PointOnEdge(). */
-	vec RandomPointOnEdge(LCG &rng) const;
-
-	vec FastRandomPointInside(LCG &rng) const;
-
 	/// Triangulates this Polygon using the ear-clipping method.
 	/** @see MinimalEnclosingAABB(). */
 	TriangleArray Triangulate() const;

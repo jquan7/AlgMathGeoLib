@@ -32,7 +32,6 @@
 #include "Ray.h"
 #include "AABB.h"
 #include "OBB.h"
-#include "../Algorithm/Random/LCG.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>
@@ -1819,53 +1818,6 @@ vec Triangle::ClosestPoint(const Triangle &other, vec *otherPt) const
 	if (otherPt)
 		*otherPt = closestOther;
 	return closestThis;
-}
-
-vec Triangle::RandomPointInside(LCG &rng) const
-{
-	float epsilon = 1e-3f;
-	///@todo rng.Float() returns [0,1[, but to be completely uniform, we'd need [0,1] here.
-	float s = rng.Float(epsilon, 1.f - epsilon);//1e-2f, 1.f - 1e-2f);
-	float t = rng.Float(epsilon, 1.f - epsilon);//1e-2f, 1.f - 1e-2f
-	if (s + t >= 1.f)
-	{
-		s = 1.f - s;
-		t = 1.f - t;
-	}
-#ifdef MATH_ASSERT_CORRECTNESS
-	vec pt = Point(s, t);
-	float2 uv = BarycentricUV(pt);
-	assert1(uv.x >= 0.f, uv.x);
-	assert1(uv.y >= 0.f, uv.y);
-	assert3(uv.x + uv.y <= 1.f, uv.x, uv.y, uv.x + uv.y);
-	float3 uvw = BarycentricUVW(pt);
-	assert1(uvw.x >= 0.f, uvw.x);
-	assert1(uvw.y >= 0.f, uvw.y);
-	assert1(uvw.z >= 0.f, uvw.z);
-	assert4(EqualAbs(uvw.x + uvw.y + uvw.z, 1.f), uvw.x, uvw.y, uvw.z, uvw.x + uvw.y + uvw.z);
-#endif
-	return Point(s, t);
-}
-
-vec Triangle::RandomVertex(LCG &rng) const
-{
-	return Vertex(rng.Int(0, 2));
-}
-
-vec Triangle::RandomPointOnEdge(LCG &rng) const
-{
-	assume(!IsDegenerate());
-	float ab = a.Distance(b);
-	float bc = b.Distance(c);
-	float ca = c.Distance(a);
-	float r = rng.Float(0, ab + bc + ca);
-	if (r < ab)
-		return a + (b-a) * r / ab;
-	r -= ab;
-	if (r < bc)
-		return b + (c-b) * r / bc;
-	r -= bc;
-	return c + (a-c) * r / ca;
 }
 
 Triangle operator *(const float3x3 &transform, const Triangle &triangle)

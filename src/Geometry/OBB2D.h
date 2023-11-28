@@ -301,26 +301,6 @@ public:
 	/// Returns an OBB that is oriented to the coordinate frame specified by vectors dir0 and dir1 and encloses the given point set.
 	static OBB FixedOrientationEnclosingOBB(const vec *pointArray, int numPoints, const vec &dir0, const vec &dir1);
 
-	/// Generates a random point inside this OBB.
-	/** The points are distributed uniformly.
-		@see class LCG, PointInside(), RandomPointOnSurface(), RandomPointOnEdge(), RandomCornerPoint(). */
-	vec RandomPointInside(LCG &rng) const;
-
-	/// Generates a random point on a random face of this OBB.
-	/** The points are distributed uniformly.
-		@see class LCG, FacePoint(), RandomPointInside(), RandomPointOnEdge(), RandomCornerPoint(). */
-	vec RandomPointOnSurface(LCG &rng) const;
-
-	/// Generates a random point on a random edge of this OBB.
-	/** The points are distributed uniformly.
-		@see class LCG, PointOnEdge(), RandomPointInside(), RandomPointOnSurface(), RandomCornerPoint(). */
-	vec RandomPointOnEdge(LCG &rng) const;
-
-	/// Picks a random corner point of this OBB.
-	/** The points are distributed uniformly.
-		@see class LCG, CornerPoint(), RandomPointInside(), RandomPointOnSurface(), RandomPointOnEdge(). */
-	vec RandomCornerPoint(LCG &rng) const;
-
 	/// Translates this OBB in world space.
 	/** @param offset The amount of displacement to apply to this OBB, in world space coordinates.
 		@see Scale(), Transform(). */

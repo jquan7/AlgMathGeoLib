@@ -253,26 +253,6 @@ public:
 	/** @see Volume(). */
 	float SurfaceArea() const;
 
-	/// Generates a random point inside this AABB.
-	/** The points are distributed uniformly.
-		@see RandomPointOnSurface(), RandomPointOnEdge(), RandomCornerPoint(). */
-	vec RandomPointInside(LCG &rng) const;
-
-	/// Generates a random point on a random face of this AABB.
-	/** The points are distributed uniformly.
-		@see RandomPointInside(), RandomPointOnEdge(), RandomCornerPoint(). */
-	vec RandomPointOnSurface(LCG &rng) const;
-
-	/// Generates a random point on a random edge of this AABB.
-	/** The points are distributed uniformly.
-		@see RandomPointInside(), RandomPointOnSurface(), RandomCornerPoint(). */
-	vec RandomPointOnEdge(LCG &rng) const;
-
-	/// Picks a random corner point of this AABB.
-	/** The points are distributed uniformly.
-		@see RandomPointInside(), RandomPointOnSurface(), RandomPointOnEdge(). */
-	vec RandomCornerPoint(LCG &rng) const;
-
 	/// Translates this AABB in world space.
 	/** @param offset The amount of displacement to apply to this AABB, in world space coordinates.
 		@see Scale(), Transform(). */

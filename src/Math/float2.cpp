@@ -23,7 +23,6 @@
 #include "float3x4.h"
 #include "float4x4.h"
 #include "MathFunc.h"
-#include "../Algorithm/Random/LCG.h"
 #include "assume.h"
 #include <string.h>
 #include <stdlib.h>
@@ -620,28 +619,6 @@ float float2::MinAreaRectInPlace(float2 *p, int n, float2 &center, float2 &uDir,
 	center = 0.5f * (uDir * (minU+maxU) + vDir * (minV+maxV));
 
 	return minArea;
-}
-
-float2 float2::RandomDir(LCG &lcg, float r)
-{
-	assume(r > 1e-3f);
-	for(int i = 0; i < 1000; ++i)
-	{
-		float x = lcg.Float(-r, r);
-		float y = lcg.Float(-r, r);
-		float lenSq = x*x + y*y;
-		if (lenSq >= 1e-6f && lenSq <= r*r)
-			return r / Sqrt(lenSq) * float2(x,y);
-	}
-	assume(false && "Failed to generate a random float2 direction vector!");
-	return float2(r, 0);
-}
-
-MUST_USE_RESULT float2 float2::RandomBox(LCG &lcg, float minElem, float maxElem)
-{
-	float x = lcg.Float(minElem, maxElem);
-	float y = lcg.Float(minElem, maxElem);
-	return float2(x, y);
 }
 
 float2 float2::operator +(const float2 &rhs) const

@@ -216,11 +216,6 @@ public:
 	static float4x4 RotateFromTo(const float3 &sourceDirection, const float3 &targetDirection);
 	static float4x4 RotateFromTo(const float4 &sourceDirection, const float4 &targetDirection);
 
-	/// Returns a random 4x4 matrix with each entry randomized between the range [minElem, maxElem].
-	/** Warning: The matrices returned by this function do not represent well-formed 3D transformations.
-		This function is mostly used for testing and debugging purposes only. */
-	static float4x4 RandomGeneral(LCG &lcg, float minElem, float maxElem);
-
 	/// Creates a new float4x4 that rotates one coordinate system to coincide with another.
 	/** This function rotates the sourceDirection vector to coincide with the targetDirection vector, and then
 			rotates sourceDirection2 (which was transformed by 1.) to targetDirection2, but keeping the constraint that

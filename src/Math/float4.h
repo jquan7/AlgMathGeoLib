@@ -685,10 +685,6 @@ public:
 		@note When calling this function, this vector should not be zero! */
 	void PerpendicularBasis(float4 &outB, float4 &outC) const;
 
-	/// Generates a random vector that is perpendicular to this vector.
-	/** The distribution is uniformly random. */
-	float4 RandomPerpendicular(LCG &rng) const;
-
 	/// Returns this vector reflected about a plane with the given normal.
 	/** By convention, both this and the reflected vector point away from the plane with the given normal.
 		@note This function ignores the w component of this vector (assumes w=0). */

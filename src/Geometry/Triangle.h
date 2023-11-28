@@ -330,29 +330,6 @@ public:
 	vec ClosestPointToTriangleEdge(const Line &line, float *outU, float *outV, float *outD) const;
 	vec ClosestPointToTriangleEdge(const LineSegment &lineSegment, float *outU, float *outV, float *outD) const;
 
-	/// Generates a random point inside this Triangle.
-	/** The points are distributed uniformly.
-		The implementation of this function is based on Graphics Gems 1, p. 25:
-		"1.5 Generating random points in triangles. Method 2." The Method 1 presented in the book
-		uses a Sqrt() instead of the if().
-		@param rng A pre-seeded random number generator object that is to be used by this function to generate random values.
-		@see class LCG, RandomPointOnEdge(), RandomVertex(), Point(). */
-	vec RandomPointInside(LCG &rng) const;
-
-	/// Chooses a corner vertex of this Triangle at random.
-	/** This function returns one of the vertices {a, b, c} at uniformly random.
-		@param rng A pre-seeded random number generator object that is to be used by this function to generate random values.
-		@see class LCG, RandomPointInside(), RandomPointOnEdge(), Vertex(). */
-	vec RandomVertex(LCG &rng) const;
-
-	/// Generates a random point on the edge of this Triangle.
-	/** The points are distributed uniformly.
-		This function requires that this triangle is not degenerate. If it is, an assume() error will be printed,
-		and the return value will be undefined.
-		@param rng A pre-seeded random number generator object that is to be used by this function to generate random values.
-		@see class LCG, RandomPointInside(), RandomVertex(), Edge(), class LineSegment, IsDegenerate(). */
-	vec RandomPointOnEdge(LCG &rng) const;
-
 #if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
 	/// Returns a human-readable representation of this Line. Most useful for debugging purposes.
 	StringT ToString() const;

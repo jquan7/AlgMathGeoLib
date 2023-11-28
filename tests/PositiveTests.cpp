@@ -9,61 +9,6 @@
 
 MATH_IGNORE_UNUSED_VARS_WARNING
 
-AABB RandomAABBContainingPoint(const vec &pt, float maxSideLength)
-{
-	float w = rng.Float(1e-2f, maxSideLength);
-	float h = rng.Float(1e-2f, maxSideLength);
-	float d = rng.Float(1e-2f, maxSideLength);
-
-	AABB a(POINT_VEC(0, 0, 0), POINT_VEC(w, h, d));
-	w = rng.Float(1e-3f, w-1e-3f);
-	h = rng.Float(1e-3f, h-1e-3f);
-	d = rng.Float(1e-3f, d-1e-3f);
-	a.Translate(pt - POINT_VEC(w, h, d));
-	assert(!a.IsDegenerate());
-	assert(a.IsFinite());
-	assert(a.Contains(pt));
-#ifdef MATH_AUTOMATIC_SSE
-	asserteq(a.minPoint.w, 1.f);
-	asserteq(a.maxPoint.w, 1.f);
-#endif
-	return a;
-}
-
-OBB RandomOBBContainingPoint(const vec &pt, float maxSideLength)
-{
-	float w = rng.Float(1e-2f, maxSideLength);
-	float h = rng.Float(1e-2f, maxSideLength);
-	float d = rng.Float(1e-2f, maxSideLength);
-	float3x4 rot = float3x4::RandomRotation(rng);
-	OBB o;
-	o.pos = pt;
-	o.axis[0] = DIR_VEC(rot.Col(0));
-	o.axis[1] = DIR_VEC(rot.Col(1));
-	o.axis[2] = DIR_VEC(rot.Col(2));
-	assume2(o.axis[0].IsNormalized(), o.axis[0], o.axis[0].LengthSq());
-	assume2(o.axis[1].IsNormalized(), o.axis[1], o.axis[1].LengthSq());
-	assume2(o.axis[2].IsNormalized(), o.axis[2], o.axis[2].LengthSq());
-	assume(vec::AreOrthogonal(o.axis[0], o.axis[1], o.axis[2]));
-//	assume(vec::AreOrthonormal(o.axis[0], o.axis[1], o.axis[2]));
-	o.r = DIR_VEC(w, h, d);
-	const float epsilon = 1e-4f;
-	o.pos += rng.Float(-w+epsilon, w-epsilon) * o.axis[0];
-	o.pos += rng.Float(-h+epsilon, h-epsilon) * o.axis[1];
-	o.pos += rng.Float(-d+epsilon, d-epsilon) * o.axis[2];
-	assert1(!o.IsDegenerate(), o);
-	assert(o.IsFinite());
-	assert(o.Contains(pt));
-#ifdef MATH_AUTOMATIC_SSE
-	asserteq(o.pos.w, 1.f);
-	asserteq(o.r.w, 0.f);
-	asserteq(o.axis[0].w, 0.f);
-	asserteq(o.axis[1].w, 0.f);
-	asserteq(o.axis[2].w, 0.f);
-#endif
-	return o;
-}
-
 UNIQUE_TEST(Polygon_Contains_PointCase)
 {
 	Polygon p;

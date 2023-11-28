@@ -27,7 +27,6 @@
 #include "float4x4.h"
 #include "Matrix.inl"
 #include "Quat.h"
-#include "../Algorithm/Random/LCG.h"
 #include "../Geometry/Plane.h"
 #include "TransformOps.h"
 #include "SSEMath.h"
@@ -161,20 +160,6 @@ float3x4 float3x4::RotateFromTo(const float3 &sourceDirection, const float3 &tar
 float3x4 float3x4::RotateFromTo(const float3 &sourceDirection, const float3 &targetDirection, const float3 &centerPoint)
 {
 	return float3x4::Translate(centerPoint) * RotateFromTo(sourceDirection, targetDirection) * float3x4::Translate(-centerPoint);
-}
-
-float3x4 float3x4::RandomGeneral(LCG &lcg, float minElem, float maxElem)
-{
-	float3x4 m;
-	for(int y = 0; y < 3; ++y)
-		for(int x = 0; x < 4; ++x)
-			m[y][x] = lcg.Float(minElem, maxElem);
-	return m;
-}
-
-float3x4 float3x4::RandomRotation(LCG &lcg)
-{
-	return float3x4(float3x3::RandomRotation(lcg));
 }
 
 float3x4 float3x4::FromQuat(const Quat &orientation)

@@ -8,8 +8,6 @@
 
 #include "../src/Math/myassert.h"
 
-LCG rng(Clock::TickU32());
-
 std::vector<Test> &Tests()
 {
 	static std::vector<Test> tests;

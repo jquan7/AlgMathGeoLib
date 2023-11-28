@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,14 +13,13 @@
    limitations under the License. */
 
 /** @file float2.inl
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #include "float2.h"
 #include "float3.h"
 #include "float4.h"
 #include "MathFunc.h"
 #include "Swap.h"
-#include "../Algorithm/Random/LCG.h"
 #include "assume.h"
 #include <string.h>
 #include <stdlib.h>

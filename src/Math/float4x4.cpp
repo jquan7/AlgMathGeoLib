@@ -28,7 +28,6 @@
 #include "Quat.h"
 #include "TransformOps.h"
 #include "../Geometry/Plane.h"
-#include "../Algorithm/Random/LCG.h"
 #include "SSEMath.h"
 #include "float4x4_sse.h"
 #include "float4x4_neon.h"
@@ -214,17 +213,6 @@ float4x4 float4x4::RotateFromTo(const float3 &sourceDirection, const float3 &tar
 	const float3 &sourceDirection2, const float3 &targetDirection2, const float3 &centerPoint)
 {
 	return float4x4::Translate(centerPoint) * RotateFromTo(sourceDirection, targetDirection, sourceDirection2, targetDirection2) * float4x4::Translate(-centerPoint);
-}
-
-float4x4 float4x4::RandomGeneral(LCG &lcg, float minElem, float maxElem)
-{
-	assume(MATH_NS::IsFinite(minElem));
-	assume(MATH_NS::IsFinite(maxElem));
-	float4x4 m;
-	for(int y = 0; y < 4; ++y)
-		for(int x = 0; x < 4; ++x)
-			m[y][x] = lcg.Float(minElem, maxElem);
-	return m;
 }
 
 float4x4 float4x4::FromQuat(const Quat &orientation)

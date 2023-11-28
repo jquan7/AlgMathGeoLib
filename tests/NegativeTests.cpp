@@ -9,15 +9,6 @@
 
 MATH_IGNORE_UNUSED_VARS_WARNING
 
-Plane RandomPlaneInHalfspace(Plane &plane)
-{
-	Plane p2;
-	p2.normal = plane.normal;
-	p2.d = rng.Float(plane.d + 1e-2f, plane.d + 1e-2f + SCALE);
-	assert(!p2.IsDegenerate());
-	return p2;
-}
-
 UNIQUE_TEST(AABBLineNoIntersectCase)
 {
 	Plane p(DIR_VEC(-0.72379446f,0.652315021f,-0.224959269f),27.2405319f);

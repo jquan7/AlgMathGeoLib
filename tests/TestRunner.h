@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 
-#include "../src/Algorithm/Random/LCG.h"
 #include "../src/Time/Clock.h"
 
 #define SCALE 1e2f
@@ -13,8 +12,6 @@
 #ifdef MATH_ENABLE_NAMESPACE
 using namespace MATH_NS;
 #endif
-
-extern LCG rng;
 
 enum TestResult
 {

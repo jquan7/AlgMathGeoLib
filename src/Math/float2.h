@@ -589,12 +589,6 @@ public:
 		@return The area of the resulting rectangle. */
 	static float MinAreaRectInPlace(float2 *pointArray, int numPoints, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV);
 
-	/// Generates a direction vector of the given length pointing at a uniformly random direction.
-	static float2 RandomDir(LCG &lcg, float length = 1.f);
-
-	/// Returns a random float3 with each entry randomized between the range [minElem, maxElem].
-	static MUST_USE_RESULT float2 RandomBox(LCG &lcg, float minElem, float maxElem);
-
 	/// Specifies a compile-time constant float2 with value (0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */

@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Quat.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Quaternions represent rotations and orientations of 3D objects. */
 #pragma once
 
@@ -41,7 +41,7 @@ public:
 		struct
 		{
 #endif
-			
+
 			float x; ///< The factor of i.
 			float y; ///< The factor of j. [similarOverload: x]
 			float z; ///< The factor of k. [similarOverload: x]
@@ -199,7 +199,7 @@ public:
 	void ToAxisAngle(float3 &rotationAxis, float &rotationAngleRadians) const;
 	void ToAxisAngle(float4 &rotationAxis, float &rotationAngleRadians) const;
 	/// Sets this quaternion by specifying the axis about which the rotation is performed, and the angle of rotation.
-	/** @param rotationAxis The axis of rotation. This vector must be normalized to call this function. If using the float4 version of this function, 
+	/** @param rotationAxis The axis of rotation. This vector must be normalized to call this function. If using the float4 version of this function,
 		then the w component must be zero.
 		@param rotationAngleRadians The angle of rotation in radians. */
 	void SetFromAxisAngle(const float3 &rotationAxis, float rotationAngleRadians);
@@ -221,7 +221,7 @@ public:
 		@param localForward Specifies the forward direction in the local space of the object. This is the direction
 			the model is facing at in its own local/object space, often +X (1,0,0), +Y (0,1,0) or +Z (0,0,1). The
 			vector to pass in here depends on the conventions you or your modeling software is using, and it is best
-			pick one convention for all your objects, and be consistent.			
+			pick one convention for all your objects, and be consistent.
 			This input parameter must be a normalized vector.
 		@param targetDirection Specifies the desired world space direction the object should look at. This function
 			will compute a quaternion which will rotate the localForward vector to orient towards this targetDirection
@@ -285,9 +285,6 @@ public:
 	static MUST_USE_RESULT Quat FromEulerYZX(float y, float z, float x); ///< [similarOverload: FromEulerXYX] [hideIndex]
 	static MUST_USE_RESULT Quat FromEulerZXY(float z, float x, float y); ///< [similarOverload: FromEulerXYX] [hideIndex]
 	static MUST_USE_RESULT Quat FromEulerZYX(float z, float y, float x); ///< [similarOverload: FromEulerXYX] [hideIndex]
-
-	/// Returns a uniformly random unitary quaternion.
-	static MUST_USE_RESULT Quat RandomRotation(LCG &lcg);
 
 	/// Extracts the rotation part of this quaternion into Euler rotation angles (in radians).
 	/** @note It is better to think about the returned float3 as an array of three floats, and

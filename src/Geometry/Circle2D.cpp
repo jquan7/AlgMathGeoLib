@@ -18,7 +18,6 @@
 #include "Circle2D.h"
 #include "../Math/MathFunc.h"
 #include "../Math/Swap.h"
-#include "../Algorithm/Random/LCG.h"
 
 MATH_BEGIN_NAMESPACE
 
@@ -263,26 +262,6 @@ Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pointArray, int numPoint
 	}
 	delete[] pts;
 	return minCircle;
-}
-
-float2 Circle2D::RandomPointInside(LCG &lcg)
-{
-	assume(r > 1e-3f);
-	float2 v = float2::zero;
-	// Rejection sampling analysis: The unit circle fills ~78.54% of the area of its enclosing rectangle, so this
-	// loop is expected to take only very few iterations before succeeding.
-	for (int i = 0; i < 1000; ++i)
-	{
-		v.x = lcg.Float(-r, r);
-		v.y = lcg.Float(-r, r);
-
-		if (v.LengthSq() <= r * r)
-			return pos + v;
-	}
-	assume(false && "Circle2D::RandomPointInside failed!");
-
-	// Failed to generate a point inside this circle. Return the circle center as fallback.
-	return pos;
 }
 
 #if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)

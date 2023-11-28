@@ -22,7 +22,6 @@
 #endif
 #include "../Math/MathFunc.h"
 #include "AABB.h"
-#include "../Algorithm/Random/LCG.h"
 #include "LineSegment.h"
 #include "Line.h"
 #include "Plane.h"
@@ -890,34 +889,6 @@ float OBB::SurfaceArea() const
 {
 	const vec size = Size();
 	return 2.f * (size.x*size.y + size.x*size.z + size.y*size.z);
-}
-
-vec OBB::RandomPointInside(LCG &rng) const
-{
-	float f1 = rng.Float();
-	float f2 = rng.Float();
-	float f3 = rng.Float();
-	return PointInside(f1, f2, f3);
-}
-
-vec OBB::RandomPointOnSurface(LCG &rng) const
-{
-	int i = rng.Int(0, 5);
-	float f1 = rng.Float();
-	float f2 = rng.Float();
-	return FacePoint(i, f1, f2);
-}
-
-vec OBB::RandomPointOnEdge(LCG &rng) const
-{
-	int i = rng.Int(0, 11);
-	float f = rng.Float();
-	return PointOnEdge(i, f);
-}
-
-vec OBB::RandomCornerPoint(LCG &rng) const
-{
-	return CornerPoint(rng.Int(0, 7));
 }
 
 void OBB::Translate(const vec &offset)

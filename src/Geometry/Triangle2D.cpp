@@ -33,7 +33,6 @@
 #endif
 #include "AABB2D.h"
 #include "OBB2D.h"
-#include "../Algorithm/Random/LCG.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>
@@ -1549,114 +1548,6 @@ vec2d Triangle2D::ClosestPoint(const Line2D &other, float *outU, float *outV, fl
 	}
 }
 #endif
-#if 0
-/// [groupSyntax]
-vec2d Triangle2D::ClosestPoint(const Triangle2D &other, vec2d *otherPt) const
-{
-	/** The code for computing the closest point pair on two Triangles is based
-		on pseudo-code from Christer Ericson's Real-Time Collision Detection, pp. 155-156. */
-
-	// First detect if the two triangles are intersecting.
-	LineSegment2D l;
-	bool success = this->Intersects(other, &l);
-	if (success)
-	{
-		vec2d cp = l.CenterPoint();
-		if (otherPt)
-			*otherPt = cp;
-		return cp;
-	}
-
-	vec2d closestThis = this->ClosestPoint(other.a);
-	vec2d closestOther = other.a;
-	float closestDSq = closestThis.DistanceSq(closestOther);
-
-	vec2d pt = this->ClosestPoint(other.b);
-	float dSq = pt.DistanceSq(other.b);
-	if (dSq < closestDSq) closestThis = pt, closestOther = other.b, closestDSq = dSq;
-
-	pt = this->ClosestPoint(other.c);
-	dSq = pt.DistanceSq(other.c);
-	if (dSq < closestDSq) closestThis = pt, closestOther = other.c, closestDSq = dSq;
-
-	pt = other.ClosestPoint(this->a);
-	dSq = pt.DistanceSq(this->a);
-	if (dSq < closestDSq) closestOther = pt, closestThis = this->a, closestDSq = dSq;
-
-	pt = other.ClosestPoint(this->b);
-	dSq = pt.DistanceSq(this->b);
-	if (dSq < closestDSq) closestOther = pt, closestThis = this->b, closestDSq = dSq;
-
-	pt = other.ClosestPoint(this->c);
-	dSq = pt.DistanceSq(this->c);
-	if (dSq < closestDSq) closestOther = pt, closestThis = this->c, closestDSq = dSq;
-
-	LineSegment2D l1[3] = { LineSegment2D(a,b), LineSegment2D(a,c), LineSegment2D(b,c) };
-	LineSegment2D l2[3] = { LineSegment2D(other.a,other.b), LineSegment2D(other.a,other.c), LineSegment2D(other.b,other.c) };
-	float d, d2;
-	for(int i = 0; i < 3; ++i)
-		for(int j = 0; j < 3; ++j)
-		{
-			float dist = l1[i].Distance(l2[j], d, d2);
-			if (dist*dist < closestDSq)
-			{
-				closestThis = l1[i].GetPoint(d);
-				closestOther = l2[j].GetPoint(d2);
-				closestDSq = dist*dist;
-			}
-		}
-
-	if (otherPt)
-		*otherPt = closestOther;
-	return closestThis;
-}
-#endif
-vec2d Triangle2D::RandomPointInside(LCG &rng) const
-{
-	float epsilon = 1e-3f;
-	///@todo rng.Float() returns [0,1[, but to be completely uniform, we'd need [0,1] here.
-	float s = rng.Float(epsilon, 1.f - epsilon);//1e-2f, 1.f - 1e-2f);
-	float t = rng.Float(epsilon, 1.f - epsilon);//1e-2f, 1.f - 1e-2f
-	if (s + t >= 1.f)
-	{
-		s = 1.f - s;
-		t = 1.f - t;
-	}
-#ifdef MATH_ASSERT_CORRECTNESS
-	vec2d pt = Point(s, t);
-	float2 uv = BarycentricUV(pt);
-	assert1(uv.x >= 0.f, uv.x);
-	assert1(uv.y >= 0.f, uv.y);
-	assert3(uv.x + uv.y <= 1.f, uv.x, uv.y, uv.x + uv.y);
-	float3 uvw = BarycentricUVW(pt);
-	assert1(uvw.x >= 0.f, uvw.x);
-	assert1(uvw.y >= 0.f, uvw.y);
-	assert1(uvw.z >= 0.f, uvw.z);
-	assert4(EqualAbs(uvw.x + uvw.y + uvw.z, 1.f), uvw.x, uvw.y, uvw.z, uvw.x + uvw.y + uvw.z);
-#endif
-	return Point(s, t);
-}
-
-vec2d Triangle2D::RandomVertex(LCG &rng) const
-{
-	return Vertex(rng.Int(0, 2));
-}
-
-vec2d Triangle2D::RandomPointOnEdge(LCG &rng) const
-{
-	assume(!IsDegenerate());
-	float ab = a.Distance(b);
-	float bc = b.Distance(c);
-	float ca = c.Distance(a);
-	float r = rng.Float(0, ab + bc + ca);
-	if (r < ab)
-		return a + (b-a) * r / ab;
-	r -= ab;
-	if (r < bc)
-		return b + (c-b) * r / bc;
-	r -= bc;
-	return c + (a-c) * r / ca;
-}
 
 Triangle2D operator *(const float3x3 &transform, const Triangle2D &triangle)
 {

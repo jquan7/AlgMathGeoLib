@@ -27,7 +27,6 @@
 #include "float2.h"
 #include "float3.h"
 #include "../Geometry/AABB.h"
-#include "../Algorithm/Random/LCG.h"
 #include "float3x3.h"
 #include "float3x4.h"
 #include "float4x4.h"

@@ -541,10 +541,6 @@ public:
 		@note When calling this function, this vector should not be zero! */
 	void PerpendicularBasis(float3 &outB, float3 &outC) const;
 
-	/// Generates a random vector that is perpendicular to this vector.
-	/** The distribution is uniformly random. */
-	float3 RandomPerpendicular(LCG &rng) const;
-
 	/// Computes the scalar triple product of the given three vectors.
 	/** @return [u v w] = (u x v) . w = u . (v x w)
 		@see Dot(), Cross(). */

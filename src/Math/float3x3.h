@@ -195,17 +195,6 @@ public:
 			view->world. In GLM, the LookAt function is tied to cameras only, and it returns the inverse mapping world->view. */
 	static float3x3 LookAt(const float3 &localForward, const float3 &targetDirection, const float3 &localUp, const float3 &worldUp);
 
-	/// Returns a uniformly random 3x3 matrix that performs only rotation.
-	/** This matrix produces a random orthonormal basis for an orientation of an object. There is no mirroring
-		or scaling present in the generated matrix. Also, naturally since float3x3 cannot represent translation or projection,
-		those properties are not present either. */
-	static float3x3 RandomRotation(LCG &lcg);
-
-	/// Returns a random 3x3 matrix with each entry randomized between the range[minElem, maxElem].
-	/** Warning: The matrices returned by this function do not represent well-formed 3D transformations.
-		This function is mostly used for testing and debugging purposes only. */
-	static float3x3 RandomGeneral(LCG &lcg, float minElem, float maxElem);
-
 	/// Creates a new float3x3 that performs the rotation expressed by the given quaternion.
 	static float3x3 FromQuat(const Quat &orientation);
 

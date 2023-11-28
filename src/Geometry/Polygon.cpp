@@ -29,7 +29,6 @@
 #include "Ray.h"
 #include "LineSegment.h"
 #include "Triangle.h"
-#include "../Algorithm/Random/LCG.h"
 #include "../Math/MathFunc.h"
 #include "../Math/Swap.h"
 #include "../Math/float3x3.h"
@@ -846,20 +845,6 @@ vec Polygon::PointOnEdge(float normalizedDistance) const
 	}
 	mathassert(false && "Polygon::PointOnEdge reached end of loop which shouldn't!");
 	return p[0];
-}
-
-vec Polygon::RandomPointOnEdge(LCG &rng) const
-{
-	return PointOnEdge(rng.Float());
-}
-
-vec Polygon::FastRandomPointInside(LCG &rng) const
-{
-	TriangleArray tris = Triangulate();
-	if (tris.empty())
-		return vec::nan;
-	int i = rng.Int(0, (int)tris.size()-1);
-	return TRIANGLE(tris[i]).RandomPointInside(rng);
 }
 
 // A(u) = a1 + u * (a2-a1).

@@ -81,7 +81,6 @@ class TranslateOp;
 class Torus;
 class ScaleOp;
 class Triangle;
-class LCG;
 
 class AABB2D;
 class LineSegment2D;
@@ -213,7 +212,6 @@ REGISTER_POD(MATH_NS::Polynomial);
 REGISTER_POD(MATH_NS::Ray);
 REGISTER_POD(MATH_NS::Torus);
 REGISTER_POD(MATH_NS::Triangle);
-REGISTER_POD(MATH_NS::LCG);
 REGISTER_POD(MATH_NS::float4_storage);
 REGISTER_POD(MATH_NS::Triangle_storage);
 REGISTER_POD(MATH_NS::LineSegment_storage);
