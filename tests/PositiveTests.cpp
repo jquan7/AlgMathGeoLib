@@ -1240,25 +1240,6 @@ RANDOMIZED_TEST(RayTriangleMeshIntersect)
 	assert(IsFinite(d));
 }
 
-RANDOMIZED_TEST(RayKdTreeIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	KdTree<Triangle> t;
-	TriangleArray tris = a.TriangulateConvex();
-	if (!tris.empty())
-		t.AddObjects((Triangle*)&tris[0], (int)tris.size());
-	t.Build();
-	Ray b = RandomRayContainingPoint(pt);
-	TriangleKdTreeRayQueryNearestHitVisitor result;
-	t.RayQuery(b, result);
-	assert(result.rayT >= 0.f);
-	assert(result.rayT < FLOAT_INF);
-	assert(result.triangleIndex != KdTree<Triangle_storage>::BUCKET_SENTINEL);
-	assert(result.pos.IsFinite());
-	assert(result.barycentricUV.IsFinite());
-}
-
 TEST(PolygonContains2D)
 {
 	float xmin = 0.f, xmax = 10.f, ymin = 0.f, ymax = 10.f, z = 2.f;

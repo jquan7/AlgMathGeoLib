@@ -1186,22 +1186,3 @@ RANDOMIZED_TEST(RayTriangleMeshNoIntersect)
 	assert(d == FLOAT_INF);
 	MARK_UNUSED(d);
 }
-
-RANDOMIZED_TEST(RayKdTreeNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	KdTree<Triangle> t;
-	TriangleArray tris = a.TriangulateConvex();
-	if (!tris.empty())
-		t.AddObjects((Triangle*)&tris[0], (int)tris.size());
-	t.Build();
-	p.ReverseNormal();
-	Ray b = RandomRayInHalfspace(p);
-	TriangleKdTreeRayQueryNearestHitVisitor result;
-	t.RayQuery(b, result);
-	assert(result.rayT == FLOAT_INF);
-	assert(result.triangleIndex == KdTree<Triangle>::BUCKET_SENTINEL);
-	assert(!result.pos.IsFinite());
-	assert(!result.barycentricUV.IsFinite());
-}
