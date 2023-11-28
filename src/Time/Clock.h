@@ -1,4 +1,4 @@
-/* Copyright 2010 Jukka Jylänki
+/* Copyright 2010 Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -133,9 +133,6 @@ private:
 	// The following two are actually used as LARGE_INTEGERs, but to avoid having to pull Windows.h in Clock.h, define them
 	// as identically sized u64 instead.
 	static u64/*LARGE_INTEGER*/ ddwTimerFrequency; ///< Ticks per second.
-#endif
-#ifdef __APPLE__
-	static tick_t ticksPerSecond;
 #endif
 };
 

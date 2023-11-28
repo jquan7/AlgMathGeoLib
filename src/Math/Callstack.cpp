@@ -141,7 +141,7 @@ StringT NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 #pragma warning(pop)
 #endif
 
-#elif defined(__APPLE__) || defined(LINUX)
+#elif defined(LINUX)
 
 #include <stdlib.h>
 #include <execinfo.h>

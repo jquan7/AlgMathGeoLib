@@ -37,10 +37,6 @@ if (MINGW)
 	set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 endif()
 
-if (IOS)
-	add_definitions(-DAPPLE_IOS)
-endif()
-
 set(optFlags "-DNDEBUG -DMATH_SILENT_ASSUME -DRELEASE -DOPTIMIZED_RELEASE")
 
 set(CMAKE_C_FLAGS_RELEASE     "${CMAKE_C_FLAGS_RELEASE} ${optFlags}")

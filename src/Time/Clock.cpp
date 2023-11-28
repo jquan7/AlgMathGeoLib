@@ -15,7 +15,7 @@
 /** @file Clock.cpp
 	@brief */
 
-#if defined(__unix__) || defined(__EMSCRIPTEN__) || defined(ANDROID) || defined(__APPLE__) || defined (__CYGWIN__)
+#if defined(__unix__) || defined(__EMSCRIPTEN__) || defined(ANDROID) || defined (__CYGWIN__)
 #include <time.h>
 #include <errno.h>
 #include <string.h>
@@ -30,10 +30,6 @@
 #include <emscripten.h>
 #endif
 
-#ifdef __APPLE__
-#include <mach/mach_time.h>
-#endif
-
 #include "Clock.h"
 #include "../Math/myassert.h"
 #include "../Math/assume.h"
@@ -42,10 +38,6 @@ MATH_BEGIN_NAMESPACE
 
 #ifdef WIN32
 u64 Clock::ddwTimerFrequency;
-#endif
-
-#ifdef __APPLE__
-tick_t Clock::ticksPerSecond = 0;
 #endif
 
 tick_t Clock::appStartTime = 0;
@@ -68,13 +60,6 @@ void Clock::InitClockData()
 	{
 		appStartTime = (tick_t)GetTickCount64();
 	}
-#endif
-
-#ifdef __APPLE__
-	mach_timebase_info_data_t timeBaseInfo;
-	mach_timebase_info(&timeBaseInfo);
-	ticksPerSecond = 1000000000ULL * (uint64_t)timeBaseInfo.denom / (uint64_t)timeBaseInfo.numer;
-	assert(ticksPerSecond > (uint64_t)timeBaseInfo.denom/timeBaseInfo.numer); // Guard against overflow if OSX numer/denom change or similar.
 #endif
 }
 
@@ -220,8 +205,6 @@ tick_t Clock::Tick()
 	assume(success != 0);
 	MARK_UNUSED(success);
 	return ddwTimer.QuadPart;
-#elif defined(__APPLE__)
-	return mach_absolute_time();
 #elif defined(_POSIX_MONOTONIC_CLOCK)
 	timespec t;
 	clock_gettime(CLOCK_MONOTONIC, &t);
@@ -262,11 +245,9 @@ tick_t Clock::TicksPerSec()
 
 #elif defined(WIN32)
 	return ddwTimerFrequency;
-#elif defined(__APPLE__)
-	return ticksPerSecond;
 #elif defined(_POSIX_MONOTONIC_CLOCK)
 	return 1000 * 1000 * 1000;
-#elif defined(_POSIX_C_SOURCE) || defined(__APPLE__)
+#elif defined(_POSIX_C_SOURCE)
 	return 1000 * 1000;
 #else
 	return CLOCKS_PER_SEC;
