@@ -209,7 +209,6 @@ public:
 	bool Intersects(const OBB &obb, float &dNear, float &dFar) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 	/** @param epsilon If testing intersection between two line segments, a distance threshold value is used to account
 			for floating-point inaccuracies. */
 	bool Intersects(const LineSegment &lineSegment, float epsilon = 1e-3f) const;

@@ -39,18 +39,6 @@ Triangle RandomTriangleNearOrigin(float maxDistanceFromOrigin)
 	return Triangle(RandomPointNearOrigin(maxDistanceFromOrigin), RandomPointNearOrigin(maxDistanceFromOrigin), RandomPointNearOrigin(maxDistanceFromOrigin));
 }
 
-Polygon RandomPolygonContainingPoint(const vec &pt);
-Polygon RandomPolygonNearOrigin(float maxDistanceFromOrigin)
-{
-	return RandomPolygonContainingPoint(RandomPointNearOrigin(maxDistanceFromOrigin));
-}
-
-Polyhedron RandomPolyhedronContainingPoint(const vec &pt);
-Polyhedron RandomPolyhedronNearOrigin(float maxDistanceFromOrigin)
-{
-	return RandomPolyhedronContainingPoint(RandomPointNearOrigin(maxDistanceFromOrigin));
-}
-
 #define DISTSCALE 1e2f
 #define SIZESCALE 1e1f
 
@@ -119,25 +107,6 @@ RANDOMIZED_TEST(AABB_Enclose_Triangle)
 	assert(aabb.Contains(t));
 }
 
-
-RANDOMIZED_TEST(AABB_Enclose_Polygon)
-{
-	AABB aabb = RandomAABBNearOrigin(DISTSCALE, SIZESCALE);
-	Polygon p = RandomPolygonNearOrigin(DISTSCALE);
-	aabb.Enclose(p);
-
-	assert2(aabb.Contains(p), aabb, p);
-}
-
-RANDOMIZED_TEST(AABB_Enclose_Polyhedron)
-{
-	AABB aabb = RandomAABBNearOrigin(DISTSCALE, SIZESCALE);
-	Polyhedron p = RandomPolyhedronNearOrigin(DISTSCALE);
-	aabb.Enclose(p);
-
-	assert2(aabb.Contains(p), aabb, p);
-}
-
 RANDOMIZED_TEST(Sphere_Enclose_point)
 {
 	Sphere s = RandomSphereNearOrigin(DISTSCALE, SIZESCALE);
@@ -190,22 +159,4 @@ RANDOMIZED_TEST(Sphere_Enclose_Triangle)
 	s.Enclose(t);
 
 	assert(s.Contains(t));
-}
-
-RANDOMIZED_TEST(Sphere_Enclose_Polygon)
-{
-	Sphere s = RandomSphereNearOrigin(DISTSCALE, SIZESCALE);
-	Polygon p = RandomPolygonNearOrigin(DISTSCALE);
-	s.Enclose(p);
-
-	assert2(s.Contains(p), s, p);
-}
-
-RANDOMIZED_TEST(Sphere_Enclose_Polyhedron)
-{
-	Sphere s = RandomSphereNearOrigin(DISTSCALE, SIZESCALE);
-	Polyhedron p = RandomPolyhedronNearOrigin(DISTSCALE);
-	s.Enclose(p);
-
-	assert2(s.Contains(p), s, p);
 }

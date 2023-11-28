@@ -157,58 +157,6 @@ Triangle RandomTriangleInHalfspace(const Plane &plane)
 	return t;
 }
 
-Polyhedron RandomPolyhedronInHalfspace(const Plane &plane)
-{
-	Polyhedron p;
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-
-	switch(rng.Int(0,7))
-	{
-	case 0: p = RandomAABBInHalfspace(plane, SCALE).ToPolyhedron();
-	case 1: p = RandomOBBInHalfspace(plane, SCALE).ToPolyhedron();
-	// case 2: p = RandomFrustumInHalfspace(plane).ToPolyhedron();
-	case 3: p = Polyhedron::Tetrahedron(pt, SCALE); break;
-	case 4: p = Polyhedron::Octahedron(pt, SCALE); break;
-	case 5: p = Polyhedron::Hexahedron(pt, SCALE); break;
-	case 6: p = Polyhedron::Icosahedron(pt, SCALE); break;
-	default: p = Polyhedron::Dodecahedron(pt, SCALE); break;
-	}
-
-//	assert(p.IsFinite());
-//	assert(!p.IsDegenerate());
-
-	vec extremePoint = p.ExtremePoint(-plane.normal);
-	float distance = plane.Distance(extremePoint);
-	p.Translate((distance + GUARDBAND) * plane.normal);
-
-//	assert(p.IsFinite());
-//	assert(!p.IsDegenerate());
-	assert(!p.Intersects(plane));
-//	assert(p.SignedDistance(plane) > 0.f);
-	extremePoint = p.ExtremePoint(-plane.normal);
-	assert(plane.SignedDistance(extremePoint) > 0.f);
-	assert(plane.SignedDistance(p) > 0.f);
-
-	return p;
-}
-
-Polygon RandomPolygonInHalfspace(const Plane &plane)
-{
-	Polyhedron p = RandomPolyhedronInHalfspace(plane);
-	Polygon poly = p.FacePolygon(rng.Int(0, p.NumFaces()-1));
-
-	assert1(!poly.IsDegenerate(), poly);
-	assert1(!poly.IsNull(), poly);
-	assert1(poly.IsPlanar(), poly);
-	assert1(poly.IsFinite(), poly);
-	assert2(!poly.Intersects(plane), poly, plane);
-	vec extremePoint = poly.ExtremePoint(-plane.normal);
-	assert(plane.SignedDistance(extremePoint) > 0.f);
-	assert(plane.SignedDistance(poly) > 0.f);
-
-	return poly;
-}
-
 RANDOMIZED_TEST(AABBAABBNoIntersect)
 {
 	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
@@ -364,22 +312,6 @@ RANDOMIZED_TEST(AABBTriangleNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(AABBPolyhedronNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	AABB a = RandomAABBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Polyhedron b = RandomPolyhedronInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 UNIQUE_TEST(AABBPolygonNoIntersectCase)
 {
 	AABB a(POINT_VEC(-1.07812309f,50.0289841f,-42.3423996f),POINT_VEC(4.804286f,50.5800514f,-42.3384552f));
@@ -391,25 +323,6 @@ UNIQUE_TEST(AABBPolygonNoIntersectCase)
 	b.p.push_back(POINT_VEC(24.5866089f,-119.97966f,114.95137f));
 	assert(!a.Intersects(b));
 }
-
-RANDOMIZED_TEST(AABBPolygonNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	AABB a = RandomAABBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Polygon b = RandomPolygonInHalfspace(p);
-	assert2(!a.Intersects(b), a.SerializeToCodeString(), b.SerializeToString());
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
 
 RANDOMIZED_TEST(OBBOBBNoIntersect)
 {
@@ -576,42 +489,6 @@ RANDOMIZED_TEST(OBBTriangleNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(OBBPolyhedronNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	OBB a = RandomOBBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Polyhedron b = RandomPolyhedronInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(OBBPolygonNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	OBB a = RandomOBBInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Polygon b = RandomPolygonInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-///	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
-
-
 RANDOMIZED_TEST(SphereSphereNoIntersect)
 {
 	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
@@ -714,38 +591,6 @@ RANDOMIZED_TEST(SphereTriangleNoIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(SpherePolyhedronNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Sphere a = RandomSphereInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Polyhedron b = RandomPolyhedronInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(SpherePolygonNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Sphere a = RandomSphereInHalfspace(p, 10.f);
-	p.ReverseNormal();
-	Polygon b = RandomPolygonInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 extern int xxxxx;
 
 UNIQUE_TEST(PlaneLineNoIntersectCase)
@@ -761,240 +606,6 @@ UNIQUE_TEST(PlaneLineNoIntersectCase2)
 	Line l(POINT_VEC(36.2179184f,88.9618607f,29.178812f),DIR_VEC(0.775070965f,0.459497392f,0.433736295f));
 	assert(!p.Intersects(l));
 }
-
-RANDOMIZED_TEST(PolyhedronLineNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	Line b = RandomLineInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronRayNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	Ray b = RandomRayInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronLineSegmentNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	LineSegment b = RandomLineSegmentInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-	assert4(a.Distance(a.ClosestPoint(b)) < 1e-3f, a, b, a.ClosestPoint(b), a.Distance(a.ClosestPoint(b)));
-//	TODO: The following is problematic due to numerical
-//	stability issues at the surface of the Polyhedron.
-//	assert(a.Contains(a.ClosestPoint(b)));
-	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronPlaneNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	Plane b = RandomPlaneInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronTriangleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	Triangle b = RandomTriangleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronPolyhedronNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	Polyhedron b = RandomPolyhedronInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-#ifndef _DEBUG
-RANDOMIZED_TEST(PolyhedronPolyhedronIntersectionPerformance)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	Polyhedron b = RandomPolyhedronInHalfspace(p);
-
-	for(size_t i = 0; i < 10; ++i)
-	{
-		globalPokedData += a.Intersects(b) ? 1 : 0;
-		globalPokedData += b.Intersects(a) ? 1 : 0;
-	}
-}
-#endif
-
-RANDOMIZED_TEST(PolyhedronPolygonNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	p.ReverseNormal();
-	Polygon b = RandomPolygonInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
-RANDOMIZED_TEST(PolygonLineNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polygon a = RandomPolygonInHalfspace(p);
-	p.ReverseNormal();
-	Line b = RandomLineInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonRayNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polygon a = RandomPolygonInHalfspace(p);
-	p.ReverseNormal();
-	Ray b = RandomRayInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonLineSegmentNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polygon a = RandomPolygonInHalfspace(p);
-	p.ReverseNormal();
-	LineSegment b = RandomLineSegmentInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-	assert4(a.Distance(a.ClosestPoint(b)) < 1e-3f, a, b, a.ClosestPoint(b), a.Distance(a.ClosestPoint(b)));
-//	TODO: The following is problematic due to numerical
-//	stability issues at the surface of the Polygon.
-//	assert(a.Contains(a.ClosestPoint(b)));
-	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonPlaneNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polygon a = RandomPolygonInHalfspace(p);
-	p.ReverseNormal();
-	Plane b = RandomPlaneInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonTriangleNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polygon a = RandomPolygonInHalfspace(p);
-	p.ReverseNormal();
-	Triangle b = RandomTriangleInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonPolygonNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polygon a = RandomPolygonInHalfspace(p);
-	p.ReverseNormal();
-	Polygon b = RandomPolygonInHalfspace(p);
-	assert2(!a.Intersects(b), a, b);
-	assert(!b.Intersects(a));
-//	assert(a.Distance(b) > 0.f);
-//	assert(b.Distance(a) > 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(!b.Contains(a.ClosestPoint(b)));
-//	assert(!a.Contains(b.ClosestPoint(a)));
-///	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
 
 RANDOMIZED_TEST(TriangleLineNoIntersect)
 {
@@ -1172,17 +783,4 @@ RANDOMIZED_TEST(PlanePlaneNoIntersect)
 //	assert(!b.Contains(a.ClosestPoint(b)));
 //	assert(!a.Contains(b.ClosestPoint(a)));
 //	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(RayTriangleMeshNoIntersect)
-{
-	Plane p(vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE)), vec::RandomDir(rng));
-	Polyhedron a = RandomPolyhedronInHalfspace(p);
-	TriangleMesh tm;
-	tm.SetConvex(a);
-	p.ReverseNormal();
-	Ray b = RandomRayInHalfspace(p);
-	float d = tm.IntersectRay(b);
-	assert(d == FLOAT_INF);
-	MARK_UNUSED(d);
 }

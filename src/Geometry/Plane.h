@@ -170,7 +170,6 @@ public:
 	float SignedDistance(const Ray &ray) const;
 //	float SignedDistance(const Plane &plane) const;
 	float SignedDistance(const Polygon &polygon) const;
-	float SignedDistance(const Polyhedron &polyhedron) const;
 	float SignedDistance(const Sphere &sphere) const;
 	float SignedDistance(const Triangle &triangle) const;
 
@@ -308,7 +307,6 @@ public:
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 	/// @todo Add a version of Plane-Triangle intersection which returns the line segment of intersection.
 	bool Intersects(const Triangle &triangle) const;
 	/// Tests if this plane intersects with the given circle.
@@ -350,9 +348,6 @@ public:
 		@note A plane passes through the origin if and only if d == 0 for the plane.
 		@see d. */
 	bool PassesThroughOrigin(float epsilon = 1e-3f) const;
-
-	// Returns true if this plane is a separating plane for the given two objects.
-//	bool IsSeparatingPlane(const Polyhedron &obj1, const Polyhedron &obj2) const;
 
 	/// Returns a circle that lies on this plane.
 	/** @return The generated circle has its center as close as possible to the specified center point,

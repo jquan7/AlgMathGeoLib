@@ -25,7 +25,6 @@
 #include "OBB.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Polyhedron.h"
 #include "../Math/Quat.h"
 #include "Sphere.h"
 #include "Triangle.h"
@@ -305,11 +304,6 @@ bool Ray::Intersects(const OBB &obb) const
 bool Ray::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool Ray::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
 }
 
 bool Ray::IntersectsDisc(const Circle &disc) const

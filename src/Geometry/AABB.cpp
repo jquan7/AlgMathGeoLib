@@ -28,7 +28,6 @@
 #include "OBB.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Polyhedron.h"
 #include "Sphere.h"
 #include "../Math/float2.h"
 #include "../Math/float3x3.h"
@@ -96,43 +95,6 @@ void AABB::SetFrom(const vec *pointArray, int numPoints)
 		return;
 	for(int i = 0; i < numPoints; ++i)
 		Enclose(pointArray[i]);
-}
-
-Polyhedron AABB::ToPolyhedron() const
-{
-	// Note to maintainer: This function is an exact copy of OBB:ToPolyhedron().
-	Polyhedron p;
-	// Populate the corners of this AABB.
-	// The will be in the order 0: ---, 1: --+, 2: -+-, 3: -++, 4: +--, 5: +-+, 6: ++-, 7: +++.
-	for(int i = 0; i < 8; ++i)
-		p.v.push_back(CornerPoint(i));
-
-	// Generate the 6 faces of this AABB.
-	const int faces[6][4] =
-	{
-		{ 0, 1, 3, 2 }, // X-
-		{ 4, 6, 7, 5 }, // X+
-		{ 0, 4, 5, 1 }, // Y-
-		{ 7, 6, 2, 3 }, // Y+
-		{ 0, 2, 6, 4 }, // Z-
-		{ 1, 5, 7, 3 }, // Z+
-	};
-
-	for(int f = 0; f < 6; ++f)
-	{
-		Polyhedron::Face face;
-		for(int v = 0; v < 4; ++v)
-			face.v.push_back(faces[f][v]);
-		p.f.push_back(face);
-	}
-
-	assume(p.IsClosed());
-	assume(p.IsConvex());
-	assume(p.EulerFormulaHolds());
-	assume(p.FaceIndicesValid());
-	assume(p.FacesAreNondegeneratePlanar());
-	assume(p.Contains(this->CenterPoint()));
-	return p;
 }
 
 OBB AABB::ToOBB() const
@@ -646,11 +608,6 @@ bool AABB::Contains(const Polygon &polygon) const
 	return Contains(polygon.MinimalEnclosingAABB());
 }
 
-bool AABB::Contains(const Polyhedron &polyhedron) const
-{
-	return Contains(polyhedron.MinimalEnclosingAABB());
-}
-
 bool AABB::IntersectLineAABB(const vec &linePos, const vec &lineDir, float &tNear, float &tFar) const
 {
 	// Never call the SSE version here. The SSE version does not output tNear and tFar, because
@@ -973,11 +930,6 @@ bool AABB::Intersects(const Polygon &polygon) const
 	return polygon.Intersects(*this);
 }
 
-bool AABB::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
-}
-
 void AABB::ProjectToAxis(const vec &axis, float &dMin, float &dMax) const
 {
 	vec c = (minPoint + maxPoint) * 0.5f;
@@ -1052,11 +1004,6 @@ void AABB::Enclose(const Triangle &triangle)
 void AABB::Enclose(const Polygon &polygon)
 {
 	Enclose(polygon.MinimalEnclosingAABB());
-}
-
-void AABB::Enclose(const Polyhedron &polyhedron)
-{
-	Enclose(polyhedron.MinimalEnclosingAABB());
 }
 
 void AABB::Enclose(const vec *pointArray, int numPoints)

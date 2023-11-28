@@ -169,7 +169,7 @@ public:
 	/// Returns a Polygon2D representation of this Triangle2D.
 	/** The returned polygon is identical to this Triangle2D. It has three vertices a, b and c which wind in the same
 		direction than in this triangle.
-	@see class Polygon2D, ToPolyhedron(). */
+	@see class Polygon2D. */
 	Polygon2D ToPolygon() const;
 #endif
 	/// Returns the tight AABB2D that encloses this Triangle2D.

@@ -24,7 +24,6 @@
 
 #include "AABB.h"
 #include "OBB.h"
-#include "Polyhedron.h"
 #include "Plane.h"
 #include "Line.h"
 #include "Ray.h"
@@ -682,11 +681,6 @@ bool Polygon::Intersects(const Polygon &polygon, float polygonThickness) const
 	return Polygon_Intersects_Polygon(*this, polygon, polygonThickness);
 }
 
-bool Polygon::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
-}
-
 bool Polygon::Intersects(const Sphere &sphere) const
 {
 	///@todo Optimize.
@@ -878,20 +872,6 @@ vec Polygon::FastRandomPointInside(LCG &rng) const
 		return vec::nan;
 	int i = rng.Int(0, (int)tris.size()-1);
 	return TRIANGLE(tris[i]).RandomPointInside(rng);
-}
-
-Polyhedron Polygon::ToPolyhedron() const
-{
-	Polyhedron poly;
-	poly.v = p;
-	poly.f.push_back(Polyhedron::Face());
-	poly.f.push_back(Polyhedron::Face());
-	for(int i = 0; i < NumVertices(); ++i)
-	{
-		poly.f[0].v.push_back(i);
-		poly.f[1].v.push_back(NumVertices()-1-i);
-	}
-	return poly;
 }
 
 // A(u) = a1 + u * (a2-a1).

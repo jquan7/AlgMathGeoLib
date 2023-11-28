@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file TriangleMesh.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the TriangleMesh geometry object. */
 #include "TriangleMesh.h"
 #include <stdlib.h>
@@ -21,7 +21,6 @@
 #include "../Math/float3.h"
 #include "Triangle.h"
 #include "Ray.h"
-#include "Polyhedron.h"
 #include "../MathGeoLibFwd.h"
 #include "../Math/MathConstants.h"
 #include "../Math/myassert.h"
@@ -202,20 +201,6 @@ TriangleMesh &TriangleMesh::operator =(const TriangleMesh &rhs)
 	memcpy(data, rhs.data, numTriangles*3*vertexSizeBytes);
 
 	return *this;
-}
-
-void TriangleMesh::SetConvex(const Polyhedron &polyhedron)
-{
-	TriangleArray tris = polyhedron.TriangulateConvex();
-	if (!tris.empty())
-	{
-		int alignment = (simdCapability == SIMD_AVX) ? 8 : ((simdCapability == SIMD_SSE41 || simdCapability == SIMD_SSE2) ? 4 : 1);
-		vec degen = POINT_VEC_SCALAR(-FLOAT_INF);
-		Triangle degent(degen, degen, degen);
-		while(tris.size() % alignment != 0)
-			tris.push_back(degent);
-		Set((Triangle*)&tris[0], (int)tris.size());
-	}
 }
 
 void TriangleMesh::Set(const float *triangleMesh, int numTris, int vtxSizeBytes)

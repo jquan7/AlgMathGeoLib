@@ -95,18 +95,8 @@ public:
 	/** This function computes the minimal axis-aligned bounding box for the given oriented bounding box. If the orientation
 		of the OBB is not aligned with the world axes, this conversion is not exact and loosens the volume of the bounding box.
 		@param obb The oriented bounding box to convert into this AABB.
-		@todo Implement SetFrom(Polyhedron).
 		@see SetCenter(), class OBB. */
 	void SetFrom(const OBB &obb);
-
-	// Computes the minimal enclosing AABB of the given polyhedron.
-	/* This function computes the smallest AABB (in terms of volume) that contains the given polyhedron, and stores
-		the result in this structure.
-		@note An AABB cannot generally exactly represent a polyhedron. Converting a polyhedron to an AABB loses some
-		features of the polyhedron.
-		@return If the given polyhedron is closed, this function succeeds and returns true. If the polyhedron is uncapped
-			(has infinite volume), this function does not modify this data structure, but returns false. */
-//	bool SetFrom(const Polyhedron &polyhedron);
 
 	/// Sets this AABB to enclose the given sphere.
 	/** This function computes the smallest possible AABB (in terms of volume) that contains the given sphere, and stores the result in this structure. */
@@ -118,16 +108,10 @@ public:
 		@see MinimalEnclosingAABB(). */
 	void SetFrom(const vec *pointArray, int numPoints);
 
-	/// Converts this AABB to a polyhedron.
-	/** This function returns a polyhedron representation of this AABB. This conversion is exact, meaning that the returned
-		polyhedron represents the same set of points that this AABB does.
-		@see class Polyhedron, ToPBVolume(), ToOBB(). */
-	Polyhedron ToPolyhedron() const;
-
 	/// Converts this AABB to an OBB.
 	/** This function returns an OBB representation of this AABB. This conversion is exact, meaning that the returned
 		OBB represents the same set of points than this AABB.
-		@see class OBB, ToPolyhedron(), ToPBVolume(). */
+		@see class OBB, ToPBVolume(). */
 	OBB ToOBB() const;
 
 	/// Returns the smallest sphere that contains this AABB.
@@ -380,7 +364,6 @@ public:
 	bool Contains(const Sphere &sphere) const;
 	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
-	bool Contains(const Polyhedron &polyhedron) const;
 
 	/// Tests whether this AABB and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
@@ -411,7 +394,6 @@ public:
 	bool Intersects(const Sphere &sphere, vec *closestPointOnAABB = 0) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 
 	/// Projects this AABB onto the given axis.
 	/** @param axis The axis to project onto. This vector can be unnormalized.
@@ -434,7 +416,6 @@ public:
 	void Enclose(const Sphere &sphere);
 	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
-	void Enclose(const Polyhedron &polyhedron);
 	void Enclose(const vec *pointArray, int numPoints);
 
 	/// Generates an unindexed triangle mesh representation of this AABB.
@@ -452,7 +433,7 @@ public:
 		The number of vertices that outPos, outNormal and outUV must be able to contain is
 		(x*y + x*z + y*z)*2*6. If x==y==z==1, then a total of 36 vertices are required. Call
 		NumVerticesInTriangulation to obtain this value.
-		@see ToPolyhedron(), ToEdgeList(), NumVerticesInTriangulation(). */
+		@see ToEdgeList(), NumVerticesInTriangulation(). */
 	void Triangulate(int numFacesX, int numFacesY, int numFacesZ,
 	                 vec *outPos, vec *outNormal, float2 *outUV,
 	                 bool ccwIsFrontFacing) const;
@@ -491,19 +472,8 @@ public:
 	static AABB FromString(const char *str, const char **outEndStr = 0);
 
 	/// Finds the set intersection of this and the given AABB.
-	/** @return This function returns the AABB that is contained in both this and the given AABB.
-		@todo Add Intersection(OBB/Polyhedron). */
+	/** @return This function returns the AABB that is contained in both this and the given AABB.  */
 	AABB Intersection(const AABB &aabb) const;
-
-	// Finds the set intersection of this AABB and the given OBB.
-	/* @return This function returns a Polyhedron that represents the set of points that are contained in this AABB
-		and the given OBB. */
-//	Polyhedron Intersection(const OBB &obb) const;
-
-	// Finds the set intersection of this AABB and the given Polyhedron.
-	/* @return This function returns a Polyhedron that represents the set of points that are contained in this AABB
-		and the given Polyhedron. */
-//	Polyhedron Intersection(const Polyhedron &polyhedron) const;
 
 	/// Computes the intersection of a line, ray or line segment and an AABB.
 	/** Based on "T. Kay, J. Kajiya. Ray Tracing Complex Scenes. SIGGRAPH 1986 vol 20, number 4. pp. 269-"

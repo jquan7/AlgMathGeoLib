@@ -151,7 +151,6 @@ public:
 	bool Contains(const Polygon &polygon) const;
 	bool Contains(const AABB &aabb) const;
 	bool Contains(const OBB &obb) const;
-	bool Contains(const Polyhedron &polyhedron) const;
 	bool Contains(const Sphere &sphere) const;
 	bool Contains(const Sphere &sphere, float epsilon) const;
 
@@ -257,7 +256,7 @@ public:
 	/// Tests whether this sphere and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this sphere,
-		or this sphere is contained inside a polyhedron, etc.)
+		or this sphere is contained inside a OBB, etc.)
 		@param intersectionPoint [out] If specified, receives the actual point of intersection. This pointer may be null.
 		@param intersectionNormal [out] If specified, receives the sphere normal at the point of intersection. This pointer may be null.
 		@param d [out] If specified, receives the distance along the Line/LineSegment/Ray to the intersection. This pointer may be null.
@@ -272,7 +271,6 @@ public:
 	bool Intersects(const OBB &obb, vec *closestPointOnOBB = 0) const;
 	bool Intersects(const Triangle &triangle, vec *closestPointOnTriangle = 0) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 	bool Intersects(const Sphere &sphere) const;
 
 	// Computes the set intersection between this Sphere and the given plane, which forms a 2D circle.
@@ -294,7 +292,6 @@ public:
 	void Enclose(const Sphere &sphere);
 	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
-	void Enclose(const Polyhedron &polyhedron);
 
 	/// Expands the radius of this Sphere until it encloses the given object.
 	/** @param epsilon A small amount to extrude the given object by for numerical precision.

@@ -26,7 +26,6 @@
 #include "Triangle.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Polyhedron.h"
 #include "Sphere.h"
 #include "AABB.h"
 #include "Circle.h"
@@ -219,11 +218,6 @@ bool Line::Intersects(const OBB &obb, float &dNear, float &dFar) const
 bool Line::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool Line::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
 }
 
 bool Line::IntersectsDisc(const Circle &disc) const

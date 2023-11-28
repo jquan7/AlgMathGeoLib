@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file TriangleMesh.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The TriangleMesh geometry object. */
 #pragma once
 
@@ -40,8 +40,6 @@ public:
 	void Set(const float *triangleMesh, int numTriangles, int vertexSizeBytes);
 	void Set(const float3 *triangleMesh, int numTris) { Set(reinterpret_cast<const float *>(triangleMesh), numTris, sizeof(float3)); }
 	void Set(const Triangle *triangleMesh, int numTris) { Set(reinterpret_cast<const float *>(triangleMesh), numTris, sizeof(Triangle)/3); }
-
-	void SetConvex(const Polyhedron &polyhedron);
 
 	float IntersectRay(const Ray &ray) const;
 	float IntersectRay_TriangleIndex(const Ray &ray, int &outTriangleIndex) const;

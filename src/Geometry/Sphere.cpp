@@ -34,7 +34,6 @@
 #include "Line.h"
 #include "Ray.h"
 #include "Polygon.h"
-#include "Polyhedron.h"
 #include "Plane.h"
 #include "Circle.h"
 #include "../Math/float2.h"
@@ -213,16 +212,6 @@ bool Sphere::Contains(const OBB &obb) const
 {
 	for(int i = 0; i < 8; ++i)
 		if (!Contains(obb.CornerPoint(i)))
-			return false;
-
-	return true;
-}
-
-bool Sphere::Contains(const Polyhedron &polyhedron) const
-{
-	assume(polyhedron.IsClosed());
-	for(int i = 0; i < polyhedron.NumVertices(); ++i)
-		if (!Contains(polyhedron.Vertex(i)))
 			return false;
 
 	return true;
@@ -609,11 +598,6 @@ bool Sphere::Intersects(const Polygon &polygon) const
 	return polygon.Intersects(*this);
 }
 
-bool Sphere::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
-}
-
 void Sphere::Enclose(const vec &point, float epsilon)
 {
 	vec d = point - pos;
@@ -766,11 +750,6 @@ void Sphere::Enclose(const Triangle &triangle)
 void Sphere::Enclose(const Polygon &polygon)
 {
 	Enclose(polygon.VertexArrayPtr(), polygon.NumVertices());
-}
-
-void Sphere::Enclose(const Polyhedron &polyhedron)
-{
-	Enclose(polyhedron.VertexArrayPtr(), polyhedron.NumVertices());
 }
 
 void Sphere::ExtendRadiusToContain(const vec &point, float epsilon)

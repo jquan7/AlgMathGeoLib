@@ -168,7 +168,6 @@ public:
 	bool Intersects(const OBB &obb, float &dNear, float &dFar) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 	/// Tests if this ray intersects the given disc.
 	/// @todo This signature will be moved to bool Intersects(const Disc &disc) const;
 	bool IntersectsDisc(const Circle &disc) const;

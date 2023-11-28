@@ -23,7 +23,6 @@
 #include "Line.h"
 #include "OBB.h"
 #include "Polygon.h"
-#include "Polyhedron.h"
 #include "Ray.h"
 #include "Sphere.h"
 #include "Triangle.h"
@@ -242,7 +241,6 @@ float Plane::SignedDistance(const LineSegment &lineSegment) const { return Plane
 float Plane::SignedDistance(const Ray &ray) const { return Plane_SignedDistance(*this, ray); }
 //float Plane::SignedDistance(const Plane &plane) const { return Plane_SignedDistance(*this, plane); }
 float Plane::SignedDistance(const Polygon &polygon) const { return Plane_SignedDistance(*this, polygon); }
-float Plane::SignedDistance(const Polyhedron &polyhedron) const { return Plane_SignedDistance(*this, polyhedron); }
 float Plane::SignedDistance(const Sphere &sphere) const { return Plane_SignedDistance(*this, sphere); }
 float Plane::SignedDistance(const Triangle &triangle) const { return Plane_SignedDistance(*this, triangle); }
 
@@ -683,17 +681,6 @@ bool Plane::Intersects(const Triangle &triangle) const
 	float b = SignedDistance(triangle.b);
 	float c = SignedDistance(triangle.c);
 	return (a*b <= 0.f || a*c <= 0.f);
-}
-
-bool Plane::Intersects(const Polyhedron &polyhedron) const
-{
-	if (polyhedron.NumVertices() == 0)
-		return false;
-	bool sign = IsOnPositiveSide(polyhedron.Vertex(0));
-	for(int i = 1; i < polyhedron.NumVertices(); ++i)
-		if (sign != IsOnPositiveSide(polyhedron.Vertex(i)))
-			return true;
-	return false;
 }
 
 int Plane::Intersects(const Circle &circle, vec *pt1, vec *pt2) const

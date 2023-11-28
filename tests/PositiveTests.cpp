@@ -174,30 +174,6 @@ Triangle RandomTriangleContainingPoint(const vec &pt)
 	return t;
 }
 
-Polyhedron RandomPolyhedronContainingPoint(const vec &pt)
-{
-	Polyhedron p;
-	switch(rng.Int(0,7))
-	{
-	case 0: p = RandomAABBContainingPoint(pt, SCALE).ToPolyhedron(); break;
-	case 1: p = RandomOBBContainingPoint(pt, SCALE).ToPolyhedron(); break;
-	// case 2: p = RandomFrustumContainingPoint(rng, pt).ToPolyhedron(); break;
-	case 3: p = Polyhedron::Tetrahedron(pt, SCALE); break;
-	case 4: p = Polyhedron::Octahedron(pt, SCALE); break;
-	case 5: p = Polyhedron::Hexahedron(pt, SCALE); break;
-	case 6: p = Polyhedron::Icosahedron(pt, SCALE); break;
-	default: p = Polyhedron::Dodecahedron(pt, SCALE); break;
-	}
-#ifdef MATH_AUTOMATIC_SSE
-	for (int i = 0; i < p.NumVertices(); ++i)
-		asserteq(p.Vertex(i).w, 1.f);
-#endif
-	return p;
-//	assert1(t.IsFinite(), t);
-//	assert1(!t.IsDegenerate(), t);
-//	assert3(t.Contains(pt), t.SerializeToCodeString(), pt.SerializeToCodeString(), t.Distance(pt));
-}
-
 UNIQUE_TEST(Polygon_Contains_PointCase)
 {
 	Polygon p;
@@ -209,28 +185,6 @@ UNIQUE_TEST(Polygon_Contains_PointCase)
 	vec pt = POINT_VEC(0.5f, 0.f, 0.0007f);
 
 	assert(p.Contains(pt));
-}
-
-Polygon RandomPolygonContainingPoint(const vec &pt)
-{
-	Polyhedron p = RandomPolyhedronContainingPoint(pt);
-	Polygon poly = p.FacePolygon(rng.Int(0, p.NumFaces()-1));
-
-	vec pt2 = poly.FastRandomPointInside(rng);
-	assert3(poly.Contains(pt2), poly.SerializeToString(), pt2.SerializeToString(), poly.Distance(pt2));
-	poly.Translate(pt - pt2);
-
-	assert1(!poly.IsDegenerate(), poly);
-	assert1(!poly.IsNull(), poly);
-	assert1(poly.IsPlanar(), poly);
-	assert1(poly.IsFinite(), poly);
-	assert3(poly.Contains(pt), poly, pt, poly.Distance(pt));
-#ifdef MATH_AUTOMATIC_SSE
-	for (int i = 0; i < poly.NumVertices(); ++i)
-		asserteq(poly.Vertex(i).w, 1.f);
-#endif
-
-	return poly;
 }
 
 RANDOMIZED_TEST(AABBAABBIntersect)
@@ -383,21 +337,6 @@ RANDOMIZED_TEST(AABBTriangleIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(AABBPolyhedronIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	AABB a = RandomAABBContainingPoint(pt, 10.f);
-	Polyhedron b = RandomPolyhedronContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 UNIQUE_TEST(AABBPolygonIntersectCase)
 {
 	AABB a(POINT_VEC(-6.86657524f,-87.7668533f,-40.2900276f),
@@ -420,24 +359,6 @@ UNIQUE_TEST(AABBPolygonIntersectCase2)
 	b.p.push_back(POINT_VEC(74.7439194f,-120.989212f,81.3974304f));
 	assert(a.Intersects(b));
 }
-
-RANDOMIZED_TEST(AABBPolygonIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	AABB a = RandomAABBContainingPoint(pt, 10.f);
-	Polygon b = RandomPolygonContainingPoint(pt);
-	assert2(a.Intersects(b), a.SerializeToCodeString(), b.SerializeToString());
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
 
 RANDOMIZED_TEST(OBBOBBIntersect)
 {
@@ -612,40 +533,6 @@ RANDOMIZED_TEST(OBBTriangleIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(OBBPolyhedronIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	OBB a = RandomOBBContainingPoint(pt, 10.f);
-	Polyhedron b = RandomPolyhedronContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(OBBPolygonIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	OBB a = RandomOBBContainingPoint(pt, 10.f);
-	Polygon b = RandomPolygonContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-///	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
-
-
-
 RANDOMIZED_TEST(SphereSphereIntersect)
 {
 	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
@@ -742,144 +629,6 @@ RANDOMIZED_TEST(SphereTriangleIntersect)
 //	assert(b.Contains(b.ClosestPoint(a)));
 }
 
-RANDOMIZED_TEST(SpherePolyhedronIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Sphere a = RandomSphereContainingPoint(pt, 10.f);
-	Polyhedron b = RandomPolyhedronContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(SpherePolygonIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Sphere a = RandomSphereContainingPoint(pt, 10.f);
-	Polygon b = RandomPolygonContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronLineIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	Line b = RandomLineContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronRayIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	Ray b = RandomRayContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronLineSegmentIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	LineSegment b = RandomLineSegmentContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-	assert4(a.Distance(a.ClosestPoint(b)) < 1e-3f, a, b, a.ClosestPoint(b), a.Distance(a.ClosestPoint(b)));
-//	TODO: The following is problematic due to numerical
-//	stability issues at the surface of the Polyhedron.
-//	assert(a.Contains(a.ClosestPoint(b)));
-	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronPlaneIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	Plane b = RandomPlaneContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronTriangleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	Triangle b = RandomTriangleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronPolyhedronIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	Polyhedron b = RandomPolyhedronContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolyhedronPolygonIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	Polygon b = RandomPolygonContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
 UNIQUE_TEST(PolygonLineIntersectCase)
 {
 	Polygon p;
@@ -892,81 +641,6 @@ UNIQUE_TEST(PolygonLineIntersectCase)
 	Line l(POINT_VEC(-51.2448387f,66.6799698f,-31.887619f),DIR_VEC(-0.494226635f,-0.341286302f,-0.799539685f));
 
 	assert(p.Intersects(l));
-}
-
-RANDOMIZED_TEST(PolygonLineIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polygon a = RandomPolygonContainingPoint(pt);
-	Line b = RandomLineContainingPoint(pt);
-	assert2(a.Intersects(b), a.SerializeToString(), b.SerializeToCodeString());
-	assert2(b.Intersects(a), b.SerializeToCodeString(), a.SerializeToString());
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonRayIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polygon a = RandomPolygonContainingPoint(pt);
-	Ray b = RandomRayContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonLineSegmentIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polygon a = RandomPolygonContainingPoint(pt);
-	LineSegment b = RandomLineSegmentContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-	assert4(a.Contains(a.ClosestPoint(b)), a, b.SerializeToCodeString(), a.ClosestPoint(b).SerializeToCodeString(), a.Distance(a.ClosestPoint(b)));
-	assert3(b.Contains(a.ClosestPoint(b)), b.SerializeToCodeString(), a.SerializeToString(), b.Distance(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonPlaneIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polygon a = RandomPolygonContainingPoint(pt);
-	Plane b = RandomPlaneContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(PolygonTriangleIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polygon a = RandomPolygonContainingPoint(pt);
-	Triangle b = RandomTriangleContainingPoint(pt);
-	assert(a.Intersects(b));
-	assert(b.Intersects(a));
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-//	assert(b.Contains(b.ClosestPoint(a)));
 }
 
 UNIQUE_TEST(PolygonPolygonIntersectCase)
@@ -1035,23 +709,6 @@ UNIQUE_TEST(PolygonContainsPointCase)
 	vec pt = POINT_VEC(12.1201611f,-63.8624725f,20.105011f);
 	assert(a.Contains(pt, 1e-2f));
 }
-
-RANDOMIZED_TEST(PolygonPolygonIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polygon a = RandomPolygonContainingPoint(pt);
-	Polygon b = RandomPolygonContainingPoint(pt);
-	assert2(a.Intersects(b), a.SerializeToString(), b.SerializeToString());
-	assert2(b.Intersects(a), b.SerializeToString(), a.SerializeToString());
-//	assert(a.Distance(b) == 0.f);
-//	assert(b.Distance(a) == 0.f);
-//	assert(a.Contains(a.ClosestPoint(b)));
-//	assert(b.Contains(a.ClosestPoint(b)));
-//	assert(a.Contains(b.ClosestPoint(a)));
-///	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-
 
 RANDOMIZED_TEST(TriangleLineIntersect)
 {
@@ -1225,19 +882,6 @@ RANDOMIZED_TEST(PlanePlaneIntersect)
 //	assert(b.Contains(a.ClosestPoint(b)));
 //	assert(a.Contains(b.ClosestPoint(a)));
 //	assert(b.Contains(b.ClosestPoint(a)));
-}
-
-RANDOMIZED_TEST(RayTriangleMeshIntersect)
-{
-	vec pt = vec::RandomBox(rng, POINT_VEC_SCALAR(-SCALE), POINT_VEC_SCALAR(SCALE));
-	Polyhedron a = RandomPolyhedronContainingPoint(pt);
-	TriangleMesh tm;
-	tm.SetConvex(a);
-	Ray b = RandomRayContainingPoint(pt);
-	float d = tm.IntersectRay(b);
-	MARK_UNUSED(d);
-	assert(d >= 0.f);
-	assert(IsFinite(d));
 }
 
 TEST(PolygonContains2D)

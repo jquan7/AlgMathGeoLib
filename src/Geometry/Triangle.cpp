@@ -27,7 +27,6 @@
 #include "../Math/float4d.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Polyhedron.h"
 #include "Line.h"
 #include "LineSegment.h"
 #include "Ray.h"
@@ -284,11 +283,6 @@ Polygon Triangle::ToPolygon() const
 	p.p.push_back(b);
 	p.p.push_back(c);
 	return p;
-}
-
-Polyhedron Triangle::ToPolyhedron() const
-{
-	return ToPolygon().ToPolyhedron();
 }
 
 AABB Triangle::BoundingAABB() const
@@ -831,11 +825,6 @@ bool Triangle::Intersects(const OBB &obb) const
 bool Triangle::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool Triangle::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
 }
 
 void Triangle::ProjectToAxis(const vec &axis, float &dMin, float &dMax) const

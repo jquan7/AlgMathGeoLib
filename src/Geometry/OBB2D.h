@@ -96,29 +96,14 @@ public:
 	void SetFrom(const Circle &circle);
 
 #if 0
-#ifdef MATH_CONTAINERLIB_SUPPORT
-	/// Sets this OBB to enclose the given polyhedron.
-	/** This function computes the smallest OBB (in terms of volume) that contains the given polyhedron, and stores the result in this structure.
-		@note An OBB cannot generally exactly represent a polyhedron. Converting a polyhedron to an OBB loses some features of the polyhedron.
-		@return True if the resulting OBB is not degenerate, false otherwise. In either case, the old values of this OBB are destroyed.
-		@see SetFromApproximate(), ToPolyhedron(). */
-	bool SetFrom(const Polyhedron &polyhedron);
-#endif
-
 #if 0
 	/// Sets this OBB to enclose the given point cloud.
 	/** This functions uses principal component analysis to generate an approximation of the smallest OBB that encloses the
 		given point set. The resulting OBB will always contain all the specified points, but might not be the optimally
 		smallest OBB in terms of volume.
-		@see SetFrom(), ToPolyhedron(), PCAEnclosingOBB(). */
+		@see SetFrom(), PCAEnclosingOBB(). */
 	void SetFromApproximate(const vec *pointArray, int numPoints);
 #endif
-
-	/// Converts this OBB to a polyhedron.
-	/** This function returns a polyhedron representation of this OBB. This conversion is exact, meaning that the returned
-		polyhedron represents the same set of points that this OBB does.
-		@see MinimalEnclosingAABB(), ToPBVolume(). */
-	Polyhedron ToPolyhedron() const;
 
 	/// Returns the tightest AABB that contains this OBB.
 	/** This function computes the optimal minimum volume AABB that encloses this OBB.
@@ -322,14 +307,7 @@ public:
 	/// Computes the smallest OBB by volume that encloses the given point set.
 	/** This function implements the algorithm from the paper
 		An Exact Algorithm for Finding Minimum Oriented Bounding Boxes, Jukka Jyl�nki, 2015. Available at http://clb.demon.fi/minobb/ */
-	static OBB OptimalEnclosingOBB(const vec *pointArray, int numPoints);
-	static OBB OptimalEnclosingOBB(const Polyhedron &convexPolyhedron);
-
 	static OBB BruteEnclosingOBB(const vec *pointArray, int numPoints);
-	static OBB BruteEnclosingOBB(const Polyhedron &convexPolyhedron);
-
-	static OBB Brute2EnclosingOBB(const Polyhedron &convexPolyhedron);
-	static OBB Brute3EnclosingOBB(const Polyhedron &convexPolyhedron, const Quat &q);
 
 	/// Returns an OBB that is oriented to the coordinate frame specified by vectors dir0 and dir1 and encloses the given point set.
 	static OBB FixedOrientationEnclosingOBB(const vec *pointArray, int numPoints, const vec &dir0, const vec &dir1);
@@ -408,7 +386,6 @@ public:
 	bool Contains(const OBB &obb) const;
 	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
-	bool Contains(const Polyhedron &polyhedron) const;
 
 	/// Tests whether this OBB and the given object intersect.
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
@@ -440,7 +417,6 @@ public:
 	bool Intersects(const Sphere &sphere, vec *closestPointOnOBB = 0) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 
 	/// Expands this OBB to enclose the given object. The axis directions of this OBB remain intact.
 	/** This function operates in-place. This function does not necessarily result in an OBB that is an
@@ -460,7 +436,7 @@ public:
 		The number of vertices that outPos, outNormal and outUV must be able to contain is
 		(x*y + x*z + y*z)*2*6. If x==y==z==1, then a total of 36 vertices are required. Call
 		NumVerticesInTriangulation to obtain this value.
-		@see ToPolyhedron(), ToEdgeList(), NumVerticesInTriangulation(). */
+		@see ToEdgeList(), NumVerticesInTriangulation(). */
 	void Triangulate(int numFacesX, int numFacesY, int numFacesZ, vec *outPos, vec *outNormal, float2 *outUV, bool ccwIsFrontFacing) const;
 
 	/// Returns the number of vertices that the Triangulate() function will output with the given subdivision parameters.
@@ -492,21 +468,6 @@ public:
 	StringT SerializeToCodeString() const;
 	static OBB FromString(const StringT &str) { return FromString(str.c_str()); }
 #endif
-
-	static OBB FromString(const char *str, const char **outEndStr = 0);
-
-	// Finds the set intersection of this and the given OBB.
-	/* @return This function returns the Polyhedron that is contained in both this and the given OBB. */
-//	Polyhedron Intersection(const AABB &aabb) const;
-
-	// Finds the set intersection of this and the given OBB.
-	/* @return This function returns the Polyhedron that is contained in both this and the given OBB. */
-//	Polyhedron Intersection(const OBB &obb) const;
-
-	// Finds the set intersection of this OBB and the given Polyhedron.
-	/* @return This function returns a Polyhedron that represents the set of points that are contained in this OBB
-		and the given Polyhedron. */
-//	Polyhedron Intersection(const Polyhedron &polyhedron) const;
 
 #ifdef MATH_GRAPHICSENGINE_INTEROP
 	void Triangulate(VertexBuffer &vb, int numFacesX, int numFacesY, int numFacesZ, bool ccwIsFrontFacing) const;

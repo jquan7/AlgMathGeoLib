@@ -201,15 +201,8 @@ public:
 	/// Returns a Polygon representation of this Triangle.
 	/** The returned polygon is identical to this Triangle. It has three vertices a, b and c which wind in the same
 		direction than in this triangle.
-	@see class Polygon, ToPolyhedron(). */
+	@see class Polygon. */
 	Polygon ToPolygon() const;
-
-	/// Returns a Polyhedron representation of this Triangle.
-	/** The generated polyhedron will be closed and has two triangular faces, and three vertices (a, b and c).
-		The two faces share the same vertices, but in opposite winding orders. This creates a polyhedron with zero
-		volume and the surface area twice of this Triangle.
-		@see class Polyhedron, ToPolygon(). */
-	Polyhedron ToPolyhedron() const;
 
 	/// Returns the tight AABB that encloses this Triangle.
 	AABB BoundingAABB() const;
@@ -297,7 +290,6 @@ public:
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 
 	/// A helper function used in line-triangle tests.
 	static float IntersectLineTri(const vec &linePos, const vec &lineDir,

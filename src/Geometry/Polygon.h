@@ -315,7 +315,6 @@ public:
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Triangle &triangle, float polygonThickness = 1e-3f) const;
 	bool Intersects(const Polygon &polygon, float polygonThickness = 1e-3f) const;
-	bool Intersects(const Polyhedron &polyhedron) const;
 	bool Intersects(const Sphere &sphere) const;
 
 	/// Tests whether this convex polygon and the given object intersect.
@@ -371,23 +370,13 @@ public:
 
 	vec FastRandomPointInside(LCG &rng) const;
 
-	/// Converts this Polygon to a Polyhedron representation.
-	/** This function will create a Polyhedron with two faces, one for the front face of this Polygon,
-		and one for the back face.
-		@todo Add ToPolyhedron(float polygonThickness)
-		@see Triangulate(), MinimalEnclosingAABB(). */
-	Polyhedron ToPolyhedron() const;
-
-	// These faces will be extruded along the Polygon normal so that they lie polygonThickness units apart from each other.
-//	Polyhedron ToPolyhedron(float polygonThickness = 0.f) const; ///@todo Add support for this form.
-
 	/// Triangulates this Polygon using the ear-clipping method.
-	/** @see ToPolyhedron(), MinimalEnclosingAABB(). */
+	/** @see MinimalEnclosingAABB(). */
 	TriangleArray Triangulate() const;
 
 	/// Returns the smallest AABB that encloses this polygon.
 	/** @todo Add MinimalEnclosingSphere() and MinimalEnclosingOBB().
-		@see ToPolyhedron(), Triangulate(). */
+		@see Triangulate(). */
 	AABB MinimalEnclosingAABB() const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT)

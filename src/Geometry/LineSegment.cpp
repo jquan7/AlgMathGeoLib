@@ -22,7 +22,6 @@
 #include "Line.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Polyhedron.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
 #include "../Math/float4x4.h"
@@ -385,11 +384,6 @@ bool LineSegment::Intersects(const LineSegment &lineSegment, float epsilon) cons
 bool LineSegment::Intersects(const Polygon &polygon) const
 {
 	return polygon.Intersects(*this);
-}
-
-bool LineSegment::Intersects(const Polyhedron &polyhedron) const
-{
-	return polyhedron.Intersects(*this);
 }
 
 bool LineSegment::IntersectsDisc(const Circle &disc) const
