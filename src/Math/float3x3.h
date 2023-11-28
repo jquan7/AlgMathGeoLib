@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float3x3.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A 3-by-3 matrix for linear operations in 3D space. */
 #pragma once
 
@@ -167,7 +167,7 @@ public:
 		@param localForward Specifies the forward direction in the local space of the object. This is the direction
 			the model is facing at in its own local/object space, often +X (1,0,0), +Y (0,1,0) or +Z (0,0,1). The
 			vector to pass in here depends on the conventions you or your modeling software is using, and it is best
-			pick one convention for all your objects, and be consistent.			
+			pick one convention for all your objects, and be consistent.
 			This input parameter must be a normalized vector.
 		@param targetDirection Specifies the desired world space direction the object should look at. This function
 			will compute a rotation matrix which will rotate the localForward vector to orient towards this targetDirection
@@ -185,8 +185,8 @@ public:
 			collinear, but they do not need to be perpendicular either.
 		@return A matrix that maps the given local space forward direction vector to point towards the given target
 			direction, and the given local up direction towards the given target world up direction. This matrix can be
-			used as the 'world transform' of an object. The returned matrix M is orthonormal with a determinant of +1. 
-			For the matrix M it holds that M * localForward = targetDirection, and M * localUp lies in the plane spanned by 
+			used as the 'world transform' of an object. The returned matrix M is orthonormal with a determinant of +1.
+			For the matrix M it holds that M * localForward = targetDirection, and M * localUp lies in the plane spanned by
 			the vectors targetDirection and worldUp.
 		@see RotateFromTo().
 		@note Be aware that the convention of a 'LookAt' matrix in MathGeoLib differs from e.g. GLM. In MathGeoLib, the returned
@@ -292,19 +292,19 @@ public:
 	{
 		assume(row >= 0);
 		assume(row < Rows);
-		
+
 #ifdef MATH_COLMAJOR_MATRICES
 		return *(reinterpret_cast<MatrixProxy<Rows, Cols>*>(&v[0][row]));
 #else
 		return *(reinterpret_cast<MatrixProxy<Rows, Cols>*>(v[row]));
 #endif
 	}
-	
+
 	FORCE_INLINE const MatrixProxy<Rows, Cols> &operator[](int row) const
 	{
 		assume(row >= 0);
 		assume(row < Rows);
-		
+
 #ifdef MATH_COLMAJOR_MATRICES
 		return *(reinterpret_cast<const MatrixProxy<Rows, Cols>*>(&v[0][row]));
 #else
@@ -317,14 +317,14 @@ public:
 		If you have a non-const object, you can set values of this matrix through this
 		reference, using the notation m.At(row, col) = someValue; */
 	float &At(int row, int col);
-	CONST_WIN32 float At(int row, int col) const;
+	 float At(int row, int col) const;
 
 	/// Returns the given row. [noscript]
 	/** @param row The zero-based index [0, 2] of the row to get. */
 #ifdef MATH_COLMAJOR_MATRICES
-	CONST_WIN32 float3 Row(int row) const;
-	CONST_WIN32 float3 Row3(int row) const { return Row(row); }
-	
+	 float3 Row(int row) const;
+	 float3 Row3(int row) const { return Row(row); }
+
 	/// Returns the given column.
 	/** @param col The zero-based index [0, 2] of the column to get. */
 	float3 &Col(int col);
@@ -341,12 +341,12 @@ public:
 
 	/// Returns the given column.
 	/** @param col The zero-based index [0, 2] of the column to get. */
-	CONST_WIN32 float3 Col(int col) const;
-	CONST_WIN32 float3 Col3(int col) const { return Col(col); }
+	 float3 Col(int col) const;
+	 float3 Col3(int col) const { return Col(col); }
 #endif
 	/// Returns the main diagonal.
 	/** The main diagonal consists of the elements at m[0][0], m[1][1], m[2][2]. */
-	CONST_WIN32 float3 Diagonal() const;
+	 float3 Diagonal() const;
 
 	/// Scales the given row by a scalar.
 	void ScaleRow(int row, float scalar);

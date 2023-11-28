@@ -119,12 +119,6 @@ private:
 
 	/// Initializes clock tick frequency and marks the application startup time.
 	static void InitClockData();
-
-#ifdef WIN32
-	// The following two are actually used as LARGE_INTEGERs, but to avoid having to pull Windows.h in Clock.h, define them
-	// as identically sized u64 instead.
-	static u64/*LARGE_INTEGER*/ ddwTimerFrequency; ///< Ticks per second.
-#endif
 };
 
 MATH_END_NAMESPACE

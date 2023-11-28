@@ -69,7 +69,6 @@
 //                                        will invoke the debugger. (this behavior can be controlled at runtime with SetMathBreakOnAssume(bool))
 // #define MATH_SILENT_ASSUME   - the assume() macro is silent, and disabled altogether. (no prints or breaks or anything, the checks by assume() are ignored)
 // If neither of the above is defined (default), then
-//  - WIN32: if MathBreakOnAssume() == true, the system will break to debugger using a call to DebugBreak().
 //  - Other: if MathBreakOnAssume() == true, the assume() macro is equal to the assert() macro.
 //  -   All: if MathBreakOnAssume() == false, the assume() macro uses printf() to log warnings of failed math-related assumptions.
 

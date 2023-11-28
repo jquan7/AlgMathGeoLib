@@ -30,10 +30,6 @@
 #include "grisu3.h"
 #endif
 
-#ifdef WIN32
-#include "../Math/InclWindows.h"
-#endif
-
 #ifdef MATH_SSE2
 #include "sse_mathfun.h"
 #endif
@@ -63,9 +59,6 @@ bool AssumeFailed()
 #ifndef OPTIMIZED_RELEASE
 	if (mathBreakOnAssume)
 	{
-#if defined(WIN32) && !defined(WIN8RT) // Win8 metro apps don't have DebugBreak.
-		DebugBreak();
-#endif
 	}
 #endif
 	// If your debugger is breaking in this function, it means that an assume() failure has occurred,

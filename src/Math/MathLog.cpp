@@ -24,67 +24,10 @@
 #include "Callstack.h"
 #include "MathFunc.h"
 
-#if defined(WIN32) || defined(WIN8PHONE)
-#include "../Math/InclWindows.h"
-#endif
-
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#endif
-
 MATH_BEGIN_NAMESPACE
 
-#if defined(WIN8PHONE)
-
 void PrintToConsole(MathLogChannel channel, const char *str)
 {
-	if (channel == MathLogError)
-		OutputDebugStringA("Error: ");
-	else if (channel == MathLogWarning)
-		OutputDebugStringA("Warning: ");
-	OutputDebugStringA(str);
-	OutputDebugStringA("\r\n");
-}
-
-#elif defined(WIN32) && !defined(WIN8RT)
-
-void PrintToConsole(MathLogChannel channel, const char *str)
-{
-	if (channel == MathLogError || channel == MathLogErrorNoCallstack)
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), FOREGROUND_RED | FOREGROUND_INTENSITY); // Red
-		fprintf(stderr, "Error: %s\n", str);
-		SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), FOREGROUND_INTENSITY); // Dark gray
-		if (channel != MathLogErrorNoCallstack)
-		{
-			StringT callstack = GetCallstack("  ", "PrintToConsole");
-			fprintf(stderr, "%s", callstack.c_str());
-		}
-		SetConsoleTextAttribute(GetStdHandle(STD_ERROR_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Light gray/default
-	}
-	else if (channel == MathLogWarning || channel == MathLogWarningNoCallstack)
-	{
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY); // Yellow
-		printf("Warning: %s\n", str);
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY); // Dark gray
-		if (channel != MathLogWarningNoCallstack)
-		{
-			StringT callstack = GetCallstack("  ", "PrintToConsole");
-			printf("%s", callstack.c_str());
-		}
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Light gray/default
-	}
-	else
-		printf("%s\n", str);
-}
-
-#else
-
-void PrintToConsole(MathLogChannel channel, const char *str)
-{
-#ifdef WIN8RT
-	OutputDebugStringA(str);
-#endif
 	if (channel == MathLogError || channel == MathLogErrorNoCallstack)
 	{
 		fprintf(stderr, "Error: %s\n", str);
@@ -105,19 +48,7 @@ void PrintToConsole(MathLogChannel channel, const char *str)
 	}
 	else
 		printf("%s\n", str);
-
-#if defined(BREAK_ON_ERROR_PRINTS) || defined(BREAK_ON_WARNING_PRINTS)
-	if (channel == MathLogError)
-		AssumeFailed();
-#endif
-
-#ifdef BREAK_ON_WARNING_PRINTS
-	if (channel == MathLogWarning)
-		AssumeFailed();
-#endif
 }
-
-#endif
 
 void PrintToConsoleVariadic(MathLogChannel channel, const char *format, ...)
 {

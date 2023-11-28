@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float3x4.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A 3-by-4 matrix for affine operations in 3D space. */
 #pragma once
 
@@ -329,7 +329,7 @@ public:
 	FORCE_INLINE const MatrixProxy<Rows, Cols> &operator[](int row) const
 	{
 		assume(row >= 0);
-		assume(row < Rows);		
+		assume(row < Rows);
 #ifdef MATH_COLMAJOR_MATRICES
 		return *(reinterpret_cast<const MatrixProxy<Rows, Cols>*>(&v[0][row]));
 #else
@@ -349,16 +349,16 @@ public:
 	/** @param col The zero-based index [0, 3] of the column to get. */
 	float3 &Col(int col);
 	const float3 &Col(int col) const;
-	
+
 	/// Returns the three first elements of the given column. [noscript]
 	/** @param col The zero-based index [0, 3] of the column to get. */
 	float3 &Col3(int col);
 	const float3 &Col3(int col) const;
-	
+
 	/// Returns the given row.
 	/** @param row The zero-based index [0, 2] of the row to get. */
-	CONST_WIN32 float4 Row(int row) const;
-	CONST_WIN32 float3 Row3(int row) const { return Row(row).xyz(); }
+	 float4 Row(int row) const;
+	 float3 Row3(int row) const { return Row(row).xyz(); }
 #else
 	/// Returns the given row. [noscript]
 	/** @param row The zero-based index [0, 2] of the row to get. */
@@ -372,13 +372,13 @@ public:
 
 	/// Returns the given column.
 	/** @param col The zero-based index [0, 3] of the column to get. */
-	CONST_WIN32 float3 Col(int col) const;
-	CONST_WIN32 float3 Col3(int col) const { return Col(col); }
+	 float3 Col(int col) const;
+	 float3 Col3(int col) const { return Col(col); }
 #endif
 
 	/// Returns the main diagonal.
 	/** The main diagonal consists of the elements at m[0][0], m[1][1], m[2][2]. */
-	CONST_WIN32 float3 Diagonal() const;
+	 float3 Diagonal() const;
 
 	/// Scales the three first elements of the given row by a scalar.
 	void ScaleRow3(int row, float scalar);
@@ -390,7 +390,7 @@ public:
 	void ScaleCol(int col, float scalar);
 
 	/// Returns the upper-left 3-by-3 part.
-	CONST_WIN32 float3x3 Float3x3Part() const;
+	 float3x3 Float3x3Part() const;
 
 	/// Returns the translation part.
 	/** The translation part is stored in the fourth column of this matrix.
@@ -398,10 +398,10 @@ public:
 		after applying rotation and scale. If this matrix represents a local->world space transformation for an object,
 		then this gives the world space position of the object.
 		@note This function assumes that this matrix does not contain projection (the fourth row of this matrix is [0 0 0 1]). */
-	CONST_WIN32 float3 TranslatePart() const;
+	 float3 TranslatePart() const;
 
 	/// Returns the upper-left 3x3 part of this matrix. This part stores the rotation of this transform.
-	CONST_WIN32 float3x3 RotatePart() const;
+	 float3x3 RotatePart() const;
 
 	// Returns the local right axis in the post-transformed coordinate space, according to the given convention.
 	// @note The returned vector might not be normalized if this matrix contains scaling.
@@ -426,7 +426,7 @@ public:
 	float3 WorldX() const;
 	/// Returns the local +Y axis in world space.
 	/** This is the same as transforming the vector (0,1,0) by this matrix. [similarOverload: PositiveX] [hideIndex] */
-	float3 WorldY() const;	
+	float3 WorldY() const;
 	/// Returns the local +Z axis in world space.
 	/** This is the same as transforming the vector (0,0,1) by this matrix. [similarOverload: PositiveX] [hideIndex] */
 	float3 WorldZ() const;

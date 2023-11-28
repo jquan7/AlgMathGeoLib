@@ -1,4 +1,4 @@
-/* Copyright 2011 Jukka Jylänki
+/* Copyright 2011 Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float2.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A 2D (x,y) ordered pair. */
 #pragma once
 
@@ -87,20 +87,20 @@ public:
 			this vector as well, e.g. vec[1] = 10.f; would set the y-component of this vector.
 		@see ptr(), At(). */
 	FORCE_INLINE float &operator [](int index) { return At(index); }
-	FORCE_INLINE CONST_WIN32 float operator [](int index) const { return At(index); }
+	FORCE_INLINE float operator [](int index) const { return At(index); }
 
 	/// Accesses an element of this vector.
 	/** @param index The element to get. Pass in 0 for x and 1 for y.
 		@note If you have a non-const instance of this class, you can use this notation to set the elements of
 			this vector as well, e.g. vec.At(1) = 10.f; would set the y-component of this vector.
 		@see ptr(), operator [](). */
-	FORCE_INLINE CONST_WIN32 float At(int index) const
+	FORCE_INLINE  float At(int index) const
 	{
 		assume(index >= 0);
 		assume(index < Size);
 		return ptr()[index];
 	}
-	
+
 	FORCE_INLINE float &At(int index)
 	{
 		assume(index >= 0);
@@ -205,7 +205,7 @@ public:
 	/// Divides this vector by a scalar. [similarOverload: Add] [hideIndex]
 	/// @return (x/s, y/s).
 	float2 Div(float s) const { return *this / s; }
-	
+
 	/// Divides the vector (s,s) by this vector, element-wise. [similarOverload: Add] [hideIndex]
 	/// @note Mathematically, the division of a scalar by a vector is not defined in linear space structures,
 	///	 but this function is provided here for syntactical convenience.
@@ -497,7 +497,7 @@ public:
 	/// Returns the angle between this vector and the specified vector, in radians.
 	/** @note This function takes into account that this vector or the other vector can be unnormalized, and normalizes the computations.
 			If you are computing the angle between two normalized vectors, it is better to use AngleBetweenNorm().
-		@see AngleBetweenNorm(). */		
+		@see AngleBetweenNorm(). */
 	float AngleBetween(const float2 &other) const;
 
 	/// Returns the angle between this vector and the specified normalized vector, in radians.

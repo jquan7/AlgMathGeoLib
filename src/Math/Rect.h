@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,16 +13,9 @@
    limitations under the License. */
 
 /** @file Rect.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief 2D integral axis-aligned rectangle, equivalent to RECT in Windows API. */
 #pragma once
-
-// Define this when building this project to make Rects be transformable to Win32 RECT() structs.
-// #define MATH_WIN32_INTEROP
-
-#if defined(WIN32) && defined(MATH_WIN32_INTEROP)
-#include "../Math/InclWindows.h"
-#endif
 
 MATH_BEGIN_NAMESPACE
 
@@ -42,25 +35,6 @@ public:
 	int top;
 	int right;
 	int bottom;
-
-#if defined(WIN32) && defined(MATH_WIN32_INTEROP)
-	operator RECT()
-	{
-		RECT r;
-		r.top = top;
-		r.left = left;
-		r.right = right;
-		r.bottom = bottom;
-		return r;
-	}
-	Rect(const RECT &r)
-	{
-		top = r.top;
-		left = r.left;
-		bottom = r.bottom;
-		right = r.right;
-	}
-#endif
 };
 
 MATH_END_NAMESPACE

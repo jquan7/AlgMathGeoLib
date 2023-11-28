@@ -1,6 +1,3 @@
-if (CMAKE_C_COMPILER MATCHES ".*(clang|emcc).*" OR CMAKE_C_COMPILER_ID MATCHES ".*(Clang|emcc).*")
-	set(COMPILER_IS_CLANG TRUE)
-endif()
 
 if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_C_COMPILER MATCHES ".*(gcc|clang|emcc).*" OR CMAKE_C_COMPILER_ID MATCHES ".*(GCC|Clang|emcc).*")
 	set(IS_GCC_LIKE TRUE)
@@ -18,11 +15,6 @@ if ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
 	set(LINUX TRUE)
 endif()
 
-if (WIN32 AND IS_GCC_LIKE)
-	add_definitions(-DWIN32)
-endif()
-
-# Add the global _DEBUG flag from WIN32 platform to all others, which is universally used in MGL to
 # perform debug-mode-specific compilation.
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")

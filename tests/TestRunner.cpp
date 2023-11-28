@@ -88,22 +88,7 @@ std::string FormatTime(double ticks)
 
 // Print text to log without appending a newline to the end, if possible.
 #if !defined(LOGI_NL)
-#if defined(WIN8RT)
-void LOGI_NL(const char *format, ...)
-{
-	const int capacity = 2048;
-	char str[capacity];
-
-	va_list args;
-	va_start(args, format);
-
-	vsnprintf((char *)str, capacity, format, args);
-	str[capacity-1] = 0; // We only support logging a fixed-length string so don't care if we fail/truncate, just make sure we zero-terminate so there won't be any issues.
-	OutputDebugStringA(str);
-}
-#else
 #define LOGI_NL printf
-#endif
 #endif
 
 /// Returns 0: passed, 1: passed with warnings, -1: failed.

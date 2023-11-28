@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file MatrixProxy.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #pragma once
 
@@ -31,18 +31,18 @@ private:
 	float v[Cols*Rows];
 
 public:
-	CONST_WIN32 FORCE_INLINE float operator[](int col) const
+	 FORCE_INLINE float operator[](int col) const
 	{
 		assert(col >= 0);
 		assert(col < Cols);
-		
+
 		return v[col*Rows];
 	}
 	FORCE_INLINE float &operator[](int col)
 	{
 		assert(col >= 0);
 		assert(col < Cols);
-		
+
 		return v[col*Rows];
 	}
 };
@@ -54,7 +54,7 @@ private:
 	float v[Cols];
 
 public:
-	CONST_WIN32 FORCE_INLINE float operator[](int col) const
+	 FORCE_INLINE float operator[](int col) const
 	{
 		assert(col >= 0);
 		assert(col < Cols);

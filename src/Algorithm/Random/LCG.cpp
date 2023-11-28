@@ -76,24 +76,9 @@ u32 LCG::IntFast()
 u32 LCG::Int()
 {
 	assert(modulus != 0);
-	/// \todo Convert to using Schrage's method for approximate factorization. (Numerical Recipes in C)
 
-	// Currently we cast everything to 64-bit to avoid overflow, which is quite dumb.
-
-	// Create the new random number
-//#ifdef WIN32
 	u64 newNum = ((u64)lastNumber * (u64)multiplier + (u64)increment) % (u64)modulus;
-//	u32 m = lastNumber * multiplier;
-//	u32 i = m + increment;
-//	u32 f = i & 0x7FFFFFFF;
-//	u32 m = (lastNumber * 214013 + 2531011) & 0x7FFFFFFF;
-//	unsigned __int64 newNum = (lastNumber * multiplier + increment) & 0x7FFFFFFF;
-//#else
-	// On console platform, we rely on using smaller sequences.
-//	unsigned long newNum = ((unsigned long)lastNumber * (unsigned long)multiplier + (unsigned long)increment) % (unsigned long)modulus;
-//#endif
-	// Save the newly generated random number to use as seed for the next one.
-//	lastNumber = m;//(u32)newNum;
+
 	assert4((((u32)newNum) != 0 || increment != 0) && "LCG degenerated to producing a stream of zeroes!", lastNumber, multiplier, increment, modulus);
 	lastNumber = (u32)newNum;
 	return lastNumber;

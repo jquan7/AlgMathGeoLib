@@ -122,13 +122,13 @@ public:
 		@note If you have a non-const instance of this class, you can use this notation to set the elements of
 			this vector as well, e.g. vec[1] = 10.f; would set the y-component of this vector. */
 	FORCE_INLINE float &operator [](int index) { return At(index); }
-	FORCE_INLINE CONST_WIN32 float operator [](int index) const { return At(index); }
+	FORCE_INLINE  float operator [](int index) const { return At(index); }
 
 	/// Accesses an element of this vector.
 	/** @param index The element to get. Pass in 0 for x, 1 for y, 2 for z and 3 for w.
 		@note If you have a non-const instance of this class, you can use this notation to set the elements of
 			this vector as well, e.g. vec.At(1) = 10.f; would set the y-component of this vector. */
-	FORCE_INLINE CONST_WIN32 float At(int index) const
+	FORCE_INLINE  float At(int index) const
 	{
 		assume(index >= 0);
 		assume(index < Size);

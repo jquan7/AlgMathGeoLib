@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 if (CMAKE_VERSION VERSION_GREATER 3.0.99999) # Want to say "version >= 3.1", but no idea how to achieve that otherwise.
-	cmake_policy(SET CMP0054 NEW) # Don't expand vars inside quotes, i.e. don't expand a line of form: ''if ("MSVC")'', but require ''if ("${MSVC}")''
+	cmake_policy(SET CMP0054 NEW)
 endif()
 
 project(MathGeoLib)
@@ -13,11 +13,7 @@ set(MATHGEOLIB_VERSION
   ${MATHGEOLIB_MAJOR_VERSION}.${MATHGEOLIB_MINOR_VERSION}.${MATHGEOLIB_PATCH_VERSION})
 
 #Define cmake install path
-if(WIN32 AND NOT CYGWIN)
-  set(DEF_INSTALL_CMAKE_DIR CMake)
-else()
-  set(DEF_INSTALL_CMAKE_DIR lib/cmake/${PROJECT_NAME})
-endif()
+set(DEF_INSTALL_CMAKE_DIR lib/cmake/${PROJECT_NAME})
 set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH
   "Installation directory for CMake files")
 
@@ -65,13 +61,6 @@ endif()
 if (LINUX)
 	# clock_gettime() is found from the library librt on linux.
 	target_link_libraries(MathGeoLib rt)
-endif()
-
-if (WIN8RT)
-	set_target_properties(MathGeoLib PROPERTIES VS_WINRT_EXTENSIONS TRUE)
-	# Ignore warning LNK4264: archiving object file compiled with /ZW into a static library; note that when authoring Windows Runtime types it is not recommended to link with a static library that contains Windows Runtime metadata
-	#    since we are not authoring any WinRT components from this code.
-	set_target_properties(MathGeoLib PROPERTIES STATIC_LIBRARY_FLAGS "/ignore:4264")
 endif()
 
 # install lib and header files if testing is disabled

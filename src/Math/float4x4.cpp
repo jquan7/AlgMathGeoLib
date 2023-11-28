@@ -619,7 +619,7 @@ float &float4x4::At(int rowIndex, int colIndex)
 #endif
 }
 
-CONST_WIN32 float float4x4::At(int rowIndex, int colIndex) const
+ float float4x4::At(int rowIndex, int colIndex) const
 {
 	assume(rowIndex >= 0);
 	assume(rowIndex < Rows);
@@ -661,14 +661,14 @@ const float3 &float4x4::Col3(int col) const
 	return reinterpret_cast<const float3 &>(v[col]);
 }
 
-CONST_WIN32 float4 float4x4::Row(int row) const
+ float4 float4x4::Row(int row) const
 {
 	assume(row >= 0);
 	assume(row < Rows);
 	return float4(At(row, 0), At(row, 1), At(row, 2), At(row, 3));
 }
 
-CONST_WIN32 float3 float4x4::Row3(int row) const
+ float3 float4x4::Row3(int row) const
 {
 	assume(row >= 0);
 	assume(row < Rows);
@@ -703,14 +703,14 @@ const float3 &float4x4::Row3(int rowIndex) const
 	return reinterpret_cast<const float3 &>(v[rowIndex]);
 }
 
-CONST_WIN32 float4 float4x4::Col(int colIndex) const
+ float4 float4x4::Col(int colIndex) const
 {
 	assume(colIndex >= 0);
 	assume(colIndex < Cols);
 	return float4(v[0][colIndex], v[1][colIndex], v[2][colIndex], v[3][colIndex]);
 }
 
-CONST_WIN32 float3 float4x4::Col3(int colIndex) const
+ float3 float4x4::Col3(int colIndex) const
 {
 	assume(colIndex >= 0);
 	assume(colIndex < Cols);
@@ -718,12 +718,12 @@ CONST_WIN32 float3 float4x4::Col3(int colIndex) const
 }
 #endif
 
-CONST_WIN32 float4 float4x4::Diagonal() const
+ float4 float4x4::Diagonal() const
 {
 	return float4(v[0][0], v[1][1], v[2][2], v[3][3]);
 }
 
-CONST_WIN32 float3 float4x4::Diagonal3() const
+ float3 float4x4::Diagonal3() const
 {
 	return float3(v[0][0], v[1][1], v[2][2]);
 }
@@ -766,7 +766,7 @@ void float4x4::ScaleCol(int colIndex, float scalar)
 	At(3, colIndex) *= scalar;
 }
 
-CONST_WIN32 float3x3 float4x4::Float3x3Part() const
+ float3x3 float4x4::Float3x3Part() const
 {
 	return float3x3(At(0, 0), At(0, 1), At(0, 2),
 	                At(1, 0), At(1, 1), At(1, 2),
@@ -774,7 +774,7 @@ CONST_WIN32 float3x3 float4x4::Float3x3Part() const
 }
 
 #ifdef MATH_COLMAJOR_MATRICES
-CONST_WIN32 float3x4 float4x4::Float3x4Part() const
+ float3x4 float4x4::Float3x4Part() const
 {
 	return float3x4(At(0, 0), At(0, 1), At(0, 2), At(0, 3),
 					At(1, 0), At(1, 1), At(1, 2), At(1, 3),
@@ -799,12 +799,12 @@ void float4x4::SetFloat3x4Part(const float3x4 &float3x4Part)
 	At(2, 0) = float3x4Part[2][0]; At(2, 1) = float3x4Part[2][1]; At(2, 2) = float3x4Part[2][2]; At(2, 3) = float3x4Part[2][3];
 }
 
-CONST_WIN32 float3 float4x4::TranslatePart() const
+ float3 float4x4::TranslatePart() const
 {
 	return Col3(3);
 }
 
-CONST_WIN32 float3x3 float4x4::RotatePart() const
+ float3x3 float4x4::RotatePart() const
 {
 	return Float3x3Part();
 }

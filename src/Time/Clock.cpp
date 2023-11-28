@@ -15,15 +15,11 @@
 /** @file Clock.cpp
 	@brief */
 
-#if defined(__unix__) || defined (__CYGWIN__)
+#if defined(__unix__)
 #include <time.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/time.h>
-#endif
-
-#ifdef WIN32
-#include "../Math/InclWindows.h"
 #endif
 
 #include "Clock.h"
@@ -31,10 +27,6 @@
 #include "../Math/assume.h"
 
 MATH_BEGIN_NAMESPACE
-
-#ifdef WIN32
-u64 Clock::ddwTimerFrequency;
-#endif
 
 tick_t Clock::appStartTime = 0;
 
@@ -44,19 +36,6 @@ void Clock::InitClockData()
 {
 	if (appStartTime == 0)
 		appStartTime = Tick();
-
-#ifdef WIN32
-	if (!QueryPerformanceFrequency(reinterpret_cast<LARGE_INTEGER*>(&ddwTimerFrequency)))
-	{
-		LOGE("The system doesn't support high-resolution timers!");
-		ddwTimerFrequency = (u64)-1;
-	}
-
-	if (appStartTime == 0)
-	{
-		appStartTime = (tick_t)GetTickCount64();
-	}
-#endif
 }
 
 Clock::Clock()
@@ -76,90 +55,45 @@ void Clock::Sleep(int milliseconds)
 
 int Clock::Year()
 {
-#ifdef WIN32
-	SYSTEMTIME s;
-	GetSystemTime(&s);
-	return s.wYear;
-#else
 	///\todo.
 	return 0;
-#endif
 }
 
 int Clock::Month()
 {
-#ifdef WIN32
-	SYSTEMTIME s;
-	GetSystemTime(&s);
-	return s.wMonth;
-#else
 	///\todo.
 	return 0;
-#endif
 }
 
 int Clock::Day()
 {
-#ifdef WIN32
-	SYSTEMTIME s;
-	GetSystemTime(&s);
-	return s.wDay;
-#else
 	///\todo.
 	return 0;
-#endif
 }
 
 int Clock::Hour()
 {
-#ifdef WIN32
-	SYSTEMTIME s;
-	GetSystemTime(&s);
-	return s.wHour;
-#else
 	///\todo.
 	return 0;
-#endif
 }
 
 int Clock::Min()
 {
-#ifdef WIN32
-	SYSTEMTIME s;
-	GetSystemTime(&s);
-	return s.wMinute;
-#else
 	///\todo.
 	return 0;
-#endif
 }
 
 int Clock::Sec()
 {
-#ifdef WIN32
-	SYSTEMTIME s;
-	GetSystemTime(&s);
-	return s.wSecond;
-#else
 	///\todo.
 	return 0;
-#endif
 }
 
 unsigned long Clock::SystemTime()
 {
-#ifdef WIN32
-	return (unsigned long)GetTickCount64();
-#else
 	return TickU32();
-#endif
 }
-/*
-tick_t Clock::ApplicationStartupTick()
-{
-	return appStartTime;
-}
-*/
+
 unsigned long Clock::Time()
 {
 	return (unsigned long)((Tick() - appStartTime) * 1000 / Clock::TicksPerSec());
@@ -174,15 +108,7 @@ tick_t Clock::Tick()
 
 unsigned long Clock::TickU32()
 {
-#ifdef WIN32
-	LARGE_INTEGER ddwTimer;
-	BOOL success = QueryPerformanceCounter(&ddwTimer);
-	assume(success != 0);
-	MARK_UNUSED(success);
-	return ddwTimer.LowPart;
-#else
 	return (unsigned long)Tick();
-#endif
 }
 
 tick_t Clock::TicksPerSec()

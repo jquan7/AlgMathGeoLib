@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float3x4.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #include "float3x4.h"
 #include <string.h>
@@ -459,7 +459,7 @@ float3 &float3x4::Col(int col)
 {
 	assume(col >= 0);
 	assume(col < Cols);
-	
+
 	return reinterpret_cast<float3 &>(v[col]);
 }
 
@@ -467,7 +467,7 @@ const float3 &float3x4::Col(int col) const
 {
 	assume(col >= 0);
 	assume(col < Cols);
-	
+
 	return reinterpret_cast<const float3 &>(v[col]);
 }
 
@@ -475,7 +475,7 @@ float3 &float3x4::Col3(int col)
 {
 	assume(col >= 0);
 	assume(col < Cols);
-	
+
 	return reinterpret_cast<float3 &>(v[col]);
 }
 
@@ -483,11 +483,11 @@ const float3 &float3x4::Col3(int col) const
 {
 	assume(col >= 0);
 	assume(col < Cols);
-	
+
 	return reinterpret_cast<const float3 &>(v[col]);
 }
 
-CONST_WIN32 float4 float3x4::Row(int row) const
+ float4 float3x4::Row(int row) const
 {
 	assume(row >= 0);
 	assume(row < Rows);
@@ -526,7 +526,7 @@ const float3 &float3x4::Row3(int rowIndex) const
 	return reinterpret_cast<const float3 &>(v[rowIndex]);
 }
 
-CONST_WIN32 float3 float3x4::Col(int colIndex) const
+ float3 float3x4::Col(int colIndex) const
 {
 	assume(colIndex >= 0);
 	assume(colIndex < Cols);
@@ -534,7 +534,7 @@ CONST_WIN32 float3 float3x4::Col(int colIndex) const
 }
 #endif
 
-CONST_WIN32 float3 float3x4::Diagonal() const
+ float3 float3x4::Diagonal() const
 {
 	return float3(v[0][0], v[1][1], v[2][2]);
 }
@@ -569,19 +569,19 @@ void float3x4::ScaleCol(int colIndex, float scalar)
 	At(2, colIndex) *= scalar;
 }
 
-CONST_WIN32 float3x3 float3x4::Float3x3Part() const
+ float3x3 float3x4::Float3x3Part() const
 {
 	return float3x3(At(0, 0), At(0, 1), At(0, 2),
 					At(1, 0), At(1, 1), At(1, 2),
 					At(2, 0), At(2, 1), At(2, 2));
 }
 
-CONST_WIN32 float3 float3x4::TranslatePart() const
+ float3 float3x4::TranslatePart() const
 {
 	return Col(3);
 }
 
-CONST_WIN32 float3x3 float3x4::RotatePart() const
+ float3x3 float3x4::RotatePart() const
 {
 	return Float3x3Part();
 }
@@ -1259,7 +1259,7 @@ float3x4 float3x4::operator *(const float3x4 &rhs) const
 	r[0][1] = At(0, 0) * rhs.At(0, 1) + At(0, 1) * rhs.At(1, 1) + At(0, 2) * rhs.At(2, 1);
 	r[0][2] = At(0, 0) * rhs.At(0, 2) + At(0, 1) * rhs.At(1, 2) + At(0, 2) * rhs.At(2, 2);
 	r[0][3] = At(0, 0) * rhs.At(0, 3) + At(0, 1) * rhs.At(1, 3) + At(0, 2) * rhs.At(2, 3) + At(0, 3);
-	
+
 	r[1][0] = At(1, 0) * rhs.At(0, 0) + At(1, 1) * rhs.At(1, 0) + At(1, 2) * rhs.At(2, 0);
 	r[1][1] = At(1, 0) * rhs.At(0, 1) + At(1, 1) * rhs.At(1, 1) + At(1, 2) * rhs.At(2, 1);
 	r[1][2] = At(1, 0) * rhs.At(0, 2) + At(1, 1) * rhs.At(1, 2) + At(1, 2) * rhs.At(2, 2);
