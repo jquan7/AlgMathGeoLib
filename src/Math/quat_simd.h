@@ -58,59 +58,6 @@ FORCE_INLINE simd4f quat_transform_vec4(simd4f quat, simd4f vec)
 	return s;
 }
 
-#if defined(ANDROID) && defined(MATH_NEON)
-inline void quat_mul_quat_asm(const void *q1, const void *q2, void *out)
-{
-/*	return Quat(x*r.w + y*r.z - z*r.y + w*r.x,
-	           -x*r.z + y*r.w + z*r.x + w*r.y,
-	            x*r.y - y*r.x + z*r.w + w*r.z,
-	           -x*r.x - y*r.y - z*r.z + w*r.w); */
-#ifdef _DEBUG
-	assert(IS16ALIGNED(out));
-	assert(IS16ALIGNED(q1));
-	assert(IS16ALIGNED(q2));
-	assert(IS16ALIGNED(sx));
-	assert(IS16ALIGNED(sy));
-	assert(IS16ALIGNED(sz));
-#endif
-	///\todo 128-bit aligned loads: [%1,:128]
-	asm(
-		"\t vld1.32 {d0, d1}, [%1]\n"    // q0 = quat1.xyzw
-		"\t vmov.i32 d12, #0\n"          // q6.lo = 0
-		"\t vmov.i32 d13, #0x80000000\n" // q6.hi = [- - + +] = 'signy'
-		"\t vld1.32 {d8, d9}, [%2]\n"    // q4 = quat2.xyzw [%2]
-		"\t vdup.32 q1, d0[1]\n"         // q1 = q0[1] = quat1.yyyy = 'Y'
-		"\t vdup.32 q2, d1[0]\n"         // q2 = q0[2] = quat1.zzzz = 'Z'
-		"\t vshl.i64 d10, d13, #32\n"    // q5.lo = q6.hi = [- +]
-		"\t vdup.32 q3, d1[1]\n"         // q3 = q0[3] = quat1.wwww = 'W'
-		"\t vdup.32 q0, d0[0]\n"         // q0 = q0[0] = quat1.xxxx = 'X'
-		"\t vmov d11, d10\n"             // q5.hi = q5.lo = [- + - +] = 'signx'
-		"\t vmov d15, d10\n"             // q7.hi = q5.lo = [- +]
-		"\t vshr.u64 d14, d10, #32\n"    // q7.lo = q5.lo = [- + + -] = 'signz'
-
-		"\t vmov d18, d9\n"              // q9.lo = q4.hi
-		"\t vmov d19, d8\n"              // q9.hi = q4.lo, q9 = quat2.zwxy = 'q2 for Y'
-
-		"\t veor q0, q0, q5\n"           // q0 = X*signx = [-x x -x x]
-		"\t veor q1, q1, q6\n"           // q1 = Y*signy = [-y -y y y]
-		"\t veor q2, q2, q7\n"           // q2 = Z*signz = [-z z z -z]
-
-		"\t vrev64.32 q10, q9\n"         // q10 = quat2.wzyx = 'q2 for X'
-
-		"\t vmul.f32 q0, q0, q10\n"      // q0 = X*signx * quat2
-		"\t vmul.f32 q11, q1, q9\n"       // q0 += Y*signy * quat2
-		"\t vrev64.32 q8, q4\n"          // q8 = quat2.yxwz  = 'q2 for Z'
-		"\t vmla.f32 q0, q2, q8\n"       // q0 += Z*signz * quat2
-		"\t vmla.f32 q11, q3, q4\n"       // q0 += W       * quat2
-
-		"\t vadd.f32 q0, q0, q11\n"
-		"\t vst1.32	{d0, d1}, [%0]\n"    // store output
-	: /* no outputs by value */
-	: [out]"r"(out), [quat1]"r"(q1), [quat2]"r"(q2)
-	: "memory", "q11", "q10", "q9", "q8", "q7", "q6", "q5", "q4", "q3", "q2", "q1", "q0");
-}
-#endif
-
 FORCE_INLINE simd4f quat_mul_quat(simd4f q1, simd4f q2)
 {
 /*
@@ -143,10 +90,6 @@ FORCE_INLINE simd4f quat_mul_quat(simd4f q1, simd4f q2)
 	out = madd_ps(Z, r3, out);
 	out = madd_ps(W, q2, out);
 	return out;
-#elif defined(ANDROID) && defined(MATH_NEON)
-	simd4f ret;
-	quat_mul_quat_asm(&q1, &q2, &ret);
-	return ret;
 #elif defined(MATH_NEON)
 	static const float32x4_t signx = set_ps_hex_const(0x80000000u, 0, 0x80000000u, 0);
 	static const float32x4_t signy = set_ps_hex_const(0x80000000u, 0x80000000u, 0, 0);

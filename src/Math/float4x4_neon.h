@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float4_neon.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief ARM NEON code for float4-related computations. */
 
 #pragma once
@@ -26,8 +26,6 @@
 
 MATH_BEGIN_NAMESPACE
 
-#if !defined(ANDROID) ///\bug Android GCC 4.6.6 gives internal compiler error!
-// Multiplies mat * vec, where mat is a matrix in row-major format.
 FORCE_INLINE simd4f mat4x4_mul_vec4(const simd4f *mat, simd4f vec)
 {
 #ifdef MATH_NEON
@@ -43,7 +41,6 @@ FORCE_INLINE simd4f mat4x4_mul_vec4(const simd4f *mat, simd4f vec)
 	return mat4x4_mul_sse1(mat, vec);
 #endif
 }
-#endif
 
 // Multiplies vec * mat, where mat is a matrix in row-major format.
 FORCE_INLINE simd4f vec4_mul_mat4x4(simd4f vec, const simd4f *mat)
@@ -91,36 +88,6 @@ FORCE_INLINE void mat4x4_mul_mat4x4(simd4f *out, const simd4f *m1, const simd4f 
 #endif
 }
 
-#ifdef ANDROID
-FORCE_INLINE void mat4x4_mul_mat4x4_asm(simd4f *out, const simd4f *m1, const simd4f *m2)
-{
-	asm(
-		"\t vldmia %1, {q4-q7} \n"
-		"\t vldmia %2, {q8-q11} \n"
-		"\t vmul.f32 q0, q8, d8[0] \n"
-		"\t vmul.f32 q1, q8, d10[0] \n"
-		"\t vmul.f32 q2, q8, d12[0] \n"
-		"\t vmul.f32 q3, q8, d14[0] \n"
-		"\t vmla.f32 q0, q9, d8[1] \n"
-		"\t vmla.f32 q1, q9, d10[1] \n"
-		"\t vmla.f32 q2, q9, d12[1] \n"
-		"\t vmla.f32 q3, q9, d14[1] \n"
-		"\t vmla.f32 q0, q10, d9[0] \n"
-		"\t vmla.f32 q1, q10, d11[0] \n"
-		"\t vmla.f32 q2, q10, d13[0] \n"
-		"\t vmla.f32 q3, q10, d15[0] \n"
-		"\t vmla.f32 q0, q11, d9[1] \n"
-		"\t vmla.f32 q1, q11, d11[1] \n"
-		"\t vmla.f32 q2, q11, d13[1] \n"
-		"\t vmla.f32 q3, q11, d15[1] \n"
-		"\t vstmia %0, {q0-q3} \n"
-	: /* no outputs by value */
-	: "r"(out), "r"(m1), "r"(m2)
-	: "memory", "q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q11");
-}
-#endif
-
-#if !defined(ANDROID) ///\bug Android GCC 4.6.6 gives internal compiler error!
 FORCE_INLINE void mat4x4_transpose(simd4f *out, const simd4f *mat)
 {
 #ifdef MATH_NEON
@@ -155,7 +122,6 @@ FORCE_INLINE void mat4x4_transpose(simd4f *out, const simd4f *mat)
 
 #endif
 }
-#endif
 
 FORCE_INLINE void mat4x4_set(simd4f *mat, float _00, float _01, float _02, float _03,
                                           float _10, float _11, float _12, float _13,

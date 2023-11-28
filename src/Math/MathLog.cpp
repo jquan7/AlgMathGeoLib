@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Log.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The LOG and LOGUSER macros. Provides an unified mechanism for logging. */
 #include "MathLog.h"
 
@@ -28,42 +28,13 @@
 #include "../Math/InclWindows.h"
 #endif
 
-#if defined(ANDROID)
-/// This will require you to pass '-llog' on the command line to link against the Android logging libraries.
-#include <android/log.h>
-#endif
-
 #ifdef _MSC_VER
 #define snprintf _snprintf
 #endif
 
 MATH_BEGIN_NAMESPACE
 
-#if defined(ANDROID)
-
-void PrintToConsole(MathLogChannel channel, const char *str)
-{
-	const int capacity = 512;
-	char text[capacity];
-	if (channel == MathLogError)
-	{
-		strcpy(text, "Error: ");
-		strncat(text, str, capacity-7);
-		text[capacity-1] = 0;
-		(void)__android_log_print(ANDROID_LOG_ERROR, "native-activity", "%s", text);
-	}
-	else if (channel == MathLogWarning)
-	{
-		strcpy(text, "Warning: ");
-		strncat(text, str, capacity-9);
-		text[capacity-1] = 0;
-		(void)__android_log_print(ANDROID_LOG_WARN, "native-activity", "%s", text);
-	}
-	else
-		(void)__android_log_print(ANDROID_LOG_INFO, "native-activity", "%s", str);
-}
-
-#elif defined(WIN8PHONE)
+#if defined(WIN8PHONE)
 
 void PrintToConsole(MathLogChannel channel, const char *str)
 {

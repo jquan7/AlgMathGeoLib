@@ -202,13 +202,9 @@ bool float2::BitEquals(const float2 &other) const
 /// at debug runs.
 bool IsNeutralCLocale()
 {
-	// Android NDK locale.h does not have struct lconv or localeconv() implemented, and only contains stub 
-	// symbols with a comment 'MISSING FROM BIONIC - DEFINED TO MAKE libstdc++-v3 happy'
-#ifndef ANDROID
 	lconv *lc = localeconv();
 	if (strcmp(lc->decimal_point, "."))
 		return false;
-#endif
 	return true;
 }
 
@@ -683,7 +679,7 @@ float2 &float2::operator =(const float2 &rhs)
 {
 	x = rhs.x;
 	y = rhs.y;
-	
+
 	return *this;
 }
 

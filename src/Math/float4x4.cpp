@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float4x4.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #include "float4x4.h"
 #include <string.h>
@@ -1192,10 +1192,9 @@ float4x4 &float4x4::operator =(const float4x4 &rhs)
 
 #if defined(MATH_AUTOMATIC_SSE)
 
-#if !defined(ANDROID) // Android NEON doesn't currently use aligned loads.
 	assert(IS16ALIGNED(this));
 	assert(IS16ALIGNED(&rhs));
-#endif
+
 	row[0] = rhs.row[0];
 	row[1] = rhs.row[1];
 	row[2] = rhs.row[2];
@@ -1380,13 +1379,13 @@ bool float4x4::InverseOrthogonalUniformScale()
 	if (scale == 0.f)
 		return false;
 	scale = 1.f / scale;
-	
+
 	At(0, 0) *= scale; At(0, 1) *= scale; At(0, 2) *= scale;
 	At(1, 0) *= scale; At(1, 1) *= scale; At(1, 2) *= scale;
 	At(2, 0) *= scale; At(2, 1) *= scale; At(2, 2) *= scale;
-	
+
 	SetTranslatePart(TransformDir(-At(0, 3), -At(1, 3), -At(2, 3)));
-	
+
 	return true;
 }
 
@@ -1400,7 +1399,7 @@ void float4x4::InverseOrthonormal()
 	Swap(v[0][1], v[1][0]);
 	Swap(v[0][2], v[2][0]);
 	Swap(v[1][2], v[2][1]);
-	
+
 	// b) Replace the top-right 3x1 part by computing R^t(-T).
 	SetTranslatePart(TransformDir(-At(0, 3), -At(1, 3), -At(2, 3)));
 #endif
@@ -1408,7 +1407,7 @@ void float4x4::InverseOrthonormal()
 
 void float4x4::Transpose()
 {
-#if defined(MATH_AUTOMATIC_SSE) && !defined(ANDROID) ///\bug Android GCC 4.6.6 gives internal compiler error!
+#if defined(MATH_AUTOMATIC_SSE)
 	mat4x4_transpose(row, row);
 #else
 	Swap(v[0][1], v[1][0]);
@@ -1422,7 +1421,7 @@ void float4x4::Transpose()
 
 float4x4 float4x4::Transposed() const
 {
-#if defined(MATH_AUTOMATIC_SSE) && !defined(ANDROID) ///\bug Android GCC 4.6.6 gives internal compiler error!
+#if defined(MATH_AUTOMATIC_SSE)
 	float4x4 copy;
 	mat4x4_transpose(copy.row, row);
 	return copy;
@@ -1584,7 +1583,7 @@ float3 float4x4::TransformDir(float tx, float ty, float tz) const
 
 float4 float4x4::Transform(const float4 &vector) const
 {
-#if defined(MATH_AUTOMATIC_SSE) && !defined(ANDROID) ///\bug Android GCC 4.6.6 gives internal compiler error!
+#if defined(MATH_AUTOMATIC_SSE)
 	return mat4x4_mul_vec4(row, vector.v);
 #else
 	return float4(At(0, 0) * vector.x + At(0, 1) * vector.y + At(0, 2) * vector.z + At(0, 3) * vector.w,
@@ -1667,12 +1666,12 @@ float4x4 float4x4::operator *(const float3x3 &rhs) const
 	r[0][1] = At(0, 0) * rhs.At(0, 1) + At(0, 1) * rhs.At(1, 1) + At(0, 2) * rhs.At(2, 1);
 	r[0][2] = At(0, 0) * rhs.At(0, 2) + At(0, 1) * rhs.At(1, 2) + At(0, 2) * rhs.At(2, 2);
 	r[0][3] = At(0, 3);
-	
+
 	r[1][0] = At(1, 0) * rhs.At(0, 0) + At(1, 1) * rhs.At(1, 0) + At(1, 2) * rhs.At(2, 0);
 	r[1][1] = At(1, 0) * rhs.At(0, 1) + At(1, 1) * rhs.At(1, 1) + At(1, 2) * rhs.At(2, 1);
 	r[1][2] = At(1, 0) * rhs.At(0, 2) + At(1, 1) * rhs.At(1, 2) + At(1, 2) * rhs.At(2, 2);
 	r[1][3] = At(1, 3);
-	
+
 	r[2][0] = At(2, 0) * rhs.At(0, 0) + At(2, 1) * rhs.At(1, 0) + At(2, 2) * rhs.At(2, 0);
 	r[2][1] = At(2, 0) * rhs.At(0, 1) + At(2, 1) * rhs.At(1, 1) + At(2, 2) * rhs.At(2, 1);
 	r[2][2] = At(2, 0) * rhs.At(0, 2) + At(2, 1) * rhs.At(1, 2) + At(2, 2) * rhs.At(2, 2);
@@ -1696,17 +1695,17 @@ float4x4 float4x4::operator *(const float3x4 &rhs) const
 	r[0][1] = At(0, 0) * rhs.At(0, 1) + At(0, 1) * rhs.At(1, 1) + At(0, 2) * rhs.At(2, 1);
 	r[0][2] = At(0, 0) * rhs.At(0, 2) + At(0, 1) * rhs.At(1, 2) + At(0, 2) * rhs.At(2, 2);
 	r[0][3] = At(0, 0) * rhs.At(0, 3) + At(0, 1) * rhs.At(1, 3) + At(0, 2) * rhs.At(2, 3) + At(0, 3);
-	
+
 	r[1][0] = At(1, 0) * rhs.At(0, 0) + At(1, 1) * rhs.At(1, 0) + At(1, 2) * rhs.At(2, 0);
 	r[1][1] = At(1, 0) * rhs.At(0, 1) + At(1, 1) * rhs.At(1, 1) + At(1, 2) * rhs.At(2, 1);
 	r[1][2] = At(1, 0) * rhs.At(0, 2) + At(1, 1) * rhs.At(1, 2) + At(1, 2) * rhs.At(2, 2);
 	r[1][3] = At(1, 0) * rhs.At(0, 3) + At(1, 1) * rhs.At(1, 3) + At(1, 2) * rhs.At(2, 3) + At(1, 3);
-	
+
 	r[2][0] = At(2, 0) * rhs.At(0, 0) + At(2, 1) * rhs.At(1, 0) + At(2, 2) * rhs.At(2, 0);
 	r[2][1] = At(2, 0) * rhs.At(0, 1) + At(2, 1) * rhs.At(1, 1) + At(2, 2) * rhs.At(2, 1);
 	r[2][2] = At(2, 0) * rhs.At(0, 2) + At(2, 1) * rhs.At(1, 2) + At(2, 2) * rhs.At(2, 2);
 	r[2][3] = At(2, 0) * rhs.At(0, 3) + At(2, 1) * rhs.At(1, 3) + At(2, 2) * rhs.At(2, 3) + At(2, 3);
-	
+
 	r[3][0] = At(3, 0) * rhs.At(0, 0) + At(3, 1) * rhs.At(1, 0) + At(3, 2) * rhs.At(2, 0);
 	r[3][1] = At(3, 0) * rhs.At(0, 1) + At(3, 1) * rhs.At(1, 1) + At(3, 2) * rhs.At(2, 1);
 	r[3][2] = At(3, 0) * rhs.At(0, 2) + At(3, 1) * rhs.At(1, 2) + At(3, 2) * rhs.At(2, 2);
@@ -1725,17 +1724,17 @@ float4x4 float4x4::operator *(const float4x4 &rhs) const
 	r[0][1] = At(0, 0) * rhs.At(0, 1) + At(0, 1) * rhs.At(1, 1) + At(0, 2) * rhs.At(2, 1) + At(0, 3) * rhs.At(3, 1);
 	r[0][2] = At(0, 0) * rhs.At(0, 2) + At(0, 1) * rhs.At(1, 2) + At(0, 2) * rhs.At(2, 2) + At(0, 3) * rhs.At(3, 2);
 	r[0][3] = At(0, 0) * rhs.At(0, 3) + At(0, 1) * rhs.At(1, 3) + At(0, 2) * rhs.At(2, 3) + At(0, 3) * rhs.At(3, 3);
-	
+
 	r[1][0] = At(1, 0) * rhs.At(0, 0) + At(1, 1) * rhs.At(1, 0) + At(1, 2) * rhs.At(2, 0) + At(1, 3) * rhs.At(3, 0);
 	r[1][1] = At(1, 0) * rhs.At(0, 1) + At(1, 1) * rhs.At(1, 1) + At(1, 2) * rhs.At(2, 1) + At(1, 3) * rhs.At(3, 1);
 	r[1][2] = At(1, 0) * rhs.At(0, 2) + At(1, 1) * rhs.At(1, 2) + At(1, 2) * rhs.At(2, 2) + At(1, 3) * rhs.At(3, 2);
 	r[1][3] = At(1, 0) * rhs.At(0, 3) + At(1, 1) * rhs.At(1, 3) + At(1, 2) * rhs.At(2, 3) + At(1, 3) * rhs.At(3, 3);
-	
+
 	r[2][0] = At(2, 0) * rhs.At(0, 0) + At(2, 1) * rhs.At(1, 0) + At(2, 2) * rhs.At(2, 0) + At(2, 3) * rhs.At(3, 0);
 	r[2][1] = At(2, 0) * rhs.At(0, 1) + At(2, 1) * rhs.At(1, 1) + At(2, 2) * rhs.At(2, 1) + At(2, 3) * rhs.At(3, 1);
 	r[2][2] = At(2, 0) * rhs.At(0, 2) + At(2, 1) * rhs.At(1, 2) + At(2, 2) * rhs.At(2, 2) + At(2, 3) * rhs.At(3, 2);
 	r[2][3] = At(2, 0) * rhs.At(0, 3) + At(2, 1) * rhs.At(1, 3) + At(2, 2) * rhs.At(2, 3) + At(2, 3) * rhs.At(3, 3);
-	
+
 	r[3][0] = At(3, 0) * rhs.At(0, 0) + At(3, 1) * rhs.At(1, 0) + At(3, 2) * rhs.At(2, 0) + At(3, 3) * rhs.At(3, 0);
 	r[3][1] = At(3, 0) * rhs.At(0, 1) + At(3, 1) * rhs.At(1, 1) + At(3, 2) * rhs.At(2, 1) + At(3, 3) * rhs.At(3, 1);
 	r[3][2] = At(3, 0) * rhs.At(0, 2) + At(3, 1) * rhs.At(1, 2) + At(3, 2) * rhs.At(2, 2) + At(3, 3) * rhs.At(3, 2);
@@ -2078,7 +2077,7 @@ void float4x4::Decompose(float3 &translate, float3x3 &rotate, float3 &scale) con
 	assume(Row(3).Equals(0,0,0,1));
 
 	assume(this->IsColOrthogonal3());
-	
+
 	translate = Col3(3);
 	rotate = RotatePart();
 	scale.x = rotate.Col3(0).Length();
@@ -2162,17 +2161,17 @@ float4x4 operator *(const float3x3 &lhs, const float4x4 &rhs)
 	r[0][1] = lhs.At(0, 0) * rhs.At(0, 1) + lhs.At(0, 1) * rhs.At(1, 1) + lhs.At(0, 2) * rhs.At(2, 1);
 	r[0][2] = lhs.At(0, 0) * rhs.At(0, 2) + lhs.At(0, 1) * rhs.At(1, 2) + lhs.At(0, 2) * rhs.At(2, 2);
 	r[0][3] = lhs.At(0, 0) * rhs.At(0, 3) + lhs.At(0, 1) * rhs.At(1, 3) + lhs.At(0, 2) * rhs.At(2, 3);
-	
+
 	r[1][0] = lhs.At(1, 0) * rhs.At(0, 0) + lhs.At(1, 1) * rhs.At(1, 0) + lhs.At(1, 2) * rhs.At(2, 0);
 	r[1][1] = lhs.At(1, 0) * rhs.At(0, 1) + lhs.At(1, 1) * rhs.At(1, 1) + lhs.At(1, 2) * rhs.At(2, 1);
 	r[1][2] = lhs.At(1, 0) * rhs.At(0, 2) + lhs.At(1, 1) * rhs.At(1, 2) + lhs.At(1, 2) * rhs.At(2, 2);
 	r[1][3] = lhs.At(1, 0) * rhs.At(0, 3) + lhs.At(1, 1) * rhs.At(1, 3) + lhs.At(1, 2) * rhs.At(2, 3);
-	
+
 	r[2][0] = lhs.At(2, 0) * rhs.At(0, 0) + lhs.At(2, 1) * rhs.At(1, 0) + lhs.At(2, 2) * rhs.At(2, 0);
 	r[2][1] = lhs.At(2, 0) * rhs.At(0, 1) + lhs.At(2, 1) * rhs.At(1, 1) + lhs.At(2, 2) * rhs.At(2, 1);
 	r[2][2] = lhs.At(2, 0) * rhs.At(0, 2) + lhs.At(2, 1) * rhs.At(1, 2) + lhs.At(2, 2) * rhs.At(2, 2);
 	r[2][3] = lhs.At(2, 0) * rhs.At(0, 3) + lhs.At(2, 1) * rhs.At(1, 3) + lhs.At(2, 2) * rhs.At(2, 3);
-	
+
 	r[3][0] = rhs.At(3, 0);
 	r[3][1] = rhs.At(3, 1);
 	r[3][2] = rhs.At(3, 2);
@@ -2191,17 +2190,17 @@ float4x4 operator *(const float3x4 &lhs, const float4x4 &rhs)
 	r[0][1] = lhs.At(0, 0) * rhs.At(0, 1) + lhs.At(0, 1) * rhs.At(1, 1) + lhs.At(0, 2) * rhs.At(2, 1) + lhs.At(0, 3) * rhs.At(3, 1);
 	r[0][2] = lhs.At(0, 0) * rhs.At(0, 2) + lhs.At(0, 1) * rhs.At(1, 2) + lhs.At(0, 2) * rhs.At(2, 2) + lhs.At(0, 3) * rhs.At(3, 2);
 	r[0][3] = lhs.At(0, 0) * rhs.At(0, 3) + lhs.At(0, 1) * rhs.At(1, 3) + lhs.At(0, 2) * rhs.At(2, 3) + lhs.At(0, 3) * rhs.At(3, 3);
-	
+
 	r[1][0] = lhs.At(1, 0) * rhs.At(0, 0) + lhs.At(1, 1) * rhs.At(1, 0) + lhs.At(1, 2) * rhs.At(2, 0) + lhs.At(1, 3) * rhs.At(3, 0);
 	r[1][1] = lhs.At(1, 0) * rhs.At(0, 1) + lhs.At(1, 1) * rhs.At(1, 1) + lhs.At(1, 2) * rhs.At(2, 1) + lhs.At(1, 3) * rhs.At(3, 1);
 	r[1][2] = lhs.At(1, 0) * rhs.At(0, 2) + lhs.At(1, 1) * rhs.At(1, 2) + lhs.At(1, 2) * rhs.At(2, 2) + lhs.At(1, 3) * rhs.At(3, 2);
 	r[1][3] = lhs.At(1, 0) * rhs.At(0, 3) + lhs.At(1, 1) * rhs.At(1, 3) + lhs.At(1, 2) * rhs.At(2, 3) + lhs.At(1, 3) * rhs.At(3, 3);
-	
+
 	r[2][0] = lhs.At(2, 0) * rhs.At(0, 0) + lhs.At(2, 1) * rhs.At(1, 0) + lhs.At(2, 2) * rhs.At(2, 0) + lhs.At(2, 3) * rhs.At(3, 0);
 	r[2][1] = lhs.At(2, 0) * rhs.At(0, 1) + lhs.At(2, 1) * rhs.At(1, 1) + lhs.At(2, 2) * rhs.At(2, 1) + lhs.At(2, 3) * rhs.At(3, 1);
 	r[2][2] = lhs.At(2, 0) * rhs.At(0, 2) + lhs.At(2, 1) * rhs.At(1, 2) + lhs.At(2, 2) * rhs.At(2, 2) + lhs.At(2, 3) * rhs.At(3, 2);
 	r[2][3] = lhs.At(2, 0) * rhs.At(0, 3) + lhs.At(2, 1) * rhs.At(1, 3) + lhs.At(2, 2) * rhs.At(2, 3) + lhs.At(2, 3) * rhs.At(3, 3);
-	
+
 	r[3][0] = rhs.At(3, 0);
 	r[3][1] = rhs.At(3, 1);
 	r[3][2] = rhs.At(3, 2);

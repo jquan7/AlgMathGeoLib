@@ -15,7 +15,7 @@
 /** @file Clock.cpp
 	@brief */
 
-#if defined(__unix__) || defined(__EMSCRIPTEN__) || defined(ANDROID) || defined (__CYGWIN__)
+#if defined(__unix__) || defined(__EMSCRIPTEN__) || defined (__CYGWIN__)
 #include <time.h>
 #include <errno.h>
 #include <string.h>
@@ -185,11 +185,7 @@ unsigned long Clock::Time()
 
 tick_t Clock::Tick()
 {
-#if defined(ANDROID)
-	struct timespec res;
-	clock_gettime(CLOCK_REALTIME, &res);
-	return 1000000000ULL*res.tv_sec + (tick_t)res.tv_nsec;
-#elif defined(__EMSCRIPTEN__)
+#if defined(__EMSCRIPTEN__)
 
 #ifdef MATH_TICK_IS_FLOAT
 	return (tick_t)emscripten_get_now();
@@ -233,9 +229,7 @@ unsigned long Clock::TickU32()
 
 tick_t Clock::TicksPerSec()
 {
-#if defined(ANDROID)
-	return 1000000000ULL; // 1e9 == nanoseconds.
-#elif defined(__EMSCRIPTEN__)
+#if defined(__EMSCRIPTEN__)
 
 #ifdef MATH_TICK_IS_FLOAT
 	return (tick_t)1000.0;

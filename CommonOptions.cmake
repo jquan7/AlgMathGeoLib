@@ -12,14 +12,9 @@ if (IS_GCC_LIKE AND NOT COMPILER_IS_CLANG)
 	set(COMPILER_IS_GCC TRUE)
 endif()
 
-# Undef WIN32 when Windows is only used as a host system
-if (EMSCRIPTEN OR ANDROID)
-	SET(WIN32)
-endif()
-
 option(GENERATE_ASM_LISTING "Generate assembly listing of all compiled code" FALSE)
 
-if ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux" AND NOT EMSCRIPTEN AND NOT ANDROID)
+if ("${CMAKE_SYSTEM_NAME}" MATCHES "Linux" AND NOT EMSCRIPTEN)
 	set(LINUX TRUE)
 endif()
 
