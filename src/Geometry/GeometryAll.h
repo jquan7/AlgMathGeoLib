@@ -39,4 +39,3 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "Triangle.h"
-#include "TriangleMesh.h"
