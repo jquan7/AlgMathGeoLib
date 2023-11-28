@@ -31,5 +31,4 @@
 #include "OBB.h"
 #include "Plane.h"
 #include "Polygon.h"
-#include "Ray.h"
 #include "Triangle.h"

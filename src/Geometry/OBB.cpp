@@ -32,7 +32,6 @@
 #include "../Math/float4.h"
 #include "../Math/float4x4.h"
 #include "../Math/Quat.h"
-#include "Ray.h"
 #include "Triangle.h"
 #include <stdlib.h>
 
@@ -1245,20 +1244,6 @@ bool OBB::Intersects(const Plane &p) const
 	// Compute the distance of this OBB center from the plane.
 	float s = Dot(p.normal, pos) - p.d;
 	return Abs(s) <= t;
-}
-
-bool OBB::Intersects(const Ray &ray) const
-{
-	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
-	Ray localRay = WorldToLocal() * ray;
-	return aabb.Intersects(localRay);
-}
-
-bool OBB::Intersects(const Ray &ray, float &dNear, float &dFar) const
-{
-	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
-	Ray localRay = WorldToLocal() * ray;
-	return aabb.Intersects(localRay, dNear, dFar);
 }
 
 bool OBB::Intersects(const Line &line) const

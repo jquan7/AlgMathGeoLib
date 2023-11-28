@@ -23,7 +23,6 @@
 #include "Line.h"
 #include "OBB.h"
 #include "Polygon.h"
-#include "Ray.h"
 #include "Triangle.h"
 #include "LineSegment.h"
 #include "../Math/float3x3.h"
@@ -56,12 +55,6 @@ Plane::Plane(const vec &v1, const vec &v2, const vec &v3)
 Plane::Plane(const vec &point, const vec &normal_)
 {
 	Set(point, normal_);
-}
-
-Plane::Plane(const Ray &ray, const vec &normal)
-{
-	vec perpNormal = normal - normal.ProjectToNorm(ray.dir);
-	Set(ray.pos, perpNormal.Normalized());
 }
 
 Plane::Plane(const Line &line, const vec &normal)
@@ -232,7 +225,6 @@ float Plane::SignedDistance(const OBB &obb) const { return Plane_SignedDistance(
 //float Plane::SignedDistance(const Circle &circle) const { return Plane_SignedDistance(*this, circle); }
 float Plane::SignedDistance(const Line &line) const { return Plane_SignedDistance(*this, line); }
 float Plane::SignedDistance(const LineSegment &lineSegment) const { return Plane_SignedDistance(*this, lineSegment); }
-float Plane::SignedDistance(const Ray &ray) const { return Plane_SignedDistance(*this, ray); }
 //float Plane::SignedDistance(const Plane &plane) const { return Plane_SignedDistance(*this, plane); }
 float Plane::SignedDistance(const Polygon &polygon) const { return Plane_SignedDistance(*this, polygon); }
 float Plane::SignedDistance(const Triangle &triangle) const { return Plane_SignedDistance(*this, triangle); }
@@ -296,17 +288,6 @@ Line Plane::Project(const Line &line, bool *nonDegenerate) const
 	return l;
 }
 
-Ray Plane::Project(const Ray &ray, bool *nonDegenerate) const
-{
-	Ray r;
-	r.pos = Project(ray.pos);
-	r.dir = r.dir - r.dir.ProjectToNorm(normal);
-	float len = r.dir.Normalize();
-	if (nonDegenerate)
-		*nonDegenerate = (len > 0.f);
-	return r;
-}
-
 Triangle Plane::Project(const Triangle &triangle) const
 {
 	Triangle t;
@@ -323,25 +304,6 @@ Polygon Plane::Project(const Polygon &polygon) const
 		p.p.push_back(Project(polygon.p[i]));
 
 	return p;
-}
-
-vec Plane::ClosestPoint(const Ray &ray) const
-{
-	assume(ray.IsFinite());
-	assume(!IsDegenerate());
-
-	// The plane and a ray have three configurations:
-	// 1) the ray and the plane don't intersect: the closest point is the ray origin point.
-	// 2) the ray and the plane do intersect: the closest point is the intersection point.
-	// 3) the ray is parallel to the plane: any point on the ray projected to the plane is a closest point.
-	float denom = Dot(normal, ray.dir);
-	if (denom == 0.f)
-		return Project(ray.pos); // case 3)
-	float t = (d - Dot(normal, ray.pos)) / denom;
-	if (t >= 0.f && t < 1e6f) // Numerical stability check: Instead of checking denom against epsilon, check the resulting t for very large values.
-		return ray.GetPoint(t); // case 2)
-	else
-		return Project(ray.pos); // case 1)
 }
 
 vec Plane::ClosestPoint(const LineSegment &lineSegment) const
@@ -371,7 +333,6 @@ vec Plane::ClosestPoint(const LineSegment &lineSegment) const
 		                                                                         // will return true for the returned point.
 	else
 	{
-		///@todo Output parametric t along the ray as well.
 		float t = (d - Dot(normal, lineSegment.a)) / (bDist - aDist);
 		t = Clamp01(t);
 		// Project()ing the result here is necessary only if we clamped, but done for numerical stability, so that Plane::Contains() will
@@ -388,11 +349,6 @@ bool Plane::Contains(const vec &point, float distanceThreshold) const
 bool Plane::Contains(const Line &line, float epsilon) const
 {
 	return Contains(line.pos) && line.dir.IsPerpendicular(normal, epsilon);
-}
-
-bool Plane::Contains(const Ray &ray, float epsilon) const
-{
-	return Contains(ray.pos) && ray.dir.IsPerpendicular(normal, epsilon);
 }
 
 bool Plane::Contains(const LineSegment &lineSegment, float epsilon) const
@@ -589,16 +545,6 @@ bool Plane::IntersectLinePlane(const vec &planeNormal, float planeD, const vec &
 	return EqualAbs(Dot(planeNormal, linePos), planeD, 1e-3f);
 }
 
-
-bool Plane::Intersects(const Ray &ray, float *dist) const
-{
-	float t;
-	bool success = IntersectLinePlane(normal, this->d, ray.pos, ray.dir, t);
-	if (dist)
-		*dist = t;
-	return success && t >= 0.f;
-}
-
 bool Plane::Intersects(const Line &line, float *dist) const
 {
 	float t;
@@ -696,27 +642,6 @@ bool Plane::Clip(vec &a, vec &b) const
 bool Plane::Clip(LineSegment &line) const
 {
 	return Clip(line.a, line.b);
-}
-
-int Plane::Clip(const Line &line, Ray &outRay) const
-{
-	float t;
-	bool intersects = IntersectLinePlane(normal, d, line.pos, line.dir, t);
-	if (!intersects)
-	{
-		if (SignedDistance(line.pos) <= 0.f)
-			return 0; // Discard the whole line, it's completely behind the plane.
-		else
-			return 2; // The whole line is in the positive halfspace. Keep all of it.
-	}
-
-	outRay.pos = line.pos + line.dir * t; // The intersection point
-	if (Dot(line.dir, normal) >= 0.f)
-		outRay.dir = line.dir;
-	else
-		outRay.dir = -line.dir;
-
-	return 1; // Clipping resulted in a ray being generated.
 }
 
 int Plane::Clip(const Triangle &triangle, Triangle &t1, Triangle &t2) const

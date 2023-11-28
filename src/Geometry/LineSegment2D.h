@@ -49,7 +49,6 @@ public:
 			the resulting line segment will not lie on the ray.
 		@see a, b, classes Ray2D, Line2D, Line2D::GetPoint(), Ray2D::GetPoint(). */
 #if 0
-	explicit LineSegment2D(const Ray2D &ray, float d);
 	explicit LineSegment2D(const Line2D &line, float d);
 #endif
 

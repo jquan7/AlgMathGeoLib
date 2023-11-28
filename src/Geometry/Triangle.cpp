@@ -28,7 +28,6 @@
 #include "Polygon.h"
 #include "Line.h"
 #include "LineSegment.h"
-#include "Ray.h"
 #include "AABB.h"
 #include "OBB.h"
 
@@ -366,7 +365,7 @@ double Triangle::DistanceSqD(const vec &point) const
 
 /** Calculates the intersection between a line and a triangle. The facing is not accounted for, so
 	rays are reported to intersect triangles that are both front and backfacing.
-	According to "T. M&ouml;ller, B. Trumbore. Fast, Minimum Storage Ray/Triangle Intersection. 2005."
+	According to "T. M&ouml;ller, B. Trumbore. Fast, Minimum Storage Triangle Intersection. 2005."
 	http://jgt.akpeters.com/papers/MollerTrumbore97/
 	@param linePos The starting point of the line.
 	@param lineDir The direction vector of the line. This does not need to be normalized.
@@ -452,20 +451,6 @@ bool Triangle::Intersects(const Line &l, float *d, vec *intersectionPoint) const
 		*d = t;
 	if (intersectionPoint)
 		*intersectionPoint = l.GetPoint(t);
-	return success;
-}
-
-bool Triangle::Intersects(const Ray &r, float *d, vec *intersectionPoint) const
-{
-	float u, v;
-	float t = IntersectLineTri(r.pos, r.dir, a, b, c, u, v);
-	bool success = (t >= 0 && t != FLOAT_INF);
-	if (!success)
-		return false;
-	if (d)
-		*d = t;
-	if (intersectionPoint)
-		*intersectionPoint = r.GetPoint(t);
 	return success;
 }
 

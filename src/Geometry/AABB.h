@@ -328,17 +328,13 @@ public:
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this AABB,
 		or this AABB is contained inside a OBB, etc.)
-		@param ray The first parameter of this function specifies the other object to test against.
 		@param dNear [out] If specified, receives the parametric distance along the line denoting where the
 			line entered this AABB.
 		@param dFar [out] If specified, receives the parametric distance along the line denoting where the
 			line exited this AABB.
 		@see Contains(), Distance(), ClosestPoint().
 		@note If you do not need the intersection intervals, you should call the functions without these
-			parameters in the function signature for optimal performance.
-		@todo Add Intersects(Circle/Disc). */
-	bool Intersects(const Ray &ray, float &dNear, float &dFar) const;
-	bool Intersects(const Ray &ray) const;
+			parameters in the function signature for optimal performance. */
 	bool Intersects(const Line &line, float &dNear, float &dFar) const;
 	bool Intersects(const Line &line) const;
 	bool Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) const;
@@ -428,17 +424,17 @@ public:
 	/** @return This function returns the AABB that is contained in both this and the given AABB.  */
 	AABB Intersection(const AABB &aabb) const;
 
-	/// Computes the intersection of a line, ray or line segment and an AABB.
-	/** Based on "T. Kay, J. Kajiya. Ray Tracing Complex Scenes. SIGGRAPH 1986 vol 20, number 4. pp. 269-"
+	/// Computes the intersection of a line, line segment and an AABB.
+	/** Based on "T. Kay, J. Kajiya. line Tracing Complex Scenes. SIGGRAPH 1986 vol 20, number 4. pp. 269-"
 		http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
 		@param linePos The starting position of the line.
 		@param lineDir The direction of the line. This direction vector must be normalized!
 		@param tNear [in, out] For the test, the input line is treated as a line segment. Pass in the signed distance
 			from the line origin to the start of the line. For a Line-AABB test, -FLOAT_INF is typically passed here.
-			For a Ray-AABB test, 0.0f should be inputted. If intersection occurs, the signed distance from line origin
+			For a line-AABB test, 0.0f should be inputted. If intersection occurs, the signed distance from line origin
 			to the line entry point in the AABB is returned here.
 		@param tFar [in, out] Pass in the signed distance from the line origin to the end of the line. For Line-AABB and
-			Ray-AABB tests, pass in FLOAT_INF. For a LineSegment-AABB test, pass in the length of the line segment here.
+			line-AABB tests, pass in FLOAT_INF. For a LineSegment-AABB test, pass in the length of the line segment here.
 			If intersection occurs, the signed distance from line origin to the line exit point in the AABB
 			is returned here.
 		@return True if an intersection occurs, false otherwise.

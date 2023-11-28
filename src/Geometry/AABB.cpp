@@ -23,7 +23,6 @@
 #endif
 #include "LineSegment.h"
 #include "Line.h"
-#include "Ray.h"
 #include "OBB.h"
 #include "Plane.h"
 #include "Polygon.h"
@@ -557,18 +556,6 @@ bool AABB::Intersects(const Line &line) const
 #endif
 }
 
-bool AABB::Intersects(const Ray &ray) const
-{
-	float tNear = 0;
-	float tFar = FLOAT_INF;
-
-#ifdef MATH_SIMD
-	return IntersectLineAABB_SSE(ray.pos, ray.dir, tNear, tFar);
-#else
-	return IntersectLineAABB_CPP(ray.pos, ray.dir, tNear, tFar);
-#endif
-}
-
 bool AABB::Intersects(const LineSegment &lineSegment) const
 {
 	vec dir = lineSegment.b - lineSegment.a;
@@ -594,9 +581,6 @@ bool AABB::IntersectLineAABB_CPP(const vec &linePos, const vec &lineDir, float &
 	// for this intersection test.
 	// For a Line-AABB test, pass in
 	//    tNear = -FLOAT_INF;
-	//    tFar = FLOAT_INF;
-	// For a Ray-AABB test, pass in
-	//    tNear = 0.f;
 	//    tFar = FLOAT_INF;
 	// For a LineSegment-AABB test, pass in
 	//    tNear = 0.f;
@@ -763,13 +747,6 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 	return comieq_ss(epsilon, epsilonMasked) != 0;
 }
 #endif
-
-bool AABB::Intersects(const Ray &ray, float &dNear, float &dFar) const
-{
-	dNear = 0.f;
-	dFar = FLOAT_INF;
-	return IntersectLineAABB(ray.pos, ray.dir, dNear, dFar);
-}
 
 bool AABB::Intersects(const Line &line, float &dNear, float &dFar) const
 {

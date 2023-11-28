@@ -61,11 +61,3 @@ UNIQUE_TEST(TrickyTriangleTriangleSATNoIntersect)
 
 }
 
-UNIQUE_TEST(TrickyPlaneRayClosestPoint)
-{
-	Plane p(DIR_VEC(0.50561136f,-0.753886223f,0.419538707f),83.6198273f);
-	Ray r(POINT_VEC(-34.2622185f,97.5630875f,14.6553354f),DIR_VEC(-0.433765054f,-0.636341155f,-0.637901187f));
-	vec cp = p.ClosestPoint(r);
-	assert(p.Contains(cp));
-}
-

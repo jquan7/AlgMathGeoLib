@@ -274,7 +274,6 @@ public:
 		@see Contains(), Distance(), ClosestPoint(), LineSegment::GetPoint(). */
 	bool Intersects(const LineSegment &lineSegment, float *d = 0, vec *intersectionPoint = 0) const;
 	bool Intersects(const Line &line, float *d = 0, vec *intersectionPoint = 0) const;
-	bool Intersects(const Ray &ray, float *d = 0, vec *intersectionPoint = 0) const;
 	bool Intersects(const Plane &plane) const;
 	/** @param outLine [out] If specified, receives the line segment of the common points shared by the two
 			intersecting triangles. If the two triangles do not intersect, this pointer is not written to.

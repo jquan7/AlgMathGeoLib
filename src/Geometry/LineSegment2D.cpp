@@ -120,11 +120,6 @@ LineSegment2D::LineSegment2D(const vec2d &a_, const vec2d &b_)
 {
 }
 #if 0
-LineSegment2D::LineSegment2D(const Ray2D &ray, float d)
-:a(ray.pos), b(ray.GetPoint(d))
-{
-}
-
 LineSegment2D::LineSegment2D(const Line2D &line, float d)
 :a(line.pos), b(line.GetPoint(d))
 {

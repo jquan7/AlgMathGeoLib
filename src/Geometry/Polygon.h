@@ -207,7 +207,7 @@ public:
 
 	/// Maps the given global (world) space point to the local 2D space of this polygon.
 	/// @todo Return a float3 to be able to read the distance of the point from the plane of the polygon? (or add an overload for that)
-	/// @todo Add MapTo2D(Line/LineSegment/Ray/Triangle/Polygon).
+	/// @todo Add MapTo2D(Line/LineSegment/Triangle/Polygon).
 	float2 MapTo2D(const vec &point) const;
 
 	/// Given a 2D point in the local space, returns the corresponding 3D point in the global (world) space.
@@ -308,7 +308,6 @@ public:
 		@see ConvexIntersects(), Contains(), ClosestPoint(), Distance().
 		@todo Add Intersects(Circle/Disc). */
 	bool Intersects(const Line &line) const;
-	bool Intersects(const Ray &ray) const;
 	bool Intersects(const LineSegment &lineSegment) const;
 	bool Intersects(const Plane &plane) const;
 	bool Intersects(const AABB &aabb) const;

@@ -41,14 +41,13 @@ public:
 	/** @see a, b. */
 	LineSegment(const vec &a, const vec &b);
 
-	/// Constructs a line segment from a ray or a line.
+	/// Constructs a line segment from a a line.
 	/** This constructor takes the ray/line origin position as the starting point of this line segment, and defines the end point
 		of the line segment using the given distance parameter.
 		@param d The distance along the ray/line for the end point of this line segment. This will set b = ray.pos + d * ray.dir
 			as the end point. When converting a ray to a line segment, it is possible to pass in a d value < 0, but in that case
 			the resulting line segment will not lie on the ray.
-		@see a, b, classes Ray, Line, Line::GetPoint(), Ray::GetPoint(). */
-	explicit LineSegment(const Ray &ray, float d);
+		@see a, b, class Line, Line::GetPoint(). */
 	explicit LineSegment(const Line &line, float d);
 
 	/// Returns a point on the line.
@@ -59,7 +58,7 @@ public:
 			GetPoint(0) returns a, and GetPoint(1) returns b. This means that GetPoint(1) will not generally be exactly one unit
 			away from the starting point of this line segment, as is the case with Line and Ray.
 		@return (1-d)*a + d*b.
-		@see a, b, Line::GetPoint(), Ray::GetPoint(). */
+		@see a, b, Line::GetPoint(). */
 	vec GetPoint(float d) const;
 
 	/// Returns the center point of this line segment.
@@ -149,9 +148,6 @@ public:
 	/** @param d2 [out] If specified, this parameter receives the (normalized, in case of line segment)
 			distance along the other line object which specifies the closest point on that line to
 			this line segment. */
-	vec ClosestPoint(const Ray &other) const { float d, d2; return ClosestPoint(other, d, d2); }
-	vec ClosestPoint(const Ray &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
-	vec ClosestPoint(const Ray &other, float &d, float &d2) const;
 	vec ClosestPoint(const Line &other) const { float d, d2; return ClosestPoint(other, d, d2); }
 	vec ClosestPoint(const Line &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
 	vec ClosestPoint(const Line &other, float &d, float &d2) const;
@@ -170,9 +166,6 @@ public:
 	/** @param d2 [out] If specified, this parameter receives the (normalized, in case of line segment)
 			distance along the other line object which specifies the closest point on that line to
 			this line segment. */
-	float Distance(const Ray &other) const { float d, d2; return Distance(other, d, d2); }
-	float Distance(const Ray &other, float &d) const { float d2; return Distance(other, d, d2); }
-	float Distance(const Ray &other, float &d, float &d2) const;
 	float Distance(const Line &other) const { float d, d2; return Distance(other, d, d2); }
 	float Distance(const Line &other, float &d) const { float d2; return Distance(other, d, d2); }
 	float Distance(const Line &other, float &d, float &d2) const;
@@ -212,10 +205,6 @@ public:
 	/// @todo This signature will be moved to bool Intersects(const Disc &disc) const;
 	bool IntersectsDisc(const Circle &disc) const;
 
-	/// Converts this LineSegment to a Ray.
-	/** The pos member of the returned Ray will be equal to a, and the dir member equal to Dir().
-		@see class Ray, ToLine(). */
-	Ray ToRay() const;
 	/// Converts this LineSegment to a Line.
 	/** The pos member of the returned Line will be equal to a, and the dir member equal to Dir().
 		@see class Line, ToRay(). */

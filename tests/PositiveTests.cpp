@@ -151,13 +151,6 @@ UNIQUE_TEST(TriangleLineSegmentIntersectCase)
 //	assert(b.Contains(cp));
 }
 
-UNIQUE_TEST(PlaneRayIntersectCase)
-{
-	Plane p(DIR_VEC(-0.25385046f,-0.518036366f,-0.816822112f),91.5489655f);
-	Ray r(POINT_VEC(-70.5785141f,-19.6609783f,-77.6785507f),DIR_VEC(0.916250288f,0.141897082f,-0.374634057f));
-	assert(p.Intersects(r));
-}
-
 UNIQUE_TEST(PlanePlaneIntersectCase)
 {
 	Plane a(DIR_VEC(-9.31284958e-005f,0.896122217f,-0.44380734f).Normalized(),-63.5531387f);

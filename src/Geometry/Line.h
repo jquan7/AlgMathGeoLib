@@ -29,7 +29,7 @@ public:
 	/// Specifies the origin of this line.
 	vec pos;
 
-	/// The normalized direction vector of this ray. [similarOverload: pos]
+	/// The normalized direction vector of this Line. [similarOverload: pos]
 	/** @note For proper functionality, this direction vector needs to always be normalized. If you set to this
 		member manually, remember to make sure you only assign normalized direction vectors. */
 	vec dir;
@@ -46,13 +46,6 @@ public:
 			the vector for you (for performance reasons).
 		@see pos, dir. */
 	Line(const vec &pos, const vec &dir);
-
-	/// Converts a Ray to a Line.
-	/** This conversion simply copies the members pos and dir over from the given Ray to this Line.
-		This means that the new Line starts at the same position, but extends to two directions in space,
-		instead of one.
-		@see class Ray, ToRay(). */
-	explicit Line(const Ray &ray);
 
 	/// Converts a LineSegment to a Line.
 	/** This constructor sets pos = lineSegment.a, and dir = (lineSegment.b - lineSegment.a).Normalized().
@@ -87,9 +80,8 @@ public:
 		is a 1D object in a 3D space, an epsilon threshold is used to allow errors caused by floating-point
 		inaccuracies.
 		@return True if this line contains the given object, up to the given distance threshold.
-		@see class LineSegment, class Ray, Distance(), ClosestPoint(), Intersects(). */
+		@see class LineSegment, Distance(), ClosestPoint(), Intersects(). */
 	bool Contains(const vec &point, float distanceThreshold = 1e-3f) const;
-	bool Contains(const Ray &ray, float distanceThreshold = 1e-3f) const;
 	bool Contains(const LineSegment &lineSegment, float distanceThreshold = 1e-3f) const;
 
 	/// Tests if two lines are equal.
@@ -112,9 +104,6 @@ public:
 	float Distance(const vec &point, float &d) const;
 	/** @param d2 [out] If specified, receives the parametric distance along the other line that specifies the
 		closest point on that line to this line. The value returned here can be negative. */
-	float Distance(const Ray &other) const { float d, d2; return Distance(other, d, d2); }
-	float Distance(const Ray &other, float &d) const { float d2; return Distance(other, d, d2); }
-	float Distance(const Ray &other, float &d, float &d2) const;
 	float Distance(const Line &other) const { float d, d2; return Distance(other, d, d2); }
 	float Distance(const Line &other, float &d) const { float d2; return Distance(other, d, d2); }
 	float Distance(const Line &other, float &d, float &d2) const;
@@ -132,9 +121,6 @@ public:
 	vec ClosestPoint(const vec &targetPoint, float &d) const;
 	/** @param d2 [out] If specified, receives the parametric distance along the other line that specifies the
 		closest point on that line to this line. The value returned here can be negative. */
-	vec ClosestPoint(const Ray &other) const { float d, d2; return ClosestPoint(other, d, d2); }
-	vec ClosestPoint(const Ray &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
-	vec ClosestPoint(const Ray &other, float &d, float &d2) const;
 	vec ClosestPoint(const Line &other) const { float d, d2; return ClosestPoint(other, d, d2); }
 	vec ClosestPoint(const Line &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
 	vec ClosestPoint(const Line &other, float &d, float &d2) const;
@@ -169,16 +155,9 @@ public:
 	bool Intersects(const OBB &obb, float &dNear, float &dFar) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
-	/// Tests if this ray intersects the given disc.
+	/// Tests if this LINE intersects the given disc.
 	/// @todo This signature will be moved to bool Intersects(const Disc &disc) const;
 	bool IntersectsDisc(const Circle &disc) const;
-
-	/// Converts this Line to a Ray.
-	/** The pos and dir members of the returned Ray will be equal to this Line. The only difference is
-		that a Line extends to infinity in two directions, whereas the returned Ray spans only in
-		the positive direction.
-		@see dir, Line::Line, class Ray, ToLineSegment(). */
-	Ray ToRay() const;
 
 	/// Converts this Line to a LineSegment.
 	/** @param d Specifies the position of the other endpoint along this Line. This parameter may be negative.

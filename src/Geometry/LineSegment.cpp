@@ -18,7 +18,6 @@
 #include "LineSegment.h"
 #include "../Math/MathFunc.h"
 #include "AABB.h"
-#include "Ray.h"
 #include "Line.h"
 #include "Plane.h"
 #include "Polygon.h"
@@ -43,11 +42,6 @@ MATH_BEGIN_NAMESPACE
 
 LineSegment::LineSegment(const vec &a_, const vec &b_)
 :a(a_), b(b_)
-{
-}
-
-LineSegment::LineSegment(const Ray &ray, float d)
-:a(ray.pos), b(ray.GetPoint(d))
 {
 }
 
@@ -160,12 +154,6 @@ vec LineSegment::ClosestPoint(const vec &point, float &d) const
 	vec dir = b - a;
 	d = Clamp01(Dot(point - a, dir) / dir.LengthSq());
 	return a + d * dir;
-}
-
-vec LineSegment::ClosestPoint(const Ray &other, float &d, float &d2) const
-{
-	other.ClosestPoint(*this, d2, d);
-	return GetPoint(d);
 }
 
 vec LineSegment::ClosestPoint(const Line &other, float &d, float &d2) const
@@ -292,12 +280,6 @@ double LineSegment::DistanceSqD(const vec &point) const
 	return closestPoint.DistanceSq(POINT_TO_FLOAT4D(point));
 }
 
-float LineSegment::Distance(const Ray &other, float &d, float &d2) const
-{
-	ClosestPoint(other, d, d2);
-	return GetPoint(d).Distance(other.GetPoint(d2));
-}
-
 float LineSegment::Distance(const Line &other, float &d, float &d2) const
 {
 	vec closestPoint2 = other.ClosestPoint(*this, d, d2);
@@ -377,11 +359,6 @@ bool LineSegment::Intersects(const Polygon &polygon) const
 bool LineSegment::IntersectsDisc(const Circle &disc) const
 {
 	return disc.IntersectsDisc(*this);
-}
-
-Ray LineSegment::ToRay() const
-{
-	return Ray(a, Dir());
 }
 
 Line LineSegment::ToLine() const

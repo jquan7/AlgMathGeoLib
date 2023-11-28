@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Circle.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief The Circle geometry object. */
 #pragma once
 
@@ -135,36 +135,29 @@ public:
 //	bool DiscContains(const LineSegment &lineSegment, float maxDistance = 1e-6f) const;
 
 	/// Computes the distance of the given object to the edge of this circle.
-	/** @todo Implement DistanceToEdge(Ray/LineSegment/Line).
-		@return The distance of the given point to the edge of this circle. If the point is contained on this circle,
+	/** @return The distance of the given point to the edge of this circle. If the point is contained on this circle,
 			the value 0 is returned.
 		@see DistanceToDisc(), ClosestPointToEdge(), ClosestPointToDisc(). */
 	float DistanceToEdge(const vec &point) const;
-//	float DistanceToEdge(const Ray &ray, float *d, vec *closestPoint) const;
 //	float DistanceToEdge(const LineSegment &lineSegment, float *d, vec *closestPoint) const;
 //	float DistanceToEdge(const Line &line, float *d, vec *closestPoint) const;
 
 	/// Computes the distance of the given object to this disc (filled circle).
 	/** If the point is contained inside this disc, the value 0 is returned.
-		@see DistanceToEdge(), ClosestPointToEdge(), ClosestPointToDisc().
-		@todo Implement DistanceToDisc(Ray/LineSegment/Line). */
+		@see DistanceToEdge(), ClosestPointToEdge(), ClosestPointToDisc(). */
 	float DistanceToDisc(const vec &point) const;
 /*
-	float DistanceToDisc(const Ray &ray, float *d, vec *closestPoint) const;
 	float DistanceToDisc(const LineSegment &lineSegment, float *d, vec *closestPoint) const;
 	float DistanceToDisc(const Line &line, float *d, vec *closestPoint) const;
 */
 	/// Computes the closest point on the edge of this circle to the given point.
-	/** @todo Implement ClosestPointToEdge(Ray/LineSegment/Line).
-		@see DistanceToEdge(), DistanceToDisc(), ClosestPointToDisc(). */
+	/** @see DistanceToEdge(), DistanceToDisc(), ClosestPointToDisc(). */
 	vec ClosestPointToEdge(const vec &point) const;
-//	vec ClosestPointToEdge(const Ray &ray, float *d) const;
 //	vec ClosestPointToEdge(const LineSegment &lineSegment, float *d) const;
 //	vec ClosestPointToEdge(const Line &line, float *d) const;
 
 	/// Computes the closest point on the disc of this circle to the given object.
-	/** @todo Implement ClosestPointToDisc(Ray/LineSegment/Line).
-		@see DistanceToEdge(), DistanceToDisc(), ClosestPointToEdge(). */
+	/** @see DistanceToEdge(), DistanceToDisc(), ClosestPointToEdge(). */
 	vec ClosestPointToDisc(const vec &point) const;
 
 	/// Tests this circle for an intersection against the given plane.
@@ -178,7 +171,6 @@ public:
 	/** @see Intersects(). */
 	bool IntersectsDisc(const Line &line) const;
 	bool IntersectsDisc(const LineSegment &lineSegment) const;
-	bool IntersectsDisc(const Ray &ray) const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
 	/// Tests if this circle intersects the faces of the given OBB.

@@ -374,8 +374,6 @@ public:
 			line entered this OBB.
 		@param dFar [out] If specified, receives the parametric distance along the line denoting where the
 			line exited this OBB. */
-	bool Intersects(const Ray &ray, float &dNear, float &dFar) const;
-	bool Intersects(const Ray &ray) const;
 	bool Intersects(const Line &line, float &dNear, float &dFar) const;
 	bool Intersects(const Line &line) const;
 	bool Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) const;

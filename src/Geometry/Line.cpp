@@ -16,7 +16,6 @@
 	@author Jukka Jyl�nki
 	@brief Implementation for the Line geometry object. */
 #include "Line.h"
-#include "Ray.h"
 #include "LineSegment.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
@@ -74,12 +73,6 @@ Line::Line(const vec &pos_, const vec &dir_)
 	assume2(dir.IsNormalized(), dir, dir.LengthSq());
 }
 
-Line::Line(const Ray &ray)
-:pos(ray.pos), dir(ray.dir)
-{
-	assume2(dir.IsNormalized(), dir, dir.LengthSq());
-}
-
 Line::Line(const LineSegment &lineSegment)
 :pos(lineSegment.a), dir(lineSegment.Dir())
 {
@@ -130,11 +123,6 @@ bool Line::Contains(const vec &point, float distanceThreshold) const
 	return ClosestPoint(point).DistanceSq(point) <= distanceThreshold;
 }
 
-bool Line::Contains(const Ray &ray, float epsilon) const
-{
-	return Contains(ray.pos, epsilon) && dir.Equals(ray.dir, epsilon);
-}
-
 bool Line::Contains(const LineSegment &lineSegment, float epsilon) const
 {
 	return Contains(lineSegment.a, epsilon) && Contains(lineSegment.b, epsilon);
@@ -152,12 +140,6 @@ bool Line::Equals(const Line &line, float epsilon) const
 float Line::Distance(const vec &point, float &d) const
 {
 	return ClosestPoint(point, d).Distance(point);
-}
-
-float Line::Distance(const Ray &other, float &d, float &d2) const
-{
-	vec c = ClosestPoint(other, d, d2);
-	return c.Distance(other.GetPoint(d2));
 }
 
 float Line::Distance(const Line &other, float &d, float &d2) const
@@ -220,18 +202,6 @@ vec Line::ClosestPoint(const vec &targetPoint, float &d) const
 	return GetPoint(d);
 }
 
-vec Line::ClosestPoint(const Ray &other, float &d, float &d2) const
-{
-	ClosestPointLineLine(pos, dir, other.pos, other.dir, d, d2);
-	if (d2 >= 0.f)
-		return GetPoint(d);
-	else
-	{
-		d2 = 0.f;
-		return ClosestPoint(other.pos, d);
-	}
-}
-
 vec Line::ClosestPoint(const Line &other, float &d, float &d2) const
 {
 	ClosestPointLineLine(pos, dir, other.pos, other.dir, d, d2);
@@ -271,11 +241,6 @@ vec Line::ClosestPoint(const Triangle &triangle, float &d, float2 &outBarycentri
 bool Line::AreCollinear(const vec &p1, const vec &p2, const vec &p3, float epsilon)
 {
 	return vec::AreCollinear(p1, p2, p3, epsilon);
-}
-
-Ray Line::ToRay() const
-{
-	return Ray(pos, dir);
 }
 
 LineSegment Line::ToLineSegment(float d) const

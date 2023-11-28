@@ -27,7 +27,6 @@
 #include "float4.h"
 #include "float3x3.h"
 #include "../Geometry/Line.h"
-#include "../Geometry/Ray.h"
 #include "../Geometry/LineSegment.h"
 #include "../Geometry/AABB.h"
 #include "../Geometry/OBB.h"
@@ -504,7 +503,6 @@ float float3::Distance(const float3 &rhs) const
 }
 
 float float3::Distance(const Line &rhs) const { return rhs.Distance(POINT_VEC(*this)); }
-float float3::Distance(const Ray &rhs) const { return rhs.Distance(POINT_VEC(*this)); }
 float float3::Distance(const LineSegment &rhs) const { return rhs.Distance(POINT_VEC(*this)); }
 float float3::Distance(const Plane &rhs) const { return rhs.Distance(POINT_VEC(*this)); }
 float float3::Distance(const Triangle &rhs) const { return rhs.Distance(POINT_VEC(*this)); }

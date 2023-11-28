@@ -66,7 +66,6 @@ public:
 		@param normal The direction the plane if facing. This vector must have been normalized in advance. The normal
 			of the line must not be collinear with the direction of this normal. If a line segment is specified, the line
 			segment must not be degenerate. */
-	Plane(const Ray &line, const vec &normal);
 	Plane(const Line &line, const vec &normal);
 	Plane(const LineSegment &line, const vec &normal);
 
@@ -166,7 +165,6 @@ public:
 //	float SignedDistance(const Circle &circle) const;
 	float SignedDistance(const Line &line) const;
 	float SignedDistance(const LineSegment &lineSegment) const;
-	float SignedDistance(const Ray &ray) const;
 //	float SignedDistance(const Plane &plane) const;
 	float SignedDistance(const Polygon &polygon) const;
 	float SignedDistance(const Triangle &triangle) const;
@@ -180,12 +178,11 @@ public:
 		@see OrthoProjection(), ProjectToPositiveHalf(), ProjectToNegativeHalf(). */
 	vec Project(const vec &point) const;
 	LineSegment Project(const LineSegment &lineSegment) const;
-	/** @param nonDegenerate [out] If the line or ray is perpendicular to the plane, the projection is
+	/** @param nonDegenerate [out] If the line is perpendicular to the plane, the projection is
 		a single point. In that case, the .pos parameter of the returned object will specify the point
 		location, the .dir parameter of the object will be undefined and the nonDegenerate pointer will be
 		set to false. This pointer may be null. */
 	Line Project(const Line &line, bool *nonDegenerate) const;
-	Ray Project(const Ray &ray, bool *nonDegenerate) const;
 
 	Triangle Project(const Triangle &triangle) const;
 	Polygon Project(const Polygon &polygon) const;
@@ -242,7 +239,6 @@ public:
 		the region of intersection.
 		@see Contains(), Distance(), Intersects(). */
 	vec ClosestPoint(const vec &point) const { return Project(point); }
-	vec ClosestPoint(const Ray &ray) const;
 	vec ClosestPoint(const LineSegment &lineSegment) const;
 
 	/// Tests if this plane contains the given object.
@@ -251,7 +247,6 @@ public:
 		@return True if the given object is contained in this plane, up to the given epsilon distance. */
 	bool Contains(const vec &point, float epsilon = 1e-3f) const;
 	bool Contains(const Line &line, float epsilon = 1e-3f) const;
-	bool Contains(const Ray &ray, float epsilon = 1e-3f) const;
 	bool Contains(const LineSegment &lineSegment, float epsilon = 1e-3f) const;
 	bool Contains(const Triangle &triangle, float epsilon = 1e-3f) const;
 	bool Contains(const Circle &circle, float epsilon = 1e-3f) const;
@@ -298,7 +293,6 @@ public:
 	/** @param dist [out] If specified, this parameter will receive the parametric distance of
 			the intersection point along the line object. Use the GetPoint(d) function of the line class
 			to get the actual point of intersection. This pointer may be null. */
-	bool Intersects(const Ray &ray, float *dist = 0) const;
 	bool Intersects(const Line &line, float *dist = 0) const;
 	bool Intersects(const LineSegment &lineSegment, float *dist = 0) const;
 	bool Intersects(const AABB &aabb) const;
@@ -322,15 +316,6 @@ public:
 				was generated. */
 	bool Clip(LineSegment &line) const;
 	bool Clip(vec &a, vec &b) const;
-
-	/// Clips a line against this plane.
-	/** This function removes the part of the line which lies in the negative halfspace of this plane.
-		@param line The line to clip. If this function returns 2, then the input line should be preserved.
-		@param outRay [out] If this function returns 1, then this parameter will receive the ray object that was formed.
-		@return If the clipping removed the whole line, the value 0 is returned.
-				If the clipping resulted in a ray, the value 1 is returned.
-				If the clipping resulted in a line, the value 2 is returned. */
-	int Clip(const Line &line, Ray &outRay) const;
 
 	/// Clips a triangle against this plane.
 	/** This function removes the part of the triangle which lies in the negative halfspace of this plane.

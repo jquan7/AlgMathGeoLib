@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Circle.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation for the Circle geometry object. */
 #include "Circle.h"
 #include "Plane.h"
@@ -23,7 +23,6 @@
 #include "../Math/float3x4.h"
 #include "../Math/float4x4.h"
 #include "../Math/Quat.h"
-#include "Ray.h"
 #include "AABB.h"
 #include "OBB.h"
 #include "LineSegment.h"
@@ -134,17 +133,6 @@ float Circle::DistanceToEdge(const vec &point) const
 	return ClosestPointToEdge(point).Distance(point);
 }
 /*
-float Circle::DistanceToEdge(const Ray &ray, float *d, vec *closestPoint) const
-{
-	float t;
-	vec cp = ClosestPointToEdge(ray, &t);
-	if (closestPoint)
-		*closestPoint = cp;
-	if (d)
-		*d = t;
-	return cp.Distance(ray.GetPoint(t));
-}
-
 float Circle::DistanceToEdge(const LineSegment &lineSegment, float *d, vec *closestPoint) const
 {
 	float t;
@@ -220,15 +208,6 @@ bool Circle::IntersectsDisc(const LineSegment &lineSegment) const
 	return lineSegment.GetPoint(d).DistanceSq(pos) <= r*r;
 }
 
-bool Circle::IntersectsDisc(const Ray &ray) const
-{
-	float d;
-	bool intersectsPlane = ray.Intersects(ContainingPlane(), &d);
-	if (intersectsPlane)
-		return false;
-	return ray.GetPoint(d).DistanceSq(pos) <= r*r;
-}
-
 #ifdef MATH_ENABLE_STL_SUPPORT
 VecArray Circle::IntersectsFaces(const AABB &aabb) const
 {
@@ -239,7 +218,7 @@ VecArray Circle::IntersectsFaces(const OBB &obb) const
 {
 	VecArray intersectionPoints;
 	for(int i = 0; i < 6; ++i)
-	{		
+	{
 		Plane p = obb.FacePlane(i);
 		vec pt1, pt2;
 		int numIntersections = Intersects(p, &pt1, &pt2);

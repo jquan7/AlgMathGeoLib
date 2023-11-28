@@ -26,7 +26,6 @@
 #include "OBB.h"
 #include "Plane.h"
 #include "Line.h"
-#include "Ray.h"
 #include "LineSegment.h"
 #include "Triangle.h"
 #include "../Math/MathFunc.h"
@@ -489,14 +488,6 @@ bool Polygon::Intersects(const Line &line) const
 	if (!PlaneCCW().Intersects(line, &d))
 		return false;
 	return Contains(line.GetPoint(d));
-}
-
-bool Polygon::Intersects(const Ray &ray) const
-{
-	float d;
-	if (!PlaneCCW().Intersects(ray, &d))
-		return false;
-	return Contains(ray.GetPoint(d));
 }
 
 bool Polygon::Intersects(const LineSegment &lineSegment) const

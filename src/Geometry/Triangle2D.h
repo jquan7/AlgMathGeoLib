@@ -248,7 +248,6 @@ public:
 		@see Contains(), Distance(), ClosestPoint(), LineSegment2D::GetPoint(). */
 	bool Intersects(const LineSegment2D &lineSegment, float *d = 0, vec2d *intersectionPoint = 0) const;
 	bool Intersects(const Line2D &line, float *d = 0, vec2d *intersectionPoint = 0) const;
-	bool Intersects(const Ray2D &ray, float *d = 0, vec2d *intersectionPoint = 0) const;
 	/** @param closestPointOnTriangle [out] If specified, receives the point of intersection between the Sphere2D
 			and this Triangle2D. Even if no intersection occurred, this parameter will receive the closest point on
 			the Triangle2D to the Sphere2D. This pointer may be null. */
