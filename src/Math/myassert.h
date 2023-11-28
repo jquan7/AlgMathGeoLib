@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file myassert.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Control over assert() macro for MathGeoLib. */
 #include "MathLog.h"
 #include "assume.h"
@@ -63,31 +63,31 @@
 #define MATH_IGNORE_UNUSED_VARS_WARNING
 
 #define assert(x) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if (!(x)) \
 		{ \
 			const char *error_ = #x " in " __FILE__ ":" STRINGIZE(__LINE__); \
 			MARK_UNUSED(error_); /* Appease cppcheck to not complain that error is unused. */ \
 			RuntimeFailure(error_); \
 		} \
-	MULTI_LINE_MACRO_END
+	} while(0)
 
 #define asserteq(x,y) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if ((x) != (y)) \
 		{ \
 			StringT str = StringT("Assertion '" #x "' == '" #y "' failed! (") + ObjToString(x) + " != " + ObjToString(y) + ("!) in " __FILE__ ":" STRINGIZE(__LINE__)); \
 			RuntimeFailure(str.c_str()); \
 		} \
-	MULTI_LINE_MACRO_END
+	} while(0)
 
 #define assertcmp(x, cmp, y) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if (!((x) cmp (y))) \
 		{ \
 			StringT str = StringT("Assertion '" #x "' " #cmp " '" #y "' failed! (") + ObjToString(x) + " and " + ObjToString(y) + ("!) in " __FILE__ ":" STRINGIZE(__LINE__)); \
 			RuntimeFailure(str.c_str()); \
 		} \
-	MULTI_LINE_MACRO_END
+	} while(0)
 
 #endif

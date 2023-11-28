@@ -192,49 +192,49 @@ MATH_END_NAMESPACE
 
 #ifndef assume
 #define assume(x) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if (!(x)) \
 			assume_failed(#x " in " __FILE__ ":" STRINGIZE(__LINE__)); \
-	MULTI_LINE_MACRO_END
+	} while(0)
 #endif
 
 // In assume1-assume4, print1-print4 are additional helper parameters that get printed out to log in case of failure.
 #define assume1(x, print1) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if (!(x)) \
 			assume_failed((("\"" #x "\", " #print1 ": ") + MATH_NS::ObjToString(print1) + \
 			                  (" in " __FILE__ ":" STRINGIZE(__LINE__))).c_str()); \
-	MULTI_LINE_MACRO_END
+	} while(0)
 #define assert1 assume1
 
 #define assume2(x, print1, print2) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if (!(x)) \
 			assume_failed((("\"" #x "\", " #print1 ": ") + MATH_NS::ObjToString(print1) + \
 			                  (", " #print2 ": ") + MATH_NS::ObjToString(print2) + \
 			                  (" in " __FILE__ ":" STRINGIZE(__LINE__))).c_str()); \
-	MULTI_LINE_MACRO_END
+	} while(0)
 #define assert2 assume2
 
 #define assume3(x, print1, print2, print3) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if (!(x)) \
 			assume_failed((("\"" #x "\", " #print1 ": ") + MATH_NS::ObjToString(print1) + \
 			                  (", " #print2 ": ") + MATH_NS::ObjToString(print2) + \
 			                  (", " #print3 ": ") + MATH_NS::ObjToString(print3) + \
 			                  (" in " __FILE__ ":" STRINGIZE(__LINE__))).c_str()); \
-	MULTI_LINE_MACRO_END
+	} while(0)
 #define assert3 assume3
 
 #define assume4(x, print1, print2, print3, print4) \
-	MULTI_LINE_MACRO_BEGIN \
+	do { \
 		if (!(x)) \
 			assume_failed((("\"" #x "\", " #print1 ": ") + MATH_NS::ObjToString(print1) + \
 			                  (", " #print2 ": ") + MATH_NS::ObjToString(print2) + \
 			                  (", " #print3 ": ") + MATH_NS::ObjToString(print3) + \
 			                  (", " #print4 ": ") + MATH_NS::ObjToString(print4) + \
 			                  (" in " __FILE__ ":" STRINGIZE(__LINE__))).c_str()); \
-	MULTI_LINE_MACRO_END
+	} while(0)
 #define assert4 assume4
 
 // If MATH_ASSERT_CORRECTNESS is defined, the function mathassert() is enabled to test
