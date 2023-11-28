@@ -30,20 +30,8 @@
 // and forward-declaring it manually is not allowed, see http://stackoverflow.com/questions/307343/forward-declare-an-stl-container
 #include <vector>
 
-#ifdef _MSC_VER
-#define NAMELESS_UNION_BEGIN \
-	__pragma(warning(push)) \
-	__pragma(warning(disable:4201))
-
-#define NAMELESS_UNION_END \
-	__pragma(warning(pop))
-
-#else
-
 #define NAMELESS_UNION_BEGIN union {
 #define NAMELESS_UNION_END };
-
-#endif
 
 #if !defined(MATH_ENABLE_STL_SUPPORT) && !defined(assert)
 #include <stdio.h>
@@ -104,15 +92,9 @@ struct float4_storage;
 #define IS_MAT_ALIGNED(x) IS16ALIGNED(x)
 #endif
 
-#ifdef _MSC_VER
-#define ALIGN16 __declspec(align(16))
-#define ALIGN32 __declspec(align(32))
-#define ALIGN64 __declspec(align(64))
-#else
 #define ALIGN16 __attribute__((aligned(16)))
 #define ALIGN32 __attribute__((aligned(32)))
 #define ALIGN64 __attribute__((aligned(64)))
-#endif
 
 #else
 
@@ -152,21 +134,11 @@ struct AlignedAllocator;
 struct Triangle_storage;
 struct LineSegment_storage;
 
-// Visual Studio will not align data to 16 bytes inside a vector, so use a custom allocator to do it.
-#if defined(_MSC_VER)
-typedef std::vector<Triangle_storage, AlignedAllocator<Triangle_storage, 16> > TriangleArray;
-typedef std::vector<LineSegment_storage, AlignedAllocator<LineSegment_storage, 16> > LineSegmentArray;
-typedef std::vector<float4_storage, AlignedAllocator<float4_storage, 16> > Float4Array;
-#ifdef MATH_AUTOMATIC_SSE
-typedef std::vector<float4_storage, AlignedAllocator<float4_storage, 16> > VecArray;
-#endif
-#else
 typedef std::vector<Triangle> TriangleArray;
 typedef std::vector<LineSegment> LineSegmentArray;
 typedef std::vector<float4> Float4Array;
 #ifdef MATH_AUTOMATIC_SSE
 typedef std::vector<float4> VecArray;
-#endif
 #endif
 
 #if !defined(MATH_AUTOMATIC_SSE)

@@ -477,18 +477,12 @@ FORCE_INLINE bool IsNan(double d) { return (ReinterpretAsU64(d) << 1) > 0xFFE000
 FORCE_INLINE bool IsInf(float f) { return (ReinterpretAsU32(f) << 1) == 0xFF000000u; }
 FORCE_INLINE bool IsInf(double d) { return (ReinterpretAsU64(d) << 1) == 0xFFE0000000000000ULL; }
 
-#ifdef _MSC_VER
-template<> FORCE_INLINE bool IsFinite<long double>(long double value) { return _finite((double)value) != 0; }
-FORCE_INLINE bool IsInf(long double value) { return IsInf((double)value); }
-FORCE_INLINE bool IsNan(long double value) { return IsNan((double)value); }
-#else
 //template<> FORCE_INLINE bool IsFinite<long double>(long double value) { asserteq(sizeof(long double), 16); u64 val[2]; memcpy(val, &value, sizeof(u64)*2); return (val[1] & 0x7FFF) != 0x7FFF || val[0] < 0x8000000000000000ULL; }
 //FORCE_INLINE bool IsInf(long double value) { asserteq(sizeof(long double), 16); u64 val[2]; memcpy(val, &value, sizeof(u64)*2); return (val[1] & 0x7FFF) == 0x7FFF && val[0] == 0x8000000000000000ULL; }
 //FORCE_INLINE bool IsNan(long double value) { asserteq(sizeof(long double), 16); u64 val[2]; memcpy(val, &value, sizeof(u64)*2); return (val[1] & 0x7FFF) == 0x7FFF && val[0] >  0x8000000000000000ULL; }
 template<> FORCE_INLINE bool IsFinite<long double>(long double value) { return IsFinite<double>((double)value); }
 FORCE_INLINE bool IsInf(long double value) { return IsInf((double)value); }
 FORCE_INLINE bool IsNan(long double value) { return IsNan((double)value); }
-#endif
 
 /// Serializes a float to a string.
 char *SerializeFloat(float f, char *dstStr);

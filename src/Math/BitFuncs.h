@@ -19,13 +19,8 @@
 
 static inline int CountTrailingZeroes32(uint32_t x)
 {
-#ifdef _MSC_VER
-	unsigned long ret;
-	_BitScanForward(&ret, x);
-	return (int)ret;
-#else // TODO: be more precise here
+    // TODO: be more precise here
 	return __builtin_ctz(x);
-#endif
 }
 
 // TODO: Other bit twiddling related functions.

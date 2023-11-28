@@ -32,9 +32,6 @@
 #elif defined(OPTIMIZED_RELEASE) || defined(NDEBUG)
 #define RuntimeFailure(str) ((void)0)
 #define RUNTIME_FAILURE_DISABLED
-#elif defined(_MSC_VER)
-#include <crtdbg.h>
-#define RuntimeFailure(str) do { LOGE("%s", str); _CrtDbgBreak(); } while(0)
 #else
 #define RuntimeFailure(str) do { LOGE("%s", str); } while(0)
 #endif
@@ -49,9 +46,7 @@
 // This occurs commonly in unit tests that are also doubled as benchmarks - killing the use of assert() macro will leave variables
 // that were otherwise not used, except when assert()ing a condition. As a simplest measure, MATH_IGNORE_UNUSED_VARS_WARNING will
 // operate only when assert() is a no-op, so that in debug builds etc. real instances of unused variables are still caught.
-#ifdef _MSC_VER
-#define MATH_IGNORE_UNUSED_VARS_WARNING __pragma(warning(disable:4189)) // C4189: 'variableName' : local variable is initialized but not referenced
-#elif defined(__GNUC__) && (__GNUC__*10000+__GNUC_MINOR*100) >= 40600
+#if defined(__GNUC__) && (__GNUC__*10000+__GNUC_MINOR*100) >= 40600
 // GCC 4.6 introduced a new warning "-Wunused-but-set-variable", so suppress that on those compilers.
 #define MATH_IGNORE_UNUSED_VARS_WARNING _Pragma("GCC diagnostic ignored \"-Wunused-variable\"") _Pragma("GCC diagnostic ignored \"-Wunused-but-set-variable\"")
 #else

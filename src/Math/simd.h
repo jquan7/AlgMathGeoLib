@@ -336,15 +336,9 @@ FORCE_INLINE simd4f setx_ps(float f)
 	// On VS2010+AVX generates vmovss+vxorps+vmovss
 	// return _mm_load_ss(&f);
 
-#if _MSC_VER < 1700 // < VS2012
-	// On VS2010+AVX generates vmovss+vshufps (to broadcast the single element to all channels). Best performance so far for VS2010.
-	// On VS2013 generates a vbroadcastss instruction.
-	return set1_ps(f);
-#else
 	// On VS2010+AVX is the same as _mm_load_ss, i.e. vmovss+vxorps+vmovss
 	// On VS2013, this is the perfect thing - a single vmovss instruction!
 	return _mm_set_ss(f);
-#endif
 
 	// On VS2010+AVX generates vmovss reg <- mem, vmovss alignedmem <- reg, vmovaps reg <- alignedmem, so is the worst!
 	// simd4f s;
@@ -427,12 +421,7 @@ FORCE_INLINE simd4f modf_ps(simd4f x, simd4f mod)
 #endif
 
 // Returns the vector [a.x+a.y+a.z+a.w, b.x+b.y+b.z+b.w, c.x+c.y+c.z+c.w, d.x+d.y+d.z+d.w]
-#if defined(_MSC_VER) && defined(MATH_SSE) && _MSC_VER < 1800 // < VS2013
-// Work around a VS2010 bug "error C2719: 'd': formal parameter with __declspec(align('16')) won't be aligned"
-FORCE_INLINE simd4f hadd4_ps(simd4f a, simd4f b, simd4f c, const simd4f &d)
-#else
 FORCE_INLINE simd4f hadd4_ps(simd4f a, simd4f b, simd4f c, simd4f d)
-#endif
 {
 	simd4f t0 = _mm_unpacklo_ps(a, b);
 	simd4f t1 = _mm_unpackhi_ps(a, b);
@@ -604,13 +593,8 @@ static inline simd4f sqrt_ps(simd4f x) { return cmov_ps(mul_ps(x, rsqrt_ps(x)), 
 	(c) = m3.val[1]; \
 	(d) = m4.val[1]; } while(0)
 
-#ifdef _MSC_VER
-#define set_ps_const(w,z,y,x) {{ (u64)ReinterpretAsU32(x) | (((u64)ReinterpretAsU32(y)) << 32), (u64)ReinterpretAsU32(z) | (((u64)ReinterpretAsU32(w)) << 32) }}
-#define set_ps_hex_const(w,z,y,x) {{ (u64)(x) | (((u64)(y)) << 32), (u64)(z) | (((u64)(w)) << 32) }}
-#else
 #define set_ps_const(w,z,y,x) { x, y, z, w }
 #define set_ps_hex_const(w,z,y,x) { ReinterpretAsFloat(x), ReinterpretAsFloat(y), ReinterpretAsFloat(z), ReinterpretAsFloat(w) }
-#endif
 
 FORCE_INLINE simd4f set_ps(float w, float z, float y, float x)
 {

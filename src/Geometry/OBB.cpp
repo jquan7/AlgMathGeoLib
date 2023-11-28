@@ -156,20 +156,6 @@ AABB OBB::MinimalEnclosingAABB() const
 	return aabb;
 }
 
-#if 0
-
-AABB OBB::MaximalContainedAABB() const
-{
-#ifdef _MSC_VER
-#pragma warning(OBB::MaximalContainedAABB not implemented!)
-#else
-#warning OBB::MaximalContainedAABB not implemented!
-#endif
-	assume(false && "OBB::MaximalContainedAABB not implemented!"); /// @todo Implement.
-	return AABB();
-}
-#endif
-
 bool OBB::IsFinite() const
 {
 	return pos.IsFinite() && r.IsFinite() && axis[0].IsFinite() && axis[1].IsFinite() && axis[2].IsFinite();

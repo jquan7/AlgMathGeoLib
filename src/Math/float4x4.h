@@ -89,10 +89,6 @@ public:
 #endif
 #endif
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable:4201) // warning C4201: nonstandard extension used: nameless struct/union
-#endif
 		// Alias into the array of elements to allow accessing items from this matrix directly for convenience.
 		// This gives human-readable names to the individual matrix elements:
 		struct
@@ -109,9 +105,6 @@ public:
 			float shearWx, shearWy, shearWz, w;
 #endif
 		};
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 		// where scaleX/Y/Z specify how much principal axes are scaled by, x/y/z specify translation (position) on the axes,
 		// w specifies the homogeneous divide factor,
 		// and shearAb specify how much shearing occurs towards axis A from axis b (when vector is multiplied via M*v convention)

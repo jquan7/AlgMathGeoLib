@@ -137,11 +137,7 @@
 #endif
 
 #ifdef MATH_SSE3
-#ifdef _MSC_VER
-#include <intrin.h>
-#else
 #include <pmmintrin.h>
-#endif
 #ifndef MATH_SSE2
 #define MATH_SSE2
 #endif

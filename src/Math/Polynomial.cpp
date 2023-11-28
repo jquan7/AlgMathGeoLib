@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Polynomial.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #include "Polynomial.h"
 #include "MathFunc.h"
@@ -39,29 +39,5 @@ int Polynomial::SolveQuadratic(float a, float b, float c, float &root1, float &r
 	root2 = (-b - radicand) * denom;
 	return 2;
 }
-
-#if 0
-int Polynomial::SolveCubic(float /*a*/, float /*b*/, float /*c*/, float /*d*/, float & /*root1*/, float & /*root2*/, float & /*root3*/)
-{
-#ifdef _MSC_VER
-#pragma warning(Polynomial::SolveCubic not implemented!)
-#else
-#warning Polynomial::SolveCubic not implemented!
-#endif
-	assume(false && "Polynomial::SolveCubic not implemented!"); /// @todo Implement.
-	return 0;
-}
-
-int Polynomial::SolveQuartic(float /*a*/, float /*b*/, float /*c*/, float /*d*/, float & /*root1*/, float & /*root2*/, float & /*root3*/, float & /*root4*/)
-{
-#ifdef _MSC_VER
-#pragma warning(Polynomial::SolveQuartic not implemented!)
-#else
-#warning Polynomial::SolveQuartic not implemented!
-#endif
-	assume(false && "Polynomial::SolveQuartic not implemented!"); /// @todo Implement.
-	return 0;
-}
-#endif
 
 MATH_END_NAMESPACE

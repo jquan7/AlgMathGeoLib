@@ -15,10 +15,6 @@
 
 #include "grisu3.h"
 
-#ifdef _MSC_VER
-#pragma warning(disable : 4204) // nonstandard extension used : non-constant aggregate initializer
-#endif
-
 #define D64_SIGN         0x8000000000000000ULL
 #define D64_EXP_MASK     0x7FF0000000000000ULL
 #define D64_FRACT_MASK   0x000FFFFFFFFFFFFFULL

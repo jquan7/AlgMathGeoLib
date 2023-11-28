@@ -102,16 +102,7 @@ public:
 
 #define RDTSC() Clock::Rdtsc()
 
-#if _MSC_VER >= 1700 // Visual Studio 2012
-// On VS2012 and newer, benchmarks are not apples-to-apples if some for loops get autovectorized by
-// the compiler, and others aren't. For example, measuring scalar sinf() vs MGL SSE Sin() shows that
-// VS2012 autovectorizer is able to compute 8 sinf()s in one iteration, but Sin() is always computed fully scalar.
-// Therefore in the benchmarks disable autovectorization to provide directly comparable results.
-// http://msdn.microsoft.com/en-us/library/hh872235.aspx
-#define MGL_PRAGMA_NO_AUTOVECTORIZE __pragma(loop(no_vector))
-#else
 #define MGL_PRAGMA_NO_AUTOVECTORIZE
-#endif
 
 #define BENCHMARK(name, description) \
 	void BenchmarkFunc_##name(Test &test); \

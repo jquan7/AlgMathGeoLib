@@ -242,19 +242,6 @@ float3x4 Plane::OrthoProjection() const
 	return float3x4::OrthographicProjection(*this);
 }
 
-#if 0
-float3x4 Plane::ObliqueProjection(const vec & /*obliqueProjectionDir*/) const
-{
-#ifdef _MSC_VER
-#pragma warning(Plane::ObliqueProjection not implemented!)
-#else
-#warning Plane::ObliqueProjection not implemented!
-#endif
-	assume(false && "Plane::ObliqueProjection not implemented!"); /// @todo Implement.
-	return float3x4();
-}
-#endif
-
 float3x4 Plane::MirrorMatrix() const
 {
 	return float3x4::Mirror(*this);
@@ -392,19 +379,6 @@ vec Plane::ClosestPoint(const LineSegment &lineSegment) const
 		return Project(lineSegment.GetPoint(t));
 	}
 }
-
-#if 0
-vec Plane::ObliqueProject(const vec & /*point*/, const vec & /*obliqueProjectionDir*/) const
-{
-#ifdef _MSC_VER
-#pragma warning(Plane::ObliqueProject not implemented!)
-#else
-#warning Plane::ObliqueProject not implemented!
-#endif
-	assume(false && "Plane::ObliqueProject not implemented!"); /// @todo Implement.
-	return vec();
-}
-#endif
 
 bool Plane::Contains(const vec &point, float distanceThreshold) const
 {

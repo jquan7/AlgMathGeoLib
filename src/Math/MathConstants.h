@@ -34,13 +34,8 @@
 #define NOT_NECESSARILY_USED
 #endif
 
-#if defined(_MSC_VER)
-#define FLOAT_NAN ((float)std::numeric_limits<float>::quiet_NaN())
-#define FLOAT_INF ((float)std::numeric_limits<float>::infinity())
-#else
 #define FLOAT_NAN ((float)NAN)
 #define FLOAT_INF ((float)INFINITY)
-#endif
 
 MATH_BEGIN_NAMESPACE
 
