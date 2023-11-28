@@ -23,7 +23,6 @@
 #include "../Math/float4x4.h"
 #include "OBB2D.h"
 #include "../Math/Quat.h"
-#include "../Math/Swap.h"
 #if 0
 #include "Ray2D.h"
 #include "Line2D.h"
@@ -143,7 +142,7 @@ vec2d LineSegment2D::CenterPoint() const
 
 void LineSegment2D::Reverse()
 {
-	Swap(a, b);
+	std::swap(a, b);
 }
 
 vec2d LineSegment2D::Dir() const
@@ -470,7 +469,7 @@ void LineSegment2D::ProjectToAxis(const vec2d &direction, float &outMin, float &
 	outMin = Dot(direction, a);
 	outMax = Dot(direction, b);
 	if (outMax < outMin)
-		Swap(outMin, outMax);
+		std::swap(outMin, outMax);
 }
 #if 0
 LineSegment2D operator *(const float3x3 &transform, const LineSegment2D &l)

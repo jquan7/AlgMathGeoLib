@@ -16,7 +16,6 @@
 	@author Jukka Jyl�nki
 	@brief Common mathematical functions. */
 #include "MathFunc.h"
-#include "Swap.h"
 #include "SSEMath.h"
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <utility>
@@ -515,7 +514,7 @@ int CombinatorialTab(int n, int k)
 	{
 		for(int j = Max(1, i-n+k); j <= Min(k,i-1); ++j)
 			t1[j] = t2[j] + t2[j-1];
-		Swap(t1, t2);
+		std::swap(t1, t2);
 	}
 	int c = t2[k];
 	delete[] table;

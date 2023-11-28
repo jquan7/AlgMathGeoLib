@@ -33,7 +33,6 @@
 #include "../Math/float4.h"
 #include "../Math/float4x4.h"
 #include "../Math/Quat.h"
-#include "../Math/Swap.h"
 #include "Triangle.h"
 
 #include "../Math/float4x4_neon.h"
@@ -975,7 +974,7 @@ void AABB::Triangulate(int numFacesX, int numFacesY, int numFacesZ,
 				outPos[i+1] = FacePoint(face, u, v2);
 				outPos[i+2] = FacePoint(face, u2, v);
 				if (flip)
-					Swap(outPos[i+1], outPos[i+2]);
+					std::swap(outPos[i+1], outPos[i+2]);
 				outPos[i+3] = outPos[i+2];
 				outPos[i+4] = outPos[i+1];
 				outPos[i+5] = FacePoint(face, u2, v2);
@@ -986,7 +985,7 @@ void AABB::Triangulate(int numFacesX, int numFacesY, int numFacesZ,
 					outUV[i+1] = float2(u,v2);
 					outUV[i+2] = float2(u2,v);
 					if (flip)
-						Swap(outUV[i+1], outUV[i+2]);
+						std::swap(outUV[i+1], outUV[i+2]);
 					outUV[i+3] = outUV[i+2];
 					outUV[i+4] = outUV[i+1];
 					outUV[i+5] = float2(u2,v2);

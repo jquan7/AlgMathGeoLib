@@ -1,4 +1,4 @@
-/* Copyright 2011 Jukka Jylänki
+/* Copyright 2011 Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file Matrix.inl
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #pragma once
 
@@ -32,7 +32,7 @@ void Set3x3PartRotateX(Matrix &m, float angle)
 {
 	float sinz, cosz;
 	SinCos(angle, sinz, cosz);
-	
+
 	m[0][0] = 1.f; m[0][1] =  0.f; m[0][2] =   0.f;
 	m[1][0] = 0.f; m[1][1] = cosz; m[1][2] = -sinz;
 	m[2][0] = 0.f; m[2][1] = sinz; m[2][2] =  cosz;
@@ -722,18 +722,18 @@ void SetIdentity3x3(Matrix &m)
 template<typename Matrix>
 void InverseAffineMatrixNoScale(Matrix &mat)
 {
-	Swap(mat[0][1], mat[1][0]);
-	Swap(mat[0][2], mat[2][0]);
-	Swap(mat[1][2], mat[2][1]);
+	std::swap(mat[0][1], mat[1][0]);
+	std::swap(mat[0][2], mat[2][0]);
+	std::swap(mat[1][2], mat[2][1]);
 	mat.SetTranslatePart(mat.TransformDir(-mat[0][3], -mat[1][3], -mat[2][3]));
 }
 
 template<typename Matrix>
 void InverseAffineMatrixUniformScale(Matrix &mat)
 {
-	Swap(mat[0][1], mat[1][0]);
-	Swap(mat[0][2], mat[2][0]);
-	Swap(mat[1][2], mat[2][1]);
+	std::swap(mat[0][1], mat[1][0]);
+	std::swap(mat[0][2], mat[2][0]);
+	std::swap(mat[1][2], mat[2][1]);
 	float scale = sqrtf(1.f / float3(mat[0][0], mat[0][1], mat[0][2]).LengthSq());
 
 	mat[0][0] *= scale; mat[0][1] *= scale; mat[0][2] *= scale;
@@ -746,9 +746,9 @@ void InverseAffineMatrixUniformScale(Matrix &mat)
 template<typename Matrix>
 void InverseAffineMatrixNonuniformScale(Matrix &mat)
 {
-	Swap(mat[0][1], mat[1][0]);
-	Swap(mat[0][2], mat[2][0]);
-	Swap(mat[1][2], mat[2][1]);
+	std::swap(mat[0][1], mat[1][0]);
+	std::swap(mat[0][2], mat[2][0]);
+	std::swap(mat[1][2], mat[2][1]);
 	for(int i = 0; i < 3; ++i)
 	{
 		float scale = sqrtf(1.f / float3(mat[i][0], mat[i][1], mat[i][2]).LengthSq());
@@ -792,13 +792,13 @@ bool InverseMatrix(Matrix &mat, float epsilon)
 			inversed.SwapRows(greatest, column);
 			mat.SwapRows(greatest, column);
 		}
-		
+
 		// multiply rows
 		assume(!EqualAbs(mat[column][column], 0.f, epsilon));
 		float scale = 1.f / mat[column][column];
 		inversed.ScaleRow(column, scale);
 		mat.ScaleRow(column, scale);
-		
+
 		// add rows
 		for(int i = 0; i < column; i++)
 		{

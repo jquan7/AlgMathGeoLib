@@ -17,7 +17,6 @@
 	@brief Implementation for the Triangle geometry object. */
 #include "Triangle.h"
 #include "../Math/MathFunc.h"
-#include "../Math/Swap.h"
 #include "../Math/float2.h"
 #include "../Math/float3.h"
 #include "../Math/float3x3.h"
@@ -542,9 +541,9 @@ bool Triangle::Intersects(const Triangle &t2, LineSegment *outLine) const
 		l.Distance(l2a, d2a);
 		l.Distance(l2b, d2b);
 		if (d1a > d1b)
-			Swap(d1a, d1b);
+			std::swap(d1a, d1b);
 		if (d2a > d2b)
-			Swap(d2a, d2b);
+			std::swap(d2a, d2b);
 		float rStart = Max(d1a, d2a);
 		float rEnd = Min(d1b, d2b);
 		if (rStart <= rEnd)
@@ -1715,8 +1714,8 @@ vec Triangle::ClosestPoint(const Line &other, float *outU, float *outV, float *o
 		float b1 = d_e1d + v_m_p_d;
 		/*
 		// Inverse 2x2 matrix.
-		Swap(m00, m11);
-		Swap(m01, m10);
+		std::swap(m00, m11);
+		std::swap(m01, m10);
 		m01 = -m01;
 		m10 = -m10;
 		*/

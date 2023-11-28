@@ -30,7 +30,6 @@
 #include "LineSegment.h"
 #include "Triangle.h"
 #include "../Math/MathFunc.h"
-#include "../Math/Swap.h"
 #include "../Math/float3x3.h"
 #include "../Math/float3x4.h"
 #include "../Math/float4x4.h"
@@ -88,7 +87,7 @@ bool Polygon::DiagonalExists(int i, int j) const
 	if (i == j) // Degenerate if i == j.
 		return false;
 	if (i > j)
-		Swap(i, j);
+		std::swap(i, j);
 	assume(i+1 != j);
 	if (i+1 == j) // Is this LineSegment an edge of this polygon?
 		return false;

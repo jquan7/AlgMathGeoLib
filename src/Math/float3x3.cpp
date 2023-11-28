@@ -19,7 +19,6 @@
 #include <string.h>
 #include "assume.h"
 #include "MathFunc.h"
-#include "Swap.h"
 #include "float3.h"
 #include "float4.h"
 #include "float3x4.h"
@@ -547,9 +546,9 @@ void float3x3::SwapColumns(int col1, int col2)
 	assume(col1 < Cols);
 	assume(col2 >= 0);
 	assume(col2 < Cols);
-	Swap(At(0, col1), At(0, col2));
-	Swap(At(1, col1), At(1, col2));
-	Swap(At(2, col1), At(2, col2));
+	std::swap(At(0, col1), At(0, col2));
+	std::swap(At(1, col1), At(1, col2));
+	std::swap(At(2, col1), At(2, col2));
 }
 
 void float3x3::SwapRows(int row1, int row2)
@@ -558,9 +557,9 @@ void float3x3::SwapRows(int row1, int row2)
 	assume(row1 < Rows);
 	assume(row2 >= 0);
 	assume(row2 < Rows);
-	Swap(At(row1, 0), At(row2, 0));
-	Swap(At(row1, 1), At(row2, 1));
-	Swap(At(row1, 2), At(row2, 2));
+	std::swap(At(row1, 0), At(row2, 0));
+	std::swap(At(row1, 1), At(row2, 1));
+	std::swap(At(row1, 2), At(row2, 2));
 }
 
 void float3x3::SetRotatePartX(float angle)
@@ -828,17 +827,17 @@ bool float3x3::SolveAxb(float3 b, float3 &x) const
 	// Find which item in first column has largest absolute value.
 	if (av10 >= av00 && av10 >= av20)
 	{
-		Swap(v00, v10);
-		Swap(v01, v11);
-		Swap(v02, v12);
-		Swap(b[0], b[1]);
+		std::swap(v00, v10);
+		std::swap(v01, v11);
+		std::swap(v02, v12);
+		std::swap(b[0], b[1]);
 	}
 	else if (av20 >= av00)
 	{
-		Swap(v00, v20);
-		Swap(v01, v21);
-		Swap(v02, v22);
-		Swap(b[0], b[2]);
+		std::swap(v00, v20);
+		std::swap(v01, v21);
+		std::swap(v02, v22);
+		std::swap(b[0], b[2]);
 	}
 
 	/* a b c | x
@@ -875,9 +874,9 @@ bool float3x3::SolveAxb(float3 b, float3 &x) const
 	// Pivotize again.
 	if (Abs(v21) > Abs(v11))
 	{
-		Swap(v11, v21);
-		Swap(v12, v22);
-		Swap(b[1], b[2]);
+		std::swap(v11, v21);
+		std::swap(v12, v22);
+		std::swap(b[1], b[2]);
 	}
 
 	if (EqualAbs(v11, 0.f))
@@ -934,9 +933,9 @@ bool float3x3::InverseColOrthogonal()
 	s1 = 1.f / s1;
 	s2 = 1.f / s2;
 	s3 = 1.f / s3;
-	Swap(At(0, 1), At(1, 0));
-	Swap(At(0, 2), At(2, 0));
-	Swap(At(1, 2), At(2, 1));
+	std::swap(At(0, 1), At(1, 0));
+	std::swap(At(0, 2), At(2, 0));
+	std::swap(At(1, 2), At(2, 1));
 
 	At(0, 0) *= s1; At(0, 1) *= s1; At(0, 2) *= s1;
 	At(1, 0) *= s2; At(1, 1) *= s2; At(1, 2) *= s2;
@@ -959,9 +958,9 @@ bool float3x3::InverseOrthogonalUniformScale()
 	if (scale < 1e-8f)
 		return false;
 	scale = 1.f / scale;
-	Swap(At(0, 1), At(1, 0));
-	Swap(At(0, 2), At(2, 0));
-	Swap(At(1, 2), At(2, 1));
+	std::swap(At(0, 1), At(1, 0));
+	std::swap(At(0, 2), At(2, 0));
+	std::swap(At(1, 2), At(2, 1));
 
 	At(0, 0) *= scale; At(0, 1) *= scale; At(0, 2) *= scale;
 	At(1, 0) *= scale; At(1, 1) *= scale; At(1, 2) *= scale;
@@ -1028,9 +1027,9 @@ bool float3x3::InverseSymmetric()
 
 void float3x3::Transpose()
 {
-	Swap(v[0][1], v[1][0]);
-	Swap(v[0][2], v[2][0]);
-	Swap(v[1][2], v[2][1]);
+	std::swap(v[0][1], v[1][0]);
+	std::swap(v[0][2], v[2][0]);
+	std::swap(v[1][2], v[2][1]);
 }
 
 float3x3 float3x3::Transposed() const

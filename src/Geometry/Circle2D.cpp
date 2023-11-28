@@ -17,7 +17,6 @@
 	   @brief Implementation for the Circle2D geometry object. */
 #include "Circle2D.h"
 #include "../Math/MathFunc.h"
-#include "../Math/Swap.h"
 
 MATH_BEGIN_NAMESPACE
 
@@ -222,10 +221,10 @@ Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pointArray, int numPoint
 	// bounding sphere extents.
 	for(int i = 0; i < numPoints; ++i)
 	{
-		if (pts[0].x < pts[i].x) Swap(pts[0], pts[i]);
-		if (pts[1].x > pts[i].x) Swap(pts[1], pts[i]);
-		if (pts[2].y < pts[i].y) Swap(pts[2], pts[i]);
-		if (pts[3].y > pts[i].y) Swap(pts[3], pts[i]);
+		if (pts[0].x < pts[i].x) std::swap(pts[0], pts[i]);
+		if (pts[1].x > pts[i].x) std::swap(pts[1], pts[i]);
+		if (pts[2].y < pts[i].y) std::swap(pts[2], pts[i]);
+		if (pts[3].y > pts[i].y) std::swap(pts[3], pts[i]);
 	}
 
 	// Compute the minimal enclosing circle for the first three points.
@@ -248,7 +247,7 @@ Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pointArray, int numPoint
 		int redundantIndex;
 		minCircle = SmallestCircleSqEnclosing4Points(pts[i], pts[0], pts[1], pts[2], redundantIndex);
 		minCircle.pos += pts[i];
-		Swap(pts[i], pts[redundantIndex]);
+		std::swap(pts[i], pts[redundantIndex]);
 		// For robustness, apply epsilon after square root.
 		minCircle.r = Sqrt(minCircle.r) + 1e-3f;
 		r2 = minCircle.r*minCircle.r;

@@ -19,7 +19,6 @@
 #include <string.h>
 
 #include "MathFunc.h"
-#include "Swap.h"
 #include "float3.h"
 #include "float4.h"
 #include "float3x3.h"
@@ -1011,10 +1010,10 @@ void float4x4::SwapColumns(int col1, int col2)
 	assume(col1 < Cols);
 	assume(col2 >= 0);
 	assume(col2 < Cols);
-	Swap(At(0, col1), At(0, col2));
-	Swap(At(1, col1), At(1, col2));
-	Swap(At(2, col1), At(2, col2));
-	Swap(At(3, col1), At(3, col2));
+	std::swap(At(0, col1), At(0, col2));
+	std::swap(At(1, col1), At(1, col2));
+	std::swap(At(2, col1), At(2, col2));
+	std::swap(At(3, col1), At(3, col2));
 }
 
 void float4x4::SwapColumns3(int col1, int col2)
@@ -1023,9 +1022,9 @@ void float4x4::SwapColumns3(int col1, int col2)
 	assume(col1 < Cols);
 	assume(col2 >= 0);
 	assume(col2 < Cols);
-	Swap(At(0, col1), At(0, col2));
-	Swap(At(1, col1), At(1, col2));
-	Swap(At(2, col1), At(2, col2));
+	std::swap(At(0, col1), At(0, col2));
+	std::swap(At(1, col1), At(1, col2));
+	std::swap(At(2, col1), At(2, col2));
 }
 
 void float4x4::SwapRows(int r1, int r2)
@@ -1036,12 +1035,12 @@ void float4x4::SwapRows(int r1, int r2)
 	assume(r2 < Rows);
 
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
-	Swap(row[r1], row[r2]);
+	std::swap(row[r1], row[r2]);
 #else
-	Swap(At(r1, 0), At(r2, 0));
-	Swap(At(r1, 1), At(r2, 1));
-	Swap(At(r1, 2), At(r2, 2));
-	Swap(At(r1, 3), At(r2, 3));
+	std::swap(At(r1, 0), At(r2, 0));
+	std::swap(At(r1, 1), At(r2, 1));
+	std::swap(At(r1, 2), At(r2, 2));
+	std::swap(At(r1, 3), At(r2, 3));
 #endif
 }
 
@@ -1051,9 +1050,9 @@ void float4x4::SwapRows3(int r1, int r2)
 	assume(r1 < Rows);
 	assume(r2 >= 0);
 	assume(r2 < Rows);
-	Swap(At(r1, 0), At(r2, 0));
-	Swap(At(r1, 1), At(r2, 1));
-	Swap(At(r1, 2), At(r2, 2));
+	std::swap(At(r1, 0), At(r2, 0));
+	std::swap(At(r1, 1), At(r2, 1));
+	std::swap(At(r1, 2), At(r2, 2));
 }
 
 void float4x4::SetTranslatePart(float translateX, float translateY, float translateZ)
@@ -1360,9 +1359,9 @@ bool float4x4::InverseOrthogonalUniformScale()
 	assume(!ContainsProjection());
 	assume(IsColOrthogonal3(1e-3f));
 	assume(HasUniformScale());
-	Swap(At(0, 1), At(1, 0));
-	Swap(At(0, 2), At(2, 0));
-	Swap(At(1, 2), At(2, 1));
+	std::swap(At(0, 1), At(1, 0));
+	std::swap(At(0, 2), At(2, 0));
+	std::swap(At(1, 2), At(2, 1));
 	float scale = float3(At(0, 0), At(1, 0), At(2, 0)).LengthSq();
 	if (scale == 0.f)
 		return false;
@@ -1384,9 +1383,9 @@ void float4x4::InverseOrthonormal()
 	mat3x4_inverse_orthonormal(row, row);
 #else
 	// a) Transpose the top-left 3x3 part in-place to produce R^t.
-	Swap(v[0][1], v[1][0]);
-	Swap(v[0][2], v[2][0]);
-	Swap(v[1][2], v[2][1]);
+	std::swap(v[0][1], v[1][0]);
+	std::swap(v[0][2], v[2][0]);
+	std::swap(v[1][2], v[2][1]);
 
 	// b) Replace the top-right 3x1 part by computing R^t(-T).
 	SetTranslatePart(TransformDir(-At(0, 3), -At(1, 3), -At(2, 3)));
@@ -1398,12 +1397,12 @@ void float4x4::Transpose()
 #if defined(MATH_AUTOMATIC_SSE)
 	mat4x4_transpose(row, row);
 #else
-	Swap(v[0][1], v[1][0]);
-	Swap(v[0][2], v[2][0]);
-	Swap(v[0][3], v[3][0]);
-	Swap(v[1][2], v[2][1]);
-	Swap(v[1][3], v[3][1]);
-	Swap(v[2][3], v[3][2]);
+	std::swap(v[0][1], v[1][0]);
+	std::swap(v[0][2], v[2][0]);
+	std::swap(v[0][3], v[3][0]);
+	std::swap(v[1][2], v[2][1]);
+	std::swap(v[1][3], v[3][1]);
+	std::swap(v[2][3], v[3][2]);
 #endif
 }
 

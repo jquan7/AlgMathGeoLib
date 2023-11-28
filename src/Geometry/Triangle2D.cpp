@@ -17,7 +17,6 @@
 	@brief Implementation for the Triangle2D geometry object. */
 #include "Triangle2D.h"
 #include "../Math/MathFunc.h"
-#include "../Math/Swap.h"
 #include "../Math/float2.h"
 #include "../Math/float3.h"
 #include "../Math/float3x3.h"
@@ -1505,8 +1504,8 @@ vec2d Triangle2D::ClosestPoint(const Line2D &other, float *outU, float *outV, fl
 		float b1 = d_e1d + v_m_p_d;
 		/*
 		// Inverse 2x2 matrix.
-		Swap(m00, m11);
-		Swap(m01, m10);
+		std::swap(m00, m11);
+		std::swap(m01, m10);
 		m01 = -m01;
 		m10 = -m10;
 		*/

@@ -28,7 +28,6 @@
 #include "../Math/float4d.h"
 #include "OBB.h"
 #include "../Math/Quat.h"
-#include "../Math/Swap.h"
 #include "Triangle.h"
 #include "Circle.h"
 
@@ -69,7 +68,7 @@ vec LineSegment::CenterPoint() const
 
 void LineSegment::Reverse()
 {
-	Swap(a, b);
+	std::swap(a, b);
 }
 
 vec LineSegment::Dir() const
@@ -395,7 +394,7 @@ void LineSegment::ProjectToAxis(const vec &direction, float &outMin, float &outM
 	outMin = Dot(direction, a);
 	outMax = Dot(direction, b);
 	if (outMax < outMin)
-		Swap(outMin, outMax);
+		std::swap(outMin, outMax);
 }
 
 LineSegment operator *(const float3x3 &transform, const LineSegment &l)

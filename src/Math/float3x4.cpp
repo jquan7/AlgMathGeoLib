@@ -19,7 +19,6 @@
 #include <string.h>
 
 #include "MathFunc.h"
-#include "Swap.h"
 #include "float2.h"
 #include "float3.h"
 #include "float4.h"
@@ -722,9 +721,9 @@ void float3x4::SwapColumns(int col1, int col2)
 	assume(col1 < Cols);
 	assume(col2 >= 0);
 	assume(col2 < Cols);
-	Swap(At(0, col1), At(0, col2));
-	Swap(At(1, col1), At(1, col2));
-	Swap(At(2, col1), At(2, col2));
+	std::swap(At(0, col1), At(0, col2));
+	std::swap(At(1, col1), At(1, col2));
+	std::swap(At(2, col1), At(2, col2));
 }
 
 void float3x4::SwapRows(int row1, int row2)
@@ -735,12 +734,12 @@ void float3x4::SwapRows(int row1, int row2)
 	assume(row2 < Rows);
 
 #ifdef MATH_SIMD
-	Swap(row[row1], row[row2]);
+	std::swap(row[row1], row[row2]);
 #else
-	Swap(At(row1, 0), At(row2, 0));
-	Swap(At(row1, 1), At(row2, 1));
-	Swap(At(row1, 2), At(row2, 2));
-	Swap(At(row1, 3), At(row2, 3));
+	std::swap(At(row1, 0), At(row2, 0));
+	std::swap(At(row1, 1), At(row2, 1));
+	std::swap(At(row1, 2), At(row2, 2));
+	std::swap(At(row1, 3), At(row2, 3));
 #endif
 }
 
@@ -894,9 +893,9 @@ bool float3x4::InverseColOrthogonal()
 	s1 = 1.f / s1;
 	s2 = 1.f / s2;
 	s3 = 1.f / s3;
-	Swap(At(0, 1), At(1, 0));
-	Swap(At(0, 2), At(2, 0));
-	Swap(At(1, 2), At(2, 1));
+	std::swap(At(0, 1), At(1, 0));
+	std::swap(At(0, 2), At(2, 0));
+	std::swap(At(1, 2), At(2, 1));
 
 	At(0, 0) *= s1; At(0, 1) *= s1; At(0, 2) *= s1;
 	At(1, 0) *= s2; At(1, 1) *= s2; At(1, 2) *= s2;
@@ -916,9 +915,9 @@ bool float3x4::InverseOrthogonalUniformScale()
 #else
 	assume(IsColOrthogonal(1e-3f));
 	assume(HasUniformScale());
-	Swap(At(0, 1), At(1, 0));
-	Swap(At(0, 2), At(2, 0));
-	Swap(At(1, 2), At(2, 1));
+	std::swap(At(0, 1), At(1, 0));
+	std::swap(At(0, 2), At(2, 0));
+	std::swap(At(1, 2), At(2, 1));
 	float scale = float3(At(0, 0), At(1, 0), At(2, 0)).LengthSq();
 	if (scale == 0.f)
 		return false;
@@ -968,9 +967,9 @@ void float3x4::InverseOrthonormal()
 	   Therefore the inversion requires only two steps: */
 
 	// a) Transpose the top-left 3x3 part in-place to produce R^t.
-	Swap(v[0][1], v[1][0]);
-	Swap(v[0][2], v[2][0]);
-	Swap(v[1][2], v[2][1]);
+	std::swap(v[0][1], v[1][0]);
+	std::swap(v[0][2], v[2][0]);
+	std::swap(v[1][2], v[2][1]);
 
 	// b) Replace the top-right 3x1 part by computing R^t(-T).
 	SetTranslatePart(TransformDir(-At(0, 3), -At(1, 3), -At(2, 3)));
@@ -980,9 +979,9 @@ void float3x4::InverseOrthonormal()
 void float3x4::Transpose3()
 {
 	///\todo SSE.
-	Swap(v[0][1], v[1][0]);
-	Swap(v[0][2], v[2][0]);
-	Swap(v[1][2], v[2][1]);
+	std::swap(v[0][1], v[1][0]);
+	std::swap(v[0][2], v[2][0]);
+	std::swap(v[1][2], v[2][1]);
 }
 
 float3x4 float3x4::Transposed3() const

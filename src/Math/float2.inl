@@ -19,7 +19,6 @@
 #include "float3.h"
 #include "float4.h"
 #include "MathFunc.h"
-#include "Swap.h"
 #include "assume.h"
 #include <string.h>
 #include <stdlib.h>
