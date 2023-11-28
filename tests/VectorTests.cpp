@@ -371,7 +371,7 @@ TEST(Float4OpMul)
 {
 	float4 f = float4(1,2,3,4);
 	float scalar = -2.f;
-	
+
 	float4 f2 = f * scalar;
 	float4 f3 = scalar * f;
 	assert(f2.Equals(f3));
@@ -383,7 +383,7 @@ TEST(Float4OpDiv)
 {
 	float4 f = float4(1,2,4,8);
 	float scalar = -2.f;
-	
+
 	float4 f2 = f / scalar;
 	assert(f2.Equals(float4(-0.5f, -1.f, -2.f, -4.f)));
 }
@@ -410,7 +410,7 @@ TEST(Float4OpMulAssign)
 {
 	float4 f = float4(1,2,3,4);
 	float scalar = -2.f;
-	
+
 	float4 f2 = f;
 	f2 *= scalar;
 	assert(f2.Equals(float4(-2.f, -4.f, -6.f, -8.f)));
@@ -420,7 +420,7 @@ TEST(Float4OpDivAssign)
 {
 	float4 f = float4(1,2,4,8);
 	float scalar = -2.f;
-	
+
 	float4 f2 = f;
 	f2 /= scalar;
 	assert(f2.Equals(float4(-0.5f, -1.f, -2.f, -4.f)));
@@ -476,7 +476,7 @@ TEST(Float4Div)
 
 // Testing various strategies for loading a single 'float' scalar to a __m128.
 
-/* 	VS2010 with AVX generates, BAD! 
+/* 	VS2010 with AVX generates, BAD!
 	vmovss	xmm1, DWORD PTR [edx+eax*4]
 	vxorps	xmm0, xmm0, xmm0
 	vmovss	xmm0, xmm0, xmm1
@@ -1082,21 +1082,9 @@ static double sqe(const float3 &v)
 	return d*d;
 }
 
-static double sqe(const float4 &v)
-{
-	double d = Sqrt(float4d(v).LengthSq()) - 1.0;
-	return d*d;
-}
-
 static double sqe(const float3 &v, const float3 &w)
 {
 	double d = float4d(v, 0.f).Dot(float4d(w, 0.f));
-	return d*d;
-}
-
-static double sqe(const float4 &v, const float4 &w)
-{
-	double d = float4d(v).Dot(float4d(w));
 	return d*d;
 }
 
@@ -1557,7 +1545,7 @@ UNIQUE_TEST(MatrixTranspose)
 	simd4f b = set_ps(5.f,6.f,7.f,8.f);
 	simd4f c = set_ps(9.f,10.f,11.f,12.f);
 	simd4f d = set_ps(13.f,14.f,15.f,16.f);
-	
+
 	_MM_TRANSPOSE4_PS(a, b, c, d);
 	assert(float4(a).Equals(float4(4.f, 8.f, 12.f, 16.f)));
 	assert(float4(b).Equals(float4(3.f, 7.f, 11.f, 15.f)));
