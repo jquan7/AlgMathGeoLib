@@ -214,7 +214,9 @@ Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pointArray, int numPoint
 
 	// Start off by computing the convex hull of the points, which prunes many points off from the problem space.
 	float2 *pts = new float2[numPoints];
-	memcpy(pts, pointArray, sizeof(float2)*numPoints);
+	for (int i = 0; i < numPoints; ++i)
+		pts[i] = pointArray[i];
+	// memcpy(pts, pointArray, sizeof(float2)*numPoints);
 	numPoints = float2_ConvexHullInPlace(pts, numPoints);
 
 	// Use initial bounding box extents (min/max x and y) as fast guesses for the optimal

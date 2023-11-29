@@ -118,9 +118,9 @@ void Line::Transform(const Quat &transform)
 	dir = transform.Transform(dir);
 }
 
-bool Line::Contains(const vec &point, float distanceThreshold) const
+bool Line::Contains(const vec &point, float dist_th) const
 {
-	return ClosestPoint(point).DistanceSq(point) <= distanceThreshold;
+	return ClosestPoint(point).DistanceSq(point) <= dist_th;
 }
 
 bool Line::Contains(const LineSegment &lineSegment, float epsilon) const

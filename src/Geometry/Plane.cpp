@@ -326,9 +326,9 @@ vec Plane::ClosestPoint(const LineSegment &lineSegment) const
 	}
 }
 
-bool Plane::Contains(const vec &point, float distanceThreshold) const
+bool Plane::Contains(const vec &point, float dist_th) const
 {
-	return Distance(point) <= distanceThreshold;
+	return Distance(point) <= dist_th;
 }
 
 bool Plane::Contains(const Line &line, float epsilon) const

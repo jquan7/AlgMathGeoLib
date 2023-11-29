@@ -523,7 +523,7 @@ void float3x3::Set(const float3x3 &rhs)
 void float3x3::Set(const float *values)
 {
 	assume(values);
-	memcpy(this, values, sizeof(float)*9);
+	memcpy(v, values, sizeof(float)*Rows*Cols);
 }
 
 void float3x3::Set(int row, int col, float value)

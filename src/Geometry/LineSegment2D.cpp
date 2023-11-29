@@ -198,14 +198,14 @@ bool LineSegment2D::IsFinite() const
 	return a.IsFinite() && b.IsFinite();
 }
 
-bool LineSegment2D::Contains(const vec2d &point, float distanceThreshold) const
+bool LineSegment2D::Contains(const vec2d &point, float dist_th) const
 {
-	return ClosestPoint(point).DistanceSq(point) <= distanceThreshold;
+	return ClosestPoint(point).DistanceSq(point) <= dist_th;
 }
 
-bool LineSegment2D::Contains(const LineSegment2D &rhs, float distanceThreshold) const
+bool LineSegment2D::Contains(const LineSegment2D &rhs, float dist_th) const
 {
-	return Contains(rhs.a, distanceThreshold) && Contains(rhs.b, distanceThreshold);
+	return Contains(rhs.a, dist_th) && Contains(rhs.b, dist_th);
 }
 
 bool LineSegment2D::Equals(const LineSegment2D &rhs, float e) const

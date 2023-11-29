@@ -124,13 +124,13 @@ public:
 	bool IsFinite() const;
 
 	/// Tests if this line segment represents the same set of points than the given line segment.
-	/** @param distanceThreshold Specifies how much distance threshold to allow in the comparison.
+	/** @param dist_th Specifies how much distance threshold to allow in the comparison.
 		@return True if a == rhs.a && b == rhs.b, or, a == rhs.b && b = rhs.a, within the given epsilon. */
-	bool Equals(const LineSegment &rhs, float distanceThreshold = 1e-3f) const;
+	bool Equals(const LineSegment &rhs, float dist_th = 1e-3f) const;
 
 	/// Tests if the given point or line segment is contained on this line segment.
-	bool Contains(const vec &point, float distanceThreshold = 1e-3f) const;
-	bool Contains(const LineSegment &lineSegment, float distanceThreshold = 1e-3f) const;
+	bool Contains(const vec &point, float dist_th = 1e-3f) const;
+	bool Contains(const LineSegment &lineSegment, float dist_th = 1e-3f) const;
 
 	/// Computes the closest point on this line segment to the given object.
 	/** @param d [out] If specified, this parameter receives the normalized distance along
