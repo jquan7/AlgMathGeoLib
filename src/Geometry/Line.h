@@ -71,22 +71,20 @@ public:
     bool Contains(const vec &point, float dist_th = 1e-3f) const;
     bool Contains(const LineSegment &lineSegment, float dist_th = 1e-3f) const;
 
-    /// Tests if two lines are equal.
-    /** This function tests for set equality (not just member value equality). This means that the pos and dir parameters
-        of either line can be completely different, as long as the set of points on the both lines are equal.
-        @return True if this and the given Line represent the same set of points, up to the given epsilon. */
+    /// Tests if two lines are equal. Set equality (pos and dir can be completely different)
     bool Equals(const Line &line, float epsilon = 1e-3f) const;
 
     /// Computes the distance between this line and the given object.
-    /** This function finds the nearest pair of points on this and the given object, and computes their distance.
-        If the two objects intersect, or one object is contained inside the other, the returned distance is zero.
-        @param d [out] If specified, receives the parametric distance along this line that
-            specifies the closest point on this line to the given object. The value returned here can be negative.
+    /** If the two objects intersect, or one object is contained inside the other, the returned distance is 0.
+        @param d [out] If specified, receives the parametric distance along this
+            line that specifies the closest point on this line to the given object.
+            The value returned here can be negative.
         @see Contains(), Intersects(), ClosestPoint(), GetPoint(). */
     float Distance(const vec &point) const { float d; return Distance(point, d); }
     float Distance(const vec &point, float &d) const;
-    /** @param d2 [out] If specified, receives the parametric distance along the other line that specifies the
-        closest point on that line to this line. The value returned here can be negative. */
+    /** @param d2 [out] If specified, receives the parametric distance along
+        the other line that specifies the closest point on that line to this line.
+        The value returned here can be negative. */
     float Distance(const Line &other) const { float d, d2; return Distance(other, d, d2); }
     float Distance(const Line &other, float &d) const { float d2; return Distance(other, d, d2); }
     float Distance(const Line &other, float &d, float &d2) const;
@@ -95,15 +93,17 @@ public:
     float Distance(const LineSegment &other, float &d, float &d2) const;
 
     /// Computes the closest point on this line to the given object.
-    /** If the other object intersects this line, this function will return an arbitrary point inside
-        the region of intersection.
-        @param d [out] If specified, receives the parametric distance along this line that
-            specifies the closest point on this line to the given object. The value returned here can be negative.
+    /** If the other object intersects this line, this function will return an
+        arbitrary point inside the region of intersection.
+        @param d [out] If specified, receives the parametric distance along this
+            line that specifies the closest point on this line to the given object.
+            The value returned here can be negative.
         @see Contains(), Distance(), Intersects(), GetPoint(). */
     vec ClosestPoint(const vec &targetPoint) const { float d; return ClosestPoint(targetPoint, d); }
     vec ClosestPoint(const vec &targetPoint, float &d) const;
-    /** @param d2 [out] If specified, receives the parametric distance along the other line that specifies the
-        closest point on that line to this line. The value returned here can be negative. */
+    /** @param d2 [out] If specified, receives the parametric distance along
+        the other line that specifies the closest point on that line to this line.
+        The value returned here can be negative. */
     vec ClosestPoint(const Line &other) const { float d, d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const Line &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const Line &other, float &d, float &d2) const;
