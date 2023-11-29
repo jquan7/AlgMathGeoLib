@@ -196,9 +196,9 @@ bool Line::IntersectsDisc(const Circle &disc) const
 	return disc.IntersectsDisc(*this);
 }
 
-vec Line::ClosestPoint(const vec &targetPoint, float &d) const
+vec Line::ClosestPoint(const vec &tar_pt, float &d) const
 {
-	d = Dot(targetPoint - pos, dir);
+	d = Dot(tar_pt - pos, dir);
 	return GetPoint(d);
 }
 

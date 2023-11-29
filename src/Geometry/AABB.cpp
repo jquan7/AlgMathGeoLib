@@ -39,7 +39,7 @@
 MATH_BEGIN_NAMESPACE
 
 AABB::AABB(const vec &minPoint_, const vec &maxPoint_)
-:minPoint(minPoint_), maxPoint(maxPoint_)
+:minpt(minPoint_), maxpt(maxPoint_)
 {
 }
 
@@ -50,15 +50,15 @@ AABB::AABB(const OBB &obb)
 
 void AABB::SetNegativeInfinity()
 {
-	minPoint.SetFromScalar(FLOAT_INF);
-	maxPoint.SetFromScalar(-FLOAT_INF);
+	minpt.SetFromScalar(FLOAT_INF);
+	maxpt.SetFromScalar(-FLOAT_INF);
 }
 
 void AABB::SetFromCenterAndSize(const vec &center, const vec &size)
 {
 	vec halfSize = 0.5f * size;
-	minPoint = center - halfSize;
-	maxPoint = center + halfSize;
+	minpt = center - halfSize;
+	maxpt = center + halfSize;
 }
 
 void AABB::SetFrom(const OBB &obb)
@@ -84,17 +84,17 @@ OBB AABB::ToOBB() const
 
 bool AABB::IsFinite() const
 {
-	return minPoint.IsFinite() && maxPoint.IsFinite();
+	return minpt.IsFinite() && maxpt.IsFinite();
 }
 
 bool AABB::IsDegenerate() const
 {
-	return !(minPoint.x < maxPoint.x && minPoint.y < maxPoint.y && minPoint.z < maxPoint.z);
+	return !(minpt.x < maxpt.x && minpt.y < maxpt.y && minpt.z < maxpt.z);
 }
 
 vec AABB::CenterPoint() const
 {
-	return (minPoint + maxPoint) * 0.5f;
+	return (minpt + maxpt) * 0.5f;
 }
 
 vec AABB::PointInside(float x, float y, float z) const
@@ -103,8 +103,8 @@ vec AABB::PointInside(float x, float y, float z) const
 	assume(0.f <= y && y <= 1.f);
 	assume(0.f <= z && z <= 1.f);
 
-	vec d = maxPoint - minPoint;
-	return minPoint + d.Mul(POINT_VEC(x, y, z));
+	vec d = maxpt - minpt;
+	return minpt + d.Mul(POINT_VEC(x, y, z));
 }
 
 LineSegment AABB::Edge(int edgeIndex) const
@@ -128,18 +128,18 @@ LineSegment AABB::Edge(int edgeIndex) const
 		case 11: return LineSegment(CornerPoint(6), CornerPoint(7));
 		*/
 		// Force-optimize to avoid calling to CornerPoint for another switch-case statement.
-		case 0: return LineSegment(minPoint, POINT_VEC(minPoint.x, minPoint.y, maxPoint.z));
-		case 1: return LineSegment(minPoint, POINT_VEC(minPoint.x, maxPoint.y, minPoint.z));
-		case 2: return LineSegment(minPoint, POINT_VEC(maxPoint.x, minPoint.y, minPoint.z));
-		case 3: return LineSegment(POINT_VEC(minPoint.x, minPoint.y, maxPoint.z), POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z));
-		case 4: return LineSegment(POINT_VEC(minPoint.x, minPoint.y, maxPoint.z), POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z));
-		case 5: return LineSegment(POINT_VEC(minPoint.x, maxPoint.y, minPoint.z), POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z));
-		case 6: return LineSegment(POINT_VEC(minPoint.x, maxPoint.y, minPoint.z), POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z));
-		case 7: return LineSegment(POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z), maxPoint);
-		case 8: return LineSegment(POINT_VEC(maxPoint.x, minPoint.y, minPoint.z), POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z));
-		case 9: return LineSegment(POINT_VEC(maxPoint.x, minPoint.y, minPoint.z), POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z));
-		case 10: return LineSegment(POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z), maxPoint);
-		case 11: return LineSegment(POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z), maxPoint);
+		case 0: return LineSegment(minpt, POINT_VEC(minpt.x, minpt.y, maxpt.z));
+		case 1: return LineSegment(minpt, POINT_VEC(minpt.x, maxpt.y, minpt.z));
+		case 2: return LineSegment(minpt, POINT_VEC(maxpt.x, minpt.y, minpt.z));
+		case 3: return LineSegment(POINT_VEC(minpt.x, minpt.y, maxpt.z), POINT_VEC(minpt.x, maxpt.y, maxpt.z));
+		case 4: return LineSegment(POINT_VEC(minpt.x, minpt.y, maxpt.z), POINT_VEC(maxpt.x, minpt.y, maxpt.z));
+		case 5: return LineSegment(POINT_VEC(minpt.x, maxpt.y, minpt.z), POINT_VEC(minpt.x, maxpt.y, maxpt.z));
+		case 6: return LineSegment(POINT_VEC(minpt.x, maxpt.y, minpt.z), POINT_VEC(maxpt.x, maxpt.y, minpt.z));
+		case 7: return LineSegment(POINT_VEC(minpt.x, maxpt.y, maxpt.z), maxpt);
+		case 8: return LineSegment(POINT_VEC(maxpt.x, minpt.y, minpt.z), POINT_VEC(maxpt.x, minpt.y, maxpt.z));
+		case 9: return LineSegment(POINT_VEC(maxpt.x, minpt.y, minpt.z), POINT_VEC(maxpt.x, maxpt.y, minpt.z));
+		case 10: return LineSegment(POINT_VEC(maxpt.x, minpt.y, maxpt.z), maxpt);
+		case 11: return LineSegment(POINT_VEC(maxpt.x, maxpt.y, minpt.z), maxpt);
 	}
 }
 
@@ -149,22 +149,22 @@ vec AABB::CornerPoint(int cornerIndex) const
 	switch(cornerIndex)
 	{
 		default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-		case 0: return minPoint;
-		case 1: return POINT_VEC(minPoint.x, minPoint.y, maxPoint.z);
-		case 2: return POINT_VEC(minPoint.x, maxPoint.y, minPoint.z);
-		case 3: return POINT_VEC(minPoint.x, maxPoint.y, maxPoint.z);
-		case 4: return POINT_VEC(maxPoint.x, minPoint.y, minPoint.z);
-		case 5: return POINT_VEC(maxPoint.x, minPoint.y, maxPoint.z);
-		case 6: return POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z);
-		case 7: return maxPoint;
+		case 0: return minpt;
+		case 1: return POINT_VEC(minpt.x, minpt.y, maxpt.z);
+		case 2: return POINT_VEC(minpt.x, maxpt.y, minpt.z);
+		case 3: return POINT_VEC(minpt.x, maxpt.y, maxpt.z);
+		case 4: return POINT_VEC(maxpt.x, minpt.y, minpt.z);
+		case 5: return POINT_VEC(maxpt.x, minpt.y, maxpt.z);
+		case 6: return POINT_VEC(maxpt.x, maxpt.y, minpt.z);
+		case 7: return maxpt;
 	}
 }
 
 vec AABB::ExtremePoint(const vec &direction) const
 {
-	return POINT_VEC((direction.x >= 0.f ? maxPoint.x : minPoint.x),
-	                 (direction.y >= 0.f ? maxPoint.y : minPoint.y),
-	                 (direction.z >= 0.f ? maxPoint.z : minPoint.z));
+	return POINT_VEC((direction.x >= 0.f ? maxpt.x : minpt.x),
+	                 (direction.y >= 0.f ? maxpt.y : minpt.y),
+	                 (direction.z >= 0.f ? maxpt.z : minpt.z));
 }
 
 vec AABB::ExtremePoint(const vec &direction, float &projectionDistance) const
@@ -179,24 +179,24 @@ vec AABB::PointOnEdge(int edgeIndex, float u) const
 	assume(0 <= edgeIndex && edgeIndex <= 11);
 	assume(0 <= u && u <= 1.f);
 
-	vec d = maxPoint - minPoint;
+	vec d = maxpt - minpt;
 	switch(edgeIndex)
 	{
 	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-	case 0: return POINT_VEC(minPoint.x, minPoint.y, minPoint.z + u * d.z);
-	case 1: return POINT_VEC(minPoint.x, maxPoint.y, minPoint.z + u * d.z);
-	case 2: return POINT_VEC(maxPoint.x, minPoint.y, minPoint.z + u * d.z);
-	case 3: return POINT_VEC(maxPoint.x, maxPoint.y, minPoint.z + u * d.z);
+	case 0: return POINT_VEC(minpt.x, minpt.y, minpt.z + u * d.z);
+	case 1: return POINT_VEC(minpt.x, maxpt.y, minpt.z + u * d.z);
+	case 2: return POINT_VEC(maxpt.x, minpt.y, minpt.z + u * d.z);
+	case 3: return POINT_VEC(maxpt.x, maxpt.y, minpt.z + u * d.z);
 
-	case 4: return POINT_VEC(minPoint.x, minPoint.y + u * d.y, minPoint.z);
-	case 5: return POINT_VEC(maxPoint.x, minPoint.y + u * d.y, minPoint.z);
-	case 6: return POINT_VEC(minPoint.x, minPoint.y + u * d.y, maxPoint.z);
-	case 7: return POINT_VEC(maxPoint.x, minPoint.y + u * d.y, maxPoint.z);
+	case 4: return POINT_VEC(minpt.x, minpt.y + u * d.y, minpt.z);
+	case 5: return POINT_VEC(maxpt.x, minpt.y + u * d.y, minpt.z);
+	case 6: return POINT_VEC(minpt.x, minpt.y + u * d.y, maxpt.z);
+	case 7: return POINT_VEC(maxpt.x, minpt.y + u * d.y, maxpt.z);
 
-	case 8: return POINT_VEC(minPoint.x + u * d.x, minPoint.y, minPoint.z);
-	case 9: return POINT_VEC(minPoint.x + u * d.x, minPoint.y, maxPoint.z);
-	case 10: return POINT_VEC(minPoint.x + u * d.x, maxPoint.y, minPoint.z);
-	case 11: return POINT_VEC(minPoint.x + u * d.x, maxPoint.y, maxPoint.z);
+	case 8: return POINT_VEC(minpt.x + u * d.x, minpt.y, minpt.z);
+	case 9: return POINT_VEC(minpt.x + u * d.x, minpt.y, maxpt.z);
+	case 10: return POINT_VEC(minpt.x + u * d.x, maxpt.y, minpt.z);
+	case 11: return POINT_VEC(minpt.x + u * d.x, maxpt.y, maxpt.z);
 	}
 }
 
@@ -204,16 +204,16 @@ vec AABB::FaceCenterPoint(int faceIndex) const
 {
 	assume(0 <= faceIndex && faceIndex <= 5);
 
-	vec center = (minPoint + maxPoint) * 0.5f;
+	vec center = (minpt + maxpt) * 0.5f;
 	switch(faceIndex)
 	{
 	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-	case 0: return POINT_VEC(minPoint.x, center.y, center.z);
-	case 1: return POINT_VEC(maxPoint.x, center.y, center.z);
-	case 2: return POINT_VEC(center.x, minPoint.y, center.z);
-	case 3: return POINT_VEC(center.x, maxPoint.y, center.z);
-	case 4: return POINT_VEC(center.x, center.y, minPoint.z);
-	case 5: return POINT_VEC(center.x, center.y, maxPoint.z);
+	case 0: return POINT_VEC(minpt.x, center.y, center.z);
+	case 1: return POINT_VEC(maxpt.x, center.y, center.z);
+	case 2: return POINT_VEC(center.x, minpt.y, center.z);
+	case 3: return POINT_VEC(center.x, maxpt.y, center.z);
+	case 4: return POINT_VEC(center.x, center.y, minpt.z);
+	case 5: return POINT_VEC(center.x, center.y, maxpt.z);
 	}
 }
 
@@ -223,16 +223,16 @@ vec AABB::FacePoint(int faceIndex, float u, float v) const
 	assume(0 <= u && u <= 1.f);
 	assume(0 <= v && v <= 1.f);
 
-	vec d = maxPoint - minPoint;
+	vec d = maxpt - minpt;
 	switch(faceIndex)
 	{
 	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-	case 0: return POINT_VEC(minPoint.x, minPoint.y + u * d.y, minPoint.z + v * d.z);
-	case 1: return POINT_VEC(maxPoint.x, minPoint.y + u * d.y, minPoint.z + v * d.z);
-	case 2: return POINT_VEC(minPoint.x + u * d.x, minPoint.y, minPoint.z + v * d.z);
-	case 3: return POINT_VEC(minPoint.x + u * d.x, maxPoint.y, minPoint.z + v * d.z);
-	case 4: return POINT_VEC(minPoint.x + u * d.x, minPoint.y + v * d.y, minPoint.z);
-	case 5: return POINT_VEC(minPoint.x + u * d.x, minPoint.y + v * d.y, maxPoint.z);
+	case 0: return POINT_VEC(minpt.x, minpt.y + u * d.y, minpt.z + v * d.z);
+	case 1: return POINT_VEC(maxpt.x, minpt.y + u * d.y, minpt.z + v * d.z);
+	case 2: return POINT_VEC(minpt.x + u * d.x, minpt.y, minpt.z + v * d.z);
+	case 3: return POINT_VEC(minpt.x + u * d.x, maxpt.y, minpt.z + v * d.z);
+	case 4: return POINT_VEC(minpt.x + u * d.x, minpt.y + v * d.y, minpt.z);
+	case 5: return POINT_VEC(minpt.x + u * d.x, minpt.y + v * d.y, maxpt.z);
 	}
 }
 
@@ -303,7 +303,7 @@ AABB AABB::FromCenterAndSize(const vec &aabbCenterPos, const vec &aabbSize)
 
 vec AABB::Size() const
 {
-	return maxPoint - minPoint;
+	return maxpt - minpt;
 }
 
 vec AABB::HalfSize() const
@@ -325,26 +325,26 @@ float AABB::SurfaceArea() const
 
 void AABB::Translate(const vec &offset)
 {
-	minPoint += offset;
-	maxPoint += offset;
+	minpt += offset;
+	maxpt += offset;
 }
 
 AABB AABB::Translated(const vec &offset) const
 {
-	return AABB(minPoint + offset, maxPoint + offset);
+	return AABB(minpt + offset, maxpt + offset);
 }
 
 void AABB::Scale(const vec &centerPoint, float scaleFactor)
 {
-	minPoint = (minPoint - centerPoint) * scaleFactor + centerPoint;
-	maxPoint = (maxPoint - centerPoint) * scaleFactor + centerPoint;
+	minpt = (minpt - centerPoint) * scaleFactor + centerPoint;
+	maxpt = (maxpt - centerPoint) * scaleFactor + centerPoint;
 }
 
 void AABB::Scale(const vec &centerPoint, const vec &scaleFactor)
 {
 	float3x4 transform = float3x4::Scale(DIR_TO_FLOAT3(scaleFactor), POINT_TO_FLOAT3(centerPoint)); ///TODO: mat
-	minPoint = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(minPoint))); ///TODO: mat
-	maxPoint = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(maxPoint))); ///TODO: mat
+	minpt = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(minpt))); ///TODO: mat
+	maxpt = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(maxpt))); ///TODO: mat
 }
 
 /// See Christer Ericson's Real-time Collision Detection, p. 87, or
@@ -353,23 +353,23 @@ void AABB::Scale(const vec &centerPoint, const vec &scaleFactor)
 template<typename Matrix>
 void AABBTransformAsAABB(AABB &aabb, Matrix &m)
 {
-	const vec centerPoint = (aabb.minPoint + aabb.maxPoint) * 0.5f;
-	const vec halfSize = centerPoint - aabb.minPoint;
+	const vec centerPoint = (aabb.minpt + aabb.maxpt) * 0.5f;
+	const vec halfSize = centerPoint - aabb.minpt;
 	vec newCenter = m.MulPos(centerPoint);
 
 	// The following is equal to taking the absolute value of the whole matrix m.
 	vec newDir = DIR_VEC(Abs(m[0][0] * halfSize.x) + Abs(m[0][1] * halfSize.y) + Abs(m[0][2] * halfSize.z),
 						 Abs(m[1][0] * halfSize.x) + Abs(m[1][1] * halfSize.y) + Abs(m[1][2] * halfSize.z),
 						 Abs(m[2][0] * halfSize.x) + Abs(m[2][1] * halfSize.y) + Abs(m[2][2] * halfSize.z));
-	aabb.minPoint = newCenter - newDir;
-	aabb.maxPoint = newCenter + newDir;
+	aabb.minpt = newCenter - newDir;
+	aabb.maxpt = newCenter + newDir;
 }
 
 #ifdef MATH_SIMD
 void AABBTransformAsAABB_SIMD(AABB &aabb, const float4x4 &m)
 {
-	simd4f minPt = aabb.minPoint;
-	simd4f maxPt = aabb.maxPoint;
+	simd4f minPt = aabb.minpt;
+	simd4f maxPt = aabb.maxpt;
 	simd4f centerPoint = muls_ps(add_ps(minPt, maxPt), 0.5f);
 	simd4f newCenter = mat4x4_mul_vec4(m.row, centerPoint);
 
@@ -379,8 +379,8 @@ void AABBTransformAsAABB_SIMD(AABB &aabb, const float4x4 &m)
 	simd4f z = abs_ps(mul_ps(m.row[2], halfSize));
 	simd4f w = zero_ps();
 	simd4f newDir = hadd4_ps(x, y, z, w);
-	aabb.minPoint = sub_ps(newCenter, newDir);
-	aabb.maxPoint = add_ps(newCenter, newDir);
+	aabb.minpt = sub_ps(newCenter, newDir);
+	aabb.maxpt = add_ps(newCenter, newDir);
 }
 #endif
 
@@ -417,8 +417,8 @@ void AABB::TransformAsAABB(const Quat &transform)
 {
 	vec newCenter = transform.Transform(CenterPoint());
 	vec newDir = Abs((transform.Transform(Size()) * 0.5f));
-	minPoint = newCenter - newDir;
-	maxPoint = newCenter + newDir;
+	minpt = newCenter - newDir;
+	maxpt = newCenter + newDir;
 }
 
 OBB AABB::Transform(const float3x3 &transform) const
@@ -449,9 +449,9 @@ OBB AABB::Transform(const Quat &transform) const
 	return obb;
 }
 
-vec AABB::ClosestPoint(const vec &targetPoint) const
+vec AABB::ClosestPoint(const vec &tar_pt) const
 {
-	return targetPoint.Clamp(minPoint, maxPoint);
+	return tar_pt.Clamp(minpt, maxpt);
 }
 
 float AABB::Distance(const vec &point) const
@@ -476,8 +476,8 @@ bool AABB::Contains(const vec &point) const
 	//    Best: 2.048 nsecs / 3.467 ticks, Avg: 2.115 nsecs, Worst: 4.156 nsecs
 	// Benchmark 'AABBContains_unpredictable': AABB::Contains(point) unpredictable
 	//    Best: 2.590 nsecs / 4.4106 ticks, Avg: 2.978 nsecs, Worst: 6.084 nsecs
-	simd4f a = cmplt_ps(point, minPoint);
-	simd4f b = cmpgt_ps(point, maxPoint);
+	simd4f a = cmplt_ps(point, minpt);
+	simd4f b = cmpgt_ps(point, maxpt);
 	a = or_ps(a, b);
 	return allzero_ps(a) != 0;
 #else
@@ -487,9 +487,9 @@ bool AABB::Contains(const vec &point) const
 	//    Best: 1.988 nsecs / 3.361 ticks, Avg: 2.148 nsecs, Worst: 4.457 nsecs
 	// Benchmark 'AABBContains_unpredictable': AABB::Contains(point) unpredictable
 	//    Best: 3.554 nsecs / 6.0764 ticks, Avg: 3.803 nsecs, Worst: 6.264 nsecs
-	return minPoint.x <= point.x && point.x <= maxPoint.x &&
-	       minPoint.y <= point.y && point.y <= maxPoint.y &&
-	       minPoint.z <= point.z && point.z <= maxPoint.z;
+	return minpt.x <= point.x && point.x <= maxpt.x &&
+	       minpt.y <= point.y && point.y <= maxpt.y &&
+	       minpt.z <= point.z && point.z <= maxpt.z;
 #endif
 }
 
@@ -501,14 +501,14 @@ bool AABB::Contains(const LineSegment &lineseg) const
 bool AABB::Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const
 {
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
-	simd4f a = cmplt_ps(aabbMinPoint, minPoint);
-	simd4f b = cmpgt_ps(aabbMaxPoint, maxPoint);
+	simd4f a = cmplt_ps(aabbMinPoint, minpt);
+	simd4f b = cmpgt_ps(aabbMaxPoint, maxpt);
 	a = or_ps(a, b);
 	return allzero_ps(a) != 0;
 #else
-	return minPoint.x <= aabbMinPoint.x && maxPoint.x >= aabbMaxPoint.x &&
-	       minPoint.y <= aabbMinPoint.y && maxPoint.y >= aabbMaxPoint.y &&
-	       minPoint.z <= aabbMinPoint.z && maxPoint.z >= aabbMaxPoint.z;
+	return minpt.x <= aabbMinPoint.x && maxpt.x >= aabbMaxPoint.x &&
+	       minpt.y <= aabbMinPoint.y && maxpt.y >= aabbMaxPoint.y &&
+	       minpt.z <= aabbMinPoint.z && maxpt.z >= aabbMaxPoint.z;
 #endif
 }
 
@@ -581,8 +581,8 @@ bool AABB::IntersectLineAABB_CPP(const vec &linePos, const vec &lineDir, float &
 	if (!EqualAbs(lineDir.x, 0.f))
 	{
 		float recipDir = RecipFast(lineDir.x);
-		float t1 = (minPoint.x - linePos.x) * recipDir;
-		float t2 = (maxPoint.x - linePos.x) * recipDir;
+		float t1 = (minpt.x - linePos.x) * recipDir;
+		float t2 = (maxpt.x - linePos.x) * recipDir;
 
 		// tNear tracks distance to intersect (enter) the AABB.
 		// tFar tracks the distance to exit the AABB.
@@ -594,14 +594,14 @@ bool AABB::IntersectLineAABB_CPP(const vec &linePos, const vec &lineDir, float &
 		if (tNear > tFar)
 			return false; // Box is missed since we "exit" before entering it.
 	}
-	else if (linePos.x < minPoint.x || linePos.x > maxPoint.x)
+	else if (linePos.x < minpt.x || linePos.x > maxpt.x)
 		return false; // The ray can't possibly enter the box, abort.
 
 	if (!EqualAbs(lineDir.y, 0.f))
 	{
 		float recipDir = RecipFast(lineDir.y);
-		float t1 = (minPoint.y - linePos.y) * recipDir;
-		float t2 = (maxPoint.y - linePos.y) * recipDir;
+		float t1 = (minpt.y - linePos.y) * recipDir;
+		float t2 = (maxpt.y - linePos.y) * recipDir;
 
 		if (t1 < t2)
 			tNear = Max(t1, tNear), tFar = Min(t2, tFar);
@@ -611,21 +611,21 @@ bool AABB::IntersectLineAABB_CPP(const vec &linePos, const vec &lineDir, float &
 		if (tNear > tFar)
 			return false; // Box is missed since we "exit" before entering it.
 	}
-	else if (linePos.y < minPoint.y || linePos.y > maxPoint.y)
+	else if (linePos.y < minpt.y || linePos.y > maxpt.y)
 		return false; // The ray can't possibly enter the box, abort.
 
 	if (!EqualAbs(lineDir.z, 0.f)) // ray is parallel to plane in question
 	{
 		float recipDir = RecipFast(lineDir.z);
-		float t1 = (minPoint.z - linePos.z) * recipDir;
-		float t2 = (maxPoint.z - linePos.z) * recipDir;
+		float t1 = (minpt.z - linePos.z) * recipDir;
+		float t2 = (maxpt.z - linePos.z) * recipDir;
 
 		if (t1 < t2)
 			tNear = Max(t1, tNear), tFar = Min(t2, tFar);
 		else // Swap t1 and t2.
 			tNear = Max(t2, tNear), tFar = Min(t1, tFar);
 	}
-	else if (linePos.z < minPoint.z || linePos.z > maxPoint.z)
+	else if (linePos.z < minpt.z || linePos.z > maxpt.z)
 		return false; // The ray can't possibly enter the box, abort.
 
 	return tNear <= tFar;
@@ -677,8 +677,8 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 	// For a full precision reciprocal, perform a div:
 //	simd4f recipDir = div_ps(set1_ps(1.f), rayDir.v);
 
-	simd4f t1 = mul_ps(sub_ps(minPoint, rayPos.v), recipDir);
-	simd4f t2 = mul_ps(sub_ps(maxPoint, rayPos.v), recipDir);
+	simd4f t1 = mul_ps(sub_ps(minpt, rayPos.v), recipDir);
+	simd4f t2 = mul_ps(sub_ps(maxpt, rayPos.v), recipDir);
 
 	simd4f nearD = min_ps(t1, t2); // [0 n3 n2 n1]
 	simd4f farD = max_ps(t1, t2);  // [0 f3 f2 f1]
@@ -722,8 +722,8 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 
 	// To avoid false positives, need to have an additional rejection test for each cardinal axis the ray direction
 	// is parallel to.
-	simd4f out2 = cmplt_ps(rayPos.v, minPoint);
-	simd4f out3 = cmpgt_ps(rayPos.v, maxPoint);
+	simd4f out2 = cmplt_ps(rayPos.v, minpt);
+	simd4f out3 = cmpgt_ps(rayPos.v, maxpt);
 	out2 = or_ps(out2, out3);
 	zeroDirections = and_ps(zeroDirections, out2);
 
@@ -779,8 +779,8 @@ bool AABB::Intersects(const AABB &aabb) const
 	// Benchmark 'AABBIntersectsAABB_random': AABB::Intersects(AABB) random
 	//    Best: 3.072 nsecs / 5.2904 ticks, Avg: 3.262 nsecs, Worst: 5.301 nsecs
 
-	simd4f a = cmpge_ps(minPoint.v, aabb.maxPoint.v);
-	simd4f b = cmpge_ps(aabb.minPoint.v, maxPoint.v);
+	simd4f a = cmpge_ps(minpt.v, aabb.maxpt.v);
+	simd4f b = cmpge_ps(aabb.minpt.v, maxpt.v);
 	a = or_ps(a, b);
 	return a_and_b_allzero_ps(a, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU)) != 0; // Mask off results from the W channel.
 #else
@@ -791,12 +791,12 @@ bool AABB::Intersects(const AABB &aabb) const
 
 	// If any of the cardinal X,Y,Z axes is a separating axis, then
 	// there is no intersection.
-	return minPoint.x < aabb.maxPoint.x &&
-	       minPoint.y < aabb.maxPoint.y &&
-	       minPoint.z < aabb.maxPoint.z &&
-	       aabb.minPoint.x < maxPoint.x &&
-	       aabb.minPoint.y < maxPoint.y &&
-	       aabb.minPoint.z < maxPoint.z;
+	return minpt.x < aabb.maxpt.x &&
+	       minpt.y < aabb.maxpt.y &&
+	       minpt.z < aabb.maxpt.z &&
+	       aabb.minpt.x < maxpt.x &&
+	       aabb.minpt.y < maxpt.y &&
+	       aabb.minpt.z < maxpt.z;
 #endif
 }
 
@@ -817,8 +817,8 @@ bool AABB::Intersects(const Polygon &polygon) const
 
 void AABB::ProjectToAxis(const vec &axis, float &dMin, float &dMax) const
 {
-	vec c = (minPoint + maxPoint) * 0.5f;
-	vec e = maxPoint - c;
+	vec c = (minpt + maxpt) * 0.5f;
+	vec e = maxpt - c;
 
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	vec absAxis = axis.Abs();
@@ -851,8 +851,8 @@ int AABB::UniqueEdgeDirections(vec *out) const
 
 void AABB::Enclose(const vec &point)
 {
-	minPoint = Min(minPoint, point);
-	maxPoint = Max(maxPoint, point);
+	minpt = Min(minpt, point);
+	maxpt = Max(maxpt, point);
 }
 
 void AABB::Enclose(const LineSegment &lineseg)
@@ -862,8 +862,8 @@ void AABB::Enclose(const LineSegment &lineseg)
 
 void AABB::Enclose(const vec &aabbMinPoint, const vec &aabbMaxPoint)
 {
-	minPoint = Min(minPoint, aabbMinPoint);
-	maxPoint = Max(maxPoint, aabbMaxPoint);
+	minpt = Min(minpt, aabbMinPoint);
+	maxpt = Max(maxpt, aabbMaxPoint);
 }
 
 void AABB::Enclose(const OBB &obb)
@@ -986,19 +986,19 @@ void AABB::ToEdgeList(vec *outPos) const
 std::string AABB::ToString() const
 {
 	char str[256];
-	sprintf(str, "AABB(Min:(%.2f, %.2f, %.2f) Max:(%.2f, %.2f, %.2f))", minPoint.x, minPoint.y, minPoint.z, maxPoint.x, maxPoint.y, maxPoint.z);
+	sprintf(str, "AABB(Min:(%.2f, %.2f, %.2f) Max:(%.2f, %.2f, %.2f))", minpt.x, minpt.y, minpt.z, maxpt.x, maxpt.y, maxpt.z);
 	return str;
 }
 
 std::string AABB::SerializeToString() const
 {
 	char str[256];
-	char *s = SerializeFloat(minPoint.x, str); *s = ','; ++s;
-	s = SerializeFloat(minPoint.y, s); *s = ','; ++s;
-	s = SerializeFloat(minPoint.z, s); *s = ','; ++s;
-	s = SerializeFloat(maxPoint.x, s); *s = ','; ++s;
-	s = SerializeFloat(maxPoint.y, s); *s = ','; ++s;
-	s = SerializeFloat(maxPoint.z, s);
+	char *s = SerializeFloat(minpt.x, str); *s = ','; ++s;
+	s = SerializeFloat(minpt.y, s); *s = ','; ++s;
+	s = SerializeFloat(minpt.z, s); *s = ','; ++s;
+	s = SerializeFloat(maxpt.x, s); *s = ','; ++s;
+	s = SerializeFloat(maxpt.y, s); *s = ','; ++s;
+	s = SerializeFloat(maxpt.z, s);
 	assert(s+1 - str < 256);
 	MARK_UNUSED(s);
 	return str;
@@ -1006,7 +1006,7 @@ std::string AABB::SerializeToString() const
 
 std::string AABB::SerializeToCodeString() const
 {
-	return "AABB(" + minPoint.SerializeToCodeString() + "," + maxPoint.SerializeToCodeString() + ")";
+	return "AABB(" + minpt.SerializeToCodeString() + "," + maxpt.SerializeToCodeString() + ")";
 }
 
 AABB AABB::FromString(const char *str, const char **outEndStr)
@@ -1017,9 +1017,9 @@ AABB AABB::FromString(const char *str, const char **outEndStr)
 	AABB a;
 	MATH_SKIP_WORD(str, "AABB(");
 	MATH_SKIP_WORD(str, "Min:(");
-	a.minPoint = PointVecFromString(str, &str);
+	a.minpt = PointVecFromString(str, &str);
 	MATH_SKIP_WORD(str, " Max:(");
-	a.maxPoint = PointVecFromString(str, &str);
+	a.maxpt = PointVecFromString(str, &str);
 	if (outEndStr)
 		*outEndStr = str;
 	return a;
@@ -1035,7 +1035,7 @@ std::ostream &operator <<(std::ostream &o, const AABB &aabb)
 
 AABB AABB::Intersection(const AABB &aabb) const
 {
-	return AABB(Max(minPoint, aabb.minPoint), Min(maxPoint, aabb.maxPoint));
+	return AABB(Max(minpt, aabb.minpt), Min(maxpt, aabb.maxpt));
 }
 
 OBB operator *(const float3x3 &transform, const AABB &aabb)

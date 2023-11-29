@@ -212,8 +212,8 @@ Polygon2D Triangle2D::ToPolygon() const
 AABB2D Triangle2D::BoundingAABB() const
 {
 	AABB2D aabb;
-	aabb.minPoint = Min(a, b, c);
-	aabb.maxPoint = Max(a, b, c);
+	aabb.minpt = Min(a, b, c);
+	aabb.maxpt = Max(a, b, c);
 	return aabb;
 }
 
@@ -447,13 +447,13 @@ bool Triangle2D::Intersects(const AABB2D &aabb) const
 	simd4f tMin = min_ps(a, min_ps(b, c));
 	simd4f tMax = max_ps(a, max_ps(b, c));
 
-	simd4f cmp = cmpge_ps(tMin, aabb.maxPoint.v);
-	cmp = or_ps(cmp, cmple_ps(tMax, aabb.minPoint.v));
+	simd4f cmp = cmpge_ps(tMin, aabb.maxpt.v);
+	cmp = or_ps(cmp, cmple_ps(tMax, aabb.minpt.v));
 	// Mask off results from the W channel and test if all were zero.
 	if (!a_and_b_allzero_ps(cmp, set_ps_hex(0, 0xFFFFFFFFU, 0xFFFFFFFFU, 0xFFFFFFFFU))) return false;
 
-	simd4f center = mul_ps(add_ps(aabb.minPoint.v, aabb.maxPoint.v), set1_ps(0.5f));
-	simd4f h = sub_ps(aabb.maxPoint.v, center);
+	simd4f center = mul_ps(add_ps(aabb.minpt.v, aabb.maxpt.v), set1_ps(0.5f));
+	simd4f h = sub_ps(aabb.maxpt.v, center);
 
 	simd4f t0 = sub_ps(b, a);
 	simd4f t1 = sub_ps(c, a);
@@ -524,13 +524,13 @@ bool Triangle2D::Intersects(const AABB2D &aabb) const
 	vec2d tMin = a.Min(b.Min(c));
 	vec2d tMax = a.Max(b.Max(c));
 
-	if (tMin.x >= aabb.maxPoint.x || tMax.x <= aabb.minPoint.x
-		|| tMin.y >= aabb.maxPoint.y || tMax.y <= aabb.minPoint.y
-		|| tMin.z >= aabb.maxPoint.z || tMax.z <= aabb.minPoint.z)
+	if (tMin.x >= aabb.maxpt.x || tMax.x <= aabb.minpt.x
+		|| tMin.y >= aabb.maxpt.y || tMax.y <= aabb.minpt.y
+		|| tMin.z >= aabb.maxpt.z || tMax.z <= aabb.minpt.z)
 		return false;
 
-	vec2d center = (aabb.minPoint + aabb.maxPoint) * 0.5f;
-	vec2d h = aabb.maxPoint - center;
+	vec2d center = (aabb.minpt + aabb.maxpt) * 0.5f;
+	vec2d h = aabb.maxpt - center;
 
 	const vec2d t[3] = { b-a, c-a, c-b };
 

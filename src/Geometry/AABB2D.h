@@ -39,84 +39,84 @@ public:
 	AABB2D() { }
 
 	AABB2D(const vec2d &minPt, const vec2d &maxPt)
-	:minPoint(minPt),
-	maxPoint(maxPt)
+	:minpt(minPt),
+	maxpt(maxPt)
 	{
 	}
 
-	vec2d minPoint;
-	vec2d maxPoint;
+	vec2d minpt;
+	vec2d maxpt;
 
-	float Width() const { return maxPoint.x - minPoint.x; }
-	float Height() const { return maxPoint.y - minPoint.y; }
+	float Width() const { return maxpt.x - minpt.x; }
+	float Height() const { return maxpt.y - minpt.y; }
 
 	float DistanceSq(const vec2d &pt) const
 	{
-		vec2d cp = pt.Clamp(minPoint, maxPoint);
+		vec2d cp = pt.Clamp(minpt, maxpt);
 		return cp.DistanceSq(pt);
 	}
 
 	void SetNegativeInfinity()
 	{
-		minPoint.SetFromScalar(FLOAT_INF);
-		maxPoint.SetFromScalar(-FLOAT_INF);
+		minpt.SetFromScalar(FLOAT_INF);
+		maxpt.SetFromScalar(-FLOAT_INF);
 	}
 
 	void Enclose(const vec2d &point)
 	{
-		minPoint = Min(minPoint, point);
-		maxPoint = Max(maxPoint, point);
+		minpt = Min(minpt, point);
+		maxpt = Max(maxpt, point);
 	}
 
 	bool Intersects(const AABB2D &rhs) const
 	{
-		return maxPoint.x >= rhs.minPoint.x &&
-		       maxPoint.y >= rhs.minPoint.y &&
-		       rhs.maxPoint.x >= minPoint.x &&
-		       rhs.maxPoint.y >= minPoint.y;
+		return maxpt.x >= rhs.minpt.x &&
+		       maxpt.y >= rhs.minpt.y &&
+		       rhs.maxpt.x >= minpt.x &&
+		       rhs.maxpt.y >= minpt.y;
 	}
 
 	bool Contains(const AABB2D &rhs) const
 	{
-		return rhs.minPoint.x >= minPoint.x && rhs.minPoint.y >= minPoint.y
-			&& rhs.maxPoint.x <= maxPoint.x && rhs.maxPoint.y <= maxPoint.y;
+		return rhs.minpt.x >= minpt.x && rhs.minpt.y >= minpt.y
+			&& rhs.maxpt.x <= maxpt.x && rhs.maxpt.y <= maxpt.y;
 	}
 
 	bool Contains(const vec2d &pt) const
 	{
-		return pt.x >= minPoint.x && pt.y >= minPoint.y
-			&& pt.x <= maxPoint.x && pt.y <= maxPoint.y;
+		return pt.x >= minpt.x && pt.y >= minpt.y
+			&& pt.x <= maxpt.x && pt.y <= maxpt.y;
 	}
 
 	bool Contains(int x, int y) const
 	{
-		return x >= minPoint.x && y >= minPoint.y
-			&& x <= maxPoint.x && y <= maxPoint.y;
+		return x >= minpt.x && y >= minpt.y
+			&& x <= maxpt.x && y <= maxpt.y;
 	}
 
 	bool IsDegenerate() const
 	{
-		return minPoint.x >= maxPoint.x || minPoint.y >= maxPoint.y;
+		return minpt.x >= maxpt.x || minpt.y >= maxpt.y;
 	}
 
 	bool HasNegativeVolume() const
 	{
-		return maxPoint.x < minPoint.x || maxPoint.y < minPoint.y;
+		return maxpt.x < minpt.x || maxpt.y < minpt.y;
 	}
 
 	bool IsFinite() const
 	{
-		return minPoint.IsFinite() && maxPoint.IsFinite() && minPoint.MinElement() > -1e5f && maxPoint.MaxElement() < 1e5f;
+		return minpt.IsFinite() && maxpt.IsFinite() && minpt.MinElement() > -1e5f && maxpt.MaxElement() < 1e5f;
 	}
 
 	vec2d PosInside(const vec2d &normalizedPos) const
 	{
-		return minPoint + normalizedPos.Mul(maxPoint - minPoint);
+		return minpt + normalizedPos.Mul(maxpt - minpt);
 	}
 
 	vec2d ToNormalizedLocalSpace(const vec2d &pt) const
 	{
-		return (pt - minPoint).Div(maxPoint - minPoint);
+		return (pt - minpt).Div(maxpt - minpt);
 	}
 
 	/// Returns a corner point of this AABB.
@@ -130,10 +130,10 @@ public:
 		switch(cornerIndex)
 		{
 			default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-			case 0: return minPoint;
-			case 1: return POINT_VEC2D(minPoint.x, maxPoint.y);
-			case 2: return POINT_VEC2D(maxPoint.x, minPoint.y);
-			case 3: return maxPoint;
+			case 0: return minpt;
+			case 1: return POINT_VEC2D(minpt.x, maxpt.y);
+			case 2: return POINT_VEC2D(maxpt.x, minpt.y);
+			case 3: return maxpt;
 		}
 	}
 
@@ -164,23 +164,23 @@ public:
 	{
 		vec newCenter = transform.Transform(CenterPoint());
 		vec newDir = Abs((transform.Transform(Size()) * 0.5f));
-		minPoint = newCenter - newDir;
-		maxPoint = newCenter + newDir;
+		minpt = newCenter - newDir;
+		maxpt = newCenter + newDir;
 	}
 	*/
 	AABB2D operator +(const vec2d &pt) const
 	{
 		AABB2D a;
-		a.minPoint = minPoint + pt;
-		a.maxPoint = maxPoint + pt;
+		a.minpt = minpt + pt;
+		a.maxpt = maxpt + pt;
 		return a;
 	}
 
 	AABB2D operator -(const vec2d &pt) const
 	{
 		AABB2D a;
-		a.minPoint = minPoint - pt;
-		a.maxPoint = maxPoint - pt;
+		a.minpt = minpt - pt;
+		a.maxpt = maxpt - pt;
 		return a;
 	}
 
@@ -188,7 +188,7 @@ public:
 	std::string ToString() const
 	{
 		char str[256];
-		sprintf(str, "AABB2D(Min:(%.2f, %.2f) Max:(%.2f, %.2f))", minPoint.x, minPoint.y, maxPoint.x, maxPoint.y);
+		sprintf(str, "AABB2D(Min:(%.2f, %.2f) Max:(%.2f, %.2f))", minpt.x, minpt.y, maxpt.x, maxpt.y);
 		return str;
 	}
 #endif
@@ -196,10 +196,10 @@ public:
 
 inline bool Contains(const AABB2D &aabb, const float3 &pt)
 {
-	return aabb.minPoint.x <= pt.x &&
-	       aabb.minPoint.y <= pt.y &&
-	       pt.x <= aabb.maxPoint.x &&
-	       pt.y <= aabb.maxPoint.y;
+	return aabb.minpt.x <= pt.x &&
+	       aabb.minpt.y <= pt.y &&
+	       pt.x <= aabb.maxpt.x &&
+	       pt.y <= aabb.maxpt.y;
 }
 
 /// See Christer Ericson's Real-time Collision Detection, p. 87, or
@@ -208,20 +208,20 @@ inline bool Contains(const AABB2D &aabb, const float3 &pt)
 template<typename Matrix>
 void AABB2DTransformAsAABB2D(AABB2D &aabb, Matrix &m)
 {
-	float ax = m[0][0] * aabb.minPoint.x;
-	float bx = m[0][0] * aabb.maxPoint.x;
-	float ay = m[0][1] * aabb.minPoint.y;
-	float by = m[0][1] * aabb.maxPoint.y;
+	float ax = m[0][0] * aabb.minpt.x;
+	float bx = m[0][0] * aabb.maxpt.x;
+	float ay = m[0][1] * aabb.minpt.y;
+	float by = m[0][1] * aabb.maxpt.y;
 
-	float ax2 = m[1][0] * aabb.minPoint.x;
-	float bx2 = m[1][0] * aabb.maxPoint.x;
-	float ay2 = m[1][1] * aabb.minPoint.y;
-	float by2 = m[1][1] * aabb.maxPoint.y;
+	float ax2 = m[1][0] * aabb.minpt.x;
+	float bx2 = m[1][0] * aabb.maxpt.x;
+	float ay2 = m[1][1] * aabb.minpt.y;
+	float by2 = m[1][1] * aabb.maxpt.y;
 
-	aabb.minPoint.x = Min(ax, bx) + Min(ay, by) + m[0][3];
-	aabb.maxPoint.x = Max(ax, bx) + Max(ay, by) + m[0][3];
-	aabb.minPoint.y = Min(ax2, bx2) + Min(ay2, by2) + m[1][3];
-	aabb.maxPoint.y = Max(ax2, bx2) + Max(ay2, by2) + m[1][3];
+	aabb.minpt.x = Min(ax, bx) + Min(ay, by) + m[0][3];
+	aabb.maxpt.x = Max(ax, bx) + Max(ay, by) + m[0][3];
+	aabb.minpt.y = Min(ax2, bx2) + Min(ay2, by2) + m[1][3];
+	aabb.maxpt.y = Max(ax2, bx2) + Max(ay2, by2) + m[1][3];
 }
 
 MATH_END_NAMESPACE

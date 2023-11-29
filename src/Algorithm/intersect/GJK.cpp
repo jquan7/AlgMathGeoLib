@@ -257,7 +257,7 @@ bool FloatingPointOffsetedGJKIntersect(const A &a, const B &b)
 {
     AABB ab = a.MinimalEnclosingAABB();
     AABB bb = b.MinimalEnclosingAABB();
-    vec offset = (Min(ab.minPoint, bb.minPoint) + Max(ab.maxPoint, bb.maxPoint)) * 0.5f;
+    vec offset = (Min(ab.minpt, bb.minpt) + Max(ab.maxpt, bb.maxpt)) * 0.5f;
     const vec floatingPointPrecisionOffset = -offset;
     return GJKIntersect(a.Translated(floatingPointPrecisionOffset), b.Translated(floatingPointPrecisionOffset));
 }

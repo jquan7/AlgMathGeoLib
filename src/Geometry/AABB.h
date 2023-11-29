@@ -41,19 +41,19 @@ class ALIGN16 AABB
 public:
 
 	/// Specifies the minimum extent of this AABB in the world space x, y and z axes.
-	vec minPoint;
-	/// Specifies the maximum extent of this AABB in the world space x, y and z axes. [similarOverload: minPoint]
-	vec maxPoint;
+	vec minpt;
+	/// Specifies the maximum extent of this AABB in the world space x, y and z axes. [similarOverload: minpt]
+	vec maxpt;
 
 	/// The default constructor does not initialize any members of this class.
-	/** This means that the values of the members minPoint and maxPoint are undefined after creating a new AABB using this
+	/** This means that the values of the members minpt and maxpt are undefined after creating a new AABB using this
 		default constructor. Remember to assign to them before use.
-		@see minPoint, maxPoint. */
+		@see minpt, maxpt. */
 	AABB() {}
 
 	/// Constructs this AABB by specifying the minimum and maximum extending corners of the box.
-	/** @see minPoint, maxPoint. */
-	AABB(const vec &minPoint, const vec &maxPoint);
+	/** @see minpt, maxpt. */
+	AABB(const vec &minpt, const vec &maxpt);
 
 	/// Constructs this AABB to enclose the given OBB.
 	/** This constructor computes the optimal minimum volume AABB that encloses the given OBB.
@@ -67,13 +67,13 @@ public:
 	FORCE_INLINE static int NumVertices() { return 8; }
 
 	/// Returns the minimum world-space coordinate along the given axis.
-	float MinX() const { return minPoint.x; }
-	float MinY() const { return minPoint.y; } ///< [similarOverload: MinX]
-	float MinZ() const { return minPoint.z; } ///< [similarOverload: MinX]
+	float MinX() const { return minpt.x; }
+	float MinY() const { return minpt.y; } ///< [similarOverload: MinX]
+	float MinZ() const { return minpt.z; } ///< [similarOverload: MinX]
 	/// Returns the maximum world-space coordinate along the given axis.
-	float MaxX() const { return maxPoint.x; }
-	float MaxY() const { return maxPoint.y; } ///< [similarOverload: MaxX]
-	float MaxZ() const { return maxPoint.z; } ///< [similarOverload: MaxX]
+	float MaxX() const { return maxpt.x; }
+	float MaxY() const { return maxpt.y; } ///< [similarOverload: MaxX]
+	float MaxZ() const { return maxpt.z; } ///< [similarOverload: MaxX]
 
 	/// Sets this structure to a degenerate AABB that does not have any volume.
 	/** This function is useful for initializing the AABB to "null" before a loop of calls to Enclose(),
@@ -108,12 +108,12 @@ public:
 
 	/// Tests if this AABB is finite.
 	/** @return True if the member variables of this AABB are valid floats and do not contain NaNs or infs, and false otherwise.
-		@see IsDegenerate(), minPoint, maxPoint. */
+		@see IsDegenerate(), minpt, maxpt. */
 	bool IsFinite() const;
 
 	/// Tests if this AABB is degenerate.
 	/** @return True if this AABB does not span a strictly positive volume.
-		@see IsFinite(), Volume(), minPoint, maxPoint. */
+		@see IsFinite(), Volume(), minpt, maxpt. */
 	bool IsDegenerate() const;
 
 	/// @return The center point of this AABB.
@@ -122,7 +122,7 @@ public:
 	vec Centroid() const { return CenterPoint(); }
 
 	/// Quickly returns an arbitrary point inside this AABB. Used in GJK intersection test.
-	vec AnyPointFast() const { return minPoint; }
+	vec AnyPointFast() const { return minpt; }
 
 	/// Generates a point inside this AABB.
 	/** @param x A normalized value between [0,1]. This specifies the point position along the world x axis.
@@ -303,7 +303,7 @@ public:
 	/// Computes the closest point inside this AABB to the given point.
 	/** If the target point lies inside this AABB, then that point is returned.
 		@see Distance(), Contains(), Intersects().  */
-	vec ClosestPoint(const vec &targetPoint) const;
+	vec ClosestPoint(const vec &tar_pt) const;
 
 	/// Computes the distance between this AABB and the given object.
 	/** This function finds the nearest pair of points on this and the given object, and computes their distance.
@@ -319,7 +319,7 @@ public:
 	bool Contains(const vec &point) const;
 	bool Contains(const LineSegment &lineseg) const;
 	bool Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const;
-	bool Contains(const AABB &aabb) const { return Contains(aabb.minPoint, aabb.maxPoint); }
+	bool Contains(const AABB &aabb) const { return Contains(aabb.minpt, aabb.maxpt); }
 	bool Contains(const OBB &obb) const;
 	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
@@ -361,7 +361,7 @@ public:
 	void Enclose(const vec &point);
 	void Enclose(const vec &aabbMinPoint, const vec &aabbMaxPoint);
 	void Enclose(const LineSegment &lineseg);
-	void Enclose(const AABB &aabb) { Enclose(aabb.minPoint, aabb.maxPoint); }
+	void Enclose(const AABB &aabb) { Enclose(aabb.minpt, aabb.maxpt); }
 	void Enclose(const OBB &obb);
 	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
@@ -448,7 +448,7 @@ public:
 	bool IntersectLineAABB_SSE(const float4 &linePos, const float4 &lineDir, float tNear, float tFar) const;
 #endif
 
-	bool Equals(const AABB &rhs, float epsilon = 1e-3f) const { return minPoint.Equals(rhs.minPoint, epsilon) && maxPoint.Equals(rhs.maxPoint, epsilon); }
+	bool Equals(const AABB &rhs, float epsilon = 1e-3f) const { return minpt.Equals(rhs.minpt, epsilon) && maxpt.Equals(rhs.maxpt, epsilon); }
 };
 
 OBB operator *(const float3x3 &transform, const AABB &aabb);

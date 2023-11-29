@@ -99,8 +99,8 @@ public:
             line that specifies the closest point on this line to the given object.
             The value returned here can be negative.
         @see Contains(), Distance(), Intersects(), GetPoint(). */
-    vec ClosestPoint(const vec &targetPoint) const { float d; return ClosestPoint(targetPoint, d); }
-    vec ClosestPoint(const vec &targetPoint, float &d) const;
+    vec ClosestPoint(const vec &tar_pt) const { float d; return ClosestPoint(tar_pt, d); }
+    vec ClosestPoint(const vec &tar_pt, float &d) const;
     /** @param d2 [out] If specified, receives the parametric distance along
         the other line that specifies the closest point on that line to this line.
         The value returned here can be negative. */
