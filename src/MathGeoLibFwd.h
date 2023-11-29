@@ -142,10 +142,6 @@ typedef std::vector<float3> VecArray;
 
 MATH_END_NAMESPACE
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-class VertexBuffer;
-#endif
-
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iosfwd>
 #endif

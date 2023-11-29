@@ -35,10 +35,6 @@
 #include <iostream>
 #endif
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-#include "VertexBuffer.h"
-#endif
-
 MATH_BEGIN_NAMESPACE
 
 int IntervalIntersection(float u0, float u1, float v0, float v1, float &s, float &t)
@@ -540,16 +536,5 @@ LineSegment2D LineSegment2D::FromString(const char *str, const char **outEndStr)
 		*outEndStr = str;
 	return l;
 }
-
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-
-void LineSegment2D::ToLineList(VertexBuffer &vb) const
-{
-	int startIndex = vb.AppendVertices(2);
-	vb.Set(startIndex, VDPosition, float4(a.x, a.y, 0.f, 1.f));
-	vb.Set(startIndex+1, VDPosition, float4(b.x, b.y, 0.f, 1.f));
-}
-
-#endif
 
 MATH_END_NAMESPACE

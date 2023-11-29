@@ -230,10 +230,6 @@ public:
 #endif
 
 	static LineSegment FromString(const char *str, const char **outEndStr = 0);
-
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-	void ToLineList(VertexBuffer &vb) const;
-#endif
 };
 
 struct LineSegment_storage

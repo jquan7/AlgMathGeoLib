@@ -26,10 +26,7 @@
 #undef assert
 #endif
 
-#ifdef FAIL_USING_EXCEPTIONS
-#include <stdexcept>
-#define RuntimeFailure(str) throw std::runtime_error(str)
-#elif defined(OPTIMIZED_RELEASE) || defined(NDEBUG)
+#if defined(OPTIMIZED_RELEASE) || defined(NDEBUG)
 #define RuntimeFailure(str) ((void)0)
 #define RUNTIME_FAILURE_DISABLED
 #else

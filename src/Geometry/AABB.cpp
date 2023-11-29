@@ -36,10 +36,6 @@
 
 #include "../Math/float4x4_neon.h"
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-#include "VertexBuffer.h"
-#endif
-
 MATH_BEGIN_NAMESPACE
 
 AABB::AABB(const vec &minPoint_, const vec &maxPoint_)
@@ -1046,40 +1042,6 @@ AABB AABB::Intersection(const AABB &aabb) const
 {
 	return AABB(Max(minPoint, aabb.minPoint), Min(maxPoint, aabb.maxPoint));
 }
-
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-void AABB::Triangulate(VertexBuffer &vb, int numFacesX, int numFacesY, int numFacesZ, bool ccwIsFrontFacing) const
-{
-	Array<vec> pos;
-	Array<vec> normal;
-	Array<float2> uv;
-	int numVertices = (numFacesX*numFacesY + numFacesY*numFacesZ + numFacesX*numFacesZ)*2*6;
-	pos.Resize_unspecified(numVertices);
-	normal.Resize_unspecified(numVertices);
-	uv.Resize_unspecified(numVertices);
-	Triangulate(numFacesX, numFacesY, numFacesZ, &pos[0], &normal[0], &uv[0], ccwIsFrontFacing);
-	int startIndex = vb.AppendVertices(numVertices);
-	for(int i = 0; i < (int)pos.size(); ++i)
-	{
-		vb.Set(startIndex+i, VDPosition, POINT_TO_FLOAT4(pos[i]));
-		if (vb.Declaration()->TypeOffset(VDNormal) >= 0)
-			vb.Set(startIndex+i, VDNormal, DIR_TO_FLOAT4(normal[i]));
-		if (vb.Declaration()->TypeOffset(VDUV) >= 0)
-			vb.SetFloat2(startIndex+i, VDUV, 0, uv[i]);
-	}
-}
-
-void AABB::ToLineList(VertexBuffer &vb) const
-{
-	Array<vec> pos;
-	pos.Resize_unspecified(NumVerticesInEdgeList());
-	ToEdgeList(&pos[0]);
-	int startIndex = vb.AppendVertices((int)pos.size());
-	for(int i = 0; i < (int)pos.size(); ++i)
-		vb.Set(startIndex+i, VDPosition, POINT_TO_FLOAT4(pos[i]));
-}
-
-#endif
 
 OBB operator *(const float3x3 &transform, const AABB &aabb)
 {

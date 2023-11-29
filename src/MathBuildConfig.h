@@ -29,13 +29,6 @@
 // This flag does not have any effect if MATH_ENABLE_NAMESPACE is not defined.
 #define MATH_AUTO_USE_NAMESPACE
 
-// Detect if we're building on Windows 8 and mark it in define WIN8 if so.
-#if defined(WINVER) && !defined(WIN8)
-#if WINVER >= 0x0602
-#define WIN8
-#endif
-#endif
-
 // If MATH_ASSERT_ON_ASSUME is defined, assume() resolves directly to assert().
 // When not defined, assume() prints out an error if the condition fails, but continues
 // execution.
@@ -50,25 +43,12 @@
 
 #endif
 
-// If FAIL_USING_EXCEPTIONS is defined, all mathassert(), assert() and assume() macros turn into
-// throwing std::runtime_error exceptions. This macro is used by default when running tests, to get
-// a runtime error report on which tests pass and which fail.
-#ifndef FAIL_USING_EXCEPTIONS
-// #define FAIL_USING_EXCEPTIONS
-#endif
-
 // If MATH_ENABLE_STL_SUPPORT is defined, MathGeoLib utilizes STL data structures. Otherwise,
 // features requiring STL are disabled (but the library can still be built).
 // Due to large increase in code size, when building for HTML5 platform, do not automatically
 // enable STL support
 #if !defined(MATH_ENABLE_STL_SUPPORT) && !defined(MATH_DISABLE_STL_SUPPORT)
 #define MATH_ENABLE_STL_SUPPORT
-#endif
-
-// If MATH_GRAPHICSENGINE_INTEROP is defined, MathGeoLib integrates with a certain
-// graphics engine. Do not enable, only for internal use.
-#ifndef MATH_GRAPHICSENGINE_INTEROP
-//#define MATH_GRAPHICSENGINE_INTEROP
 #endif
 
 // If MATH_COLMAJOR_MATRICES is defined, matrices use a column-major memory layout. If undefined, matrices

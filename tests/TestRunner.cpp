@@ -120,48 +120,12 @@ int RunTest(Test &t, int numTimesToRun, int numTrialsPerRun)
 		for(int k = 0; k < numTrialsPerRun; ++k)
 //			for(int k = 0; k < (t.isRandomized ? numTrials : 1); ++k)
 		{
-#ifdef FAIL_USING_EXCEPTIONS
-			try
+			t.function(t);
+			if (globalTestExpectedToFail)
 			{
-#endif
-				t.function(t);
-				if (globalTestExpectedToFail)
-				{
-					globalTestExpectedToFail = 0; // Signal that the following exception reports a failure of this test, and not an expected failure.
-					throw std::runtime_error(std::string("This test should have failed due to reason '") + globalTestFailureDescription + "', but it didn't fail!");
-				}
-#ifdef FAIL_USING_EXCEPTIONS
+				globalTestExpectedToFail = 0; // Signal that the following exception reports a failure of this test, and not an expected failure.
+				throw std::runtime_error(std::string("This test should have failed due to reason '") + globalTestFailureDescription + "', but it didn't fail!");
 			}
-			catch(const TestSkippedException &e)
-			{
-				if (failReason.empty())
-				{
-					failReason = std::string("SKIPPED: ") + e.what();
-					LOGW("%s", failReason.c_str());
-				}
-			}
-			catch(const std::exception &e)
-			{
-				if (globalTestExpectedToFail)
-				{
-					if (globalTestExpectedToFail == 2)
-						LOGE("This test failed as expected. Caught an exception '%s', failure is due to reason '%s'.", e.what(), globalTestFailureDescription.c_str());
-					else
-						LOGI("This test failed as expected. Caught an exception '%s', failure is due to reason '%s'.", e.what(), globalTestFailureDescription.c_str());
-				}
-				else
-				{
-					if (failReason.empty())
-						failReason = e.what();
-					++t.numFails;
-				}
-			}
-			catch(...)
-			{
-				++t.numFails;
-				LOGE("Error: Received an unknown exception type that is _not_ derived from std::exception! This should not happen!");
-			}
-#endif
 		}
 		tick_t end = Clock::Tick();
 		times.push_back(end - start);

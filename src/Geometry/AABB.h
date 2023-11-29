@@ -448,11 +448,6 @@ public:
 	bool IntersectLineAABB_SSE(const float4 &linePos, const float4 &lineDir, float tNear, float tFar) const;
 #endif
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-	void Triangulate(VertexBuffer &vb, int numFacesX, int numFacesY, int numFacesZ, bool ccwIsFrontFacing) const;
-	void ToLineList(VertexBuffer &vb) const;
-#endif
-
 	bool Equals(const AABB &rhs, float epsilon = 1e-3f) const { return minPoint.Equals(rhs.minPoint, epsilon) && maxPoint.Equals(rhs.maxPoint, epsilon); }
 
 	/// Compares whether this AABB and the given AABB are identical bit-by-bit in the underlying representation.

@@ -34,10 +34,6 @@
 #include <iostream>
 #endif
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-#include "VertexBuffer.h"
-#endif
-
 MATH_BEGIN_NAMESPACE
 
 LineSegment::LineSegment(const vec &a_, const vec &b_)
@@ -448,16 +444,5 @@ LineSegment LineSegment::FromString(const char *str, const char **outEndStr)
 		*outEndStr = str;
 	return l;
 }
-
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-
-void LineSegment::ToLineList(VertexBuffer &vb) const
-{
-	int startIndex = vb.AppendVertices(2);
-	vb.Set(startIndex, VDPosition, POINT_TO_FLOAT4(a));
-	vb.Set(startIndex+1, VDPosition, POINT_TO_FLOAT4(b));
-}
-
-#endif
 
 MATH_END_NAMESPACE

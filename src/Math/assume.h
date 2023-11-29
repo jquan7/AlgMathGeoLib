@@ -147,10 +147,7 @@ inline std::string ObjToString<u64>(const u64 &obj)
 
 MATH_END_NAMESPACE
 
-#ifdef FAIL_USING_EXCEPTIONS
-#include <stdexcept>
-#define assume_failed(message) throw std::runtime_error((message))
-#elif defined(MATH_ASSERT_ON_ASSUME)
+#ifdef MATH_ASSERT_ON_ASSUME
 #define assume(x) assert(x)
 #define assume_failed(message) do { \
 		LOGE("Assumption %s failed! in file %s, line %d!", message, __FILE__, __LINE__); \
