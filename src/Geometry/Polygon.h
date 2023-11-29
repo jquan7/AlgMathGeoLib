@@ -110,12 +110,12 @@ public:
 
 	/// Projects this Polygon onto the given 1D axis direction vector.
 	/** This function collapses this Polygon onto an 1D axis for the purposes of e.g. separate axis test computations.
-		The function returns a 1D range [outMin, outMax] denoting the interval of the projection.
+		The function returns a 1D range [outmin, outmax] denoting the interval of the projection.
 		@param direction The 1D axis to project to. This vector may be unnormalized, in which case the output
 			of this function gets scaled by the length of this vector.
-		@param outMin [out] Returns the minimum extent of this object along the projection axis.
-		@param outMax [out] Returns the maximum extent of this object along the projection axis. */
-	void ProjectToAxis(const vec &direction, float &outMin, float &outMax) const;
+		@param outmin [out] Returns the minimum extent of this object along the projection axis.
+		@param outmax [out] Returns the maximum extent of this object along the projection axis. */
+	void ProjectToAxis(const vec &direction, float &outmin, float &outmax) const;
 
 	/// Tests if the given diagonal exists.
 	/** This function tests whether the diagonal that joins the two given vertices lies inside this polygon and is not intersected

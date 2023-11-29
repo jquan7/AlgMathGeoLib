@@ -223,12 +223,12 @@ public:
 
 	/// Projects this OBB onto the given 1D axis direction vector.
 	/** This function collapses this OBB onto an 1D axis for the purposes of e.g. separate axis test computations.
-		The function returns a 1D range [outMin, outMax] denoting the interval of the projection.
+		The function returns a 1D range [outmin, outmax] denoting the interval of the projection.
 		@param direction The 1D axis to project to. This vector may be unnormalized, in which case the output
 			of this function gets scaled by the length of this vector.
-		@param outMin [out] Returns the minimum extent of this object along the projection axis.
-		@param outMax [out] Returns the maximum extent of this object along the projection axis. */
-	void ProjectToAxis(const vec &direction, float &outMin, float &outMax) const;
+		@param outmin [out] Returns the minimum extent of this object along the projection axis.
+		@param outmax [out] Returns the maximum extent of this object along the projection axis. */
+	void ProjectToAxis(const vec &direction, float &outmin, float &outmax) const;
 
 	int UniqueFaceNormals(vec *out) const;
 	int UniqueEdgeDirections(vec *out) const;
@@ -370,13 +370,13 @@ public:
 	bool Intersects(const OBB &obb, float epsilon = 1e-3f) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const Plane &plane) const;
-	/** @param dNear [out] If specified, receives the parametric distance along the line denoting where the
+	/** @param near [out] If specified, receives the parametric distance along the line denoting where the
 			line entered this OBB.
-		@param dFar [out] If specified, receives the parametric distance along the line denoting where the
+		@param far [out] If specified, receives the parametric distance along the line denoting where the
 			line exited this OBB. */
-	bool Intersects(const Line &line, float &dNear, float &dFar) const;
+	bool Intersects(const Line &line, float &near, float &far) const;
 	bool Intersects(const Line &line) const;
-	bool Intersects(const LineSegment &lineseg, float &dNear, float &dFar) const;
+	bool Intersects(const LineSegment &lineseg, float &near, float &far) const;
 	bool Intersects(const LineSegment &lineseg) const;
 	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;

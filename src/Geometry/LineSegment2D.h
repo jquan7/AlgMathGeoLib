@@ -191,21 +191,21 @@ public:
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (for example, if this line segment is contained inside a LineSegment)
 		@todo Output intersection point. */
-	/** @param intersectionPoint [out] If specified, receives the point of intersection. This pointer may be null. */
-	bool Intersects(const Triangle2D &triangle, float *d, vec2d *intersectionPoint) const;
+	/** @param intersect_pt [out] If specified, receives the point of intersection. This pointer may be null. */
+	bool Intersects(const Triangle2D &triangle, float *d, vec2d *intersect_pt) const;
 	/** @param intersectionNormal [out] If specified, receives the normal vector of the other object at the point of intersection.
 			This pointer may be null.
 			@param d [out] If specified, this parameter receives the normalized distance along
 			this line segment which specifies the closest point on this line segment to
 			the specified point. This pointer may be null. */
-	bool Intersects(const Sphere2D &s, vec2d *intersectionPoint = 0, vec2d *intersectionNormal = 0, float *d = 0) const;
-	/** @param dNear [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
+	bool Intersects(const Sphere2D &s, vec2d *intersect_pt = 0, vec2d *intersectionNormal = 0, float *d = 0) const;
+	/** @param near [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
 			bounding box object.
-		@param dFar [out] If specified, receives the parametric distance along this line segment denoting where the line exited the
+		@param far [out] If specified, receives the parametric distance along this line segment denoting where the line exited the
 			bounding box object. */
-	bool Intersects(const AABB2D &aabb, float &dNear, float &dFar) const;
+	bool Intersects(const AABB2D &aabb, float &near, float &far) const;
 	bool Intersects(const AABB2D &aabb) const;
-	bool Intersects(const OBB2D &obb, float &dNear, float &dFar) const;
+	bool Intersects(const OBB2D &obb, float &near, float &far) const;
 	bool Intersects(const OBB2D &obb) const;
 	bool Intersects(const Polygon2D &polygon) const;
 #endif
@@ -227,12 +227,12 @@ public:
 
 	/// Projects this LineSegment2D onto the given 1D axis direction vector.
 	/** This function collapses this LineSegment2D onto an 1D axis for the purposes of e.g. separate axis test computations.
-		The function returns a 1D range [outMin, outMax] denoting the interval of the projection.
+		The function returns a 1D range [outmin, outmax] denoting the interval of the projection.
 		@param direction The 1D axis to project to. This vector may be unnormalized, in which case the output
 			of this function gets scaled by the length of this vector.
-		@param outMin [out] Returns the minimum extent of this object along the projection axis.
-		@param outMax [out] Returns the maximum extent of this object along the projection axis. */
-	void ProjectToAxis(const vec2d &direction, float &outMin, float &outMax) const;
+		@param outmin [out] Returns the minimum extent of this object along the projection axis.
+		@param outmax [out] Returns the maximum extent of this object along the projection axis. */
+	void ProjectToAxis(const vec2d &direction, float &outmin, float &outmax) const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this LineSegment2D. Most useful for debugging purposes.

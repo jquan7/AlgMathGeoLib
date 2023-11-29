@@ -183,15 +183,15 @@ public:
 			this line segment which specifies the closest point on this line segment to
 			the specified point. This pointer may be null. */
 	bool Intersects(const Plane &plane, float *d) const;
-	/** @param intersectionPoint [out] If specified, receives the point of intersection. This pointer may be null. */
-	bool Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const;
-	/** @param dNear [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
+	/** @param intersect_pt [out] If specified, receives the point of intersection. This pointer may be null. */
+	bool Intersects(const Triangle &triangle, float *d, vec *intersect_pt) const;
+	/** @param near [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
 			bounding box object.
-		@param dFar [out] If specified, receives the parametric distance along this line segment denoting where the line exited the
+		@param far [out] If specified, receives the parametric distance along this line segment denoting where the line exited the
 			bounding box object. */
-	bool Intersects(const AABB &aabb, float &dNear, float &dFar) const;
+	bool Intersects(const AABB &aabb, float &near, float &far) const;
 	bool Intersects(const AABB &aabb) const;
-	bool Intersects(const OBB &obb, float &dNear, float &dFar) const;
+	bool Intersects(const OBB &obb, float &near, float &far) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
 	/** @param epsilon If testing intersection between two line segments, a distance threshold value is used to account
@@ -208,12 +208,12 @@ public:
 
 	/// Projects this LineSegment onto the given 1D axis direction vector.
 	/** This function collapses this LineSegment onto an 1D axis for the purposes of e.g. separate axis test computations.
-		The function returns a 1D range [outMin, outMax] denoting the interval of the projection.
+		The function returns a 1D range [outmin, outmax] denoting the interval of the projection.
 		@param direction The 1D axis to project to. This vector may be unnormalized, in which case the output
 			of this function gets scaled by the length of this vector.
-		@param outMin [out] Returns the minimum extent of this object along the projection axis.
-		@param outMax [out] Returns the maximum extent of this object along the projection axis. */
-	void ProjectToAxis(const vec &direction, float &outMin, float &outMax) const;
+		@param outmin [out] Returns the minimum extent of this object along the projection axis.
+		@param outmax [out] Returns the maximum extent of this object along the projection axis. */
+	void ProjectToAxis(const vec &direction, float &outmin, float &outmax) const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this LineSegment. Most useful for debugging purposes.

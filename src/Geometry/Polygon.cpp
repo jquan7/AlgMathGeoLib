@@ -756,13 +756,13 @@ vec Polygon::ExtremePoint(const vec &direction, float &projectionDistance) const
 	return mostExtreme;
 }
 
-void Polygon::ProjectToAxis(const vec &direction, float &outMin, float &outMax) const
+void Polygon::ProjectToAxis(const vec &direction, float &outmin, float &outmax) const
 {
 	///TODO: Optimize!
 	vec minPt = ExtremePoint(-direction);
 	vec maxPt = ExtremePoint(direction);
-	outMin = Dot(minPt, direction);
-	outMax = Dot(maxPt, direction);
+	outmin = Dot(minPt, direction);
+	outmax = Dot(maxPt, direction);
 }
 
 /*

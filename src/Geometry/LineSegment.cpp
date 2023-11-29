@@ -317,9 +317,9 @@ bool LineSegment::Intersects(const Plane &plane, float *d) const
 	return plane.Intersects(*this, d);
 }
 
-bool LineSegment::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const
+bool LineSegment::Intersects(const Triangle &triangle, float *d, vec *intersect_pt) const
 {
-	return triangle.Intersects(*this, d, intersectionPoint);
+	return triangle.Intersects(*this, d, intersect_pt);
 }
 
 bool LineSegment::Intersects(const AABB &aabb) const
@@ -327,9 +327,9 @@ bool LineSegment::Intersects(const AABB &aabb) const
 	return aabb.Intersects(*this);
 }
 
-bool LineSegment::Intersects(const AABB &aabb, float &dNear, float &dFar) const
+bool LineSegment::Intersects(const AABB &aabb, float &near, float &far) const
 {
-	return aabb.Intersects(*this, dNear, dFar);
+	return aabb.Intersects(*this, near, far);
 }
 
 bool LineSegment::Intersects(const OBB &obb) const
@@ -337,9 +337,9 @@ bool LineSegment::Intersects(const OBB &obb) const
 	return obb.Intersects(*this);
 }
 
-bool LineSegment::Intersects(const OBB &obb, float &dNear, float &dFar) const
+bool LineSegment::Intersects(const OBB &obb, float &near, float &far) const
 {
-	return obb.Intersects(*this, dNear, dFar);
+	return obb.Intersects(*this, near, far);
 }
 
 bool LineSegment::Intersects(const LineSegment &lineseg, float epsilon) const
@@ -362,12 +362,12 @@ Line LineSegment::ToLine() const
 	return Line(a, Dir());
 }
 
-void LineSegment::ProjectToAxis(const vec &direction, float &outMin, float &outMax) const
+void LineSegment::ProjectToAxis(const vec &direction, float &outmin, float &outmax) const
 {
-	outMin = Dot(direction, a);
-	outMax = Dot(direction, b);
-	if (outMax < outMin)
-		std::swap(outMin, outMax);
+	outmin = Dot(direction, a);
+	outmax = Dot(direction, b);
+	if (outmax < outmin)
+		std::swap(outmin, outmax);
 }
 
 LineSegment operator *(const float3x3 &transform, const LineSegment &l)

@@ -423,7 +423,7 @@ float Triangle::IntersectLineTri(const vec &linePos, const vec &lineDir,
 }
 
 /// [groupSyntax]
-bool Triangle::Intersects(const LineSegment &l, float *d, vec *intersectionPoint) const
+bool Triangle::Intersects(const LineSegment &l, float *d, vec *intersect_pt) const
 {
 	/** The Triangle-Line/LineSegment/Ray intersection tests are based on M&ouml;ller-Trumbore method:
 		"T. M&ouml;ller, B. Trumbore. Fast, Minimum Storage Ray/Triangle Intersection. 2005."
@@ -435,12 +435,12 @@ bool Triangle::Intersects(const LineSegment &l, float *d, vec *intersectionPoint
 		return false;
 	if (d)
 		*d = t;
-	if (intersectionPoint)
-		*intersectionPoint = l.GetPoint(t);
+	if (intersect_pt)
+		*intersect_pt = l.GetPoint(t);
 	return true;
 }
 
-bool Triangle::Intersects(const Line &l, float *d, vec *intersectionPoint) const
+bool Triangle::Intersects(const Line &l, float *d, vec *intersect_pt) const
 {
 	float u, v;
 	float t = IntersectLineTri(l.pos, l.dir, a, b, c, u, v);
@@ -449,8 +449,8 @@ bool Triangle::Intersects(const Line &l, float *d, vec *intersectionPoint) const
 		return false;
 	if (d)
 		*d = t;
-	if (intersectionPoint)
-		*intersectionPoint = l.GetPoint(t);
+	if (intersect_pt)
+		*intersect_pt = l.GetPoint(t);
 	return success;
 }
 
@@ -1397,12 +1397,12 @@ vec Triangle::ClosestPointToTriangleEdge(const LineSegment &lineseg, float *outU
 vec Triangle::ClosestPoint(const Line &line, vec *otherPt) const
 {
 	///TODO: Optimize this function.
-	vec intersectionPoint;
-	if (Intersects(line, 0, &intersectionPoint))
+	vec intersect_pt;
+	if (Intersects(line, 0, &intersect_pt))
 	{
 		if (otherPt)
-			*otherPt = intersectionPoint;
-		return intersectionPoint;
+			*otherPt = intersect_pt;
+		return intersect_pt;
 	}
 
 	float u1,v1,d1;

@@ -110,12 +110,12 @@ public:
     vec ClosestPoint(const LineSegment &other) const { float d, d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const LineSegment &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const LineSegment &other, float &d, float &d2) const;
-    /** @param outBarycentricUV [out] If specified, receives the barycentric UV coordinates (in two-coordinate barycentric UV convention)
+    /** @param barycentric_coord_UV [out] If specified, receives the barycentric UV coordinates (in two-coordinate barycentric UV convention)
             representing the closest point on the triangle to this line.
         @see Contains(), Distance(), Intersects(), GetPoint(), Triangle::Point(float u, float v). */
     vec ClosestPoint(const Triangle &triangle) const { float d; return ClosestPoint(triangle, d); }
     vec ClosestPoint(const Triangle &triangle, float &d) const;
-    vec ClosestPoint(const Triangle &triangle, float &d, float2 &outBarycentricUV) const;
+    vec ClosestPoint(const Triangle &triangle, float &d, float2 &barycentric_coord_UV) const;
 
     /// Tests whether this line and the given object intersect.
     /** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
@@ -123,19 +123,19 @@ public:
         @param d [out] If specified, this parameter will receive the parametric distance of
             the intersection point along this object. Use the GetPoint(d) function
             to get the actual point of intersection. This pointer may be null.
-        @param intersectionPoint [out] If specified, receives the actual point of intersection. This pointer
+        @param intersect_pt [out] If specified, receives the actual point of intersection. This pointer
             may be null.
         @return True if an intersection occurs or one of the objects is contained inside the other, false otherwise.
         @see Contains(), Distance(), ClosestPoint(), GetPoint(). */
-    bool Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const;
+    bool Intersects(const Triangle &triangle, float *d, vec *intersect_pt) const;
     bool Intersects(const Plane &plane, float *d) const;
-    /** @param dNear [out] If specified, receives the distance along this line to where the line enters
+    /** @param near [out] If specified, receives the distance along this line to where the line enters
         the bounding box.
-        @param dFar [out] If specified, receives the distance along this line to where the line exits
+        @param far [out] If specified, receives the distance along this line to where the line exits
         the bounding box. */
-    bool Intersects(const AABB &aabb, float &dNear, float &dFar) const;
+    bool Intersects(const AABB &aabb, float &near, float &far) const;
     bool Intersects(const AABB &aabb) const;
-    bool Intersects(const OBB &obb, float &dNear, float &dFar) const;
+    bool Intersects(const OBB &obb, float &near, float &far) const;
     bool Intersects(const OBB &obb) const;
     bool Intersects(const Polygon &polygon) const;
     /// Tests if this LINE intersects the given disc.
@@ -148,21 +148,21 @@ public:
     LineSegment ToLineSegment(float d) const;
 
     /// Converts this Line to a LineSegment.
-    /** @param dStart Specifies the position of the first endpoint along this Line. This parameter may be negative,
+    /** @param start Specifies the position of the first endpoint along this Line. This parameter may be negative,
         in which case the starting point lies to the opposite direction of the Line.
-        @param dEnd Specifies the position of the second endpoint along this Line. This parameter may also be negative.
-        @return A LineSegment with point a at pos + dStart * dir, and point b at pos + dEnd * dir.
+        @param end Specifies the position of the second endpoint along this Line. This parameter may also be negative.
+        @return A LineSegment with point a at pos + start * dir, and point b at pos + end * dir.
         @see pos, dir, Line::Line, class LineSegment, ToLine(). */
-    LineSegment ToLineSegment(float dStart, float dEnd) const;
+    LineSegment ToLineSegment(float start, float end) const;
 
     /// Projects this Line onto the given 1D axis direction vector.
     /** This function collapses this Line onto an 1D axis for the purposes of e.g. separate axis test computations.
-        The function returns a 1D range [outMin, outMax] denoting the interval of the projection.
+        The function returns a 1D range [outmin, outmax] denoting the interval of the projection.
         @param direction The 1D axis to project to. This vector may be unnormalized, in which case the output
             of this function gets scaled by the length of this vector.
-        @param outMin [out] Returns the minimum extent of this object along the projection axis.
-        @param outMax [out] Returns the maximum extent of this object along the projection axis. */
-    void ProjectToAxis(const vec &direction, float &outMin, float &outMax) const;
+        @param outmin [out] Returns the minimum extent of this object along the projection axis.
+        @param outmax [out] Returns the maximum extent of this object along the projection axis. */
+    void ProjectToAxis(const vec &direction, float &outmin, float &outmax) const;
 
     /// Tests if the given three points are collinear.
     /** This function tests whether the given three functions all lie on the same line.

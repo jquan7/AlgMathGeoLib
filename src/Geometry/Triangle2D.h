@@ -242,12 +242,12 @@ public:
 		@param d [out] If specified, this parameter will receive the parametric distance of
 			the intersection point along the line object. Use the GetPoint(d) function of the line class
 			to get the actual point of intersection. This pointer may be null.
-		@param intersectionPoint [out] If specified, receives the actual point of intersection. This pointer
+		@param intersect_pt [out] If specified, receives the actual point of intersection. This pointer
 			may be null.
 		@return True if an intersection occurs or one of the objects is contained inside the other, false otherwise.
 		@see Contains(), Distance(), ClosestPoint(), LineSegment2D::GetPoint(). */
-	bool Intersects(const LineSegment2D &lineseg, float *d = 0, vec2d *intersectionPoint = 0) const;
-	bool Intersects(const Line2D &line, float *d = 0, vec2d *intersectionPoint = 0) const;
+	bool Intersects(const LineSegment2D &lineseg, float *d = 0, vec2d *intersect_pt = 0) const;
+	bool Intersects(const Line2D &line, float *d = 0, vec2d *intersect_pt = 0) const;
 	/** @param closestPointOnTriangle [out] If specified, receives the point of intersection between the Sphere2D
 			and this Triangle2D. Even if no intersection occurred, this parameter will receive the closest point on
 			the Triangle2D to the Sphere2D. This pointer may be null. */

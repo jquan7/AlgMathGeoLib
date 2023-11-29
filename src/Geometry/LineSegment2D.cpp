@@ -405,14 +405,14 @@ float LineSegment2D::Distance(const Sphere2D &other) const
 	return Max(0.f, Distance(other.pos) - other.r);
 }
 
-bool LineSegment2D::Intersects(const Triangle2D &triangle, float *d, vec2d *intersectionPoint) const
+bool LineSegment2D::Intersects(const Triangle2D &triangle, float *d, vec2d *intersect_pt) const
 {
-	return triangle.Intersects(*this, d, intersectionPoint);
+	return triangle.Intersects(*this, d, intersect_pt);
 }
 
-bool LineSegment2D::Intersects(const Sphere2D &s, vec2d *intersectionPoint, vec2d *intersectionNormal, float *d) const
+bool LineSegment2D::Intersects(const Sphere2D &s, vec2d *intersect_pt, vec2d *intersectionNormal, float *d) const
 {
-	return s.Intersects(*this, intersectionPoint, intersectionNormal, d) > 0;
+	return s.Intersects(*this, intersect_pt, intersectionNormal, d) > 0;
 }
 
 bool LineSegment2D::Intersects(const AABB2D &aabb) const
@@ -420,9 +420,9 @@ bool LineSegment2D::Intersects(const AABB2D &aabb) const
 	return aabb.Intersects(*this);
 }
 
-bool LineSegment2D::Intersects(const AABB2D &aabb, float &dNear, float &dFar) const
+bool LineSegment2D::Intersects(const AABB2D &aabb, float &near, float &far) const
 {
-	return aabb.Intersects(*this, dNear, dFar);
+	return aabb.Intersects(*this, near, far);
 }
 
 bool LineSegment2D::Intersects(const OBB2D &obb) const
@@ -430,9 +430,9 @@ bool LineSegment2D::Intersects(const OBB2D &obb) const
 	return obb.Intersects(*this);
 }
 
-bool LineSegment2D::Intersects(const OBB2D &obb, float &dNear, float &dFar) const
+bool LineSegment2D::Intersects(const OBB2D &obb, float &near, float &far) const
 {
-	return obb.Intersects(*this, dNear, dFar);
+	return obb.Intersects(*this, near, far);
 }
 #endif
 bool LineSegment2D::Intersects(const LineSegment2D &lineseg, float epsilon) const
@@ -455,12 +455,12 @@ Line2D LineSegment2D::ToLine() const
 	return Line2D(a, Dir());
 }
 #endif
-void LineSegment2D::ProjectToAxis(const vec2d &direction, float &outMin, float &outMax) const
+void LineSegment2D::ProjectToAxis(const vec2d &direction, float &outmin, float &outmax) const
 {
-	outMin = Dot(direction, a);
-	outMax = Dot(direction, b);
-	if (outMax < outMin)
-		std::swap(outMin, outMax);
+	outmin = Dot(direction, a);
+	outmax = Dot(direction, b);
+	if (outmax < outmin)
+		std::swap(outmin, outmax);
 }
 #if 0
 LineSegment2D operator *(const float3x3 &transform, const LineSegment2D &l)

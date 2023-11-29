@@ -227,14 +227,14 @@ vec OBB::ExtremePoint(const vec &direction, float &projectionDistance) const
 	return extremePoint;
 }
 
-void OBB::ProjectToAxis(const vec &direction, float &outMin, float &outMax) const
+void OBB::ProjectToAxis(const vec &direction, float &outmin, float &outmax) const
 {
 	float x = Abs(Dot(direction, axis[0]) * r.x);
 	float y = Abs(Dot(direction, axis[1]) * r.y);
 	float z = Abs(Dot(direction, axis[2]) * r.z);
 	float pt = Dot(direction, pos);
-	outMin = pt - x - y - z;
-	outMax = pt + x + y + z;
+	outmin = pt - x - y - z;
+	outmax = pt + x + y + z;
 }
 
 int OBB::UniqueFaceNormals(vec *out) const
@@ -1065,11 +1065,11 @@ bool OBB::Intersects(const Line &line) const
 	return aabb.Intersects(l);
 }
 
-bool OBB::Intersects(const Line &line, float &dNear, float &dFar) const
+bool OBB::Intersects(const Line &line, float &near, float &far) const
 {
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
 	Line l = WorldToLocal() * line;
-	return aabb.Intersects(l, dNear, dFar);
+	return aabb.Intersects(l, near, far);
 }
 
 bool OBB::Intersects(const LineSegment &lineseg) const
@@ -1079,11 +1079,11 @@ bool OBB::Intersects(const LineSegment &lineseg) const
 	return aabb.Intersects(l);
 }
 
-bool OBB::Intersects(const LineSegment &lineseg, float &dNear, float &dFar) const
+bool OBB::Intersects(const LineSegment &lineseg, float &near, float &far) const
 {
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
 	LineSegment l = WorldToLocal() * lineseg;
-	return aabb.Intersects(l, dNear, dFar);
+	return aabb.Intersects(l, near, far);
 }
 
 bool OBB::Intersects(const Triangle &triangle) const

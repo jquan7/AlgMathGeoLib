@@ -351,7 +351,7 @@ float Triangle2D::IntersectLineTri(const vec2d &linePos, const vec2d &lineDir,
 }
 
 /// [groupSyntax]
-bool Triangle2D::Intersects(const LineSegment2D &l, float *d, vec2d *intersectionPoint) const
+bool Triangle2D::Intersects(const LineSegment2D &l, float *d, vec2d *intersect_pt) const
 {
 	/** The Triangle2D-Line2D/LineSegment2D/Ray2D intersection tests are based on M&ouml;ller-Trumbore method:
 		"T. M&ouml;ller, B. Trumbore. Fast, Minimum Storage Ray2D/Triangle2D Intersection. 2005."
@@ -363,12 +363,12 @@ bool Triangle2D::Intersects(const LineSegment2D &l, float *d, vec2d *intersectio
 		return false;
 	if (d)
 		*d = t;
-	if (intersectionPoint)
-		*intersectionPoint = l.GetPoint(t);
+	if (intersect_pt)
+		*intersect_pt = l.GetPoint(t);
 	return true;
 }
 
-bool Triangle2D::Intersects(const Line2D &l, float *d, vec2d *intersectionPoint) const
+bool Triangle2D::Intersects(const Line2D &l, float *d, vec2d *intersect_pt) const
 {
 	float u, v;
 	float t = IntersectLineTri(l.pos, l.dir, a, b, c, u, v);
@@ -377,12 +377,12 @@ bool Triangle2D::Intersects(const Line2D &l, float *d, vec2d *intersectionPoint)
 		return false;
 	if (d)
 		*d = t;
-	if (intersectionPoint)
-		*intersectionPoint = l.GetPoint(t);
+	if (intersect_pt)
+		*intersect_pt = l.GetPoint(t);
 	return success;
 }
 
-bool Triangle2D::Intersects(const Ray2D &r, float *d, vec2d *intersectionPoint) const
+bool Triangle2D::Intersects(const Ray2D &r, float *d, vec2d *intersect_pt) const
 {
 	float u, v;
 	float t = IntersectLineTri(r.pos, r.dir, a, b, c, u, v);
@@ -391,8 +391,8 @@ bool Triangle2D::Intersects(const Ray2D &r, float *d, vec2d *intersectionPoint) 
 		return false;
 	if (d)
 		*d = t;
-	if (intersectionPoint)
-		*intersectionPoint = r.GetPoint(t);
+	if (intersect_pt)
+		*intersect_pt = r.GetPoint(t);
 	return success;
 }
 
@@ -1202,12 +1202,12 @@ vec2d Triangle2D::ClosestPointToTriangleEdge(const LineSegment2D &lineseg, float
 vec2d Triangle2D::ClosestPoint(const Line2D &line, vec2d *otherPt) const
 {
 	///TODO: Optimize this function.
-	vec2d intersectionPoint;
-	if (Intersects(line, 0, &intersectionPoint))
+	vec2d intersect_pt;
+	if (Intersects(line, 0, &intersect_pt))
 	{
 		if (otherPt)
-			*otherPt = intersectionPoint;
-		return intersectionPoint;
+			*otherPt = intersect_pt;
+		return intersect_pt;
 	}
 
 	float u1,v1,d1;

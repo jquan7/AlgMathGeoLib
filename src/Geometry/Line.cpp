@@ -156,9 +156,9 @@ float Line::Distance(const LineSegment &other, float &d, float &d2) const
 	return c.Distance(other.GetPoint(d2));
 }
 
-bool Line::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const
+bool Line::Intersects(const Triangle &triangle, float *d, vec *intersect_pt) const
 {
-	return triangle.Intersects(*this, d, intersectionPoint);
+	return triangle.Intersects(*this, d, intersect_pt);
 }
 
 bool Line::Intersects(const Plane &plane, float *d) const
@@ -171,9 +171,9 @@ bool Line::Intersects(const AABB &aabb) const
 	return aabb.Intersects(*this);
 }
 
-bool Line::Intersects(const AABB &aabb, float &dNear, float &dFar) const
+bool Line::Intersects(const AABB &aabb, float &near, float &far) const
 {
-	return aabb.Intersects(*this, dNear, dFar);
+	return aabb.Intersects(*this, near, far);
 }
 
 bool Line::Intersects(const OBB &obb) const
@@ -181,9 +181,9 @@ bool Line::Intersects(const OBB &obb) const
 	return obb.Intersects(*this);
 }
 
-bool Line::Intersects(const OBB &obb, float &dNear, float &dFar) const
+bool Line::Intersects(const OBB &obb, float &near, float &far) const
 {
-	return obb.Intersects(*this, dNear, dFar);
+	return obb.Intersects(*this, near, far);
 }
 
 bool Line::Intersects(const Polygon &polygon) const
@@ -231,10 +231,10 @@ vec Line::ClosestPoint(const Triangle &triangle, float &d) const
 	return ClosestPoint(closestPointTriangle, d);
 }
 
-vec Line::ClosestPoint(const Triangle &triangle, float &d, float2 &outBarycentricUV) const
+vec Line::ClosestPoint(const Triangle &triangle, float &d, float2 &barycentric_coord_UV) const
 {
 	vec closestPointTriangle = triangle.ClosestPoint(*this);
-	outBarycentricUV = triangle.BarycentricUV(closestPointTriangle);
+	barycentric_coord_UV = triangle.BarycentricUV(closestPointTriangle);
 	return ClosestPoint(closestPointTriangle, d);
 }
 
@@ -248,23 +248,23 @@ LineSegment Line::ToLineSegment(float d) const
 	return LineSegment(pos, GetPoint(d));
 }
 
-void Line::ProjectToAxis(const vec &direction, float &outMin, float &outMax) const
+void Line::ProjectToAxis(const vec &direction, float &outmin, float &outmax) const
 {
 	// Most of the time, the projection of a line spans the whole 1D axis.
 	// As a special case, if the line is perpendicular to the direction vector in question,
 	// then the projection interval of this line is a single point.
 	if (dir.IsPerpendicular(direction))
-		outMin = outMax = Dot(direction, pos);
+		outmin = outmax = Dot(direction, pos);
 	else
 	{
-		outMin = -FLOAT_INF;
-		outMax = FLOAT_INF;
+		outmin = -FLOAT_INF;
+		outmax = FLOAT_INF;
 	}
 }
 
-LineSegment Line::ToLineSegment(float dStart, float dEnd) const
+LineSegment Line::ToLineSegment(float start, float end) const
 {
-	return LineSegment(GetPoint(dStart), GetPoint(dEnd));
+	return LineSegment(GetPoint(start), GetPoint(end));
 }
 
 Line operator *(const float3x3 &transform, const Line &l)

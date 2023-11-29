@@ -268,12 +268,12 @@ public:
 		@param d [out] If specified, this parameter will receive the parametric distance of
 			the intersection point along the line object. Use the GetPoint(d) function of the line class
 			to get the actual point of intersection. This pointer may be null.
-		@param intersectionPoint [out] If specified, receives the actual point of intersection. This pointer
+		@param intersect_pt [out] If specified, receives the actual point of intersection. This pointer
 			may be null.
 		@return True if an intersection occurs or one of the objects is contained inside the other, false otherwise.
 		@see Contains(), Distance(), ClosestPoint(), LineSegment::GetPoint(). */
-	bool Intersects(const LineSegment &lineseg, float *d = 0, vec *intersectionPoint = 0) const;
-	bool Intersects(const Line &line, float *d = 0, vec *intersectionPoint = 0) const;
+	bool Intersects(const LineSegment &lineseg, float *d = 0, vec *intersect_pt = 0) const;
+	bool Intersects(const Line &line, float *d = 0, vec *intersect_pt = 0) const;
 	bool Intersects(const Plane &plane) const;
 	/** @param outLine [out] If specified, receives the line segment of the common points shared by the two
 			intersecting triangles. If the two triangles do not intersect, this pointer is not written to.

@@ -328,16 +328,16 @@ public:
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this AABB,
 		or this AABB is contained inside a OBB, etc.)
-		@param dNear [out] If specified, receives the parametric distance along the line denoting where the
+		@param near [out] If specified, receives the parametric distance along the line denoting where the
 			line entered this AABB.
-		@param dFar [out] If specified, receives the parametric distance along the line denoting where the
+		@param far [out] If specified, receives the parametric distance along the line denoting where the
 			line exited this AABB.
 		@see Contains(), Distance(), ClosestPoint().
 		@note If you do not need the intersection intervals, you should call the functions without these
 			parameters in the function signature for optimal performance. */
-	bool Intersects(const Line &line, float &dNear, float &dFar) const;
+	bool Intersects(const Line &line, float &near, float &far) const;
 	bool Intersects(const Line &line) const;
-	bool Intersects(const LineSegment &lineseg, float &dNear, float &dFar) const;
+	bool Intersects(const LineSegment &lineseg, float &near, float &far) const;
 	bool Intersects(const LineSegment &lineseg) const;
 	bool Intersects(const Plane &plane) const;
 	bool Intersects(const AABB &aabb) const;

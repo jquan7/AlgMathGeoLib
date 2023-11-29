@@ -739,30 +739,30 @@ bool AABB::IntersectLineAABB_SSE(const float4 &rayPos, const float4 &rayDir, flo
 }
 #endif
 
-bool AABB::Intersects(const Line &line, float &dNear, float &dFar) const
+bool AABB::Intersects(const Line &line, float &near, float &far) const
 {
-	dNear = -FLOAT_INF;
-	dFar = FLOAT_INF;
-	return IntersectLineAABB(line.pos, line.dir, dNear, dFar);
+	near = -FLOAT_INF;
+	far = FLOAT_INF;
+	return IntersectLineAABB(line.pos, line.dir, near, far);
 }
 
-bool AABB::Intersects(const LineSegment &lineseg, float &dNear, float &dFar) const
+bool AABB::Intersects(const LineSegment &lineseg, float &near, float &far) const
 {
 	vec dir = lineseg.b - lineseg.a;
 	float len = dir.Length();
 	if (len <= 1e-4f) // Degenerate line segment? Fall back to point-in-AABB test.
 	{
-		dNear = 0.f;
-		dFar = 1.f;
+		near = 0.f;
+		far = 1.f;
 		return Contains(lineseg.a);
 	}
 	float invLen = 1.f / len;
 	dir *= invLen;
-	dNear = 0.f;
-	dFar = len;
-	bool hit = IntersectLineAABB(lineseg.a, dir, dNear, dFar);
-	dNear *= invLen;
-	dFar *= invLen;
+	near = 0.f;
+	far = len;
+	bool hit = IntersectLineAABB(lineseg.a, dir, near, far);
+	near *= invLen;
+	far *= invLen;
 	return hit;
 }
 
