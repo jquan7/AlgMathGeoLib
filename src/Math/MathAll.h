@@ -21,7 +21,6 @@
 #include "../MathBuildConfig.h"
 #include "MathNamespace.h"
 
-#include "BitOps.h"
 #include "float2.h"
 #include "float3.h"
 #include "float3x3.h"
