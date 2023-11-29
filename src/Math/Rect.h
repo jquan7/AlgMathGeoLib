@@ -17,6 +17,8 @@
 	@brief 2D integral axis-aligned rectangle, equivalent to RECT in Windows API. */
 #pragma once
 
+#include "MathNamespace.h"
+
 MATH_BEGIN_NAMESPACE
 
 /// A 2D integral (x,y),(w,h) -rectangle.
