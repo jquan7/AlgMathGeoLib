@@ -22,7 +22,6 @@
 #include "../Math/float4x4.h"
 #include "OBB.h"
 #include "../Math/Quat.h"
-#include "Triangle.h"
 #include "Plane.h"
 #include "Polygon.h"
 #include "AABB.h"
@@ -156,11 +155,6 @@ float Line::Distance(const LineSegment &other, float &d, float &d2) const
 	return c.Distance(other.GetPoint(d2));
 }
 
-bool Line::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const
-{
-	return triangle.Intersects(*this, d, intersectionPoint);
-}
-
 bool Line::Intersects(const Plane &plane, float *d) const
 {
 	return plane.Intersects(*this, d);
@@ -223,19 +217,6 @@ vec Line::ClosestPoint(const LineSegment &other, float &d, float &d2) const
 	}
 	else
 		return GetPoint(d);
-}
-
-vec Line::ClosestPoint(const Triangle &triangle, float &d) const
-{
-	vec closestPointTriangle = triangle.ClosestPoint(*this);
-	return ClosestPoint(closestPointTriangle, d);
-}
-
-vec Line::ClosestPoint(const Triangle &triangle, float &d, float2 &outBarycentricUV) const
-{
-	vec closestPointTriangle = triangle.ClosestPoint(*this);
-	outBarycentricUV = triangle.BarycentricUV(closestPointTriangle);
-	return ClosestPoint(closestPointTriangle, d);
 }
 
 bool Line::AreCollinear(const vec &p1, const vec &p2, const vec &p3, float epsilon)

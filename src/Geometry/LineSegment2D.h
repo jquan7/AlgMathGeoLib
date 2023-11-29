@@ -192,7 +192,6 @@ public:
 		another, this function still returns true. (for example, if this line segment is contained inside a LineSegment)
 		@todo Output intersection point. */
 	/** @param intersectionPoint [out] If specified, receives the point of intersection. This pointer may be null. */
-	bool Intersects(const Triangle2D &triangle, float *d, vec2d *intersectionPoint) const;
 	/** @param intersectionNormal [out] If specified, receives the normal vector of the other object at the point of intersection.
 			This pointer may be null.
 			@param d [out] If specified, this parameter receives the normalized distance along

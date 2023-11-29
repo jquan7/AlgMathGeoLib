@@ -29,7 +29,6 @@
 #include "Line.h"
 #include "LineSegment.h"
 #include "AABB.h"
-#include "OBB.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>
@@ -775,11 +774,6 @@ bool Triangle::Intersects(const AABB &aabb) const
 	// No separating axis exists, the AABB and triangle intersect.
 	return true;
 #endif
-}
-
-bool Triangle::Intersects(const OBB &obb) const
-{
-	return obb.Intersects(*this);
 }
 
 bool Triangle::Intersects(const Polygon &polygon) const

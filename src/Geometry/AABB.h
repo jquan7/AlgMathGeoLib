@@ -321,7 +321,6 @@ public:
 	bool Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const;
 	bool Contains(const AABB &aabb) const { return Contains(aabb.minPoint, aabb.maxPoint); }
 	bool Contains(const OBB &obb) const;
-	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
 
 	/// Tests whether this AABB and the given object intersect.
@@ -342,7 +341,6 @@ public:
 	bool Intersects(const Plane &plane) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
-	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
 
 	/// Projects this AABB onto the given axis.
@@ -363,40 +361,12 @@ public:
 	void Enclose(const LineSegment &lineSegment);
 	void Enclose(const AABB &aabb) { Enclose(aabb.minPoint, aabb.maxPoint); }
 	void Enclose(const OBB &obb);
-	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
 	void Enclose(const vec *pointArray, int numPoints);
 
-	/// Generates an unindexed triangle mesh representation of this AABB.
-	/** @param numFacesX The number of faces to generate along the X axis. This value must be >= 1.
-		@param numFacesY The number of faces to generate along the Y axis. This value must be >= 1.
-		@param numFacesZ The number of faces to generate along the Z axis. This value must be >= 1.
-		@param outPos [out] An array of size numVertices which will receive a triangle list
-			of vertex positions. Cannot be null.
-		@param outNormal [out] An array of size numVertices which will receive vertex normals.
-			If this parameter is null, vertex normals are not returned.
-		@param outUV [out] An array of size numVertices which will receive vertex UV coordinates.
-			If this parameter is null, a UV mapping is not generated.
-		@param ccwIsFrontFacing If true, then the front-facing direction of the faces will be the sides
-			with counterclockwise winding order. Otherwise, the faces are generated in clockwise winding order.
-		The number of vertices that outPos, outNormal and outUV must be able to contain is
-		(x*y + x*z + y*z)*2*6. If x==y==z==1, then a total of 36 vertices are required. Call
-		NumVerticesInTriangulation to obtain this value.
-		@see ToEdgeList(), NumVerticesInTriangulation(). */
-	void Triangulate(int numFacesX, int numFacesY, int numFacesZ,
-	                 vec *outPos, vec *outNormal, float2 *outUV,
-	                 bool ccwIsFrontFacing) const;
-
-	/// Returns the number of vertices that the Triangulate() function will output with the given subdivision parameters.
-	/** @see Triangulate(). */
-	static int NumVerticesInTriangulation(int numFacesX, int numFacesY, int numFacesZ)
-	{
-		return (numFacesX*numFacesY + numFacesX*numFacesZ + numFacesY*numFacesZ)*2*6;
-	}
-
 	/// Generates an edge list representation of the edges of this AABB.
 	/** @param outPos [out] An array that contains space for at least 24 vertices (NumVerticesInEdgeList()).
-		@see Triangulate(), Edge(), NumVerticesInEdgeList(). */
+		@see Edge(), NumVerticesInEdgeList(). */
 	void ToEdgeList(vec *outPos) const;
 
 	/// Returns the number of vertices that the ToEdgeList() function will output.

@@ -126,7 +126,7 @@ public:
 		@param maxDistance The epsilon threshold to test the distance against. This effectively turns the circle into a torus
 			for this test.
 		@see DistanceToEdge(), DistanceToDisc(), ClosestPointToEdge(), ClosestPointToDisc().
-		@todo Implement DiscContains(float3/LineSegment/Triangle). */
+		@todo Implement DiscContains(float3/LineSegment). */
 	bool EdgeContains(const vec &point, float maxDistance = 1e-6f) const;
 
 	// Returns true if the given point lies inside this filled circle.

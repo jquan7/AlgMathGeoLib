@@ -27,7 +27,6 @@
 #include "../Math/float4d.h"
 #include "OBB.h"
 #include "../Math/Quat.h"
-#include "Triangle.h"
 #include "Circle.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
@@ -315,11 +314,6 @@ bool LineSegment::Intersects(const Plane &plane) const
 bool LineSegment::Intersects(const Plane &plane, float *d) const
 {
 	return plane.Intersects(*this, d);
-}
-
-bool LineSegment::Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const
-{
-	return triangle.Intersects(*this, d, intersectionPoint);
 }
 
 bool LineSegment::Intersects(const AABB &aabb) const
