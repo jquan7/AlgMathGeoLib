@@ -746,7 +746,7 @@ vec2d Triangle2D::ClosestPoint(const vec2d &p) const
 #if 0
 vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt) const
 {
-	///\todo Optimize.
+	///TODO: Optimize.
 	float u, v;
 	float t = IntersectLineTri(lineSegment.a, lineSegment.b - lineSegment.a, a, b, c, u, v);
 	bool intersects = (t >= 0.0f && t <= 1.0f);
@@ -789,7 +789,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 }
 #endif
 #if 0
-///\todo Enable this codepath. This if rom Geometric Tools for Computer Graphics,
+///TODO: Enable this codepath. This if rom Geometric Tools for Computer Graphics,
 /// but the algorithm in the book is broken and does not take into account the
 /// direction of the gradient to determine the proper region of intersection.
 /// Instead using a slower code path above.
@@ -1201,7 +1201,7 @@ vec2d Triangle2D::ClosestPointToTriangleEdge(const LineSegment2D &lineSegment, f
 
 vec2d Triangle2D::ClosestPoint(const Line2D &line, vec2d *otherPt) const
 {
-	///\todo Optimize this function.
+	///TODO: Optimize this function.
 	vec2d intersectionPoint;
 	if (Intersects(line, 0, &intersectionPoint))
 	{
@@ -1218,7 +1218,7 @@ vec2d Triangle2D::ClosestPoint(const Line2D &line, vec2d *otherPt) const
 }
 #endif
 #if 0
-///\todo Enable this codepath. This if rom Geometric Tools for Computer Graphics,
+///TODO: Enable this codepath. This if rom Geometric Tools for Computer Graphics,
 /// but the algorithm in the book is broken and does not take into account the
 /// direction of the gradient to determine the proper region of intersection.
 /// Instead using a slower code path above.

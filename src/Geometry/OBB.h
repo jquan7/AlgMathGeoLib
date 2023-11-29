@@ -430,11 +430,6 @@ public:
 
 	static OBB FromString(const char *str, const char **outEndStr = 0);
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-	void Triangulate(VertexBuffer &vb, int numFacesX, int numFacesY, int numFacesZ, bool ccwIsFrontFacing) const;
-	void ToLineList(VertexBuffer &vb) const;
-#endif
-
 	bool Equals(const OBB &rhs, float epsilon = 1e-3f) const { return pos.Equals(rhs.pos, epsilon) && r.Equals(rhs.r, epsilon) && axis[0].Equals(rhs.axis[0], epsilon) && axis[1].Equals(rhs.axis[1], epsilon) && axis[2].Equals(rhs.axis[2], epsilon); }
 
 	/// Compares whether this OBB and the given OBB  are identical bit-by-bit in the underlying representation.

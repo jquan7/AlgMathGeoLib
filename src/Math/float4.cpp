@@ -150,7 +150,7 @@ float4 float4::Swizzled(int i, int j, int k, int l) const
 {
 #if defined(MATH_AVX) && defined MATH_AUTOMATIC_SSE
 	return vec4_permute(v, i, j, k, l);
-	///\todo How to perform an efficient swizzle if AVX is not available?
+	///TODO: How to perform an efficient swizzle if AVX is not available?
 	///      We need a dynamic runtime shuffle operation, so _mm_shuffle_ps
 	///      cannot be used.
 #else
@@ -224,14 +224,14 @@ float4 float4::wwww() const
 #ifdef MATH_SIMD
 
 /// The returned vector contains the squared length of the float3 part in the lowest channel of the vector.
-///\todo Delete this function.
+///TODO: Delete this function.
 simd4f float4::LengthSq3_SSE() const
 {
 	return dot3_ps3(v, v);
 }
 
 /// The returned vector contains the length of the float3 part in each channel of the vector.
-///\todo Delete this function.
+///TODO: Delete this function.
 simd4f float4::Length3_SSE() const
 {
 	return sqrt_ps(dot3_ps(v, v));
@@ -442,8 +442,8 @@ void float4::Scale3(float scalar)
 
 float float4::ScaleToLength3(float newLength)
 {
-	///\todo Add SSE-enabled version.
-	///\todo Add ClampToLength3.
+	///TODO: Add SSE-enabled version.
+	///TODO: Add ClampToLength3.
 	float length = LengthSq3();
 	if (length < 1e-6f)
 		return 0.f;
@@ -645,7 +645,7 @@ float4 float4::Neg4() const
 
 float4 float4::Recip3() const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	return float4(1.f/x, 1.f/y, 1.f/z, w);
 }
 

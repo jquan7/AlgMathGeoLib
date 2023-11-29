@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float4x4_sse.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief SSE code for float4x4-related computations. */
 #pragma once
 
@@ -398,7 +398,7 @@ FORCE_INLINE float mat4x4_inverse(const simd4f *mat, simd4f *out)
 	               _mm_shuffle_ps(mat[2], mat[1], _MM_SHUFFLE(i,i,i,i))))
 FORCE_INLINE float mat3x4_inverse(const simd4f *mat, simd4f *out)
 {
-	///\todo There might be a way to exploit here that the last row is a [0,0,0,1], and avoid some computations.
+	///TODO: There might be a way to exploit here that the last row is a [0,0,0,1], and avoid some computations.
 	simd4f mat_3 = set_ps(1.f, 0.f, 0.f, 0.f);
 	simd4f f1 = MAT3x4_COFACTOR(mat, 3, 2);
 	simd4f f2 = MAT3x4_COFACTOR(mat, 3, 1);

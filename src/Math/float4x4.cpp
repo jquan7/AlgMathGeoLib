@@ -1340,10 +1340,10 @@ float4x4 float4x4::Inverted() const
 
 bool float4x4::InverseColOrthogonal()
 {
-	///\todo SSE
+	///TODO: SSE
 	assume(!ContainsProjection());
 #ifdef MATH_COLMAJOR_MATRICES
-	///\todo Optimize away redundant copies
+	///TODO: Optimize away redundant copies
 	float3x4 mat3x4 = Float3x4Part();
 	bool ret = mat3x4.InverseColOrthogonal();
 	SetFloat3x4Part(mat3x4);
@@ -1355,7 +1355,7 @@ bool float4x4::InverseColOrthogonal()
 
 bool float4x4::InverseOrthogonalUniformScale()
 {
-	///\todo SSE
+	///TODO: SSE
 	assume(!ContainsProjection());
 	assume(IsColOrthogonal3(1e-3f));
 	assume(HasUniformScale());
@@ -1445,7 +1445,7 @@ float float4x4::Trace() const
 
 void float4x4::Orthogonalize3(int c0, int c1, int c2)
 {
-	///\todo SSE
+	///TODO: SSE
 	assume(c0 != c1 && c0 != c2 && c1 != c2);
 	assume(c0 >= 0 && c1 >= 0 && c2 >= 0 && c0 < Cols && c1 < Cols && c2 < Cols);
 	///@todo Optimize away copies.
@@ -1460,7 +1460,7 @@ void float4x4::Orthogonalize3(int c0, int c1, int c2)
 
 void float4x4::Orthonormalize3(int c0, int c1, int c2)
 {
-	///\todo SSE
+	///TODO: SSE
 	assume(c0 != c1 && c0 != c2 && c1 != c2);
 	assume(c0 >= 0 && c1 >= 0 && c2 >= 0 && c0 < Cols && c1 < Cols && c2 < Cols);
 	///@todo Optimize away copies.
@@ -1475,7 +1475,7 @@ void float4x4::Orthonormalize3(int c0, int c1, int c2)
 
 void float4x4::RemoveScale()
 {
-	///\todo SSE
+	///TODO: SSE
 #ifdef MATH_COLMAJOR_MATRICES
 	float3 row0 = Row3(0);
 	float3 row1 = Row3(1);
@@ -1582,7 +1582,7 @@ float4 float4x4::Transform(const float4 &vector) const
 
 void float4x4::TransformPos(float3 *pointArray, int numPoints) const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	assume(pointArray);
 	for(int i = 0; i < numPoints; ++i)
 		pointArray[i] = this->TransformPos(pointArray[i]);
@@ -1590,7 +1590,7 @@ void float4x4::TransformPos(float3 *pointArray, int numPoints) const
 
 void float4x4::TransformPos(float3 *pointArray, int numPoints, int strideBytes) const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	assume(pointArray);
 	u8 *data = reinterpret_cast<u8*>(pointArray);
 	for(int i = 0; i < numPoints; ++i)
@@ -1603,7 +1603,7 @@ void float4x4::TransformPos(float3 *pointArray, int numPoints, int strideBytes) 
 
 void float4x4::TransformDir(float3 *dirArray, int numVectors) const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	assume(dirArray);
 	for(int i = 0; i < numVectors; ++i)
 		dirArray[i] = this->TransformDir(dirArray[i]);
@@ -1611,7 +1611,7 @@ void float4x4::TransformDir(float3 *dirArray, int numVectors) const
 
 void float4x4::TransformDir(float3 *dirArray, int numVectors, int strideBytes) const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	assume(dirArray);
 	u8 *data = reinterpret_cast<u8*>(dirArray);
 	for(int i = 0; i < numVectors; ++i)
@@ -1624,7 +1624,7 @@ void float4x4::TransformDir(float3 *dirArray, int numVectors, int strideBytes) c
 
 void float4x4::Transform(float4 *vectorArray, int numVectors) const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	assume(vectorArray);
 	for(int i = 0; i < numVectors; ++i)
 		vectorArray[i] = *this * vectorArray[i];
@@ -1632,7 +1632,7 @@ void float4x4::Transform(float4 *vectorArray, int numVectors) const
 
 void float4x4::Transform(float4 *vectorArray, int numVectors, int strideBytes) const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	assume(vectorArray);
 	u8 *data = reinterpret_cast<u8*>(vectorArray);
 	for(int i = 0; i < numVectors; ++i)

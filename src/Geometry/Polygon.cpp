@@ -350,7 +350,7 @@ bool Polygon::Contains(const vec &worldSpacePoint, float polygonThicknessSq) con
 	assert3(basisV.IsPerpendicular(PlaneCCW().normal), basisV, PlaneCCW().normal, basisV.Dot(PlaneCCW().normal));
 
 	vec normal = basisU.Cross(basisV);
-//	float lenSq = normal.LengthSq(); ///\todo Could we treat basisU and basisV unnormalized here?
+//	float lenSq = normal.LengthSq(); ///TODO: Could we treat basisU and basisV unnormalized here?
 	float dot = normal.Dot(vec(p[0]) - worldSpacePoint);
 	if (dot*dot > polygonThicknessSq)
 		return false; // The point is not even within the plane of the polygon - can't be contained.
@@ -758,7 +758,7 @@ vec Polygon::ExtremePoint(const vec &direction, float &projectionDistance) const
 
 void Polygon::ProjectToAxis(const vec &direction, float &outMin, float &outMax) const
 {
-	///\todo Optimize!
+	///TODO: Optimize!
 	vec minPt = ExtremePoint(-direction);
 	vec maxPt = ExtremePoint(direction);
 	outMin = Dot(minPt, direction);

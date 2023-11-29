@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file SSEMath.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief SIMD-enabled math helper utilities. */
 #pragma once
 
@@ -32,11 +32,11 @@ MATH_BEGIN_NAMESPACE
 /// Allocates the given amount of memory at the given alignment.
 void *AlignedMalloc(size_t size, size_t alignment);
 
-/// \todo This is not really placement-new.
+/// TODO: This is not really placement-new.
 template<typename T>
 inline T *AlignedNew(size_t numElements, size_t alignment) { return reinterpret_cast<T*>(AlignedMalloc(numElements*sizeof(T), alignment)); }
 
-/// \todo This is not really placement-new.
+/// TODO: This is not really placement-new.
 template<typename T>
 inline T *AlignedNew(size_t numElements) { return AlignedNew<T>(numElements, 16); }
 

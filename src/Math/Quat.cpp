@@ -255,7 +255,7 @@ float3 MUST_USE_RESULT Quat::Transform(const float3 &vec) const
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SIMD)
 	return float4(quat_transform_vec4(q, load_vec3(vec.ptr(), 0.f))).xyz();
 #else
-	///\todo Optimize/benchmark the scalar path not to generate a matrix!
+	///TODO: Optimize/benchmark the scalar path not to generate a matrix!
 	float3x3 mat = this->ToFloat3x3();
 	return mat * vec;
 #endif
@@ -379,7 +379,7 @@ float3 MUST_USE_RESULT Quat::SlerpVector(const float3 &from, const float3 &to, f
 		return from;
 	if (t >= 1.f)
 		return to;
-	///\todo The following chain can be greatly optimized.
+	///TODO: The following chain can be greatly optimized.
 	Quat q = Quat::RotateFromTo(from, to);
 	q = Slerp(Quat::identity, q, t);
 	return q.Transform(from);

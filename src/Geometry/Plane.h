@@ -361,11 +361,6 @@ public:
 #endif
 
 	static Plane FromString(const char *str, const char **outEndStr = 0);
-
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-	void Triangulate(VertexBuffer &vb, float uWidth, float vHeight, const vec &centerPoint, int numFacesU, int numFacesV, bool ccwIsFrontFacing) const;
-	void ToLineList(VertexBuffer &vb, float uWidth, float vHeight, const vec &centerPoint, int numLinesU, int numLinesV) const;
-#endif
 };
 
 struct Plane_storage

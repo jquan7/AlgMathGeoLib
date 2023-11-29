@@ -37,10 +37,6 @@
 
 #include <set>
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-#include "VertexBuffer.h"
-#endif
-
 #if defined(MATH_SIMD) && defined(MATH_AUTOMATIC_SSE)
 #include "../Math/float4_neon.h"
 #include "../Math/float4_sse.h"
@@ -820,7 +816,7 @@ float3x4 OBB::LocalToWorld() const
 	assume2(axis[0].IsNormalized(), axis[0], axis[0].LengthSq());
 	assume2(axis[1].IsNormalized(), axis[1], axis[1].LengthSq());
 	assume2(axis[2].IsNormalized(), axis[2], axis[2].LengthSq());
-	float3x4 m; ///\todo sse-matrix
+	float3x4 m; ///TODO: sse-matrix
 	m.SetCol(0, axis[0].ptr());
 	m.SetCol(1, axis[1].ptr());
 	m.SetCol(2, axis[2].ptr());
@@ -1013,12 +1009,12 @@ void OBB::Enclose(const vec &point)
 		if (distanceFromOBB > 0.f)
 		{
 			r[i] += distanceFromOBB * 0.5f;
-			if (dist > 0.f) ///\todo Optimize out this comparison!
+			if (dist > 0.f) ///TODO: Optimize out this comparison!
 				pos += axis[i] * distanceFromOBB * 0.5f;
 			else
 				pos -= axis[i] * distanceFromOBB * 0.5f;
 
-			p = point-pos; ///\todo Can we omit this? (redundant since axis[i] are orthonormal?)
+			p = point-pos; ///TODO: Can we omit this? (redundant since axis[i] are orthonormal?)
 
 			mathassert(EqualAbs(Abs(p.Dot(axis[i])), r[i], 1e-1f));
 		}
@@ -1343,75 +1339,6 @@ OBB OBB::FromString(const char *str, const char **outEndStr)
 		*outEndStr = str;
 	return o;
 }
-
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-void OBB::Triangulate(VertexBuffer &vb, int x, int y, int z, bool ccwIsFrontFacing) const
-{
-	Array<vec> position;
-	Array<vec> normal;
-	Array<float2> uv;
-	int numVertices = (x*y+y*z+x*z)*2*6;
-	position.Resize_unspecified(numVertices);
-	normal.Resize_unspecified(numVertices);
-	uv.Resize_unspecified(numVertices);
-	Triangulate(x,y,z, &position[0], &normal[0], &uv[0], ccwIsFrontFacing);
-	int startIndex = vb.AppendVertices(numVertices);
-	for(int i = 0; i < (int)position.size(); ++i)
-	{
-		vb.Set(startIndex+i, VDPosition, POINT_TO_FLOAT4(position[i]));
-		if (vb.Declaration()->TypeOffset(VDNormal) >= 0)
-			vb.Set(startIndex+i, VDNormal, DIR_TO_FLOAT4(normal[i]));
-		if (vb.Declaration()->TypeOffset(VDUV) >= 0)
-			vb.SetFloat2(startIndex+i, VDUV, 0, uv[i]);
-	}
-}
-
-void OBB::ToLineList(VertexBuffer &vb) const
-{
-	if (vb.Declaration()->HasType(VDNormal))
-	{
-		// FacePlane() returns plane normals in order -x, +x, -y, +y, -z, +z
-		// Cornerpoint() returns points in order
-		// 0: ---, 1: --+, 2: -+-, 3: -++, 4: +--, 5: +-+, 6: ++-, 7: +++. (corresponding the XYZ axis directions).
-
-		// Vertices corresponding to these six faces:
-		int verts[6][4] =
-		{
-			{ 0, 1, 3, 2 }, // -x
-			{ 7, 6, 4, 5 }, // +x
-			{ 0, 1, 5, 4 }, // -y
-			{ 7, 6, 2, 3 }, // +y
-			{ 0, 2, 6, 4 }, // -z
-			{ 7, 5, 1, 3 }  // +z
-		};
-		int si = vb.AppendVertices(2*4*6);
-		for(int face = 0; face < 6; ++face)
-		{
-			float4 faceNormal = DIR_TO_FLOAT4(FacePlane(face).normal);
-			int v0 = verts[face][3];
-			for(int v1i = 0; v1i < 4; ++v1i)
-			{
-				int v1 = verts[face][v1i];
-				vb.Set(si, VDPosition, POINT_TO_FLOAT4(CornerPoint(v0)));
-				vb.Set(si++, VDNormal, faceNormal);
-				vb.Set(si, VDPosition, POINT_TO_FLOAT4(CornerPoint(v1)));
-				vb.Set(si++, VDNormal, faceNormal);
-				v0 = v1;
-			}
-		}
-	}
-	else
-	{
-		Array<vec> position;
-		position.Resize_unspecified(NumVerticesInEdgeList());
-		ToEdgeList(&position[0]);
-		int startIndex = vb.AppendVertices((int)position.size());
-		for(int i = 0; i < (int)position.size(); ++i)
-			vb.Set(startIndex+i, VDPosition, POINT_TO_FLOAT4(position[i]));
-	}
-}
-
-#endif
 
 OBB operator *(const float3x3 &transform, const OBB &obb)
 {

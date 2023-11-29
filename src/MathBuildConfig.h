@@ -76,7 +76,7 @@
 //#define MATH_SSE2
 //#define MATH_SSE // SSE1.
 
-///\todo Enable NEON only on ARMv7, not older.
+///TODO: Enable NEON only on ARMv7, not older.
 //#define MATH_NEON
 #ifdef MATH_NEON
 #include <arm_neon.h>

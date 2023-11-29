@@ -77,7 +77,7 @@ void Set3x3PartRotateZ(Matrix &m, float angle)
 template<typename Matrix>
 void Set3x3PartRotateEulerXYZ(Matrix &m, float x, float y, float z)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx, sx, cy, sy, cz, sz;
 	SinCos(x, sx, cx);
 	SinCos(y, sy, cy);
@@ -128,7 +128,7 @@ void ExtractEulerXYZ(Matrix &m, float &x, float &y, float &z)
 template<typename Matrix>
 void Set3x3PartRotateEulerXZY(Matrix &m, float &x, float &z, float &y)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx, sx, cy, sy, cz, sz;
 	SinCos(x, sx, cx);
 	SinCos(y, sy, cy);
@@ -179,7 +179,7 @@ void ExtractEulerXZY(Matrix &m, float &x, float &z, float &y)
 template<typename Matrix>
 void Set3x3PartRotateEulerYXZ(Matrix &m, float &y, float &x, float &z)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx, sx, cy, sy, cz, sz;
 	SinCos(x, sx, cx);
 	SinCos(y, sy, cy);
@@ -230,7 +230,7 @@ void ExtractEulerYXZ(Matrix &m, float &y, float &x, float &z)
 template<typename Matrix>
 void Set3x3PartRotateEulerYZX(Matrix &m, float &y, float &z, float &x)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx, sx, cy, sy, cz, sz;
 	SinCos(x, sx, cx);
 	SinCos(y, sy, cy);
@@ -281,7 +281,7 @@ void ExtractEulerYZX(Matrix &m, float &y, float &z, float &x)
 template<typename Matrix>
 void Set3x3PartRotateEulerZXY(Matrix &m, float &z, float &x, float &y)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx, sx, cy, sy, cz, sz;
 	SinCos(x, sx, cx);
 	SinCos(y, sy, cy);
@@ -332,7 +332,7 @@ void ExtractEulerZXY(const Matrix &m, float &z, float &x, float &y)
 template<typename Matrix>
 void Set3x3PartRotateEulerZYX(Matrix &m, float &z, float &y, float &x)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx, sx, cy, sy, cz, sz;
 	SinCos(x, sx, cx);
 	SinCos(y, sy, cy);
@@ -383,7 +383,7 @@ void ExtractEulerZYX(Matrix &m, float &z, float &y, float &x)
 template<typename Matrix>
 void Set3x3PartRotateEulerXYX(Matrix &m, float &x2, float &y, float &x1)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx2, sx2, cy, sy, cx1, sx1;
 	SinCos(x2, sx2, cx2);
 	SinCos(y, sy, cy);
@@ -434,7 +434,7 @@ void ExtractEulerXYX(Matrix &m, float &x2, float &y, float &x1)
 template<typename Matrix>
 void Set3x3PartRotateEulerXZX(Matrix &m, float &x2, float &z, float &x1)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cx2, sx2, cz, sz, cx1, sx1;
 	SinCos(x2, sx2, cx2);
 	SinCos(z, sz, cz);
@@ -485,7 +485,7 @@ void ExtractEulerXZX(Matrix &m, float &x2, float &z, float &x1)
 template<typename Matrix>
 void Set3x3PartRotateEulerYXY(Matrix &m, float &y2, float &x, float &y1)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cy2, sy2, cx, sx, cy1, sy1;
 	SinCos(y2, sy2, cy2);
 	SinCos(x, sx, cx);
@@ -536,7 +536,7 @@ void ExtractEulerYXY(Matrix &m, float &y2, float &x, float &y1)
 template<typename Matrix>
 void Set3x3PartRotateEulerYZY(Matrix &m, float &y2, float &z, float &y1)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cy2, sy2, cz, sz, cy1, sy1;
 	SinCos(y2, sy2, cy2);
 	SinCos(z, sz, cz);
@@ -587,7 +587,7 @@ void ExtractEulerYZY(Matrix &m, float &y2, float &z, float &y1)
 template<typename Matrix>
 void Set3x3PartRotateEulerZXZ(Matrix &m, float &z2, float &x, float &z1)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cz2, sz2, cx, sx, cz1, sz1;
 	SinCos(z2, sz2, cz2);
 	SinCos(x, sx, cx);
@@ -638,7 +638,7 @@ void ExtractEulerZXZ(Matrix &m, float &z2, float &x, float &z1)
 template<typename Matrix>
 void Set3x3PartRotateEulerZYZ(Matrix &m, float &z2, float &y, float &z1)
 {
-	///\todo Vectorize to compute 4 sines+cosines at one time.
+	///TODO: Vectorize to compute 4 sines+cosines at one time.
 	float cz2, sz2, cy, sy, cz1, sz1;
 	SinCos(z2, sz2, cz2);
 	SinCos(y, sy, cy);

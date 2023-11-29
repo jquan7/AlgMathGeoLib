@@ -787,7 +787,7 @@ public:
 #ifdef MATH_SIMD
 	float4(simd4f vec):v(vec) {}
 
-	///\todo All the _SSE() functions will be deleted in favor of C SSE API.
+	///TODO: All the _SSE() functions will be deleted in favor of C SSE API.
 	simd4f Swizzled_SSE(int i, int j, int k, int l) const;
 	simd4f LengthSq3_SSE() const;
 	simd4f Length3_SSE() const;

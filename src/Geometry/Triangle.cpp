@@ -942,7 +942,7 @@ vec Triangle::ClosestPointD(const vec &p) const
 
 vec Triangle::ClosestPoint(const LineSegment &lineSegment, vec *otherPt) const
 {
-	///\todo Optimize.
+	///TODO: Optimize.
 	float u, v;
 	float t = IntersectLineTri(lineSegment.a, lineSegment.b - lineSegment.a, a, b, c, u, v);
 	bool intersects = (t >= 0.0f && t <= 1.0f);
@@ -985,7 +985,7 @@ vec Triangle::ClosestPoint(const LineSegment &lineSegment, vec *otherPt) const
 }
 
 #if 0
-///\todo Enable this codepath. This if rom Geometric Tools for Computer Graphics,
+///TODO: Enable this codepath. This if rom Geometric Tools for Computer Graphics,
 /// but the algorithm in the book is broken and does not take into account the
 /// direction of the gradient to determine the proper region of intersection.
 /// Instead using a slower code path above.
@@ -1396,7 +1396,7 @@ vec Triangle::ClosestPointToTriangleEdge(const LineSegment &lineSegment, float *
 
 vec Triangle::ClosestPoint(const Line &line, vec *otherPt) const
 {
-	///\todo Optimize this function.
+	///TODO: Optimize this function.
 	vec intersectionPoint;
 	if (Intersects(line, 0, &intersectionPoint))
 	{
@@ -1413,7 +1413,7 @@ vec Triangle::ClosestPoint(const Line &line, vec *otherPt) const
 }
 
 #if 0
-///\todo Enable this codepath. This if rom Geometric Tools for Computer Graphics,
+///TODO: Enable this codepath. This if rom Geometric Tools for Computer Graphics,
 /// but the algorithm in the book is broken and does not take into account the
 /// direction of the gradient to determine the proper region of intersection.
 /// Instead using a slower code path above.

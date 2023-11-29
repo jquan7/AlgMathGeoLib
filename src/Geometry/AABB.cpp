@@ -342,9 +342,9 @@ void AABB::Scale(const vec &centerPoint, float scaleFactor)
 
 void AABB::Scale(const vec &centerPoint, const vec &scaleFactor)
 {
-	float3x4 transform = float3x4::Scale(DIR_TO_FLOAT3(scaleFactor), POINT_TO_FLOAT3(centerPoint)); ///\todo mat
-	minPoint = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(minPoint))); ///\todo mat
-	maxPoint = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(maxPoint))); ///\todo mat
+	float3x4 transform = float3x4::Scale(DIR_TO_FLOAT3(scaleFactor), POINT_TO_FLOAT3(centerPoint)); ///TODO: mat
+	minPoint = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(minPoint))); ///TODO: mat
+	maxPoint = POINT_VEC(transform.MulPos(POINT_TO_FLOAT3(maxPoint))); ///TODO: mat
 }
 
 /// See Christer Ericson's Real-time Collision Detection, p. 87, or

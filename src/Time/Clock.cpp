@@ -55,37 +55,37 @@ void Clock::Sleep(int milliseconds)
 
 int Clock::Year()
 {
-	///\todo.
+	///TODO:.
 	return 0;
 }
 
 int Clock::Month()
 {
-	///\todo.
+	///TODO:.
 	return 0;
 }
 
 int Clock::Day()
 {
-	///\todo.
+	///TODO:.
 	return 0;
 }
 
 int Clock::Hour()
 {
-	///\todo.
+	///TODO:.
 	return 0;
 }
 
 int Clock::Min()
 {
-	///\todo.
+	///TODO:.
 	return 0;
 }
 
 int Clock::Sec()
 {
-	///\todo.
+	///TODO:.
 	return 0;
 }
 

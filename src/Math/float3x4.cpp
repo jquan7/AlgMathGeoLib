@@ -911,7 +911,7 @@ bool float3x4::InverseOrthogonalUniformScale()
 {
 #if defined(MATH_AUTOMATIC_SSE) && defined(MATH_SSE)
 	mat3x4_inverse_orthogonal_uniformscale(row, row);
-	return true; ///\todo The return value is difficult here with SSE, figure out how to treat that.
+	return true; ///TODO: The return value is difficult here with SSE, figure out how to treat that.
 #else
 	assume(IsColOrthogonal(1e-3f));
 	assume(HasUniformScale());
@@ -978,7 +978,7 @@ void float3x4::InverseOrthonormal()
 
 void float3x4::Transpose3()
 {
-	///\todo SSE.
+	///TODO: SSE.
 	std::swap(v[0][1], v[1][0]);
 	std::swap(v[0][2], v[2][0]);
 	std::swap(v[1][2], v[2][1]);
@@ -1020,7 +1020,7 @@ float float3x4::Trace() const
 
 void float3x4::Orthonormalize(int c0, int c1, int c2)
 {
-	///\todo SSE.
+	///TODO: SSE.
 	assume(c0 != c1 && c0 != c2 && c1 != c2);
 	assume(c0 >= 0 && c1 >= 0 && c2 >= 0 && c0 < Cols && c1 < Cols && c2 < Cols);
 
@@ -1036,7 +1036,7 @@ void float3x4::Orthonormalize(int c0, int c1, int c2)
 
 void float3x4::RemoveScale()
 {
-	///\todo SSE.
+	///TODO: SSE.
 #ifdef MATH_COLMAJOR_MATRICES
 	float3 row0 = Row3(0);
 	float3 row1 = Row3(1);
@@ -1212,7 +1212,7 @@ void float3x4::BatchTransform(float4 *vectorArray, int numVectors, int stride) c
 
 float3x4 float3x4::operator *(const float3x3 &rhs) const
 {
-	///\todo SSE.
+	///TODO: SSE.
 	float3x4 r;
 
 	r[0][0] = At(0, 0) * rhs.At(0, 0) + At(0, 1) * rhs.At(1, 0) + At(0, 2) * rhs.At(2, 0);
@@ -1677,13 +1677,13 @@ float3x4 operator *(const Quat &lhs, const float3x4 &rhs)
 
 float3x4 operator *(const float3x3 &lhs, const float3x4 &rhs)
 {
-	///\todo SSE.
+	///TODO: SSE.
 	return float3x4(lhs) * rhs;
 }
 
 float4 operator *(const float4 &lhs, const float3x4 &rhs)
 {
-	///\todo SSE.
+	///TODO: SSE.
 	return float4(lhs.x * rhs.At(0, 0) + lhs.y * rhs.At(1, 0) + lhs.z * rhs.At(2, 0),
 				  lhs.x * rhs.At(0, 1) + lhs.y * rhs.At(1, 1) + lhs.z * rhs.At(2, 1),
 				  lhs.x * rhs.At(0, 2) + lhs.y * rhs.At(1, 2) + lhs.z * rhs.At(2, 2),

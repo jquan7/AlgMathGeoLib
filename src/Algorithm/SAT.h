@@ -28,7 +28,7 @@ bool SATIntersect(const A &a, const B &b)
 {
 	vec normals[16];
 	int n = a.UniqueFaceNormals(normals);
-	assert(n <= 16); ///\todo Make this API safe.
+	assert(n <= 16); ///TODO: Make this API safe.
 	for(int i = 0; i < n; ++i)
 	{
 		float amin, amax, bmin, bmax;
@@ -38,7 +38,7 @@ bool SATIntersect(const A &a, const B &b)
 			return false;
 	}
 	n = b.UniqueFaceNormals(normals);
-	assert(n <= 16); ///\todo Make this API safe.
+	assert(n <= 16); ///TODO: Make this API safe.
 	for(int i = 0; i < n; ++i)
 	{
 		float amin, amax, bmin, bmax;

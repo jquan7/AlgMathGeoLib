@@ -35,10 +35,6 @@
 #include <iostream>
 #endif
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-#include "VertexBuffer.h"
-#endif
-
 MATH_BEGIN_NAMESPACE
 
 Plane::Plane(const vec &normal_, float d_)
@@ -566,7 +562,7 @@ bool Plane::Intersects(const AABB &aabb) const
 	float r = e[0]*Abs(normal[0]) + e[1]*Abs(normal[1]) + e[2]*Abs(normal[2]);
 	// Compute the distance of the box center from plane.
 //	float s = Dot(normal, c) - d;
-	float s = Dot(normal.xyz(), c.xyz()) - d; ///\todo Use the above form when Plane is SSE'ized.
+	float s = Dot(normal.xyz(), c.xyz()) - d; ///TODO: Use the above form when Plane is SSE'ized.
 	return Abs(s) <= r;
 }
 
@@ -810,80 +806,4 @@ std::ostream &operator <<(std::ostream &o, const Plane &plane)
 
 #endif
 
-#ifdef MATH_GRAPHICSENGINE_INTEROP
-void Plane::Triangulate(VertexBuffer &vb, float uWidth, float vHeight, const vec &centerPoint, int numFacesU, int numFacesV, bool ccwIsFrontFacing) const
-{
-	vec topLeft = Point(-uWidth*0.5f, -vHeight *0.5f, centerPoint);
-	vec uEdge = (Point(uWidth*0.5f, -vHeight *0.5f, centerPoint) - topLeft) / (float)numFacesU;
-	vec vEdge = (Point(-uWidth*0.5f, vHeight *0.5f, centerPoint) - topLeft) / (float)numFacesV;
-
-	int i = vb.AppendVertices(numFacesU * numFacesV * 6);
-	for(int y = 0; y < numFacesV; ++y)
-		for(int x = 0; x < numFacesU; ++x)
-		{
-			float4 tl = POINT_TO_FLOAT4(topLeft + uEdge * (float)x + vEdge * (float)y);
-			float4 tr = POINT_TO_FLOAT4(topLeft + uEdge * (float)(x+1) + vEdge * (float)y);
-			float4 bl = POINT_TO_FLOAT4(topLeft + uEdge * (float)x + vEdge * (float)(y+1));
-			float4 br = POINT_TO_FLOAT4(topLeft + uEdge * (float)(x+1) + vEdge * (float)(y+1));
-			int i0 = ccwIsFrontFacing ? i : i+5;
-			int i1 = ccwIsFrontFacing ? i+5 : i;
-			vb.Set(i0, VDPosition, tl);
-			vb.Set(i+1, VDPosition, tr);
-			vb.Set(i+2, VDPosition, bl);
-			vb.Set(i+3, VDPosition, bl);
-			vb.Set(i+4, VDPosition, tr);
-			vb.Set(i1, VDPosition, br);
-
-			if (vb.Declaration()->HasType(VDUV))
-			{
-				float4 uvTL((float)x/numFacesU, (float)y/numFacesV, 0.f, 1.f);
-				float4 uvTR((float)(x+1)/numFacesU, (float)y/numFacesV, 0.f, 1.f);
-				float4 uvBL((float)x/numFacesU, (float)(y+1)/numFacesV, 0.f, 1.f);
-				float4 uvBR((float)(x+1)/numFacesU, (float)(y+1)/numFacesV, 0.f, 1.f);
-
-				vb.Set(i0, VDUV, uvTL);
-				vb.Set(i+1, VDUV, uvTR);
-				vb.Set(i+2, VDUV, uvBL);
-				vb.Set(i+3, VDUV, uvBL);
-				vb.Set(i+4, VDUV, uvTR);
-				vb.Set(i1, VDUV, uvBR);
-			}
-
-			if (vb.Declaration()->HasType(VDNormal))
-			{
-				for(int k = 0; k < 6; ++k)
-					vb.Set(i+k, VDNormal, DIR_TO_FLOAT4(normal));
-			}
-
-			i += 6;
-		}
-}
-
-void Plane::ToLineList(VertexBuffer &vb, float uWidth, float vHeight, const vec &centerPoint, int numLinesU, int numLinesV) const
-{
-	vec topLeft = Point(-uWidth*0.5f, -vHeight *0.5f, centerPoint);
-	vec uEdge = (Point(uWidth*0.5f, -vHeight *0.5f, centerPoint) - topLeft) / (float)numLinesU;
-	vec vEdge = (Point(-uWidth*0.5f, vHeight *0.5f, centerPoint) - topLeft) / (float)numLinesV;
-
-	int i = vb.AppendVertices((numLinesU + numLinesV) * 2);
-	for(int y = 0; y < numLinesV; ++y)
-	{
-		float4 start = POINT_TO_FLOAT4(topLeft + vEdge * (float)y);
-		float4 end   = POINT_TO_FLOAT4(topLeft + uWidth * uEdge + vEdge * (float)y);
-		vb.Set(i, VDPosition, start);
-		vb.Set(i+1, VDPosition, end);
-		i += 2;
-	}
-
-	for(int x = 0; x < numLinesU; ++x)
-	{
-		float4 start = POINT_TO_FLOAT4(topLeft + uEdge * (float)x);
-		float4 end   = POINT_TO_FLOAT4(topLeft + vHeight * vEdge + uEdge * (float)x);
-		vb.Set(i, VDPosition, start);
-		vb.Set(i+1, VDPosition, end);
-		i += 2;
-	}
-}
-
-#endif
 MATH_END_NAMESPACE
