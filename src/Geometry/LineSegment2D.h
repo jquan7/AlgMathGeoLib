@@ -130,10 +130,6 @@ public:
 		@return True if a == rhs.a && b == rhs.b, or, a == rhs.b && b = rhs.a, within the given epsilon. */
 	bool Equals(const LineSegment2D &rhs, float distanceThreshold = 1e-3f) const;
 
-	/// Compares whether this LineSegment2D and the given LineSegment2D are identical bit-by-bit in the underlying representation.
-	/** @note Prefer using this over e.g. memcmp, since there can be SSE-related padding in the structures. */
-	bool BitEquals(const LineSegment2D &other) const { return a.BitEquals(other.a) && b.BitEquals(other.b); }
-
 	/// Tests if the given point or line segment is contained on this line segment.
 	bool Contains(const vec2d &point, float distanceThreshold = 1e-3f) const;
 	bool Contains(const LineSegment2D &lineSegment, float distanceThreshold = 1e-3f) const;

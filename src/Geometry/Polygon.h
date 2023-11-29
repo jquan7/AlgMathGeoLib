@@ -369,7 +369,6 @@ public:
 	static Polygon FromString(const char *str, const char **outEndStr = 0);
 
 	bool Equals(const Polygon &other) const;
-	bool BitEquals(const Polygon &other) const;
 };
 
 Polygon operator *(const float3x3 &transform, const Polygon &polygon);

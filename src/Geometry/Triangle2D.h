@@ -324,10 +324,6 @@ public:
 	static Triangle2D FromString(const char *str, const char **outEndStr = 0);
 
 	bool Equals(const Triangle2D &rhs, float epsilon = 1e-3f) const { return a.Equals(rhs.a, epsilon) && b.Equals(rhs.b, epsilon) && c.Equals(rhs.c, epsilon); }
-
-	/// Compares whether this Triangle2D and the given Triangle2D are identical bit-by-bit in the underlying representation.
-	/** @note Prefer using this over e.g. memcmp, since there can be SSE-related padding in the structures. */
-	bool BitEquals(const Triangle2D &other) const { return a.BitEquals(other.a) && b.BitEquals(other.b) && c.BitEquals(other.c); }
 };
 
 Triangle2D operator *(const float3x3 &transform, const Triangle2D &t);

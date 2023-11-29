@@ -92,29 +92,12 @@ public:
 	void SetFrom(const AABB &aabb, const float4x4 &transform);
 	void SetFrom(const AABB &aabb, const Quat &transform);
 
-#if 0
-	/// Sets this OBB to enclose the given point cloud.
-	/** This functions uses principal component analysis to generate an approximation of the smallest OBB that encloses the
-		given point set. The resulting OBB will always contain all the specified points, but might not be the optimally
-		smallest OBB in terms of volume.
-		@see SetFrom(), PCAEnclosingOBB(). */
-	void SetFromApproximate(const vec *pointArray, int numPoints);
-#endif
-
 	/// Returns the tightest AABB that contains this OBB.
 	/** This function computes the optimal minimum volume AABB that encloses this OBB.
 		@note Since an AABB cannot generally represent an OBB, this conversion is not exact, but the returned AABB
 			specifies a larger volume.
-		@see SetFrom(), MaximalContainedAABB(), MinimalEnclosingSphere(), MaximalContainedSphere(). */
+		@see SetFrom(). */
 	AABB MinimalEnclosingAABB() const;
-
-#if 0
-	/// Returns the largest AABB that can fit inside this OBB.
-	/** This function computes the largest AABB that can fit inside this OBB. This AABB is unique up to the center point of the
-		AABB. The returned AABB will be centered to the center point of this OBB.
-		@see MinimalEnclosingAABB(), MinimalEnclosingSphere(), MaximalContainedSphere(). */
-	AABB MaximalContainedAABB() const;
-#endif
 
 	/// Returns the side lengths of this OBB in its local x, y and z directions.
 	/** @return 2*r. */
@@ -279,16 +262,6 @@ public:
 		@param largestD [out] Receives the maximum projection distance along the given direction. */
 	static void ExtremePointsAlongDirection(const vec &dir, const vec *pointArray, int numPoints, int &idxSmallest, int &idxLargest, float &smallestD, float &largestD);
 
-#if 0
-	/// Generates an OBB that encloses the given point set.
-	/** This function uses principal component analysis as the heuristics to generate the OBB. The returned OBB
-		is not necessarily the optimal OBB that encloses the given point set.
-		@param pointArray [in] The list of points to enclose with an OBB.
-		@param numPoints The number of elements in the input array.
-		@see SetFromApproximate(). */
-	static OBB PCAEnclosingOBB(const vec *pointArray, int numPoints);
-#endif
-
 	/// Computes the smallest OBB by volume that encloses the given point set.
 	/** This function implements the algorithm from the paper
 		An Exact Algorithm for Finding Minimum Oriented Bounding Boxes, Jukka Jyl�nki, 2015. Available at http://clb.demon.fi/minobb/ */
@@ -430,11 +403,11 @@ public:
 
 	static OBB FromString(const char *str, const char **outEndStr = 0);
 
-	bool Equals(const OBB &rhs, float epsilon = 1e-3f) const { return pos.Equals(rhs.pos, epsilon) && r.Equals(rhs.r, epsilon) && axis[0].Equals(rhs.axis[0], epsilon) && axis[1].Equals(rhs.axis[1], epsilon) && axis[2].Equals(rhs.axis[2], epsilon); }
-
-	/// Compares whether this OBB and the given OBB  are identical bit-by-bit in the underlying representation.
-	/** @note Prefer using this over e.g. memcmp, since there can be SSE-related padding in the structures. */
-	bool BitEquals(const OBB &other) const { return pos.BitEquals(other.pos) && r.BitEquals(other.r) && axis[0].BitEquals(other.axis[0]) && axis[1].BitEquals(other.axis[1]) && axis[2].BitEquals(other.axis[2]); }
+	bool Equals(const OBB &rhs, float epsilon = 1e-3f) const {
+		return pos.Equals(rhs.pos, epsilon) && r.Equals(rhs.r, epsilon)
+			&& axis[0].Equals(rhs.axis[0], epsilon)
+			&& axis[1].Equals(rhs.axis[1], epsilon)
+			&& axis[2].Equals(rhs.axis[2], epsilon); }
 };
 
 OBB operator *(const float3x3 &transform, const OBB &obb);

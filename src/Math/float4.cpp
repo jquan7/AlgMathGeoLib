@@ -1228,14 +1228,6 @@ bool float4::Equals(float x_, float y_, float z_, float w_, float epsilon) const
 	       MATH_NS::Abs(w - w_) < epsilon;
 }
 
-bool float4::BitEquals(const float4 &other) const
-{
-	return ReinterpretAsU32(x) == ReinterpretAsU32(other.x) &&
-		ReinterpretAsU32(y) == ReinterpretAsU32(other.y) &&
-		ReinterpretAsU32(z) == ReinterpretAsU32(other.z) &&
-		ReinterpretAsU32(w) == ReinterpretAsU32(other.w);
-}
-
 float4 float4::operator +(const float4 &rhs) const
 {
 #ifdef MATH_AUTOMATIC_SSE

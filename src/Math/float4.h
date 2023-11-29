@@ -737,10 +737,6 @@ public:
 	bool Equals(const float4 &other, float epsilon = 1e-3f) const;
 	bool Equals(float x, float y, float z, float w, float epsilon = 1e-3f) const;
 
-	/// Compares whether this float4 and the given float4 are identical bit-by-bit in the underlying representation.
-	/** @note Prefer using this over e.g. memcmp, since there can be SSE-related padding in the structures. */
-	bool BitEquals(const float4 &other) const;
-
 	/// Specifies a compile-time constant float4 with value (0, 0, 0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */

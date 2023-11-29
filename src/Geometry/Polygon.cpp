@@ -1030,18 +1030,6 @@ bool Polygon::Equals(const Polygon &other) const
 	return true;
 }
 
-bool Polygon::BitEquals(const Polygon &other) const
-{
-	if (p.size() != other.p.size())
-		return false;
-
-	for(size_t i = 0; i < p.size(); ++i)
-		if (!Vertex((int)i).BitEquals(other.Vertex((int)i)))
-			return false;
-
-	return true;
-}
-
 /*
 /// Returns true if the given vertex is a concave vertex. Otherwise the vertex is a convex vertex.
 bool IsConcaveVertex(int i) const;
