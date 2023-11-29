@@ -71,10 +71,10 @@ struct GJKVec2DProxy
 	GJKVec2DProxy(const vec2d &v):v(v) {}
 	vec2d AnyPointFast() const { return v; }
 	vec2d ExtremePoint(const vec2d &) const { return v; }
-	vec2d ExtremePoint(const vec2d &direction, float &projectionDistance) const
+	vec2d ExtremePoint(const vec2d &direction, float &project_dist) const
 	{
 		vec2d extremePoint = ExtremePoint(direction);
-		projectionDistance = extremePoint.Dot(direction);
+		project_dist = extremePoint.Dot(direction);
 		return extremePoint;
 	}
 };
@@ -100,10 +100,10 @@ struct GJKOBB2DProxy
 		return pt;
 	}
 
-	vec2d ExtremePoint(const vec2d &direction, float &projectionDistance) const
+	vec2d ExtremePoint(const vec2d &direction, float &project_dist) const
 	{
 		vec2d extremePoint = ExtremePoint(direction);
-		projectionDistance = extremePoint.Dot(direction);
+		project_dist = extremePoint.Dot(direction);
 		return extremePoint;
 	}
 };

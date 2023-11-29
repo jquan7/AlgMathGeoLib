@@ -3,13 +3,18 @@ Copyright © Toramon Co., Ltd. 2017-2023. All Rights Reserved.
 File name    : Line.h
 Author       : qijianquan qijq@toramon.com
 Version      :
-Date         : 2023-11-27 15:15:15
+Date         : 2023-11-20 15:15:15
 LastEditors  :
 LastEditTime :
 Description  : Line in 3D space
 Others       :
 Log          :
 *******************************************************************************/
+#include "../Math/float3x3.h"
+#include "../Math/float3x4.h"
+#include "../Math/float4x4.h"
+#include "../Math/Quat.h"
+#include "../Math/MathFunc.h"
 #include "Line.h"
 #include "LineSegment.h"
 #include "OBB.h"
@@ -18,11 +23,6 @@ Log          :
 #include "Polygon.h"
 #include "AABB.h"
 #include "Circle.h"
-#include "../Math/float3x3.h"
-#include "../Math/float3x4.h"
-#include "../Math/float4x4.h"
-#include "../Math/Quat.h"
-#include "../Math/MathFunc.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>

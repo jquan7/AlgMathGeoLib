@@ -122,9 +122,6 @@ typedef float3 vec_storage;
 template<class T, size_t Alignment>
 struct AlignedAllocator;
 
-struct Triangle_storage;
-struct LineSegment_storage;
-
 typedef std::vector<Triangle> TriangleArray;
 typedef std::vector<LineSegment> LineSegmentArray;
 typedef std::vector<float4> Float4Array;

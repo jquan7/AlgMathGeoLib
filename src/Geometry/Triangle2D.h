@@ -163,7 +163,7 @@ public:
 			vertex of this Triangle2D.
 		@see Vertex(). */
 	vec2d ExtremePoint(const vec2d &direction) const;
-	vec2d ExtremePoint(const vec2d &direction, float &projectionDistance) const;
+	vec2d ExtremePoint(const vec2d &direction, float &project_dist) const;
 
 #if 0
 	/// Returns a Polygon2D representation of this Triangle2D.
@@ -330,15 +330,6 @@ Triangle2D operator *(const float3x3 &transform, const Triangle2D &t);
 Triangle2D operator *(const float3x4 &transform, const Triangle2D &t);
 Triangle2D operator *(const float4x4 &transform, const Triangle2D &t);
 
-struct Triangle2D_storage
-{
-	vec2d_storage v0, v1, v2;
-	Triangle2D_storage(const Triangle2D &rhs)
-	{
-		*reinterpret_cast<Triangle2D*>(this) = rhs;
-	}
-	operator Triangle2D() const { return *reinterpret_cast<const Triangle2D*>(this); }
-};
 #define TRIANGLE(x) (*(Triangle2D*)&x)
 
 #ifdef MATH_ENABLE_STL_SUPPORT

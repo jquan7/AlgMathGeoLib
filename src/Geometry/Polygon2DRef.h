@@ -23,16 +23,16 @@ public:
 		return points[0];
 	}
 
-	vec2d ExtremePoint(const vec2d &direction, float &projectionDistance) const
+	vec2d ExtremePoint(const vec2d &direction, float &project_dist) const
 	{
 		vec2d mostExtreme = vec2d::nan;
-		projectionDistance = -FLOAT_INF;
+		project_dist = -FLOAT_INF;
 		for(int i = 0; i < numPoints; ++i)
 		{
 			float d = Dot(direction, points[i]);
-			if (d > projectionDistance)
+			if (d > project_dist)
 			{
-				projectionDistance = d;
+				project_dist = d;
 				mostExtreme = points[i];
 			}
 		}

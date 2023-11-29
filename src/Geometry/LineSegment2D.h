@@ -91,7 +91,7 @@ public:
 			either a or b.
 		@see a, b.*/
 	vec2d ExtremePoint(const vec2d &direction) const;
-	vec2d ExtremePoint(const vec2d &direction, float &projectionDistance) const;
+	vec2d ExtremePoint(const vec2d &direction, float &project_dist) const;
 
 	/// Translates this LineSegment2D in world space.
 	/** @param offset The amount of displacement to apply to this LineSegment2D, in world space coordinates.

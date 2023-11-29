@@ -146,10 +146,10 @@ vec2d LineSegment2D::ExtremePoint(const vec2d &direction) const
 	return Dot(direction, b-a) >= 0.f ? b : a;
 }
 
-vec2d LineSegment2D::ExtremePoint(const vec2d &direction, float &projectionDistance) const
+vec2d LineSegment2D::ExtremePoint(const vec2d &direction, float &project_dist) const
 {
 	vec2d extremePoint = ExtremePoint(direction);
-	projectionDistance = extremePoint.Dot(direction);
+	project_dist = extremePoint.Dot(direction);
 	return extremePoint;
 }
 

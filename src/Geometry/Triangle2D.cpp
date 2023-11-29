@@ -193,10 +193,10 @@ vec2d Triangle2D::ExtremePoint(const vec2d &direction) const
 	return mostExtreme;
 }
 
-vec2d Triangle2D::ExtremePoint(const vec2d &direction, float &projectionDistance) const
+vec2d Triangle2D::ExtremePoint(const vec2d &direction, float &project_dist) const
 {
 	vec2d extremePoint = ExtremePoint(direction);
-	projectionDistance = extremePoint.Dot(direction);
+	project_dist = extremePoint.Dot(direction);
 	return extremePoint;
 }
 #if 0

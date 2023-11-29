@@ -196,7 +196,7 @@ public:
 			vertex of this Triangle.
 		@see Vertex(). */
 	vec ExtremePoint(const vec &direction) const;
-	vec ExtremePoint(const vec &direction, float &projectionDistance) const;
+	vec ExtremePoint(const vec &direction, float &project_dist) const;
 
 	/// Returns a Polygon representation of this Triangle.
 	/** The returned polygon is identical to this Triangle. It has three vertices a, b and c which wind in the same
@@ -349,15 +349,6 @@ Triangle operator *(const float3x4 &transform, const Triangle &t);
 Triangle operator *(const float4x4 &transform, const Triangle &t);
 Triangle operator *(const Quat &transform, const Triangle &t);
 
-struct Triangle_storage
-{
-	vec_storage v0, v1, v2;
-	Triangle_storage(const Triangle &rhs)
-	{
-		*reinterpret_cast<Triangle*>(this) = rhs;
-	}
-	operator Triangle() const { return *reinterpret_cast<const Triangle*>(this); }
-};
 #define TRIANGLE(x) (*(Triangle*)&x)
 
 #ifdef MATH_ENABLE_STL_SUPPORT

@@ -265,10 +265,10 @@ vec Triangle::ExtremePoint(const vec &direction) const
 	return mostExtreme;
 }
 
-vec Triangle::ExtremePoint(const vec &direction, float &projectionDistance) const
+vec Triangle::ExtremePoint(const vec &direction, float &project_dist) const
 {
 	vec extremePoint = ExtremePoint(direction);
-	projectionDistance = extremePoint.Dot(direction);
+	project_dist = extremePoint.Dot(direction);
 	return extremePoint;
 }
 

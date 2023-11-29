@@ -155,7 +155,7 @@ public:
 			corner point of this AABB.
 		@see CornerPoint(). */
 	vec ExtremePoint(const vec &direction) const;
-	vec ExtremePoint(const vec &direction, float &projectionDistance) const;
+	vec ExtremePoint(const vec &direction, float &project_dist) const;
 
 	/// Returns a point on an edge of this AABB.
 	/** @param edgeIndex The index of the edge to generate a point to, in the range [0, 11]. @todo Document which index generates which one.

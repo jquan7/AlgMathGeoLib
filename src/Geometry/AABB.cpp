@@ -167,10 +167,10 @@ vec AABB::ExtremePoint(const vec &direction) const
 	                 (direction.z >= 0.f ? maxpt.z : minpt.z));
 }
 
-vec AABB::ExtremePoint(const vec &direction, float &projectionDistance) const
+vec AABB::ExtremePoint(const vec &direction, float &project_dist) const
 {
 	vec extremePoint = ExtremePoint(direction);
-	projectionDistance = extremePoint.Dot(direction);
+	project_dist = extremePoint.Dot(direction);
 	return extremePoint;
 }
 

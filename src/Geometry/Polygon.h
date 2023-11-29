@@ -106,7 +106,7 @@ public:
 			vertex of this Polygon.
 		@see Vertex(). */
 	vec ExtremePoint(const vec &direction) const;
-	vec ExtremePoint(const vec &direction, float &projectionDistance) const;
+	vec ExtremePoint(const vec &direction, float &project_dist) const;
 
 	/// Projects this Polygon onto the given 1D axis direction vector.
 	/** This function collapses this Polygon onto an 1D axis for the purposes of e.g. separate axis test computations.

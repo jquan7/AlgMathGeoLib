@@ -735,21 +735,21 @@ Plane Polygon::EdgePlane(int edgeIndex) const
 
 vec Polygon::ExtremePoint(const vec &direction) const
 {
-	float projectionDistance;
-	return ExtremePoint(direction, projectionDistance);
+	float project_dist;
+	return ExtremePoint(direction, project_dist);
 }
 
-vec Polygon::ExtremePoint(const vec &direction, float &projectionDistance) const
+vec Polygon::ExtremePoint(const vec &direction, float &project_dist) const
 {
 	vec mostExtreme = vec::nan;
-	projectionDistance = -FLOAT_INF;
+	project_dist = -FLOAT_INF;
 	for(int i = 0; i < NumVertices(); ++i)
 	{
 		vec pt = Vertex(i);
 		float d = Dot(direction, pt);
-		if (d > projectionDistance)
+		if (d > project_dist)
 		{
-			projectionDistance = d;
+			project_dist = d;
 			mostExtreme = pt;
 		}
 	}
