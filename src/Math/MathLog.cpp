@@ -33,7 +33,7 @@ void PrintToConsole(MathLogChannel channel, const char *str)
 		fprintf(stderr, "Error: %s\n", str);
 		if (channel != MathLogErrorNoCallstack)
 		{
-			StringT callstack = GetCallstack("  ", "PrintToConsole");
+			std::string callstack = GetCallstack("  ", "PrintToConsole");
 			fprintf(stderr, "%s", callstack.c_str());
 		}
 	}
@@ -42,7 +42,7 @@ void PrintToConsole(MathLogChannel channel, const char *str)
 		printf("Warning: %s\n", str);
 		if (channel != MathLogWarningNoCallstack)
 		{
-			StringT callstack = GetCallstack("  ", "PrintToConsole");
+			std::string callstack = GetCallstack("  ", "PrintToConsole");
 			printf("%s", callstack.c_str());
 		}
 	}

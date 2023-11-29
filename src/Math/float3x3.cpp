@@ -1374,7 +1374,7 @@ bool float3x3::Equals(const float3x3 &other, float epsilon) const
 }
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT float3x3::ToString() const
+std::string float3x3::ToString() const
 {
 	char str[256];
 	sprintf(str, "(%.2f, %.2f, %.2f) (%.2f, %.2f, %.2f) (%.2f, %.2f, %.2f)",
@@ -1385,7 +1385,7 @@ StringT float3x3::ToString() const
 	return str;
 }
 
-StringT float3x3::SerializeToString() const
+std::string float3x3::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(At(0, 0), str); *s = ','; ++s;
@@ -1402,7 +1402,7 @@ StringT float3x3::SerializeToString() const
 	return str;
 }
 
-StringT float3x3::ToString2() const
+std::string float3x3::ToString2() const
 {
 	char str[256];
 	sprintf(str, "float3x3(X:(%.2f,%.2f,%.2f) Y:(%.2f,%.2f,%.2f) Z:(%.2f,%.2f,%.2f)",

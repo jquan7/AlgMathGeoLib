@@ -214,7 +214,7 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z, w)".
-	StringT ToString() const;
+	std::string ToString() const;
 #endif
 
 	static const float4d zero;

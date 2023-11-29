@@ -1833,7 +1833,7 @@ Triangle operator *(const Quat &transform, const Triangle &triangle)
 }
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT Triangle::ToString() const
+std::string Triangle::ToString() const
 {
 	char str[256];
 	sprintf(str, "Triangle(a:(%.2f, %.2f, %.2f) b:(%.2f, %.2f, %.2f) c:(%.2f, %.2f, %.2f))",
@@ -1841,7 +1841,7 @@ StringT Triangle::ToString() const
 	return str;
 }
 
-StringT Triangle::SerializeToString() const
+std::string Triangle::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(a.x, str); *s = ','; ++s;
@@ -1858,7 +1858,7 @@ StringT Triangle::SerializeToString() const
 	return str;
 }
 
-StringT Triangle::SerializeToCodeString() const
+std::string Triangle::SerializeToCodeString() const
 {
 	return "Triangle(" + a.SerializeToCodeString() + "," + b.SerializeToCodeString() + "," + c.SerializeToCodeString() + ")";
 }

@@ -10,13 +10,13 @@
 #include <execinfo.h>
 #include <string.h>
 
-StringT NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
+std::string NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 {
 	const int N = 128;
 	void *callstack[N];
 	int n = backtrace(callstack, N);
 	char **strs = backtrace_symbols(callstack, n);
-	StringT stack;
+	std::string stack;
 	for(int i = 0; i < n; ++i)
 	{
 		if (strstr(strs[i], "_Z12GetCallstackPK") != 0)
@@ -34,10 +34,10 @@ StringT NOINLINE GetCallstack(const char *indent, const char *ignoreFilter)
 
 #else
 
-StringT GetCallstack(const char *indent, const char *ignoreFilter)
+std::string GetCallstack(const char *indent, const char *ignoreFilter)
 {
 	// Not implemented on this platform.
-	return StringT();
+	return std::string();
 }
 
 #endif

@@ -7,4 +7,4 @@
 
 #define NOINLINE __attribute__((noinline))
 
-StringT GetCallstack(const char *indent = "", const char *ignoreFilter = 0);
+std::string GetCallstack(const char *indent = "", const char *ignoreFilter = 0);

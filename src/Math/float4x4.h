@@ -932,10 +932,10 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a string representation of form "(m00, m01, m02, m03; m10, m11, m12, m13; ... )".
-	StringT ToString() const;
-	StringT SerializeToString() const;
+	std::string ToString() const;
+	std::string SerializeToString() const;
 
-	StringT ToString2() const;
+	std::string ToString2() const;
 #endif
 
 	/// Extracts the rotation part of this matrix into Euler rotation angles (in radians). [indexTitle: ToEuler***]

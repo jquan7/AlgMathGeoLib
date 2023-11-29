@@ -71,7 +71,7 @@
 	do { \
 		if ((x) != (y)) \
 		{ \
-			StringT str = StringT("Assertion '" #x "' == '" #y "' failed! (") + ObjToString(x) + " != " + ObjToString(y) + ("!) in " __FILE__ ":" STRINGIZE(__LINE__)); \
+			std::string str = std::string("Assertion '" #x "' == '" #y "' failed! (") + ObjToString(x) + " != " + ObjToString(y) + ("!) in " __FILE__ ":" STRINGIZE(__LINE__)); \
 			RuntimeFailure(str.c_str()); \
 		} \
 	} while(0)
@@ -80,7 +80,7 @@
 	do { \
 		if (!((x) cmp (y))) \
 		{ \
-			StringT str = StringT("Assertion '" #x "' " #cmp " '" #y "' failed! (") + ObjToString(x) + " and " + ObjToString(y) + ("!) in " __FILE__ ":" STRINGIZE(__LINE__)); \
+			std::string str = std::string("Assertion '" #x "' " #cmp " '" #y "' failed! (") + ObjToString(x) + " and " + ObjToString(y) + ("!) in " __FILE__ ":" STRINGIZE(__LINE__)); \
 			RuntimeFailure(str.c_str()); \
 		} \
 	} while(0)

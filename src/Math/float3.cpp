@@ -207,14 +207,14 @@ bool MUST_USE_RESULT float3::AreCollinear(const float3 &p1, const float3 &p2, co
 bool IsNeutralCLocale();
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT float3::ToString() const
+std::string float3::ToString() const
 {
 	char str[256];
 	sprintf(str, "(%.3f, %.3f, %.3f)", x, y, z);
 	return str;
 }
 
-StringT float3::SerializeToString() const
+std::string float3::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(x, str); *s = ','; ++s;
@@ -225,7 +225,7 @@ StringT float3::SerializeToString() const
 	return str;
 }
 
-StringT float3::SerializeToCodeString() const
+std::string float3::SerializeToCodeString() const
 {
 	return "float3(" + SerializeToString() + ")";
 }

@@ -208,14 +208,14 @@ bool IsNeutralCLocale()
 }
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT float2::ToString() const
+std::string float2::ToString() const
 {
 	char str[256];
 	sprintf(str, "(%f, %f)", x, y);
 	return str;
 }
 
-StringT float2::SerializeToString() const
+std::string float2::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(x, str); *s = ','; ++s;
@@ -225,7 +225,7 @@ StringT float2::SerializeToString() const
 	return str;
 }
 
-StringT float2::SerializeToCodeString() const
+std::string float2::SerializeToCodeString() const
 {
 	return "float2(" + SerializeToString() + ")";
 }

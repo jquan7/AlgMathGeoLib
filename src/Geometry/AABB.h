@@ -409,13 +409,13 @@ public:
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this AABB. Most useful for debugging purposes.
 	/** The returned string specifies the center point and the half-axes of this AABB. */
-	StringT ToString() const;
-	StringT SerializeToString() const;
+	std::string ToString() const;
+	std::string SerializeToString() const;
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
-	StringT SerializeToCodeString() const;
+	std::string SerializeToCodeString() const;
 
-	static AABB FromString(const StringT &str) { return FromString(str.c_str()); }
+	static AABB FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
 
 	static AABB FromString(const char *str, const char **outEndStr = 0);

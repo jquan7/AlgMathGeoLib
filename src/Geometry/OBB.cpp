@@ -1284,7 +1284,7 @@ bool OBB::Intersects(const Polygon &polygon) const
 }
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT OBB::ToString() const
+std::string OBB::ToString() const
 {
 	char str[256];
 	sprintf(str, "OBB(Pos:(%.2f, %.2f, %.2f) Halfsize:(%.2f, %.2f, %.2f) X:(%.2f, %.2f, %.2f) Y:(%.2f, %.2f, %.2f) Z:(%.2f, %.2f, %.2f))",
@@ -1292,9 +1292,9 @@ StringT OBB::ToString() const
 	return str;
 }
 
-StringT OBB::SerializeToString() const
+std::string OBB::SerializeToString() const
 {
-	StringT s = pos.xyz().SerializeToString() + " "
+	std::string s = pos.xyz().SerializeToString() + " "
 	              + r.xyz().SerializeToString() + " "
 	              + axis[0].xyz().SerializeToString() + " "
 	              + axis[1].xyz().SerializeToString() + " "
@@ -1302,7 +1302,7 @@ StringT OBB::SerializeToString() const
 	return s;
 }
 
-StringT OBB::SerializeToCodeString() const
+std::string OBB::SerializeToCodeString() const
 {
 	return "OBB(" + pos.SerializeToCodeString() + ","
 	              + r.SerializeToCodeString() + ","

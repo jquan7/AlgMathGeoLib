@@ -171,8 +171,6 @@ typedef __m128 simd4f;
 
 #ifdef __cplusplus
 
-#define StringT std::string
-
 #endif
 
 #include "Math/MathTypes.h"

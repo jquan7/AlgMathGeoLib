@@ -757,14 +757,14 @@ Plane operator *(const Quat &transform, const Plane &plane)
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 
-StringT Plane::ToString() const
+std::string Plane::ToString() const
 {
 	char str[256];
 	sprintf(str, "Plane(Normal:(%.2f, %.2f, %.2f) d:%.2f)", normal.x, normal.y, normal.z, d);
 	return str;
 }
 
-StringT Plane::SerializeToString() const
+std::string Plane::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(normal.x, str); *s = ','; ++s;
@@ -776,7 +776,7 @@ StringT Plane::SerializeToString() const
 	return str;
 }
 
-StringT Plane::SerializeToCodeString() const
+std::string Plane::SerializeToCodeString() const
 {
 	char str[256];
 	sprintf(str, "%.9g", d);

@@ -264,7 +264,7 @@ Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pointArray, int numPoint
 }
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT Circle2D::ToString() const
+std::string Circle2D::ToString() const
 {
 	char str[256];
 	sprintf(str, "Circle2D(pos:(%.2f, %.2f) r:%.2f)",

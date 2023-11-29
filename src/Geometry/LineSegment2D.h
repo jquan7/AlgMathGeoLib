@@ -240,12 +240,12 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this LineSegment2D. Most useful for debugging purposes.
-	StringT ToString() const;
-	StringT SerializeToString() const;
+	std::string ToString() const;
+	std::string SerializeToString() const;
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
-	StringT SerializeToCodeString() const;
-	static LineSegment2D FromString(const StringT &str) { return FromString(str.c_str()); }
+	std::string SerializeToCodeString() const;
+	static LineSegment2D FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
 
 	static LineSegment2D FromString(const char *str, const char **outEndStr = 0);

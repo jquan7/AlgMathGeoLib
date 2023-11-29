@@ -408,14 +408,14 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z)".
-	StringT ToString() const;
+	std::string ToString() const;
 
 	/// Returns "x,y,z". This is the preferred format for the float3 if it has to be serialized to a string for machine transfer.
-	StringT SerializeToString() const;
+	std::string SerializeToString() const;
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
-	StringT SerializeToCodeString() const;
-	static MUST_USE_RESULT float3 FromString(const StringT &str) { return FromString(str.c_str()); }
+	std::string SerializeToCodeString() const;
+	static MUST_USE_RESULT float3 FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
 
 	/// Parses a string that is of form "x,y,z" or "(x,y,z)" or "(x;y;z)" or "x y z" to a new float3.

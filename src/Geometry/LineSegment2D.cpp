@@ -489,7 +489,7 @@ LineSegment2D operator *(const Quat &transform, const LineSegment2D &l)
 #endif
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT LineSegment2D::ToString() const
+std::string LineSegment2D::ToString() const
 {
 	char str[256];
 	sprintf(str, "LineSegment2D(a:(%.2f, %.2f) b:(%.2f, %.2f))",
@@ -497,7 +497,7 @@ StringT LineSegment2D::ToString() const
 	return str;
 }
 
-StringT LineSegment2D::SerializeToString() const
+std::string LineSegment2D::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(a.x, str); *s = ','; ++s;
@@ -509,7 +509,7 @@ StringT LineSegment2D::SerializeToString() const
 	return str;
 }
 
-StringT LineSegment2D::SerializeToCodeString() const
+std::string LineSegment2D::SerializeToCodeString() const
 {
 	return "LineSegment2D(" + a.SerializeToCodeString() + "," + b.SerializeToCodeString() + ")";
 }

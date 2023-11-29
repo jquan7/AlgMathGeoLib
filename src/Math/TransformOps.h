@@ -54,7 +54,7 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z)".
-	StringT ToString() const;
+	std::string ToString() const;
 #endif
 };
 
@@ -103,7 +103,7 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z)".
-	StringT ToString() const;
+	std::string ToString() const;
 #endif
 };
 

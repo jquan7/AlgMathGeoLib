@@ -753,14 +753,14 @@ float4x4 MUST_USE_RESULT Quat::ToFloat4x4(const float4 &translation) const
 bool IsNeutralCLocale();
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT MUST_USE_RESULT Quat::ToString() const
+std::string MUST_USE_RESULT Quat::ToString() const
 {
 	char str[256];
 	sprintf(str, "(%.3f, %.3f, %.3f, %.3f)", x, y, z, w);
 	return str;
 }
 
-StringT MUST_USE_RESULT Quat::ToString2() const
+std::string MUST_USE_RESULT Quat::ToString2() const
 {
 	float3 axis;
 	float angle;
@@ -770,7 +770,7 @@ StringT MUST_USE_RESULT Quat::ToString2() const
 	return str;
 }
 
-StringT MUST_USE_RESULT Quat::SerializeToString() const
+std::string MUST_USE_RESULT Quat::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(x, str); *s = ','; ++s;
@@ -782,7 +782,7 @@ StringT MUST_USE_RESULT Quat::SerializeToString() const
 	return str;
 }
 
-StringT Quat::SerializeToCodeString() const
+std::string Quat::SerializeToCodeString() const
 {
 	return "Quat(" + SerializeToString() + ")";
 }

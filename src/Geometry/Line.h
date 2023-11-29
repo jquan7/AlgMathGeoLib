@@ -192,12 +192,12 @@ public:
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Line.
 	/** The returned string specifies the position and direction of this Line. */
-	StringT ToString() const;
-	StringT SerializeToString() const;
+	std::string ToString() const;
+	std::string SerializeToString() const;
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
-	StringT SerializeToCodeString() const;
-	static Line FromString(const StringT &str) { return FromString(str.c_str()); }
+	std::string SerializeToCodeString() const;
+	static Line FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
 
 	static Line FromString(const char *str, const char **outEndStr = 0);

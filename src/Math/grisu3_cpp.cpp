@@ -10,7 +10,7 @@
 #if defined(MATH_ENABLE_STL_SUPPORT)
 #include <assert.h>
 
-StringT dtoa_grisu3_string(double v)
+std::string dtoa_grisu3_string(double v)
 {
 	char str[32];
 	int len = dtoa_grisu3(v, str);

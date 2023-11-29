@@ -324,17 +324,17 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x,y,z,w)".
-	StringT MUST_USE_RESULT ToString() const;
+	std::string MUST_USE_RESULT ToString() const;
 
 	/// Returns "Quat(axis:(x,y,z) angle:degrees)".
-	StringT MUST_USE_RESULT ToString2() const;
+	std::string MUST_USE_RESULT ToString2() const;
 
 	/// Returns "x,y,z,w". This is the preferred format for the quaternion if it has to be serialized to a string for machine transfer.
-	StringT MUST_USE_RESULT SerializeToString() const;
+	std::string MUST_USE_RESULT SerializeToString() const;
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
-	StringT SerializeToCodeString() const;
-	static MUST_USE_RESULT Quat FromString(const StringT &str) { return FromString(str.c_str()); }
+	std::string SerializeToCodeString() const;
+	static MUST_USE_RESULT Quat FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
 	/// Parses a string that is of form "x,y,z,w" or "(x,y,z,w)" or "(x;y;z;w)" or "x y z w" to a new quaternion.
 	static MUST_USE_RESULT Quat FromString(const char *str, const char **outEndStr = 0);

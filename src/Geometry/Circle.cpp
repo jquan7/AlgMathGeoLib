@@ -230,7 +230,7 @@ VecArray Circle::IntersectsFaces(const OBB &obb) const
 	return intersectionPoints;
 }
 
-StringT Circle::ToString() const
+std::string Circle::ToString() const
 {
 	char str[256];
 	sprintf(str, "Circle(pos:(%.2f, %.2f, %.2f) normal:(%.2f, %.2f, %.2f), r:%.2f)",

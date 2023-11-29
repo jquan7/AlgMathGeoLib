@@ -185,7 +185,7 @@ public:
 
 	/// Returns a human-readable representation of this circle. Most useful for debugging purposes.
 	/** The returned string specifies the center position, normal direction and the radius of this circle. */
-	StringT ToString() const;
+	std::string ToString() const;
 #endif
 };
 

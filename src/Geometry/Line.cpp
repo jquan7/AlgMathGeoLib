@@ -288,14 +288,14 @@ Line operator *(const Quat &transform, const Line &l)
 }
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT Line::ToString() const
+std::string Line::ToString() const
 {
 	char str[256];
 	sprintf(str, "Line(Pos:(%.2f, %.2f, %.2f) Dir:(%.3f, %.3f, %.3f))", pos.x, pos.y, pos.z, dir.x, dir.y, dir.z);
 	return str;
 }
 
-StringT Line::SerializeToString() const
+std::string Line::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(pos.x, str); *s = ','; ++s;
@@ -309,7 +309,7 @@ StringT Line::SerializeToString() const
 	return str;
 }
 
-StringT Line::SerializeToCodeString() const
+std::string Line::SerializeToCodeString() const
 {
 	return "Line(" + pos.SerializeToCodeString() + "," + dir.SerializeToCodeString() + ")";
 }

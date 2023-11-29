@@ -500,14 +500,14 @@ bool float4::IsPerpendicular(const float4 &other, float epsilonSq) const
 bool IsNeutralCLocale();
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
-StringT float4::ToString() const
+std::string float4::ToString() const
 {
 	char str[256];
 	sprintf(str, "(%.3f, %.3f, %.3f, %.3f)", x, y, z, w);
 	return str;
 }
 
-StringT float4::SerializeToString() const
+std::string float4::SerializeToString() const
 {
 	char str[256];
 	char *s = SerializeFloat(x, str); *s = ','; ++s;
@@ -519,7 +519,7 @@ StringT float4::SerializeToString() const
 	return str;
 }
 
-StringT float4::SerializeToCodeString() const
+std::string float4::SerializeToCodeString() const
 {
 	return "float4(" + SerializeToString() + ")";
 }

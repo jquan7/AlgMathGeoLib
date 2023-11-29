@@ -351,14 +351,14 @@ public:
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y)".
-	StringT ToString() const;
+	std::string ToString() const;
 
 	/// Returns "x,y". This is the preferred format for the float2 if it has to be serialized to a string for machine transfer.
-	StringT SerializeToString() const;
+	std::string SerializeToString() const;
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
-	StringT SerializeToCodeString() const;
-	static float2 FromString(const StringT &str) { return FromString(str.c_str()); }
+	std::string SerializeToCodeString() const;
+	static float2 FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
 
 	/// Parses a string that is of form "x,y" or "(x,y)" or "(x;y)" or "x y" to a new float2.

@@ -82,25 +82,25 @@ bool MathBreakOnAssume();
 bool AssumeFailed();
 
 template<typename T>
-inline StringT ObjToString(const T &obj)
+inline std::string ObjToString(const T &obj)
 {
 	return obj.ToString();
 }
 
 template<>
-inline StringT ObjToString<const char * const>(const char * const & obj)
+inline std::string ObjToString<const char * const>(const char * const & obj)
 {
-	return StringT(obj);
+	return std::string(obj);
 }
 
 template<>
-inline StringT ObjToString<StringT>(const StringT &obj)
+inline std::string ObjToString<std::string>(const std::string &obj)
 {
 	return obj;
 }
 
 template<>
-inline StringT ObjToString<float>(const float &obj)
+inline std::string ObjToString<float>(const float &obj)
 {
 	std::stringstream ss;
 	ss << obj;
@@ -108,7 +108,7 @@ inline StringT ObjToString<float>(const float &obj)
 }
 
 template<>
-inline StringT ObjToString<double>(const double &obj)
+inline std::string ObjToString<double>(const double &obj)
 {
 	std::stringstream ss;
 	ss << obj;
@@ -116,7 +116,7 @@ inline StringT ObjToString<double>(const double &obj)
 }
 
 template<>
-inline StringT ObjToString<int>(const int &obj)
+inline std::string ObjToString<int>(const int &obj)
 {
 	std::stringstream ss;
 	ss << obj;
@@ -124,13 +124,13 @@ inline StringT ObjToString<int>(const int &obj)
 }
 
 template<>
-inline StringT ObjToString<bool>(const bool &obj)
+inline std::string ObjToString<bool>(const bool &obj)
 {
 	return obj ? "true" : "false";
 }
 
 template<>
-inline StringT ObjToString<u32>(const u32 &obj)
+inline std::string ObjToString<u32>(const u32 &obj)
 {
 	std::stringstream ss;
 	ss << obj;
@@ -138,7 +138,7 @@ inline StringT ObjToString<u32>(const u32 &obj)
 }
 
 template<>
-inline StringT ObjToString<u64>(const u64 &obj)
+inline std::string ObjToString<u64>(const u64 &obj)
 {
 	std::stringstream ss;
 	ss << obj;
