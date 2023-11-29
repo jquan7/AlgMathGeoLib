@@ -110,7 +110,7 @@ public:
     vec ClosestPoint(const LineSegment &other) const { float d, d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const LineSegment &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const LineSegment &other, float &d, float &d2) const;
-    /** @param barycentric_coord_UV [out] If specified, receives the barycentric UV coordinates (in two-coordinate barycentric UV convention)
+    /** @param barycentric_coord_UV [out] If specified, receives the barycentric UV coordinates
             representing the closest point on the triangle to this line.
         @see Contains(), Distance(), Intersects(), GetPoint(), Triangle::Point(float u, float v). */
     vec ClosestPoint(const Triangle &triangle) const { float d; return ClosestPoint(triangle, d); }
@@ -129,55 +129,56 @@ public:
         @see Contains(), Distance(), ClosestPoint(), GetPoint(). */
     bool Intersects(const Triangle &triangle, float *d, vec *intersect_pt) const;
     bool Intersects(const Plane &plane, float *d) const;
-    /** @param near [out] If specified, receives the distance along this line to where the line enters
-        the bounding box.
-        @param far [out] If specified, receives the distance along this line to where the line exits
-        the bounding box. */
+    /** @param near [out] The distance along this line to where the line enters.
+        @param far [out] The distance along this line to where the line exits. */
     bool Intersects(const AABB &aabb, float &near, float &far) const;
     bool Intersects(const AABB &aabb) const;
     bool Intersects(const OBB &obb, float &near, float &far) const;
     bool Intersects(const OBB &obb) const;
     bool Intersects(const Polygon &polygon) const;
-    /// Tests if this LINE intersects the given disc.
-    bool IntersectsDisc(const Circle &disc) const;
+    bool Intersects(const Circle &disc) const;
 
     /// Converts this Line to a LineSegment.
     /** @param d Specifies the position of the other endpoint along this Line.
         @return A LineSegment with point a at pos, and point b at pos + d * dir.
-        @see pos, dir, Line::Line, class LineSegment, ToRay(). */
+        @see pos, dir, Line::Line, class LineSegment. */
     LineSegment ToLineSegment(float d) const;
 
     /// Converts this Line to a LineSegment.
-    /** @param start Specifies the position of the first endpoint along this Line. This parameter may be negative,
-        in which case the starting point lies to the opposite direction of the Line.
-        @param end Specifies the position of the second endpoint along this Line. This parameter may also be negative.
+    /** @param start Specifies the position of the first endpoint along this Line.
+        @param end Specifies the position of the second endpoint along this Line.
         @return A LineSegment with point a at pos + start * dir, and point b at pos + end * dir.
         @see pos, dir, Line::Line, class LineSegment, ToLine(). */
     LineSegment ToLineSegment(float start, float end) const;
 
     /// Projects this Line onto the given 1D axis direction vector.
-    /** This function collapses this Line onto an 1D axis for the purposes of e.g. separate axis test computations.
-        The function returns a 1D range [outmin, outmax] denoting the interval of the projection.
-        @param direction The 1D axis to project to. This vector may be unnormalized, in which case the output
-            of this function gets scaled by the length of this vector.
+    /** This function collapses this Line onto an 1D axis.
+        @param direction The 1D axis to project to.
         @param outmin [out] Returns the minimum extent of this object along the projection axis.
         @param outmax [out] Returns the maximum extent of this object along the projection axis. */
     void ProjectToAxis(const vec &direction, float &outmin, float &outmax) const;
 
     /// Tests if the given three points are collinear.
-    /** This function tests whether the given three functions all lie on the same line.
-        @param epsilon The comparison threshold to use to account for floating-point inaccuracies. */
     static bool AreCollinear(const vec &p1, const vec &p2, const vec &p3, float epsilon = 1e-3f);
 
-    static void ClosestPointLineLine(const vec &start0, const vec &dir0, const vec &start1, const vec &dir1, float &d, float &d2);
+    /// Computes the closest point pair on two lines.
+    /** @param v0 The starting point of the first line.
+        @param v10 The direction vector of the first line. This can be unnormalized.
+        @param v2 The starting point of the second line.
+        @param v32 The direction vector of the second line. This can be unnormalized.
+        @param d [out] Receives the normalized distance of the closest point along the first line.
+        @param d2 [out] Receives the normalized distance of the closest point along the second line.
+        @return Returns the closest point on line start0<->end0 to the second line.
+        @note This is a low-level utility function. You probably want to use ClosestPoint() or Distance() instead.
+        @see ClosestPoint(), Distance(). */
+    static void ClosestPointLineLine(const vec &v0, const vec &v10, const vec &v2, const vec &v32, float &d, float &d2);
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
     /// Returns a human-readable representation of this Line.
-    /** The returned string specifies the position and direction of this Line. */
     std::string ToString() const;
     std::string SerializeToString() const;
 
-    /// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
+    /// Returns a string of C++ code that can be used to construct this object.
     std::string SerializeToCodeString() const;
     static Line FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif

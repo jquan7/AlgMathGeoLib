@@ -328,10 +328,8 @@ public:
 	/** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
 		another, this function still returns true. (e.g. in case a line segment is contained inside this AABB,
 		or this AABB is contained inside a OBB, etc.)
-		@param near [out] If specified, receives the parametric distance along the line denoting where the
-			line entered this AABB.
-		@param far [out] If specified, receives the parametric distance along the line denoting where the
-			line exited this AABB.
+		@param near [out] The distance along this line to where the line enters.
+        @param far [out] The distance along this line to where the line exits.
 		@see Contains(), Distance(), ClosestPoint().
 		@note If you do not need the intersection intervals, you should call the functions without these
 			parameters in the function signature for optimal performance. */

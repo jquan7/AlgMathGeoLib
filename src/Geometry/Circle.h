@@ -163,14 +163,14 @@ public:
 	/// Tests this circle for an intersection against the given plane.
 	/** @note For Circle-Plane intersection, there is no need to differentiate between a hollow or a filled circle (disc).
 		@return The number of intersection points found for this circle and the given plane.
-		@see IntersectsDisc(). */
+		@see Intersects(). */
 	int Intersects(const Plane &plane, vec *pt1, vec *pt2) const;
 	int Intersects(const Plane &plane) const;
 
 	/// Tests this disc for an intersection against the given object.
 	/** @see Intersects(). */
-	bool IntersectsDisc(const Line &line) const;
-	bool IntersectsDisc(const LineSegment &lineseg) const;
+	bool Intersects(const Line &line) const;
+	bool Intersects(const LineSegment &lineseg) const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Tests if this circle intersects the faces of the given OBB.
@@ -178,7 +178,7 @@ public:
 			a part of the OBB.
 		@return A vector that contains all the detected points of intersection for this circle and the given OBB. If the circle is fully
 			contained inside the OBB, or is fully outside the OBB, no intersection occurs, and the returned vector has zero elements.
-		@see Intersects(), IntersectsDisc(). */
+		@see Intersects(), Intersects(). */
 	VecArray IntersectsFaces(const OBB &obb) const;
 
 	VecArray IntersectsFaces(const AABB &aabb) const;

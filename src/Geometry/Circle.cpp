@@ -190,7 +190,7 @@ int Circle::Intersects(const Plane &plane) const
 	return plane.Intersects(*this);
 }
 
-bool Circle::IntersectsDisc(const Line &line) const
+bool Circle::Intersects(const Line &line) const
 {
 	float d;
 	bool intersectsPlane = line.Intersects(ContainingPlane(), &d);
@@ -199,7 +199,7 @@ bool Circle::IntersectsDisc(const Line &line) const
 	return line.GetPoint(d).DistanceSq(pos) <= r*r;
 }
 
-bool Circle::IntersectsDisc(const LineSegment &lineseg) const
+bool Circle::Intersects(const LineSegment &lineseg) const
 {
 	float d;
 	bool intersectsPlane = lineseg.Intersects(ContainingPlane(), &d);

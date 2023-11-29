@@ -42,11 +42,9 @@ public:
 	LineSegment(const vec &a, const vec &b);
 
 	/// Constructs a line segment from a a line.
-	/** This constructor takes the ray/line origin position as the starting point of this line segment, and defines the end point
+	/** This constructor takes the line origin position as the starting point of this line segment, and defines the end point
 		of the line segment using the given distance parameter.
-		@param d The distance along the ray/line for the end point of this line segment. This will set b = ray.pos + d * ray.dir
-			as the end point. When converting a ray to a line segment, it is possible to pass in a d value < 0, but in that case
-			the resulting line segment will not lie on the ray.
+		@param d The distance along the line for the end point of this line segment.
 		@see a, b, class Line, Line::GetPoint(). */
 	explicit LineSegment(const Line &line, float d);
 
@@ -185,10 +183,8 @@ public:
 	bool Intersects(const Plane &plane, float *d) const;
 	/** @param intersect_pt [out] If specified, receives the point of intersection. This pointer may be null. */
 	bool Intersects(const Triangle &triangle, float *d, vec *intersect_pt) const;
-	/** @param near [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
-			bounding box object.
-		@param far [out] If specified, receives the parametric distance along this line segment denoting where the line exited the
-			bounding box object. */
+	/** @param near [out] The distance along this line to where the line enters.
+        @param far [out] The distance along this line to where the line exits. */
 	bool Intersects(const AABB &aabb, float &near, float &far) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb, float &near, float &far) const;
@@ -199,7 +195,7 @@ public:
 	bool Intersects(const LineSegment &lineseg, float epsilon = 1e-3f) const;
 	/// Tests if this line segment intersects the given disc.
 	/// @todo This signature will be moved to bool Intersects(const Disc &disc) const;
-	bool IntersectsDisc(const Circle &disc) const;
+	bool Intersects(const Circle &disc) const;
 
 	/// Converts this LineSegment to a Line.
 	/** The pos member of the returned Line will be equal to a, and the dir member equal to Dir().

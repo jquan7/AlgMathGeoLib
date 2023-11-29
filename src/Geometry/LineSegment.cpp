@@ -352,9 +352,9 @@ bool LineSegment::Intersects(const Polygon &polygon) const
 	return polygon.Intersects(*this);
 }
 
-bool LineSegment::IntersectsDisc(const Circle &disc) const
+bool LineSegment::Intersects(const Circle &disc) const
 {
-	return disc.IntersectsDisc(*this);
+	return disc.Intersects(*this);
 }
 
 Line LineSegment::ToLine() const

@@ -41,12 +41,10 @@ public:
 	/** @see a, b. */
 	LineSegment2D(const vec2d &a, const vec2d &b);
 
-	/// Constructs a line segment from a ray or a line.
-	/** This constructor takes the ray/line origin position as the starting point of this line segment, and defines the end point
+	/// Constructs a line segment from a line.
+	/** This constructor takes the line origin position as the starting point of this line segment, and defines the end point
 		of the line segment using the given distance parameter.
-		@param d The distance along the ray/line for the end point of this line segment. This will set b = ray.pos + d * ray.dir
-			as the end point. When converting a ray to a line segment, it is possible to pass in a d value < 0, but in that case
-			the resulting line segment will not lie on the ray.
+		@param d The distance along the line for the end point of this line segment.
 		@see a, b, classes Ray2D, Line2D, Line2D::GetPoint(), Ray2D::GetPoint(). */
 #if 0
 	explicit LineSegment2D(const Line2D &line, float d);
@@ -199,10 +197,8 @@ public:
 			this line segment which specifies the closest point on this line segment to
 			the specified point. This pointer may be null. */
 	bool Intersects(const Sphere2D &s, vec2d *intersect_pt = 0, vec2d *intersectionNormal = 0, float *d = 0) const;
-	/** @param near [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
-			bounding box object.
-		@param far [out] If specified, receives the parametric distance along this line segment denoting where the line exited the
-			bounding box object. */
+	/** @param near [out] The distance along this line to where the line enters.
+        @param far [out] The distance along this line to where the line exits. */
 	bool Intersects(const AABB2D &aabb, float &near, float &far) const;
 	bool Intersects(const AABB2D &aabb) const;
 	bool Intersects(const OBB2D &obb, float &near, float &far) const;

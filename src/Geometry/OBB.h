@@ -339,10 +339,8 @@ public:
 	bool Intersects(const OBB &obb, float epsilon = 1e-3f) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const Plane &plane) const;
-	/** @param near [out] If specified, receives the parametric distance along the line denoting where the
-			line entered this OBB.
-		@param far [out] If specified, receives the parametric distance along the line denoting where the
-			line exited this OBB. */
+	/** @param near [out] The distance along this line to where the line enters.
+        @param far [out] The distance along this line to where the line exits. */
 	bool Intersects(const Line &line, float &near, float &far) const;
 	bool Intersects(const Line &line) const;
 	bool Intersects(const LineSegment &lineseg, float &near, float &far) const;
