@@ -317,7 +317,7 @@ public:
 			due to float inaccuracies, this cannot generally be relied upon.
 		@see Distance(), Intersects(), ClosestPoint(). */
 	bool Contains(const vec &point) const;
-	bool Contains(const LineSegment &lineSegment) const;
+	bool Contains(const LineSegment &lineseg) const;
 	bool Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const;
 	bool Contains(const AABB &aabb) const { return Contains(aabb.minPoint, aabb.maxPoint); }
 	bool Contains(const OBB &obb) const;
@@ -337,8 +337,8 @@ public:
 			parameters in the function signature for optimal performance. */
 	bool Intersects(const Line &line, float &dNear, float &dFar) const;
 	bool Intersects(const Line &line) const;
-	bool Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) const;
-	bool Intersects(const LineSegment &lineSegment) const;
+	bool Intersects(const LineSegment &lineseg, float &dNear, float &dFar) const;
+	bool Intersects(const LineSegment &lineseg) const;
 	bool Intersects(const Plane &plane) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
@@ -360,7 +360,7 @@ public:
 		@note The generated AABB is not necessarily the optimal enclosing AABB for this AABB and the given object. */
 	void Enclose(const vec &point);
 	void Enclose(const vec &aabbMinPoint, const vec &aabbMaxPoint);
-	void Enclose(const LineSegment &lineSegment);
+	void Enclose(const LineSegment &lineseg);
 	void Enclose(const AABB &aabb) { Enclose(aabb.minPoint, aabb.maxPoint); }
 	void Enclose(const OBB &obb);
 	void Enclose(const Triangle &triangle);

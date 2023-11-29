@@ -40,10 +40,10 @@ public:
     Line(const vec &pos, const vec &dir);
 
     /// Converts a LineSegment to a Line.
-    /** This constructor sets pos = lineSegment.a,
-        and dir = (lineSegment.b - lineSegment.a).Normalized().
+    /** This constructor sets pos = lineseg.a,
+        and dir = (lineseg.b - lineseg.a).Normalized().
         @see class LineSegment, ToLineSegment(). */
-    explicit Line(const LineSegment &lineSegment);
+    explicit Line(const LineSegment &lineseg);
 
     bool IsFinite() const;
 
@@ -69,7 +69,7 @@ public:
         @return True if contains.
         @see class LineSegment, Distance(), ClosestPoint(), Intersects(). */
     bool Contains(const vec &point, float dist_th = 1e-3f) const;
-    bool Contains(const LineSegment &lineSegment, float dist_th = 1e-3f) const;
+    bool Contains(const LineSegment &lineseg, float dist_th = 1e-3f) const;
 
     /// Tests if two lines are equal. Set equality (pos and dir can be completely different)
     bool Equals(const Line &line, float epsilon = 1e-3f) const;
@@ -139,11 +139,10 @@ public:
     bool Intersects(const OBB &obb) const;
     bool Intersects(const Polygon &polygon) const;
     /// Tests if this LINE intersects the given disc.
-    /// @todo This signature will be moved to bool Intersects(const Disc &disc) const;
     bool IntersectsDisc(const Circle &disc) const;
 
     /// Converts this Line to a LineSegment.
-    /** @param d Specifies the position of the other endpoint along this Line. This parameter may be negative.
+    /** @param d Specifies the position of the other endpoint along this Line.
         @return A LineSegment with point a at pos, and point b at pos + d * dir.
         @see pos, dir, Line::Line, class LineSegment, ToRay(). */
     LineSegment ToLineSegment(float d) const;

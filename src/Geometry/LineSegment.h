@@ -130,7 +130,7 @@ public:
 
 	/// Tests if the given point or line segment is contained on this line segment.
 	bool Contains(const vec &point, float dist_th = 1e-3f) const;
-	bool Contains(const LineSegment &lineSegment, float dist_th = 1e-3f) const;
+	bool Contains(const LineSegment &lineseg, float dist_th = 1e-3f) const;
 
 	/// Computes the closest point on this line segment to the given object.
 	/** @param d [out] If specified, this parameter receives the normalized distance along
@@ -196,7 +196,7 @@ public:
 	bool Intersects(const Polygon &polygon) const;
 	/** @param epsilon If testing intersection between two line segments, a distance threshold value is used to account
 			for floating-point inaccuracies. */
-	bool Intersects(const LineSegment &lineSegment, float epsilon = 1e-3f) const;
+	bool Intersects(const LineSegment &lineseg, float epsilon = 1e-3f) const;
 	/// Tests if this line segment intersects the given disc.
 	/// @todo This signature will be moved to bool Intersects(const Disc &disc) const;
 	bool IntersectsDisc(const Circle &disc) const;
@@ -245,7 +245,7 @@ LineSegment operator *(const float4x4 &transform, const LineSegment &line);
 LineSegment operator *(const Quat &transform, const LineSegment &line);
 
 #ifdef MATH_ENABLE_STL_SUPPORT
-std::ostream &operator <<(std::ostream &o, const LineSegment &lineSegment);
+std::ostream &operator <<(std::ostream &o, const LineSegment &lineseg);
 #endif
 
 MATH_END_NAMESPACE

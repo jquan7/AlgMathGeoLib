@@ -774,9 +774,9 @@ bool OBB::Contains(const vec &point) const
 #endif
 }
 
-bool OBB::Contains(const LineSegment &lineSegment) const
+bool OBB::Contains(const LineSegment &lineseg) const
 {
-	return Contains(lineSegment.a) && Contains(lineSegment.b);
+	return Contains(lineseg.a) && Contains(lineseg.b);
 }
 
 bool OBB::Contains(const AABB &aabb) const
@@ -1072,17 +1072,17 @@ bool OBB::Intersects(const Line &line, float &dNear, float &dFar) const
 	return aabb.Intersects(l, dNear, dFar);
 }
 
-bool OBB::Intersects(const LineSegment &lineSegment) const
+bool OBB::Intersects(const LineSegment &lineseg) const
 {
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
-	LineSegment l = WorldToLocal() * lineSegment;
+	LineSegment l = WorldToLocal() * lineseg;
 	return aabb.Intersects(l);
 }
 
-bool OBB::Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) const
+bool OBB::Intersects(const LineSegment &lineseg, float &dNear, float &dFar) const
 {
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
-	LineSegment l = WorldToLocal() * lineSegment;
+	LineSegment l = WorldToLocal() * lineseg;
 	return aabb.Intersects(l, dNear, dFar);
 }
 

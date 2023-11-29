@@ -219,7 +219,7 @@ public:
 		@todo Add Triangle2D::Contains(Circle) and Triangle2D::Contains(Disc). */
 	bool Contains(const vec2d &point, float triangleThicknessSq = 1e-5f) const;
 #if 0
-	bool Contains(const LineSegment2D &lineSegment, float triangleThickness = 1e-3f) const;
+	bool Contains(const LineSegment2D &lineseg, float triangleThickness = 1e-3f) const;
 	bool Contains(const Triangle2D &triangle, float triangleThickness = 1e-3f) const;
 #endif
 
@@ -246,7 +246,7 @@ public:
 			may be null.
 		@return True if an intersection occurs or one of the objects is contained inside the other, false otherwise.
 		@see Contains(), Distance(), ClosestPoint(), LineSegment2D::GetPoint(). */
-	bool Intersects(const LineSegment2D &lineSegment, float *d = 0, vec2d *intersectionPoint = 0) const;
+	bool Intersects(const LineSegment2D &lineseg, float *d = 0, vec2d *intersectionPoint = 0) const;
 	bool Intersects(const Line2D &line, float *d = 0, vec2d *intersectionPoint = 0) const;
 	/** @param closestPointOnTriangle [out] If specified, receives the point of intersection between the Sphere2D
 			and this Triangle2D. Even if no intersection occurred, this parameter will receive the closest point on
@@ -285,7 +285,7 @@ public:
 	vec2d ClosestPoint(const vec2d &point) const;
 	/** @param otherPt [out] If specified, receives the closest point on the other object to this triangle.
 		This pointer may be null. */
-	vec2d ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt = 0) const;
+	vec2d ClosestPoint(const LineSegment2D &lineseg, vec2d *otherPt = 0) const;
 	/** @param outU [out] If specified, receives the barycentric U coordinate of the returned point (in the UV convention).
 			This pointer may be null. TODO Add this parameter back.
 		@param outV [out] If specified, receives the barycentric V coordinate of the returned point (in the UV convention).
@@ -308,7 +308,7 @@ public:
 		@see Distance(), Contains(), Intersects(), ClosestPointToTriangleEdge(), Line2D::GetPoint. */
 #if 0
 	vec2d ClosestPointToTriangleEdge(const Line2D &line, float *outU, float *outV, float *outD) const;
-	vec2d ClosestPointToTriangleEdge(const LineSegment2D &lineSegment, float *outU, float *outV, float *outD) const;
+	vec2d ClosestPointToTriangleEdge(const LineSegment2D &lineseg, float *outU, float *outV, float *outD) const;
 #endif
 
 #if defined(MATH_ENABLE_STL_SUPPORT)

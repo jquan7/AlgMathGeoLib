@@ -485,7 +485,7 @@ public:
 		@see DistanceSq(), Length(), LengthSq(). */
 	float Distance(const float3 &point) const;
 	float Distance(const Line &line) const;
-	float Distance(const LineSegment &lineSegment) const;
+	float Distance(const LineSegment &lineseg) const;
 	float Distance(const Plane &plane) const;
 	float Distance(const Triangle &triangle) const;
 	float Distance(const AABB &aabb) const;

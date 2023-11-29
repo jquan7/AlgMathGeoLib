@@ -133,15 +133,15 @@ float Circle::DistanceToEdge(const vec &point) const
 	return ClosestPointToEdge(point).Distance(point);
 }
 /*
-float Circle::DistanceToEdge(const LineSegment &lineSegment, float *d, vec *closestPoint) const
+float Circle::DistanceToEdge(const LineSegment &lineseg, float *d, vec *closestPoint) const
 {
 	float t;
-	vec cp = ClosestPointToEdge(lineSegment, &t);
+	vec cp = ClosestPointToEdge(lineseg, &t);
 	if (closestPoint)
 		*closestPoint = cp;
 	if (d)
 		*d = t;
-	return cp.Distance(lineSegment.GetPoint(t));
+	return cp.Distance(lineseg.GetPoint(t));
 }
 
 float Circle::DistanceToEdge(const Line &line, float *d, vec *closestPoint) const
@@ -199,13 +199,13 @@ bool Circle::IntersectsDisc(const Line &line) const
 	return line.GetPoint(d).DistanceSq(pos) <= r*r;
 }
 
-bool Circle::IntersectsDisc(const LineSegment &lineSegment) const
+bool Circle::IntersectsDisc(const LineSegment &lineseg) const
 {
 	float d;
-	bool intersectsPlane = lineSegment.Intersects(ContainingPlane(), &d);
+	bool intersectsPlane = lineseg.Intersects(ContainingPlane(), &d);
 	if (intersectsPlane)
 		return false;
-	return lineSegment.GetPoint(d).DistanceSq(pos) <= r*r;
+	return lineseg.GetPoint(d).DistanceSq(pos) <= r*r;
 }
 
 #ifdef MATH_ENABLE_STL_SUPPORT

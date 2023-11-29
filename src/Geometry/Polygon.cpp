@@ -490,24 +490,24 @@ bool Polygon::Intersects(const Line &line) const
 	return Contains(line.GetPoint(d));
 }
 
-bool Polygon::Intersects(const LineSegment &lineSegment) const
+bool Polygon::Intersects(const LineSegment &lineseg) const
 {
 	Plane plane = PlaneCCW();
 
 	// Compute line-plane intersection (unroll Plane::IntersectLinePlane())
-	float denom = Dot(plane.normal, lineSegment.b - lineSegment.a);
+	float denom = Dot(plane.normal, lineseg.b - lineseg.a);
 
 	if (Abs(denom) < 1e-4f) // The plane of the polygon and the line are planar? Do the test in 2D.
-		return Intersects2D(LineSegment(POINT_VEC(MapTo2D(lineSegment.a), 0), POINT_VEC(MapTo2D(lineSegment.b), 0)));
+		return Intersects2D(LineSegment(POINT_VEC(MapTo2D(lineseg.a), 0), POINT_VEC(MapTo2D(lineseg.b), 0)));
 
 	// The line segment properly intersects the plane of the polygon, so there is exactly one
 	// point of intersection between the plane of the polygon and the line segment. Test that intersection point against
 	// the line segment end points.
-	float t = (plane.d - Dot(plane.normal, lineSegment.a)) / denom;
+	float t = (plane.d - Dot(plane.normal, lineseg.a)) / denom;
 	if (t < 0.f || t > 1.f)
 		return false;
 
-	return Contains(lineSegment.GetPoint(t));
+	return Contains(lineseg.GetPoint(t));
 }
 
 bool Polygon::Intersects(const Plane &plane) const
@@ -594,25 +594,25 @@ bool Polygon_Intersects_Polygon(const Polygon &poly, const T &other, float polyg
 		// and vice versa.
 		for(int i = 0; i < other.NumEdges(); ++i)
 		{
-			LineSegment lineSegment = other.Edge(i);
+			LineSegment lineseg = other.Edge(i);
 			float t;
-			bool intersects = Plane::IntersectLinePlane(plane.normal, plane.d, lineSegment.a, lineSegment.b - lineSegment.a, t);
+			bool intersects = Plane::IntersectLinePlane(plane.normal, plane.d, lineseg.a, lineseg.b - lineseg.a, t);
 			if (!intersects || t < 0.f || t > 1.f)
 				continue;
 
-			if (poly.Contains(lineSegment.GetPoint(t)))
+			if (poly.Contains(lineseg.GetPoint(t)))
 				return true;
 		}
 
 		for(int i = 0; i < poly.NumEdges(); ++i)
 		{
-			LineSegment lineSegment = poly.Edge(i);
+			LineSegment lineseg = poly.Edge(i);
 			float t;
-			bool intersects = Plane::IntersectLinePlane(plane2.normal, plane2.d, lineSegment.a, lineSegment.b - lineSegment.a, t);
+			bool intersects = Plane::IntersectLinePlane(plane2.normal, plane2.d, lineseg.a, lineseg.b - lineseg.a, t);
 			if (!intersects || t < 0.f || t > 1.f)
 				continue;
 
-			if (other.Contains(lineSegment.GetPoint(t)))
+			if (other.Contains(lineseg.GetPoint(t)))
 				return true;
 		}
 		return false;
@@ -689,12 +689,12 @@ vec Polygon::ClosestPoint(const vec &point) const
 	return closestPt;
 }
 
-vec Polygon::ClosestPoint(const LineSegment &lineSegment) const
+vec Polygon::ClosestPoint(const LineSegment &lineseg) const
 {
-	return ClosestPoint(lineSegment, 0);
+	return ClosestPoint(lineseg, 0);
 }
 
-vec Polygon::ClosestPoint(const LineSegment &lineSegment, vec *lineSegmentPt) const
+vec Polygon::ClosestPoint(const LineSegment &lineseg, vec *lineSegmentPt) const
 {
 	TriangleArray tris = Triangulate();
 	vec closestPt = vec::nan;
@@ -703,7 +703,7 @@ vec Polygon::ClosestPoint(const LineSegment &lineSegment, vec *lineSegmentPt) co
 	for(size_t i = 0; i < tris.size(); ++i)
 	{
 		vec lineSegPt;
-		vec pt = TRIANGLE(tris[i]).ClosestPoint(lineSegment, &lineSegPt);
+		vec pt = TRIANGLE(tris[i]).ClosestPoint(lineseg, &lineSegPt);
 		float d = pt.DistanceSq(lineSegPt);
 		if (d < closestDist)
 		{

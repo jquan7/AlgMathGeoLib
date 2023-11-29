@@ -73,8 +73,8 @@ Line::Line(const vec &pos_, const vec &dir_)
 	assume2(dir.IsNormalized(), dir, dir.LengthSq());
 }
 
-Line::Line(const LineSegment &lineSegment)
-:pos(lineSegment.a), dir(lineSegment.Dir())
+Line::Line(const LineSegment &lineseg)
+:pos(lineseg.a), dir(lineseg.Dir())
 {
 }
 
@@ -123,9 +123,9 @@ bool Line::Contains(const vec &point, float dist_th) const
 	return ClosestPoint(point).DistanceSq(point) <= dist_th;
 }
 
-bool Line::Contains(const LineSegment &lineSegment, float epsilon) const
+bool Line::Contains(const LineSegment &lineseg, float epsilon) const
 {
-	return Contains(lineSegment.a, epsilon) && Contains(lineSegment.b, epsilon);
+	return Contains(lineseg.a, epsilon) && Contains(lineseg.b, epsilon);
 }
 
 bool Line::Equals(const Line &line, float epsilon) const

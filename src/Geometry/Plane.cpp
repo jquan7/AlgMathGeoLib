@@ -59,10 +59,10 @@ Plane::Plane(const Line &line, const vec &normal)
 	Set(line.pos, perpNormal.Normalized());
 }
 
-Plane::Plane(const LineSegment &lineSegment, const vec &normal)
+Plane::Plane(const LineSegment &lineseg, const vec &normal)
 {
-	vec perpNormal = normal - normal.ProjectTo(lineSegment.b - lineSegment.a);
-	Set(lineSegment.a, perpNormal.Normalized());
+	vec perpNormal = normal - normal.ProjectTo(lineseg.b - lineseg.a);
+	Set(lineseg.a, perpNormal.Normalized());
 }
 
 bool Plane::IsDegenerate() const
@@ -184,9 +184,9 @@ float Plane::Distance(const vec &point) const
 	return Abs(SignedDistance(point));
 }
 
-float Plane::Distance(const LineSegment &lineSegment) const
+float Plane::Distance(const LineSegment &lineseg) const
 {
-	return lineSegment.Distance(*this);
+	return lineseg.Distance(*this);
 }
 
 float Plane::SignedDistance(const vec &point) const
@@ -212,7 +212,7 @@ float Plane::SignedDistance(const AABB &aabb) const { return Plane_SignedDistanc
 float Plane::SignedDistance(const OBB &obb) const { return Plane_SignedDistance(*this, obb); }
 //float Plane::SignedDistance(const Circle &circle) const { return Plane_SignedDistance(*this, circle); }
 float Plane::SignedDistance(const Line &line) const { return Plane_SignedDistance(*this, line); }
-float Plane::SignedDistance(const LineSegment &lineSegment) const { return Plane_SignedDistance(*this, lineSegment); }
+float Plane::SignedDistance(const LineSegment &lineseg) const { return Plane_SignedDistance(*this, lineseg); }
 //float Plane::SignedDistance(const Plane &plane) const { return Plane_SignedDistance(*this, plane); }
 float Plane::SignedDistance(const Polygon &polygon) const { return Plane_SignedDistance(*this, polygon); }
 float Plane::SignedDistance(const Triangle &triangle) const { return Plane_SignedDistance(*this, triangle); }
@@ -257,9 +257,9 @@ vec Plane::ProjectToPositiveHalf(const vec &point) const
 	return point - Min(0.f, (Dot(normal, point) - d)) * normal;
 }
 
-LineSegment Plane::Project(const LineSegment &lineSegment) const
+LineSegment Plane::Project(const LineSegment &lineseg) const
 {
-	return LineSegment(Project(lineSegment.a), Project(lineSegment.b));
+	return LineSegment(Project(lineseg.a), Project(lineseg.b));
 }
 
 Line Plane::Project(const Line &line, bool *nonDegenerate) const
@@ -291,38 +291,38 @@ Polygon Plane::Project(const Polygon &polygon) const
 	return p;
 }
 
-vec Plane::ClosestPoint(const LineSegment &lineSegment) const
+vec Plane::ClosestPoint(const LineSegment &lineseg) const
 {
 	/*
 	///@todo Output parametric d as well.
 	float d;
-	if (lineSegment.Intersects(*this, &d))
-		return lineSegment.GetPoint(d);
+	if (lineseg.Intersects(*this, &d))
+		return lineseg.GetPoint(d);
 	else
-		if (Distance(lineSegment.a) < Distance(lineSegment.b))
-			return Project(lineSegment.a);
+		if (Distance(lineseg.a) < Distance(lineseg.b))
+			return Project(lineseg.a);
 		else
-			return Project(lineSegment.b);
+			return Project(lineseg.b);
 	*/
 
-	assume(lineSegment.IsFinite());
+	assume(lineseg.IsFinite());
 	assume(!IsDegenerate());
 
-	float aDist = Dot(normal, lineSegment.a);
-	float bDist = Dot(normal, lineSegment.b);
+	float aDist = Dot(normal, lineseg.a);
+	float bDist = Dot(normal, lineseg.b);
 
 	float denom = bDist - aDist;
 	if (EqualAbs(denom, 0.f))
-		return Project(Abs(aDist) < Abs(bDist) ? lineSegment.a : lineSegment.b); // Project()ing the result here is not strictly necessary,
+		return Project(Abs(aDist) < Abs(bDist) ? lineseg.a : lineseg.b); // Project()ing the result here is not strictly necessary,
 		                                                                         // but done for numerical stability, so that Plane::Contains()
 		                                                                         // will return true for the returned point.
 	else
 	{
-		float t = (d - Dot(normal, lineSegment.a)) / (bDist - aDist);
+		float t = (d - Dot(normal, lineseg.a)) / (bDist - aDist);
 		t = Clamp01(t);
 		// Project()ing the result here is necessary only if we clamped, but done for numerical stability, so that Plane::Contains() will
 		// return true for the returned point.
-		return Project(lineSegment.GetPoint(t));
+		return Project(lineseg.GetPoint(t));
 	}
 }
 
@@ -336,9 +336,9 @@ bool Plane::Contains(const Line &line, float epsilon) const
 	return Contains(line.pos) && line.dir.IsPerpendicular(normal, epsilon);
 }
 
-bool Plane::Contains(const LineSegment &lineSegment, float epsilon) const
+bool Plane::Contains(const LineSegment &lineseg, float epsilon) const
 {
-	return Contains(lineSegment.a, epsilon) && Contains(lineSegment.b, epsilon);
+	return Contains(lineseg.a, epsilon) && Contains(lineseg.b, epsilon);
 }
 
 bool Plane::Contains(const Triangle &triangle, float epsilon) const
@@ -539,11 +539,11 @@ bool Plane::Intersects(const Line &line, float *dist) const
 	return intersects;
 }
 
-bool Plane::Intersects(const LineSegment &lineSegment, float *dist) const
+bool Plane::Intersects(const LineSegment &lineseg, float *dist) const
 {
 	float t;
-	bool success = IntersectLinePlane(normal, this->d, lineSegment.a, lineSegment.Dir(), t);
-	const float lineSegmentLength = lineSegment.Length();
+	bool success = IntersectLinePlane(normal, this->d, lineseg.a, lineseg.Dir(), t);
+	const float lineSegmentLength = lineseg.Length();
 	if (dist)
 		*dist = t / lineSegmentLength;
 	return success && t >= 0.f && t <= lineSegmentLength;

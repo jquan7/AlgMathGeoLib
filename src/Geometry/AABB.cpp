@@ -493,9 +493,9 @@ bool AABB::Contains(const vec &point) const
 #endif
 }
 
-bool AABB::Contains(const LineSegment &lineSegment) const
+bool AABB::Contains(const LineSegment &lineseg) const
 {
-	return Contains(Min(lineSegment.a, lineSegment.b), Max(lineSegment.a, lineSegment.b));
+	return Contains(Min(lineseg.a, lineseg.b), Max(lineseg.a, lineseg.b));
 }
 
 bool AABB::Contains(const vec &aabbMinPoint, const vec &aabbMaxPoint) const
@@ -547,20 +547,20 @@ bool AABB::Intersects(const Line &line) const
 #endif
 }
 
-bool AABB::Intersects(const LineSegment &lineSegment) const
+bool AABB::Intersects(const LineSegment &lineseg) const
 {
-	vec dir = lineSegment.b - lineSegment.a;
+	vec dir = lineseg.b - lineseg.a;
 	float len = dir.Length();
 	if (len <= 1e-4f) // Degenerate line segment? Fall back to point-in-AABB test.
-		return Contains(lineSegment.a);
+		return Contains(lineseg.a);
 
 	float invLen = 1.f / len;
 	dir *= invLen;
 	float tNear = 0.f, tFar = len;
 #ifdef MATH_SIMD
-	return IntersectLineAABB_SSE(lineSegment.a, dir, tNear, tFar);
+	return IntersectLineAABB_SSE(lineseg.a, dir, tNear, tFar);
 #else
-	return IntersectLineAABB_CPP(lineSegment.a, dir, tNear, tFar);
+	return IntersectLineAABB_CPP(lineseg.a, dir, tNear, tFar);
 #endif
 }
 
@@ -746,21 +746,21 @@ bool AABB::Intersects(const Line &line, float &dNear, float &dFar) const
 	return IntersectLineAABB(line.pos, line.dir, dNear, dFar);
 }
 
-bool AABB::Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) const
+bool AABB::Intersects(const LineSegment &lineseg, float &dNear, float &dFar) const
 {
-	vec dir = lineSegment.b - lineSegment.a;
+	vec dir = lineseg.b - lineseg.a;
 	float len = dir.Length();
 	if (len <= 1e-4f) // Degenerate line segment? Fall back to point-in-AABB test.
 	{
 		dNear = 0.f;
 		dFar = 1.f;
-		return Contains(lineSegment.a);
+		return Contains(lineseg.a);
 	}
 	float invLen = 1.f / len;
 	dir *= invLen;
 	dNear = 0.f;
 	dFar = len;
-	bool hit = IntersectLineAABB(lineSegment.a, dir, dNear, dFar);
+	bool hit = IntersectLineAABB(lineseg.a, dir, dNear, dFar);
 	dNear *= invLen;
 	dFar *= invLen;
 	return hit;
@@ -855,9 +855,9 @@ void AABB::Enclose(const vec &point)
 	maxPoint = Max(maxPoint, point);
 }
 
-void AABB::Enclose(const LineSegment &lineSegment)
+void AABB::Enclose(const LineSegment &lineseg)
 {
-	Enclose(Min(lineSegment.a, lineSegment.b), Max(lineSegment.a, lineSegment.b));
+	Enclose(Min(lineseg.a, lineseg.b), Max(lineseg.a, lineseg.b));
 }
 
 void AABB::Enclose(const vec &aabbMinPoint, const vec &aabbMaxPoint)

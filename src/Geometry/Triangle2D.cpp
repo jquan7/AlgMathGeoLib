@@ -254,9 +254,9 @@ bool Triangle2D::Contains(const vec2d &point, float triangleThicknessSq) const
 	return br.x >= -1e-3f && br.y >= -1e-3f && br.z >= -1e-3f; // Allow for a small epsilon to properly account for points very near the edges of the triangle.
 }
 
-bool Triangle2D::Contains(const LineSegment2D &lineSegment, float triangleThickness) const
+bool Triangle2D::Contains(const LineSegment2D &lineseg, float triangleThickness) const
 {
-	return Contains(lineSegment.a, triangleThickness) && Contains(lineSegment.b, triangleThickness);
+	return Contains(lineseg.a, triangleThickness) && Contains(lineseg.b, triangleThickness);
 }
 
 bool Triangle2D::Contains(const Triangle2D &triangle, float triangleThickness) const
@@ -744,46 +744,46 @@ vec2d Triangle2D::ClosestPoint(const vec2d &p) const
 	return a + ab * v + ac * w;
 }
 #if 0
-vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt) const
+vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineseg, vec2d *otherPt) const
 {
 	///TODO: Optimize.
 	float u, v;
-	float t = IntersectLineTri(lineSegment.a, lineSegment.b - lineSegment.a, a, b, c, u, v);
+	float t = IntersectLineTri(lineseg.a, lineseg.b - lineseg.a, a, b, c, u, v);
 	bool intersects = (t >= 0.0f && t <= 1.0f);
 	if (intersects)
 	{
-//		assume3(lineSegment.GetPoint(t).Equals(this->Point(u, v)), lineSegment.GetPoint(t).SerializeToCodeString(), this->Point(u, v).SerializeToCodeString(), lineSegment.GetPoint(t).Distance(this->Point(u, v)));
+//		assume3(lineseg.GetPoint(t).Equals(this->Point(u, v)), lineseg.GetPoint(t).SerializeToCodeString(), this->Point(u, v).SerializeToCodeString(), lineseg.GetPoint(t).Distance(this->Point(u, v)));
 		if (otherPt)
-			*otherPt = lineSegment.GetPoint(t);
+			*otherPt = lineseg.GetPoint(t);
 		return this->Point(u, v);
 	}
 
 	float u1,v1,d1;
-	vec2d pt1 = ClosestPointToTriangleEdge(lineSegment, &u1, &v1, &d1);
+	vec2d pt1 = ClosestPointToTriangleEdge(lineseg, &u1, &v1, &d1);
 
-	vec2d pt2 = ClosestPoint(lineSegment.a);
-	vec2d pt3 = ClosestPoint(lineSegment.b);
+	vec2d pt2 = ClosestPoint(lineseg.a);
+	vec2d pt3 = ClosestPoint(lineseg.b);
 
-	float D1 = pt1.DistanceSq(lineSegment.GetPoint(d1));
-	float D2 = pt2.DistanceSq(lineSegment.a);
-	float D3 = pt3.DistanceSq(lineSegment.b);
+	float D1 = pt1.DistanceSq(lineseg.GetPoint(d1));
+	float D2 = pt2.DistanceSq(lineseg.a);
+	float D3 = pt3.DistanceSq(lineseg.b);
 
 	if (D1 <= D2 && D1 <= D3)
 	{
 		if (otherPt)
-			*otherPt = lineSegment.GetPoint(d1);
+			*otherPt = lineseg.GetPoint(d1);
 		return pt1;
 	}
 	else if (D2 <= D3)
 	{
 		if (otherPt)
-			*otherPt = lineSegment.a;
+			*otherPt = lineseg.a;
 		return pt2;
 	}
 	else
 	{
 		if (otherPt)
-			*otherPt = lineSegment.b;
+			*otherPt = lineseg.b;
 		return pt3;
 	}
 }
@@ -794,12 +794,12 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 /// direction of the gradient to determine the proper region of intersection.
 /// Instead using a slower code path above.
 /// [groupSyntax]
-vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt) const
+vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineseg, vec2d *otherPt) const
 {
 	vec2d e0 = b - a;
 	vec2d e1 = c - a;
-	vec2d v_p = a - lineSegment.a;
-	vec2d d = lineSegment.b - lineSegment.a;
+	vec2d v_p = a - lineseg.a;
+	vec2d d = lineseg.b - lineseg.a;
 
 	// Q(u,v) = a + u*e0 + v*e1
 	// L(t)   = ls.a + t*d
@@ -825,25 +825,25 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 		LineSegment2D e1 = Edge(0);
 		LineSegment2D e2 = Edge(1);
 		LineSegment2D e3 = Edge(2);
-		float d1 = e1.Distance(lineSegment, &t1, &s1);
-		float d2 = e2.Distance(lineSegment, &t2, &s2);
-		float d3 = e3.Distance(lineSegment, &t3, &s3);
+		float d1 = e1.Distance(lineseg, &t1, &s1);
+		float d2 = e2.Distance(lineseg, &t2, &s2);
+		float d3 = e3.Distance(lineseg, &t3, &s3);
 		if (d1 < d2 && d1 < d3)
 		{
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(s1);
+				*otherPt = lineseg.GetPoint(s1);
 			return e1.GetPoint(t1);
 		}
 		else if (d2 < d3)
 		{
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(s2);
+				*otherPt = lineseg.GetPoint(s2);
 			return e2.GetPoint(t2);
 		}
 		else
 		{
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(s3);
+				*otherPt = lineseg.GetPoint(s3);
 			return e3.GetPoint(t3);
 		}
 	}
@@ -867,7 +867,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			t = Clamp01(t); // The solution for t must also be in the range [0,1].
 			// The solution is (u,v,t)=(0,0,t).
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(t);
+				*otherPt = lineseg.GetPoint(t);
 			return a;
 		}
 		else if (v > 1.f)
@@ -877,7 +877,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			t = Clamp01(t);
 			// The solution is (u,v,t)=(0,1,t).
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(t);
+				*otherPt = lineseg.GetPoint(t);
 			return c; // == a + v*e1
 		}
 		else if (t < 0.f)
@@ -888,7 +888,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			v = Clamp01(v); // The solution for v must also be in the range [0,1]. TODO: Is this guaranteed by the above?
 			// The solution is (u,v,t)=(0,v,0).
 			if (otherPt)
-				*otherPt = lineSegment.a;
+				*otherPt = lineseg.a;
 			return a + v * e1;
 		}
 		else if (t > 1.f)
@@ -899,14 +899,14 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			v = Clamp01(v); // The solution for v must also be in the range [0,1]. TODO: Is this guaranteed by the above?
 			// The solution is (u,v,t)=(0,v,1).
 			if (otherPt)
-				*otherPt = lineSegment.b;
+				*otherPt = lineseg.b;
 			return a + v * e1;
 		}
 		else
 		{
 			// The solution is (u,v,t)=(0,v,t).
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(t);
+				*otherPt = lineseg.GetPoint(t);
 			return a + v * e1;
 		}
 	}
@@ -930,7 +930,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			t = Clamp01(t); // The solution for t must also be in the range [0,1].
 			// The solution is (u,v,t)=(0,0,t).
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(t);
+				*otherPt = lineseg.GetPoint(t);
 			return a;
 		}
 		else if (u > 1.f)
@@ -940,7 +940,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			t = Clamp01(t); // The solution for t must also be in the range [0,1].
 			// The solution is (u,v,t)=(1,0,t).
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(t);
+				*otherPt = lineseg.GetPoint(t);
 			return b;
 		}
 		else if (t < 0.f)
@@ -950,7 +950,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 //			mathassert(EqualAbs(u, Clamp01(u)));
 			u = Clamp01(u); // The solution for u must also be in the range [0,1].
 			if (otherPt)
-				*otherPt = lineSegment.a;
+				*otherPt = lineseg.a;
 			return a + u * e0;
 		}
 		else if (t > 1.f)
@@ -960,21 +960,21 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 //			mathassert(EqualAbs(u, Clamp01(u)));
 			u = Clamp01(u); // The solution for u must also be in the range [0,1].
 			if (otherPt)
-				*otherPt = lineSegment.b;
+				*otherPt = lineseg.b;
 			return a + u * e0;
 		}
 		else
 		{
 			// The solution is (u, 0, t).
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(t);
+				*otherPt = lineseg.GetPoint(t);
 			return a + u * e0;
 		}
 	}
 	else if (uvt.z < 0.f)
 	{
 		if (otherPt)
-			*otherPt = lineSegment.a;
+			*otherPt = lineseg.a;
 		// Clamp to t == 0 and solve again.
 		float m_00 = m[1][1];
 		float m_01 = -m[0][1];
@@ -1023,7 +1023,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			t /= det;
 			t = Clamp01(t);
 			if (otherPt)
-				*otherPt = lineSegment.GetPoint(t);
+				*otherPt = lineseg.GetPoint(t);
 			return a + u*e0 + (1.f-u)*e1;
 		}
 		else
@@ -1035,7 +1035,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 	else if (uvt.z > 1.f)
 	{
 		if (otherPt)
-			*otherPt = lineSegment.b;
+			*otherPt = lineseg.b;
 		// Clamp to t == 1 and solve again.
 		float m_00 = m[1][1];
 		float m_01 = -m[0][1];
@@ -1075,7 +1075,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 			//                                      u == (K,e1-e0) / (e0-e1,e0-e1)
 
 			u = (B[0] - m[0][1] - m[0][2]) / (m[0][0] - m[0][1]);
-//			u = Dot(a + e1 + lineSegment.b, e1 - e0) / Dot(e0-e1, e0-e1);
+//			u = Dot(a + e1 + lineseg.b, e1 - e0) / Dot(e0-e1, e0-e1);
 
 //			mathassert(EqualAbs(u, Clamp01(u)));
 			u = Clamp01(u);
@@ -1104,7 +1104,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 
 		t = Clamp01(t);
 		if (otherPt)
-			*otherPt = lineSegment.GetPoint(t);
+			*otherPt = lineseg.GetPoint(t);
 
 		if (u < 0.f)
 		{
@@ -1123,7 +1123,7 @@ vec2d Triangle2D::ClosestPoint(const LineSegment2D &lineSegment, vec2d *otherPt)
 	else // All parameters are within range, so the triangle and the line segment intersect, and the intersection point is the closest point.
 	{
 		if (otherPt)
-			*otherPt = lineSegment.GetPoint(uvt.z);
+			*otherPt = lineseg.GetPoint(uvt.z);
 		return a + uvt.x * e0 + uvt.y * e1;
 	}
 }
@@ -1164,18 +1164,18 @@ vec2d Triangle2D::ClosestPointToTriangleEdge(const Line2D &other, float *outU, f
 	}
 }
 
-vec2d Triangle2D::ClosestPointToTriangleEdge(const LineSegment2D &lineSegment, float *outU, float *outV, float *outD) const
+vec2d Triangle2D::ClosestPointToTriangleEdge(const LineSegment2D &lineseg, float *outU, float *outV, float *outD) const
 {
 	///@todo Optimize!
 	// The line is parallel to the triangle.
 	float unused1, unused2, unused3;
 	float d1, d2, d3;
-	vec2d pt1 = Edge(0).ClosestPoint(lineSegment, unused1, d1);
-	vec2d pt2 = Edge(1).ClosestPoint(lineSegment, unused2, d2);
-	vec2d pt3 = Edge(2).ClosestPoint(lineSegment, unused3, d3);
-	float dist1 = pt1.DistanceSq(lineSegment.GetPoint(d1));
-	float dist2 = pt2.DistanceSq(lineSegment.GetPoint(d2));
-	float dist3 = pt3.DistanceSq(lineSegment.GetPoint(d3));
+	vec2d pt1 = Edge(0).ClosestPoint(lineseg, unused1, d1);
+	vec2d pt2 = Edge(1).ClosestPoint(lineseg, unused2, d2);
+	vec2d pt3 = Edge(2).ClosestPoint(lineseg, unused3, d3);
+	float dist1 = pt1.DistanceSq(lineseg.GetPoint(d1));
+	float dist2 = pt2.DistanceSq(lineseg.GetPoint(d2));
+	float dist3 = pt3.DistanceSq(lineseg.GetPoint(d3));
 	if (dist1 <= dist2 && dist1 <= dist3)
 	{
 		if (outU) *outU = BarycentricUV(pt1).x;

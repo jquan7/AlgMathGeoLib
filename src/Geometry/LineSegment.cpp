@@ -342,9 +342,9 @@ bool LineSegment::Intersects(const OBB &obb, float &dNear, float &dFar) const
 	return obb.Intersects(*this, dNear, dFar);
 }
 
-bool LineSegment::Intersects(const LineSegment &lineSegment, float epsilon) const
+bool LineSegment::Intersects(const LineSegment &lineseg, float epsilon) const
 {
-	return Distance(lineSegment) <= epsilon;
+	return Distance(lineseg) <= epsilon;
 }
 
 bool LineSegment::Intersects(const Polygon &polygon) const
@@ -421,9 +421,9 @@ std::string LineSegment::SerializeToCodeString() const
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 
-std::ostream &operator <<(std::ostream &o, const LineSegment &lineSegment)
+std::ostream &operator <<(std::ostream &o, const LineSegment &lineseg)
 {
-	o << lineSegment.ToString();
+	o << lineseg.ToString();
 	return o;
 }
 

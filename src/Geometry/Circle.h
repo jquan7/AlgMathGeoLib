@@ -132,14 +132,14 @@ public:
 	// Returns true if the given point lies inside this filled circle.
 	// @param maxDistance The epsilon threshold to test the distance against.
 //	bool DiscContains(const vec &point, float maxDistance = 1e-6f) const;
-//	bool DiscContains(const LineSegment &lineSegment, float maxDistance = 1e-6f) const;
+//	bool DiscContains(const LineSegment &lineseg, float maxDistance = 1e-6f) const;
 
 	/// Computes the distance of the given object to the edge of this circle.
 	/** @return The distance of the given point to the edge of this circle. If the point is contained on this circle,
 			the value 0 is returned.
 		@see DistanceToDisc(), ClosestPointToEdge(), ClosestPointToDisc(). */
 	float DistanceToEdge(const vec &point) const;
-//	float DistanceToEdge(const LineSegment &lineSegment, float *d, vec *closestPoint) const;
+//	float DistanceToEdge(const LineSegment &lineseg, float *d, vec *closestPoint) const;
 //	float DistanceToEdge(const Line &line, float *d, vec *closestPoint) const;
 
 	/// Computes the distance of the given object to this disc (filled circle).
@@ -147,13 +147,13 @@ public:
 		@see DistanceToEdge(), ClosestPointToEdge(), ClosestPointToDisc(). */
 	float DistanceToDisc(const vec &point) const;
 /*
-	float DistanceToDisc(const LineSegment &lineSegment, float *d, vec *closestPoint) const;
+	float DistanceToDisc(const LineSegment &lineseg, float *d, vec *closestPoint) const;
 	float DistanceToDisc(const Line &line, float *d, vec *closestPoint) const;
 */
 	/// Computes the closest point on the edge of this circle to the given point.
 	/** @see DistanceToEdge(), DistanceToDisc(), ClosestPointToDisc(). */
 	vec ClosestPointToEdge(const vec &point) const;
-//	vec ClosestPointToEdge(const LineSegment &lineSegment, float *d) const;
+//	vec ClosestPointToEdge(const LineSegment &lineseg, float *d) const;
 //	vec ClosestPointToEdge(const Line &line, float *d) const;
 
 	/// Computes the closest point on the disc of this circle to the given object.
@@ -170,7 +170,7 @@ public:
 	/// Tests this disc for an intersection against the given object.
 	/** @see Intersects(). */
 	bool IntersectsDisc(const Line &line) const;
-	bool IntersectsDisc(const LineSegment &lineSegment) const;
+	bool IntersectsDisc(const LineSegment &lineseg) const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Tests if this circle intersects the faces of the given OBB.

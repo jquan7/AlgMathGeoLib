@@ -435,9 +435,9 @@ bool LineSegment2D::Intersects(const OBB2D &obb, float &dNear, float &dFar) cons
 	return obb.Intersects(*this, dNear, dFar);
 }
 #endif
-bool LineSegment2D::Intersects(const LineSegment2D &lineSegment, float epsilon) const
+bool LineSegment2D::Intersects(const LineSegment2D &lineseg, float epsilon) const
 {
-	return Distance(lineSegment) <= epsilon;
+	return Distance(lineseg) <= epsilon;
 }
 #if 0
 bool LineSegment2D::Intersects(const Polygon2D &polygon) const
@@ -513,9 +513,9 @@ std::string LineSegment2D::SerializeToCodeString() const
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 
-std::ostream &operator <<(std::ostream &o, const LineSegment2D &lineSegment)
+std::ostream &operator <<(std::ostream &o, const LineSegment2D &lineseg)
 {
-	o << lineSegment.ToString();
+	o << lineseg.ToString();
 	return o;
 }
 

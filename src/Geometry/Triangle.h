@@ -250,7 +250,7 @@ public:
 		@see Distance(), Intersects(), ClosestPoint().
 		@todo Add Triangle::Contains(Circle) and Triangle::Contains(Disc). */
 	bool Contains(const vec &point, float triangleThicknessSq = 1e-5f) const;
-	bool Contains(const LineSegment &lineSegment, float triangleThickness = 1e-3f) const;
+	bool Contains(const LineSegment &lineseg, float triangleThickness = 1e-3f) const;
 	bool Contains(const Triangle &triangle, float triangleThickness = 1e-3f) const;
 
 	/// Computes the distance between this triangle and the given object.
@@ -272,7 +272,7 @@ public:
 			may be null.
 		@return True if an intersection occurs or one of the objects is contained inside the other, false otherwise.
 		@see Contains(), Distance(), ClosestPoint(), LineSegment::GetPoint(). */
-	bool Intersects(const LineSegment &lineSegment, float *d = 0, vec *intersectionPoint = 0) const;
+	bool Intersects(const LineSegment &lineseg, float *d = 0, vec *intersectionPoint = 0) const;
 	bool Intersects(const Line &line, float *d = 0, vec *intersectionPoint = 0) const;
 	bool Intersects(const Plane &plane) const;
 	/** @param outLine [out] If specified, receives the line segment of the common points shared by the two
@@ -307,7 +307,7 @@ public:
 	vec ClosestPointD(const vec &point) const;
 	/** @param otherPt [out] If specified, receives the closest point on the other object to this triangle.
 		This pointer may be null. */
-	vec ClosestPoint(const LineSegment &lineSegment, vec *otherPt = 0) const;
+	vec ClosestPoint(const LineSegment &lineseg, vec *otherPt = 0) const;
 	/** @param outU [out] If specified, receives the barycentric U coordinate of the returned point (in the UV convention).
 			This pointer may be null. TODO Add this parameter back.
 		@param outV [out] If specified, receives the barycentric V coordinate of the returned point (in the UV convention).
@@ -327,7 +327,7 @@ public:
 		@return The closest point on the edge of this triangle to the given object.
 		@see Distance(), Contains(), Intersects(), ClosestPointToTriangleEdge(), Line::GetPoint. */
 	vec ClosestPointToTriangleEdge(const Line &line, float *outU, float *outV, float *outD) const;
-	vec ClosestPointToTriangleEdge(const LineSegment &lineSegment, float *outU, float *outV, float *outD) const;
+	vec ClosestPointToTriangleEdge(const LineSegment &lineseg, float *outU, float *outV, float *outD) const;
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Line. Most useful for debugging purposes.

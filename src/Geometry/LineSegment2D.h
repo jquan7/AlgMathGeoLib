@@ -132,7 +132,7 @@ public:
 
 	/// Tests if the given point or line segment is contained on this line segment.
 	bool Contains(const vec2d &point, float dist_th = 1e-3f) const;
-	bool Contains(const LineSegment2D &lineSegment, float dist_th = 1e-3f) const;
+	bool Contains(const LineSegment2D &lineseg, float dist_th = 1e-3f) const;
 
 	/// Computes the closest point on this line segment to the given object.
 	/** @param d [out] If specified, this parameter receives the normalized distance along
@@ -211,7 +211,7 @@ public:
 #endif
 	/** @param epsilon If testing intersection between two line segments, a distance threshold value is used to account
 			for floating-point inaccuracies. */
-	bool Intersects(const LineSegment2D &lineSegment, float epsilon = 1e-3f) const;
+	bool Intersects(const LineSegment2D &lineseg, float epsilon = 1e-3f) const;
 	/// Tests if this line segment intersects the given disc.
 	/// @todo This signature will be moved to bool Intersects(const Disc &disc) const;
 #if 0
@@ -264,7 +264,7 @@ LineSegment2D operator *(const float4x4 &transform, const LineSegment2D &line);
 LineSegment2D operator *(const Quat &transform, const LineSegment2D &line);
 
 #ifdef MATH_ENABLE_STL_SUPPORT
-std::ostream &operator <<(std::ostream &o, const LineSegment2D &lineSegment);
+std::ostream &operator <<(std::ostream &o, const LineSegment2D &lineseg);
 #endif
 
 int IntervalIntersection(float u0, float u1, float v0, float v1, float &s, float &t);

@@ -152,7 +152,7 @@ public:
 			front and back sides of this plane.
 		@see SignedDistance(), Intersects(), Contains(). */
 	float Distance(const vec &point) const;
-	float Distance(const LineSegment &lineSegment) const;
+	float Distance(const LineSegment &lineseg) const;
 
 	/// Returns the signed distance of this plane to the given point.
 	/** If this function returns a negative value, the given point lies in the negative halfspace of this plane.
@@ -164,7 +164,7 @@ public:
 	float SignedDistance(const OBB &obb) const;
 //	float SignedDistance(const Circle &circle) const;
 	float SignedDistance(const Line &line) const;
-	float SignedDistance(const LineSegment &lineSegment) const;
+	float SignedDistance(const LineSegment &lineseg) const;
 //	float SignedDistance(const Plane &plane) const;
 	float SignedDistance(const Polygon &polygon) const;
 	float SignedDistance(const Triangle &triangle) const;
@@ -177,7 +177,7 @@ public:
 	/** @note This mapping can be expressed as a float3x4 matrix operation. See the OrthoProjection() function.
 		@see OrthoProjection(), ProjectToPositiveHalf(), ProjectToNegativeHalf(). */
 	vec Project(const vec &point) const;
-	LineSegment Project(const LineSegment &lineSegment) const;
+	LineSegment Project(const LineSegment &lineseg) const;
 	/** @param nonDegenerate [out] If the line is perpendicular to the plane, the projection is
 		a single point. In that case, the .pos parameter of the returned object will specify the point
 		location, the .dir parameter of the object will be undefined and the nonDegenerate pointer will be
@@ -239,7 +239,7 @@ public:
 		the region of intersection.
 		@see Contains(), Distance(), Intersects(). */
 	vec ClosestPoint(const vec &point) const { return Project(point); }
-	vec ClosestPoint(const LineSegment &lineSegment) const;
+	vec ClosestPoint(const LineSegment &lineseg) const;
 
 	/// Tests if this plane contains the given object.
 	/** @param epsilon Since a plane is a 2D object in a 3D space, an distance threshold is used for the test.
@@ -247,7 +247,7 @@ public:
 		@return True if the given object is contained in this plane, up to the given epsilon distance. */
 	bool Contains(const vec &point, float epsilon = 1e-3f) const;
 	bool Contains(const Line &line, float epsilon = 1e-3f) const;
-	bool Contains(const LineSegment &lineSegment, float epsilon = 1e-3f) const;
+	bool Contains(const LineSegment &lineseg, float epsilon = 1e-3f) const;
 	bool Contains(const Triangle &triangle, float epsilon = 1e-3f) const;
 	bool Contains(const Circle &circle, float epsilon = 1e-3f) const;
 	bool Contains(const Polygon &polygon, float epsilon = 1e-3f) const;
@@ -290,7 +290,7 @@ public:
 			the intersection point along the line object. Use the GetPoint(d) function of the line class
 			to get the actual point of intersection. This pointer may be null. */
 	bool Intersects(const Line &line, float *dist = 0) const;
-	bool Intersects(const LineSegment &lineSegment, float *dist = 0) const;
+	bool Intersects(const LineSegment &lineseg, float *dist = 0) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;

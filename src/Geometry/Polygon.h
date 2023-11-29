@@ -264,7 +264,7 @@ public:
 		@todo Add ContainsConvex(vec/etc.). See RTCD p. 202.
 		@todo Add Contains(Circle/Disc). */
 	bool Contains(const vec &point, float polygonThicknessSq = 1e-5f) const;
-	bool Contains(const LineSegment &lineSegment, float polygonThickness = 1e-3f) const;
+	bool Contains(const LineSegment &lineseg, float polygonThickness = 1e-3f) const;
 	bool Contains(const Triangle &triangle, float polygonThickness = 1e-3f) const;
 	bool Contains(const Polygon &polygon, float polygonThickness = 1e-3f) const;
 	//todo Add RTCD, p. 202.
@@ -296,7 +296,7 @@ public:
 		@see ConvexIntersects(), Contains(), ClosestPoint(), Distance().
 		@todo Add Intersects(Circle/Disc). */
 	bool Intersects(const Line &line) const;
-	bool Intersects(const LineSegment &lineSegment) const;
+	bool Intersects(const LineSegment &lineseg) const;
 	bool Intersects(const Plane &plane) const;
 	bool Intersects(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
@@ -314,12 +314,12 @@ public:
 	/// Computes the closest point on this polygon to the given object.
 	/** If the other object intersects this polygon, this function will return an arbitrary point inside
 		the region of intersection.
-		@param lineSegment The line segment to find the closest point to.
+		@param lineseg The line segment to find the closest point to.
 		@param lineSegmentPt [out] If specified, receives the closest point on the line segment to this polygon. This
 			pointer may be null.
 		@see Contains(), Distance(), Intersects().  */
-	vec ClosestPoint(const LineSegment &lineSegment, vec *lineSegmentPt) const;
-	vec ClosestPoint(const LineSegment &lineSegment) const;
+	vec ClosestPoint(const LineSegment &lineseg, vec *lineSegmentPt) const;
+	vec ClosestPoint(const LineSegment &lineseg) const;
 	vec ClosestPoint(const vec &point) const;
 
 	/// Returns the distance between this polygon and the given point.
