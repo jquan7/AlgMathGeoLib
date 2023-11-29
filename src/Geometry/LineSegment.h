@@ -184,6 +184,7 @@ public:
 			the specified point. This pointer may be null. */
 	bool Intersects(const Plane &plane, float *d) const;
 	/** @param intersectionPoint [out] If specified, receives the point of intersection. This pointer may be null. */
+	bool Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const;
 	/** @param dNear [out] If specified, receives the parametric distance along this line segment denoting where the line entered the
 			bounding box object.
 		@param dFar [out] If specified, receives the parametric distance along this line segment denoting where the line exited the

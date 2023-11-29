@@ -352,6 +352,7 @@ public:
 	bool Contains(const LineSegment &lineSegment) const;
 	bool Contains(const AABB &aabb) const;
 	bool Contains(const OBB &obb) const;
+	bool Contains(const Triangle &triangle) const;
 	bool Contains(const Polygon &polygon) const;
 
 	/// Tests whether this OBB and the given object intersect.
@@ -377,6 +378,7 @@ public:
 	bool Intersects(const Line &line) const;
 	bool Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) const;
 	bool Intersects(const LineSegment &lineSegment) const;
+	bool Intersects(const Triangle &triangle) const;
 	bool Intersects(const Polygon &polygon) const;
 
 	/// Expands this OBB to enclose the given object. The axis directions of this OBB remain intact.
@@ -384,9 +386,32 @@ public:
 		optimal fit for the previous OBB and the given point. */
 	void Enclose(const vec &point);
 
+	/// Generates an unindexed triangle mesh representation of this OBB.
+	/** @param numFacesX The number of faces to generate along the X axis. This value must be >= 1.
+		@param numFacesY The number of faces to generate along the Y axis. This value must be >= 1.
+		@param numFacesZ The number of faces to generate along the Z axis. This value must be >= 1.
+		@param outPos [out] An array of size numVertices which will receive a triangle list
+							of vertex positions. Cannot be null.
+		@param outNormal [out] An array of size numVertices which will receive vertex normals.
+							   If this parameter is null, vertex normals are not returned.
+		@param outUV [out] An array of size numVertices which will receive vertex UV coordinates.
+							   If this parameter is null, a UV mapping is not generated.
+		The number of vertices that outPos, outNormal and outUV must be able to contain is
+		(x*y + x*z + y*z)*2*6. If x==y==z==1, then a total of 36 vertices are required. Call
+		NumVerticesInTriangulation to obtain this value.
+		@see ToEdgeList(), NumVerticesInTriangulation(). */
+	void Triangulate(int numFacesX, int numFacesY, int numFacesZ, vec *outPos, vec *outNormal, float2 *outUV, bool ccwIsFrontFacing) const;
+
+	/// Returns the number of vertices that the Triangulate() function will output with the given subdivision parameters.
+	/** @see Triangulate(). */
+	static int NumVerticesInTriangulation(int numFacesX, int numFacesY, int numFacesZ)
+	{
+		return (numFacesX*numFacesY + numFacesX*numFacesZ + numFacesY*numFacesZ)*2*6;
+	}
+
 	/// Generates an edge list representation of the edges of this OBB.
 	/** @param outPos [out] An array that contains space for at least 24 vertices (NumVerticesInEdgeList()).
-		@see Edge(), NumVerticesInEdgeList(). */
+		@see Triangulate(), Edge(), NumVerticesInEdgeList(). */
 	void ToEdgeList(vec *outPos) const;
 
 	/// Returns the number of vertices that the ToEdgeList() function will output.

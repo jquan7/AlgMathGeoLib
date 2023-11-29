@@ -29,6 +29,7 @@
 #include "Polygon2D.h"
 #include "Sphere2D.h"
 #endif
+#include "Triangle2D.h"
 
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <iostream>
@@ -402,6 +403,11 @@ float LineSegment2D::DistanceSq(const LineSegment2D &other) const
 float LineSegment2D::Distance(const Sphere2D &other) const
 {
 	return Max(0.f, Distance(other.pos) - other.r);
+}
+
+bool LineSegment2D::Intersects(const Triangle2D &triangle, float *d, vec2d *intersectionPoint) const
+{
+	return triangle.Intersects(*this, d, intersectionPoint);
 }
 
 bool LineSegment2D::Intersects(const Sphere2D &s, vec2d *intersectionPoint, vec2d *intersectionNormal, float *d) const

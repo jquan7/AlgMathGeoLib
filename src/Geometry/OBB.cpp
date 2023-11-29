@@ -32,6 +32,7 @@
 #include "../Math/float4.h"
 #include "../Math/float4x4.h"
 #include "../Math/Quat.h"
+#include "Triangle.h"
 #include <stdlib.h>
 
 #include <set>
@@ -798,6 +799,11 @@ bool OBB::Contains(const OBB &obb) const
 	return true;
 }
 
+bool OBB::Contains(const Triangle &triangle) const
+{
+	return Contains(triangle.a) && Contains(triangle.b) && Contains(triangle.c);
+}
+
 bool OBB::Contains(const Polygon &polygon) const
 {
 	for(int i = 0; i < polygon.NumVertices(); ++i)
@@ -834,6 +840,16 @@ void OBB::Enclose(const vec &point)
 	}
 	// Should now contain the point.
 	assume2(Distance(point) <= 1e-3f, point, Distance(point));
+}
+
+void OBB::Triangulate(int x, int y, int z, vec *outPos, vec *outNormal, float2 *outUV, bool ccwIsFrontFacing) const
+{
+	AABB aabb(POINT_VEC_SCALAR(0), r*2.f);
+	aabb.Triangulate(x, y, z, outPos, outNormal, outUV, ccwIsFrontFacing);
+	float3x4 localToWorld = LocalToWorld();
+	assume(localToWorld.HasUnitaryScale()); // Transforming of normals will fail otherwise.
+	localToWorld.BatchTransformPos(outPos, NumVerticesInTriangulation(x,y,z), sizeof(vec));
+	localToWorld.BatchTransformDir(outNormal, NumVerticesInTriangulation(x,y,z), sizeof(vec));
 }
 
 void OBB::ToEdgeList(vec *outPos) const
@@ -1068,6 +1084,13 @@ bool OBB::Intersects(const LineSegment &lineSegment, float &dNear, float &dFar) 
 	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
 	LineSegment l = WorldToLocal() * lineSegment;
 	return aabb.Intersects(l, dNear, dFar);
+}
+
+bool OBB::Intersects(const Triangle &triangle) const
+{
+	AABB aabb(POINT_VEC_SCALAR(0.f), Size());
+	Triangle t = WorldToLocal() * triangle;
+	return t.Intersects(aabb);
 }
 
 bool OBB::Intersects(const Polygon &polygon) const

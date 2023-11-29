@@ -280,6 +280,7 @@ public:
 			This pointer may be null. */
 	bool Intersects(const Triangle &triangle, LineSegment *outLine = 0) const;
 	bool Intersects(const AABB &aabb) const;
+	bool Intersects(const OBB &obb) const;
 	bool Intersects(const Polygon &polygon) const;
 
 	/// A helper function used in line-triangle tests.

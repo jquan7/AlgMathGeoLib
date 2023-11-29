@@ -110,6 +110,12 @@ public:
     vec ClosestPoint(const LineSegment &other) const { float d, d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const LineSegment &other, float &d) const { float d2; return ClosestPoint(other, d, d2); }
     vec ClosestPoint(const LineSegment &other, float &d, float &d2) const;
+    /** @param outBarycentricUV [out] If specified, receives the barycentric UV coordinates (in two-coordinate barycentric UV convention)
+            representing the closest point on the triangle to this line.
+        @see Contains(), Distance(), Intersects(), GetPoint(), Triangle::Point(float u, float v). */
+    vec ClosestPoint(const Triangle &triangle) const { float d; return ClosestPoint(triangle, d); }
+    vec ClosestPoint(const Triangle &triangle, float &d) const;
+    vec ClosestPoint(const Triangle &triangle, float &d, float2 &outBarycentricUV) const;
 
     /// Tests whether this line and the given object intersect.
     /** Both objects are treated as "solid", meaning that if one of the objects is fully contained inside
@@ -117,8 +123,11 @@ public:
         @param d [out] If specified, this parameter will receive the parametric distance of
             the intersection point along this object. Use the GetPoint(d) function
             to get the actual point of intersection. This pointer may be null.
+        @param intersectionPoint [out] If specified, receives the actual point of intersection. This pointer
+            may be null.
         @return True if an intersection occurs or one of the objects is contained inside the other, false otherwise.
         @see Contains(), Distance(), ClosestPoint(), GetPoint(). */
+    bool Intersects(const Triangle &triangle, float *d, vec *intersectionPoint) const;
     bool Intersects(const Plane &plane, float *d) const;
     /** @param dNear [out] If specified, receives the distance along this line to where the line enters
         the bounding box.
