@@ -508,7 +508,7 @@ public:
 	static MUST_USE_RESULT bool AreOrthonormal(const float4 &a, const float4 &b, float epsilon = 1e-3f);
 	static MUST_USE_RESULT bool AreOrthonormal(const float4 &a, const float4 &b, const float4 &c, float epsilon = 1e-3f);
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z, w)".
 	StringT ToString() const;
 

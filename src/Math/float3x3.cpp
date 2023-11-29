@@ -770,10 +770,6 @@ bool float3x3::Inverse(float epsilon)
 
 bool float3x3::InverseFast(float epsilon)
 {
-#ifdef MATH_ASSERT_CORRECTNESS
-	float3x3 orig = *this;
-#endif
-
 	// Compute the inverse directly using Cramer's rule.
 	// Warning: This method is numerically very unstable!
 	float d = Determinant();
@@ -793,13 +789,6 @@ bool float3x3::InverseFast(float epsilon)
 	i[2][0] = d * (At(1, 0) * At(2, 1) - At(1, 1) * At(2, 0));
 	i[2][1] = d * (At(2, 0) * At(0, 1) - At(0, 0) * At(2, 1));
 	i[2][2] = d * (At(0, 0) * At(1, 1) - At(0, 1) * At(1, 0));
-
-#ifdef MATH_ASSERT_CORRECTNESS
-	float3x3 id = orig * i;
-	float3x3 id2 = i * orig;
-	mathassert(id.IsIdentity(0.5f));
-	mathassert(id2.IsIdentity(0.5f));
-#endif
 
 	*this = i;
 	return true;
@@ -921,9 +910,6 @@ float3x3 float3x3::Inverted() const
 
 bool float3x3::InverseColOrthogonal()
 {
-#ifdef MATH_ASSERT_CORRECTNESS
-	float3x3 orig = *this;
-#endif
 	assume(IsColOrthogonal());
 	float s1 = float3(At(0, 0), At(1, 0), At(2, 0)).LengthSq();
 	float s2 = float3(At(0, 1), At(1, 1), At(2, 1)).LengthSq();
@@ -949,9 +935,6 @@ bool float3x3::InverseColOrthogonal()
 
 bool float3x3::InverseOrthogonalUniformScale()
 {
-#ifdef MATH_ASSERT_CORRECTNESS
-	float3x3 orig = *this;
-#endif
 	assume(IsColOrthogonal());
 	assume(HasUniformScale());
 	float scale = float3(At(0, 0), At(1, 0), At(2, 0)).LengthSq();
@@ -977,9 +960,6 @@ bool float3x3::InverseOrthogonalUniformScale()
 
 void float3x3::InverseOrthonormal()
 {
-#ifdef MATH_ASSERT_CORRECTNESS
-	float3x3 orig = *this;
-#endif
 	assume(IsOrthonormal());
 	Transpose();
 	mathassert(!orig.IsInvertible()|| (orig * *this).IsIdentity());
@@ -1393,7 +1373,7 @@ bool float3x3::Equals(const float3x3 &other, float epsilon) const
 	return true;
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT float3x3::ToString() const
 {
 	char str[256];

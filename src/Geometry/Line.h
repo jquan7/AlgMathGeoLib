@@ -189,7 +189,7 @@ public:
 
 	static void ClosestPointLineLine(const vec &start0, const vec &dir0, const vec &start1, const vec &dir1, float &d, float &d2);
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Line.
 	/** The returned string specifies the position and direction of this Line. */
 	StringT ToString() const;

@@ -172,7 +172,7 @@ public:
 	bool IntersectsDisc(const Line &line) const;
 	bool IntersectsDisc(const LineSegment &lineSegment) const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Tests if this circle intersects the faces of the given OBB.
 	/** @param obb The bounding box to test against. This box is treated as "hollow", i.e. only the faces of the OBB are considered to be
 			a part of the OBB.

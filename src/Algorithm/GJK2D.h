@@ -21,10 +21,6 @@
 #include "../Math/float2.h"
 #include "../Geometry/Polygon2DRef.h"
 
-#ifdef MATH_CONTAINERLIB_SUPPORT
-#include "Container/Array.h"
-#endif
-
 MATH_BEGIN_NAMESPACE
 
 vec2d UpdateSimplex2D(vec2d *s, int &n);
@@ -127,29 +123,5 @@ inline bool GJKIntersectOBB2D(const vec2d *a, int numA, const vec2d &center, con
 	GJKOBB2DProxy p2(center, axis0, axis1);
 	return GJKIntersect2D(p1, p2);
 }
-
-#ifdef MATH_CONTAINERLIB_SUPPORT
-inline bool GJKIntersect2D(const Array<vec2d> &a, const Array<vec2d> &b)
-{
-	Polygon2DRef p1 = { a.ptr(), (int)a.size() };
-	Polygon2DRef p2 = { b.ptr(), (int)b.size() };
-	return GJKIntersect2D(p1, p2);
-}
-
-inline bool GJKContainsPt2D(const Array<vec2d> &a, const vec2d &b)
-{
-	Polygon2DRef p1 = { a.ptr(), (int)a.size() };
-	GJKVec2DProxy p2 = b;
-	return GJKIntersect2D(p1, p2);
-}
-
-inline bool GJKIntersectOBB2D(const Array<vec2d> &a, const vec2d &center, const vec2d &axis0, const vec2d &axis1)
-{
-	Polygon2DRef p1 = { a.ptr(), (int)a.size() };
-	GJKOBB2DProxy p2(center, axis0, axis1);
-	return GJKIntersect2D(p1, p2);
-}
-
-#endif
 
 MATH_END_NAMESPACE

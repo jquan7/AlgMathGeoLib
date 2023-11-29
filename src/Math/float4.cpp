@@ -499,7 +499,7 @@ bool float4::IsPerpendicular(const float4 &other, float epsilonSq) const
 
 bool IsNeutralCLocale();
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT float4::ToString() const
 {
 	char str[256];

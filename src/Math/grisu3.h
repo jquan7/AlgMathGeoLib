@@ -68,7 +68,7 @@ int i32_to_hex_string(int i, char *str);
 #include <string>
 #endif
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT dtoa_grisu3_string(double v);
 #endif
 

@@ -406,7 +406,7 @@ public:
 	/** @note Prefer using this over e.g. memcmp, since there can be SSE-related padding in the structures. */
 	bool BitEquals(const float3 &other) const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z)".
 	StringT ToString() const;
 

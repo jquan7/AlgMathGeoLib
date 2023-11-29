@@ -322,7 +322,7 @@ public:
 		represent a direction vector or a magnitude or similar. */
 	float4 CastToFloat4() const { return float4(x, y, z, w); }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x,y,z,w)".
 	StringT MUST_USE_RESULT ToString() const;
 

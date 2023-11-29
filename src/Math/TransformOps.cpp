@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file TransformOps.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #include "TransformOps.h"
 #include "MathFunc.h"
@@ -70,7 +70,7 @@ vec TranslateOp::Offset() const
 	return offset;
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT TranslateOp::ToString() const
 {
 	char str[256];
@@ -286,7 +286,7 @@ vec ScaleOp::Offset() const
 	return scale;
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT ScaleOp::ToString() const
 {
 	char str[256];

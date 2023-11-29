@@ -238,7 +238,7 @@ public:
 		@param outMax [out] Returns the maximum extent of this object along the projection axis. */
 	void ProjectToAxis(const vec2d &direction, float &outMin, float &outMax) const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this LineSegment2D. Most useful for debugging purposes.
 	StringT ToString() const;
 	StringT SerializeToString() const;

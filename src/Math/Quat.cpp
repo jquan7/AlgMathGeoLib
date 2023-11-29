@@ -540,11 +540,6 @@ void Quat::Set(const float3x3 &m)
 	assume(m.HasUnitaryScale());
 	assume(!m.HasNegativeScale());
 	SetQuatFrom(*this, m);
-
-#ifdef MATH_ASSERT_CORRECTNESS
-	// Test that the conversion float3x3->Quat->float3x3 is correct.
-	mathassert(this->ToFloat3x3().Equals(m, 0.01f));
-#endif
 }
 
 void Quat::Set(const float3x4 &m)
@@ -553,11 +548,6 @@ void Quat::Set(const float3x4 &m)
 	assume(m.HasUnitaryScale());
 	assume(!m.HasNegativeScale());
 	SetQuatFrom(*this, m);
-
-#ifdef MATH_ASSERT_CORRECTNESS
-	// Test that the conversion float3x3->Quat->float3x3 is correct.
-	mathassert(this->ToFloat3x3().Equals(m.Float3x3Part(), 0.01f));
-#endif
 }
 
 void Quat::Set(const float4x4 &m)
@@ -567,11 +557,6 @@ void Quat::Set(const float4x4 &m)
 	assume(!m.HasNegativeScale());
 	assume(m.Row(3).Equals(0,0,0,1));
 	SetQuatFrom(*this, m);
-
-#ifdef MATH_ASSERT_CORRECTNESS
-	// Test that the conversion float3x3->Quat->float3x3 is correct.
-	mathassert(this->ToFloat3x3().Equals(m.Float3x3Part(), 0.01f));
-#endif
 }
 
 void Quat::Set(float x_, float y_, float z_, float w_)
@@ -767,7 +752,7 @@ float4x4 MUST_USE_RESULT Quat::ToFloat4x4(const float4 &translation) const
 
 bool IsNeutralCLocale();
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT MUST_USE_RESULT Quat::ToString() const
 {
 	char str[256];

@@ -1977,7 +1977,7 @@ bool float4x4::ContainsProjection(float epsilon) const
 	return Row(3).Equals(0.f, 0.f, 0.f, 1.f, epsilon) == false;
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT float4x4::ToString() const
 {
 	char str[256];

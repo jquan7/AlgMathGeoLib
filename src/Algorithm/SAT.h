@@ -21,10 +21,6 @@
 #include "../Math/float2.h"
 #include "../Math/float3.h"
 
-#ifdef MATH_CONTAINERLIB_SUPPORT
-#include "Container/Array.h"
-#endif
-
 MATH_BEGIN_NAMESPACE
 
 template<typename A, typename B>
@@ -73,12 +69,5 @@ bool SATCollide2D(const float2 *a, int numA, const float2 *b, int numB);
 // If < 0, then the objects penetrate that deep along outCollisionNormal vector.
 float SATCollide2D_CollisionPoint(const float2 *a, int numA, const float2 *b, int numB,
                                  float2 &outCollisionPoint, float2 &outCollisionNormal);
-
-#ifdef MATH_CONTAINERLIB_SUPPORT
-inline bool SATCollide2D(const Array<float2> &a, const Array<float2> &b)
-{
-	return SATCollide2D(a.ptr(), (int)a.size(), b.ptr(), (int)b.size());
-}
-#endif
 
 MATH_END_NAMESPACE

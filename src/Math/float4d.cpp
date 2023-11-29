@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float4d.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A double-precision 4-wide vector. */
 #include "float4d.h"
 
@@ -28,7 +28,7 @@ const float4d float4d::unitW = float4d(0,0,0,1);
 const float4d float4d::nan = float4d(FLOAT_NAN, FLOAT_NAN, FLOAT_NAN, FLOAT_NAN);
 const float4d float4d::inf = float4d(FLOAT_INF, FLOAT_INF, FLOAT_INF, FLOAT_INF);
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT float4d::ToString() const
 {
 	char str[256];

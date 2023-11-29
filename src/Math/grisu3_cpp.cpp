@@ -7,10 +7,7 @@
 
 #include "grisu3.h"
 #include "../MathBuildConfig.h"
-#if defined(MATH_CONTAINERLIB_SUPPORT)
-#include "Container/UString.h"
-#endif
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 #include <assert.h>
 
 StringT dtoa_grisu3_string(double v)

@@ -394,7 +394,7 @@ LineSegment operator *(const Quat &transform, const LineSegment &l)
 	return LineSegment(transform * l.a, transform * l.b);
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT LineSegment::ToString() const
 {
 	char str[256];

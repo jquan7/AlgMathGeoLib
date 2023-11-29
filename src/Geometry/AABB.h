@@ -406,7 +406,7 @@ public:
 		return 4*3*2;
 	}
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this AABB. Most useful for debugging purposes.
 	/** The returned string specifies the center point and the half-axes of this AABB. */
 	StringT ToString() const;

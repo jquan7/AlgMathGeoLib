@@ -287,7 +287,7 @@ Line operator *(const Quat &transform, const Line &l)
 	return Line(transform * l.pos, transform * l.dir);
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT Line::ToString() const
 {
 	char str[256];

@@ -27,10 +27,6 @@
 #include "myassert.h"
 #include "MathLog.h"
 
-#ifdef MATH_CONTAINERLIB_SUPPORT
-#include "Container/UString.h"
-#endif
-
 #ifndef MARK_UNUSED
 /// If a variable is labelled with this directive, the compiler should not emit a warning even if it is unused in the code.
 #define MARK_UNUSED(...) ((void)((void)__VA_ARGS__))
@@ -106,37 +102,25 @@ inline StringT ObjToString<StringT>(const StringT &obj)
 template<>
 inline StringT ObjToString<float>(const float &obj)
 {
-#if defined(MATH_CONTAINERLIB_SUPPORT)
-	return String::FromFloat(obj);
-#else
 	std::stringstream ss;
 	ss << obj;
 	return ss.str();
-#endif
 }
 
 template<>
 inline StringT ObjToString<double>(const double &obj)
 {
-#if defined(MATH_CONTAINERLIB_SUPPORT)
-	return String::FromDouble(obj);
-#else
 	std::stringstream ss;
 	ss << obj;
 	return ss.str();
-#endif
 }
 
 template<>
 inline StringT ObjToString<int>(const int &obj)
 {
-#if defined(MATH_CONTAINERLIB_SUPPORT)
-	return String::FromInt(obj);
-#else
 	std::stringstream ss;
 	ss << obj;
 	return ss.str();
-#endif
 }
 
 template<>
@@ -148,25 +132,17 @@ inline StringT ObjToString<bool>(const bool &obj)
 template<>
 inline StringT ObjToString<u32>(const u32 &obj)
 {
-#if defined(MATH_CONTAINERLIB_SUPPORT)
-	return String::FromUInt(obj);
-#else
 	std::stringstream ss;
 	ss << obj;
 	return ss.str();
-#endif
 }
 
 template<>
 inline StringT ObjToString<u64>(const u64 &obj)
 {
-#if defined(MATH_CONTAINERLIB_SUPPORT)
-	return String::FromUInt64(obj);
-#else
 	std::stringstream ss;
 	ss << obj;
 	return ss.str();
-#endif
 }
 
 MATH_END_NAMESPACE
@@ -237,21 +213,11 @@ MATH_END_NAMESPACE
 	} while(0)
 #define assert4 assume4
 
-// If MATH_ASSERT_CORRECTNESS is defined, the function mathassert() is enabled to test
-// that all forms of optimizations inside the math library produce proper results.
-#ifdef MATH_ASSERT_CORRECTNESS
-#define mathassert(x) assert(x)
-#define mathassert1 assert1
-#define mathassert2 assert2
-#define mathassert3 assert3
-#define mathassert4 assert4
-#else
 #define mathassert(x) ((void)0)
 #define mathassert1(...) ((void)0)
 #define mathassert2(...) ((void)0)
 #define mathassert3(...) ((void)0)
 #define mathassert4(...) ((void)0)
-#endif
 
 // Kill both assume() and mathassert() macros in OPTIMIZED_RELEASE builds.
 #ifdef OPTIMIZED_RELEASE

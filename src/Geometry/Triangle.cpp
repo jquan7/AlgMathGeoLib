@@ -1832,7 +1832,7 @@ Triangle operator *(const Quat &transform, const Triangle &triangle)
 	return t;
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT Triangle::ToString() const
 {
 	char str[256];

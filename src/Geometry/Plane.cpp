@@ -89,11 +89,6 @@ void Plane::Set(const vec &point, const vec &normal_)
 	normal = normal_;
 	assume2(normal.IsNormalized(), normal.SerializeToCodeString(), normal.Length());
 	d = point.Dot(normal);
-
-#ifdef MATH_ASSERT_CORRECTNESS
-	assert1(EqualAbs(SignedDistance(point), 0.f, 0.01f), SignedDistance(point));
-	assert1(EqualAbs(SignedDistance(point + normal_), 1.f, 0.01f), SignedDistance(point + normal_));
-#endif
 }
 
 void Plane::ReverseNormal()
@@ -241,9 +236,6 @@ float3x4 Plane::MirrorMatrix() const
 
 vec Plane::Mirror(const vec &point) const
 {
-#ifdef MATH_ASSERT_CORRECTNESS
-	float signedDistance = SignedDistance(point);
-#endif
 	assume2(normal.IsNormalized(), normal.SerializeToCodeString(), normal.Length());
 	vec reflected = point - 2.f * (point.Dot(normal) - d) * normal;
 	mathassert(EqualAbs(signedDistance, -SignedDistance(reflected), 1e-2f));
@@ -763,7 +755,7 @@ Plane operator *(const Quat &transform, const Plane &plane)
 	return p;
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 
 StringT Plane::ToString() const
 {

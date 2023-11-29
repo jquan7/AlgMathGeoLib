@@ -930,7 +930,7 @@ public:
 	/// matrix differs from [0 0 0 1].
 	bool ContainsProjection(float epsilon = 1e-3f) const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a string representation of form "(m00, m01, m02, m03; m10, m11, m12, m13; ... )".
 	StringT ToString() const;
 	StringT SerializeToString() const;

@@ -50,12 +50,6 @@
 
 #endif
 
-#ifdef _DEBUG
-// If MATH_ASSERT_CORRECTNESS is defined, special (and possibly rather costly) mathassert()
-// tests are enabled, which test the internal correctness of the library.
-#define MATH_ASSERT_CORRECTNESS
-#endif
-
 // If FAIL_USING_EXCEPTIONS is defined, all mathassert(), assert() and assume() macros turn into
 // throwing std::runtime_error exceptions. This macro is used by default when running tests, to get
 // a runtime error report on which tests pass and which fail.
@@ -69,12 +63,6 @@
 // enable STL support
 #if !defined(MATH_ENABLE_STL_SUPPORT) && !defined(MATH_DISABLE_STL_SUPPORT)
 #define MATH_ENABLE_STL_SUPPORT
-#endif
-
-// If MATH_CONTAINERLIB_SUPPORT is defined, MathGeoLib integrates with a certain
-// STL replacement container library. Do not enable, only for internal use.
-#ifndef MATH_CONTAINERLIB_SUPPORT
-//#define MATH_CONTAINERLIB_SUPPORT
 #endif
 
 // If MATH_GRAPHICSENGINE_INTEROP is defined, MathGeoLib integrates with a certain
@@ -183,12 +171,7 @@ typedef __m128 simd4f;
 
 #ifdef __cplusplus
 
-#ifdef MATH_CONTAINERLIB_SUPPORT
-class String;
-#define StringT String
-#else
 #define StringT std::string
-#endif
 
 #endif
 

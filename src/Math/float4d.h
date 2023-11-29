@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file float4d.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief A double-precision 4-wide vector. */
 #pragma once
 
@@ -212,7 +212,7 @@ public:
 					 MATH_NS::Abs(w - other.w) < epsilon;
 	}
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z, w)".
 	StringT ToString() const;
 #endif

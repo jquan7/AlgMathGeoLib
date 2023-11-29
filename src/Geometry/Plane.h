@@ -350,7 +350,7 @@ public:
 		@return If an intersection occurs, this function returns true. */
 	static bool IntersectLinePlane(const vec &planeNormal, float planeD, const vec &linePos, const vec &lineDir, float &t);
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Plane. Most useful for debugging purposes.
 	StringT ToString() const;
 	StringT SerializeToString() const;

@@ -349,7 +349,7 @@ public:
 	/** @note Prefer using this over e.g. memcmp, since there can be SSE-related padding in the structures. */
 	bool BitEquals(const float2 &other) const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y)".
 	StringT ToString() const;
 

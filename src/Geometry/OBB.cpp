@@ -36,9 +36,6 @@
 #include <stdlib.h>
 
 #include <set>
-#ifdef MATH_CONTAINERLIB_SUPPORT
-#include "Algorithm/Sort/Sort.h"
-#endif
 
 #ifdef MATH_GRAPHICSENGINE_INTEROP
 #include "VertexBuffer.h"
@@ -1286,7 +1283,7 @@ bool OBB::Intersects(const Polygon &polygon) const
 	return polygon.Intersects(*this);
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT OBB::ToString() const
 {
 	char str[256];

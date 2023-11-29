@@ -488,7 +488,7 @@ LineSegment2D operator *(const Quat &transform, const LineSegment2D &l)
 }
 #endif
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT LineSegment2D::ToString() const
 {
 	char str[256];

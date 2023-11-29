@@ -1460,10 +1460,6 @@ bool float3x4::IsInvertible(float epsilon) const
 {
 	float d = Determinant();
 	bool isSingular = EqualAbs(d, 0.f, epsilon);
-#ifdef MATH_ASSERT_CORRECTNESS
-	float3x3 temp = Float3x3Part();
-	mathassert(temp.Inverse(epsilon) != isSingular); // IsInvertible() and Inverse() must match!
-#endif
 	return !isSingular;
 }
 
@@ -1531,7 +1527,7 @@ bool float3x4::Equals(const float3x4 &other, float epsilon) const
 }
 
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT float3x4::ToString() const
 {
 	char str[256];

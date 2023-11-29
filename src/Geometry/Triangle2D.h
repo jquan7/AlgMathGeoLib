@@ -311,7 +311,7 @@ public:
 	vec2d ClosestPointToTriangleEdge(const LineSegment2D &lineSegment, float *outU, float *outV, float *outD) const;
 #endif
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Line2D. Most useful for debugging purposes.
 	StringT ToString() const;
 	StringT SerializeToString() const;

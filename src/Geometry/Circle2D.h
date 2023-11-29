@@ -86,7 +86,7 @@ public:
 		@see FastEnclosingCircle(). */
 	static Circle2D OptimalEnclosingCircle(const float2 *pointArray, int numPoints);
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Sphere. Most useful for debugging purposes.
 	StringT ToString() const;
 #endif

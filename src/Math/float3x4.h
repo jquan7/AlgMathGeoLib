@@ -791,7 +791,7 @@ public:
 	/// Returns true if this float3x4 is equal to the given float3x4, up to given per-element epsilon.
 	bool Equals(const float3x4 &other, float epsilon = 1e-3f) const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a string representation of form "(m00, m01, m02, m03; m10, m11, m12, m13; ... )".
 	StringT ToString() const;
 	StringT SerializeToString() const;

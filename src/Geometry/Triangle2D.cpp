@@ -1569,7 +1569,7 @@ Triangle2D operator *(const float4x4 &transform, const Triangle2D &triangle)
 	return t;
 }
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT Triangle2D::ToString() const
 {
 	char str[256];

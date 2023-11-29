@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file TransformOps.h
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief */
 #pragma once
 
@@ -52,7 +52,7 @@ public:
 	/// Converts this TranslateOp object to a matrix.
 	operator float4x4() const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z)".
 	StringT ToString() const;
 #endif
@@ -62,7 +62,7 @@ float3x4 operator *(const TranslateOp &lhs, const float3x4 &rhs);
 float3x4 operator *(const float3x4 &lhs, const TranslateOp &rhs);
 
 // This form of multiplication is based on the optimization assumption that the last row of rhs is [0,0,0,1], i.e.
-// that rhs does not contain a "projective" part. If this does not hold, cast TranslateOp lhs to a float4x4 to 
+// that rhs does not contain a "projective" part. If this does not hold, cast TranslateOp lhs to a float4x4 to
 // perform a full generic 4x4 matrix multiplication instead.
 float4x4 operator *(const TranslateOp &lhs, const float4x4 &rhs);
 float4x4 operator *(const float4x4 &lhs, const TranslateOp &rhs);
@@ -101,7 +101,7 @@ public:
 	/// Converts this ScaleOp to a matrix.
 	float4x4 ToFloat4x4() const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns "(x, y, z)".
 	StringT ToString() const;
 #endif

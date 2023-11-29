@@ -329,7 +329,7 @@ public:
 	vec ClosestPointToTriangleEdge(const Line &line, float *outU, float *outV, float *outD) const;
 	vec ClosestPointToTriangleEdge(const LineSegment &lineSegment, float *outU, float *outV, float *outD) const;
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Line. Most useful for debugging purposes.
 	StringT ToString() const;
 	StringT SerializeToString() const;

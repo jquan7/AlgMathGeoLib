@@ -1,4 +1,4 @@
-/* Copyright Jukka Jylänki
+/* Copyright Jukka Jylï¿½nki
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
    limitations under the License. */
 
 /** @file GJK.cpp
-	@author Jukka Jylänki
+	@author Jukka Jylï¿½nki
 	@brief Implementation of the Gilbert-Johnson-Keerthi (GJK) convex polyhedron intersection test. */
 #include "GJK.h"
 #include "../Math/float4d.h"
@@ -39,21 +39,6 @@ vec UpdateSimplex(vec *s, int &n)
 		// 1) closest to vertex s[1].
 		// 2) closest to line segment s[0]->s[1]. XX
 		// 3) contained in the line segment s[0]->s[1], and our search is over and the algorithm is now finished. XX
-
-		// By construction of the simplex, the cases 0) and 1) can never occur. Then only the cases marked with XX need to be checked.
-#ifdef MATH_ASSERT_CORRECTNESS
-		// Sanity-check that the above reasoning is valid by testing each voronoi region and assert()ing that the ones we assume never to
-		// happen never will.
-		float d0 = s[0].DistanceSq(vec::zero);
-		float d1 = s[1].DistanceSq(vec::zero);
-		float d2 = LineSegment(s[0], s[1]).DistanceSq(vec::zero);
-		assert2(d2 <= d0, d2, d0);
-		assert2(d2 <= d1, d2, d1);
-		// Cannot be in case 0: the step 0 -> 1 must have been toward the zero direction:
-		assert(Dot(s[1]-s[0], -s[0]) >= 0.f);
-		// Cannot be in case 1: the zero direction cannot be in the voronoi region of vertex s[1].
-		assert(Dot(s[1]-s[0], -s[1]) <= 0.f);
-#endif
 
 		vec d01 = s[1] - s[0];
 		vec newSearchDir = Cross(d01, Cross(d01, s[1]));
@@ -83,33 +68,6 @@ vec UpdateSimplex(vec *s, int &n)
 		// was the last added point. But it cannot be the case 2), since previous search took us deepest towards the direction s[1]->s[2],
 		// and case 2) implies we should have been able to go even deeper in that direction, or that the origin is not included in the convex shape,
 		// a case which has been checked for already before. Therefore the cases 0)-3) can never occur. Only the cases marked with XX need to be checked.
-#ifdef MATH_ASSERT_CORRECTNESS
-		// Sanity-check that the above reasoning is valid by testing each voronoi region and assert()ing that the ones we assume never to
-		// happen never will.
-		float d[7];
-		d[0] = s[0].DistanceSq(vec::zero);
-		d[1] = s[1].DistanceSq(vec::zero);
-		d[2] = s[2].DistanceSq(vec::zero);
-		d[3] = LineSegment(s[0], s[1]).DistanceSq(vec::zero);
-		d[4] = LineSegment(s[1], s[2]).DistanceSq(vec::zero);
-		d[5] = LineSegment(s[2], s[0]).DistanceSq(vec::zero);
-		d[6] = Triangle(s[0], s[1], s[2]).DistanceSq(vec::zero);
-
-		bool isContainedInTriangle = (d[6] <= 1e-3f); // Are we in case 8)?
-		float dist = FLOAT_INF;
-		int minDistIndex = -1;
-		for(int i = 4; i < 7; ++i)
-			if (d[i] < dist)
-			{
-				dist = d[i];
-				minDistIndex = i;
-			}
-
-		assert4(isContainedInTriangle || dist <= d[0] + 1e-4f, d[0], dist, isContainedInTriangle, minDistIndex);
-		assert4(isContainedInTriangle || dist <= d[1] + 1e-4f, d[1], dist, isContainedInTriangle, minDistIndex);
-		assert4(isContainedInTriangle || dist <= d[2] + 1e-4f, d[2], dist, isContainedInTriangle, minDistIndex);
-		assert4(isContainedInTriangle || dist <= d[3] + 1e-4f, d[3], dist, isContainedInTriangle, minDistIndex);
-#endif
 		vec d12 = s[2]-s[1];
 		vec d02 = s[2]-s[0];
 		vec triNormal = Cross(d02, d12);
@@ -119,9 +77,6 @@ vec UpdateSimplex(vec *s, int &n)
 		if (t12 < 0.f)
 		{
 			// Case 4: Edge 1->2 is closest.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(d[4] <= dist + 1e-3f * Max(1.f, d[4], dist), d[4], dist, isContainedInTriangle, minDistIndex);
-#endif
 			vec newDir = Cross(d12, Cross(d12, s[1]));
 			s[0] = s[1];
 			s[1] = s[2];
@@ -133,18 +88,12 @@ vec UpdateSimplex(vec *s, int &n)
 		if (t02 < 0.f)
 		{
 			// Case 5: Edge 0->2 is closest.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(d[5] <= dist + 1e-3f * Max(1.f, d[5], dist), d[5], dist, isContainedInTriangle, minDistIndex);
-#endif
 			vec newDir = Cross(d02, Cross(d02, s[0]));
 			s[1] = s[2];
 			n = 2;
 			return newDir;
 		}
 		// Cases 6)-8):
-#ifdef MATH_ASSERT_CORRECTNESS
-		assert4(d[6] <= dist + 1e-3f * Max(1.f, d[6], dist), d[6], dist, isContainedInTriangle, minDistIndex);
-#endif
 		float scaledSignedDistToTriangle = triNormal.Dot(s[2]);
 		float distSq = scaledSignedDistToTriangle*scaledSignedDistToTriangle;
 		float scaledEpsilonSq = 1e-6f*triNormal.LengthSq();
@@ -193,70 +142,11 @@ vec UpdateSimplex(vec *s, int &n)
 		// a case which has been checked for already before. Therefore the cases 0)-5), 7) and 10) can never occur and
 		// we only need to check cases 6), 8), 9), 11), 12), 13) and 14), marked with XX.
 
-#ifdef MATH_ASSERT_CORRECTNESS
-		// Sanity-check that the above reasoning is valid by testing each voronoi region and assert()ing that the ones we assume never to
-		// happen never will.
-		double d[14];
-		d[0] = POINT_TO_FLOAT4(s[0]).Distance4Sq(POINT_TO_FLOAT4(vec::zero));
-		d[1] = POINT_TO_FLOAT4(s[1]).Distance4Sq(POINT_TO_FLOAT4(vec::zero));
-		d[2] = POINT_TO_FLOAT4(s[2]).Distance4Sq(POINT_TO_FLOAT4(vec::zero));
-		d[3] = POINT_TO_FLOAT4(s[3]).Distance4Sq(POINT_TO_FLOAT4(vec::zero));
-		d[4] = LineSegment(s[0], s[1]).DistanceSqD(vec::zero);
-		d[5] = LineSegment(s[0], s[2]).DistanceSqD(vec::zero);
-		d[6] = LineSegment(s[0], s[3]).DistanceSqD(vec::zero);
-		d[7] = LineSegment(s[1], s[2]).DistanceSqD(vec::zero);
-		d[8] = LineSegment(s[1], s[3]).DistanceSqD(vec::zero);
-		d[9] = LineSegment(s[2], s[3]).DistanceSqD(vec::zero);
-		d[10] = Triangle(s[0], s[1], s[2]).DistanceSqD(vec::zero);
-		d[11] = Triangle(s[0], s[1], s[3]).DistanceSqD(vec::zero);
-		d[12] = Triangle(s[0], s[2], s[3]).DistanceSqD(vec::zero);
-		d[13] = Triangle(s[1], s[2], s[3]).DistanceSqD(vec::zero);
-
-		vec Tri013Normal = Cross(s[1]-s[0], s[3]-s[0]);
-		vec Tri023Normal = Cross(s[3]-s[0], s[2]-s[0]);
-		vec Tri123Normal = Cross(s[2]-s[1], s[3]-s[1]);
-		vec Tri012Normal = Cross(s[2] - s[0], s[1] - s[0]);
-		assert(Dot(Tri012Normal, s[3] - s[0]) <= 0.f);
-		float InTri012 = Dot(-s[0], Tri012Normal);
-		float InTri013 = Dot(-s[3], Tri013Normal);
-		float InTri023 = Dot(-s[3], Tri023Normal);
-		float InTri123 = Dot(-s[3], Tri123Normal);
-		bool insideSimplex = InTri012 <= 0.f && InTri013 <= 0.f && InTri023 <= 0.f && InTri123 <= 0.f;
-
-		double dist = FLOAT_INF;
-		int minDistIndex = -1;
-		for(int i = 6; i < 14; ++i)
-			if (i == 6 || i == 8 || i == 9 || i == 11 || i == 12 || i == 13)
-				if (d[i] < dist)
-				{
-					dist = d[i];
-					minDistIndex = i;
-				}
-		assert4(insideSimplex || dist <= d[0] + 1e-4 * Max(1.0, d[0], dist), d[0], dist, insideSimplex, minDistIndex);
-		assert4(insideSimplex || dist <= d[1] + 1e-4 * Max(1.0, d[1], dist), d[1], dist, insideSimplex, minDistIndex);
-		assert4(insideSimplex || dist <= d[2] + 1e-4 * Max(1.0, d[2], dist), d[2], dist, insideSimplex, minDistIndex);
-		assert4(insideSimplex || dist <= d[4] + 1e-4 * Max(1.0, d[4], dist), d[4], dist, insideSimplex, minDistIndex);
-		assert4(insideSimplex || dist <= d[5] + 1e-4 * Max(1.0, d[5], dist), d[5], dist, insideSimplex, minDistIndex);
-		assert4(insideSimplex || dist <= d[7] + 1e-4 * Max(1.0, d[7], dist), d[7], dist, insideSimplex, minDistIndex);
-		assert4(insideSimplex || dist <= d[10] + 1e-4 * Max(1.0, d[10], dist), d[10], dist, insideSimplex, minDistIndex);
-#endif
-
 		vec d01 = s[1] - s[0];
 		vec d02 = s[2] - s[0];
 		vec d03 = s[3] - s[0];
 		vec tri013Normal = Cross(d01, d03); // Normal of triangle 0->1->3 pointing outwards from the simplex.
 		vec tri023Normal = Cross(d03, d02); // Normal of triangle 0->2->3 pointing outwards from the simplex.
-
-#ifdef MATH_ASSERT_CORRECTNESS
-		float4d D01 = POINT_TO_FLOAT4(s[1]) - POINT_TO_FLOAT4(s[0]);
-		float4d D02 = POINT_TO_FLOAT4(s[2]) - POINT_TO_FLOAT4(s[0]);
-		float4d D03 = POINT_TO_FLOAT4(s[3]) - POINT_TO_FLOAT4(s[0]);
-		float4d tri013NormalD = D01.Cross(D03);
-		float4d tri023NormalD = D03.Cross(D02);
-		assert3(tri013NormalD.Dot(D02) <= 0.f, tri013NormalD, D02, tri013NormalD.Dot(D02));
-		assert3(tri023NormalD.Dot(D01) <= 0.f, tri023NormalD, D01, tri023NormalD.Dot(D01));
-#endif
-
 		vec e03_1 = Cross(tri013Normal, d03); // The normal of edge 0->3 on triangle 013.
 		vec e03_2 = Cross(d03, tri023Normal); // The normal of edge 0->3 on triangle 023.
 		float inE03_1 = Dot(e03_1, s[3]);
@@ -264,9 +154,6 @@ vec UpdateSimplex(vec *s, int &n)
 		if (inE03_1 <= 0.f && inE03_2 <= 0.f)
 		{
 			// Case 6) Edge 0->3 is closest. Simplex degenerates to a line segment.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(!insideSimplex && d[6] <= dist + 1e-3f * Max(1.0, d[6], dist), d[6], dist, insideSimplex, minDistIndex);
-#endif
 			vec newDir = Cross(d03, Cross(d03, s[3]));
 			s[1] = s[3];
 			n = 2;
@@ -284,9 +171,6 @@ vec UpdateSimplex(vec *s, int &n)
 		if (inE13_0 <= 0.f && inE13_2 <= 0.f)
 		{
 			// Case 8) Edge 1->3 is closest. Simplex degenerates to a line segment.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(!insideSimplex && d[8] <= dist + 1e-3f * Max(1.0, d[8], dist), d[8], dist, insideSimplex, minDistIndex);
-#endif
 			vec newDir = Cross(d13, Cross(d13, s[3]));
 			s[0] = s[1];
 			s[1] = s[3];
@@ -302,9 +186,6 @@ vec UpdateSimplex(vec *s, int &n)
 		if (inE23_0 <= 0.f && inE23_1 <= 0.f)
 		{
 			// Case 9) Edge 2->3 is closest. Simplex degenerates to a line segment.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(!insideSimplex && d[9] <= dist + 1e-3f * Max(1.0, d[9], dist), d[9], dist, insideSimplex, minDistIndex);
-#endif
 			vec newDir = Cross(d23, Cross(d23, s[3]));
 			s[0] = s[2];
 			s[1] = s[3];
@@ -316,9 +197,6 @@ vec UpdateSimplex(vec *s, int &n)
 		if (inTri013 < 0.f && inE13_0 >= 0.f && inE03_1 >= 0.f)
 		{
 			// Case 11) Triangle 0->1->3 is closest.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(!insideSimplex && d[11] <= dist + 1e-3f * Max(1.0, d[11], dist), d[11], dist, insideSimplex, minDistIndex);
-#endif
 			s[2] = s[3];
 			n = 3;
 			return tri013Normal;
@@ -327,9 +205,6 @@ vec UpdateSimplex(vec *s, int &n)
 		if (inTri023 < 0.f && inE23_0 >= 0.f && inE03_2 >= 0.f)
 		{
 			// Case 12) Triangle 0->2->3 is closest.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(!insideSimplex && d[12] <= dist + 1e-3f * Max(1.0, d[12], dist), d[12], dist, insideSimplex, minDistIndex);
-#endif
 			s[1] = s[0];
 			s[0] = s[2];
 			s[2] = s[3];
@@ -340,9 +215,6 @@ vec UpdateSimplex(vec *s, int &n)
 		if (inTri123 < 0.f && inE13_2 >= 0.f && inE23_1 >= 0.f)
 		{
 			// Case 13) Triangle 1->2->3 is closest.
-#ifdef MATH_ASSERT_CORRECTNESS
-			assert4(!insideSimplex && d[13] <= dist + 1e-3f * Max(1.0, d[13], dist), d[13], dist, insideSimplex, minDistIndex);
-#endif
 			s[0] = s[1];
 			s[1] = s[2];
 			s[2] = s[3];

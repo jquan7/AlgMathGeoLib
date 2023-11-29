@@ -206,7 +206,7 @@ bool MUST_USE_RESULT float3::AreCollinear(const float3 &p1, const float3 &p2, co
 
 bool IsNeutralCLocale();
 
-#if defined(MATH_ENABLE_STL_SUPPORT) || defined(MATH_CONTAINERLIB_SUPPORT)
+#if defined(MATH_ENABLE_STL_SUPPORT)
 StringT float3::ToString() const
 {
 	char str[256];
