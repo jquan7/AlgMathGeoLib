@@ -1,6 +1,6 @@
 /*******************************************************************************
 Copyright © Toramon Co., Ltd. 2017-2023. All Rights Reserved.
-File name    : GJK.cpp
+File name    : GJK2D.cpp
 Author       : qijianquan qijq@toramon.com
 Version      :
 Date         : 2023-11-27 15:15:15

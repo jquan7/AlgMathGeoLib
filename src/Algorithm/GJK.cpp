@@ -13,20 +13,24 @@ Log          :
 *******************************************************************************/
 #include "GJK.h"
 #include "../Math/float4d.h"
+#include "../Math/float3.h"
+#include "../Geometry/AABB.h"
 #include "../Geometry/LineSegment.h"
 #include "../Geometry/Triangle.h"
 #include "../Geometry/Plane.h"
 
 MATH_BEGIN_NAMESPACE
 
-/// This function examines the simplex defined by the array of points in s, and calculates which voronoi region
-/// of that simplex the origin is closest to. Based on that information, the function constructs a new simplex
-/// that will be used to continue the search, and returns a new search direction for the GJK algorithm.
-/** @param s [in, out] An array of points in the simplex. When this function returns, this point array is updated to contain the new search simplex.
-    @param n [in, out] The number of points in the array s. When this function returns, this reference is updated to specify how many
-                       points the new search simplex contains.
-    @return The new search direction vector. */
-vec UpdateSimplex(vec *s, int &n)
+// 计算多边形在给定方向上的最远点
+#define SUPPORT(dir, minS, maxS) (a.ExtremePoint(dir, maxS) - b.ExtremePoint(-dir, minS));
+
+/**
+ * @brief   Calculates which voronoi region of the simplex the origin is closest to.
+ * @param   [vec *] s - An array of points in the simplex.
+ * @param   [int &] n - The number of points.
+ * @return  The new search direction vector.
+ */
+static vec UpdateSimplex(vec *s, int &n)
 {
     if (n == 2) {
         // Four voronoi regions that the origin could be in:
@@ -34,7 +38,6 @@ vec UpdateSimplex(vec *s, int &n)
         // 1) closest to vertex s[1].
         // 2) closest to line segment s[0]->s[1]. XX
         // 3) contained in the line segment s[0]->s[1], and our search is over and the algorithm is now finished. XX
-
         vec d01 = s[1] - s[0];
         vec newSearchDir = Cross(d01, Cross(d01, s[1]));
         if (newSearchDir.LengthSq() > 1e-7f)
@@ -64,7 +67,6 @@ vec UpdateSimplex(vec *s, int &n)
         vec d12 = s[2]-s[1];
         vec d02 = s[2]-s[0];
         vec triNormal = Cross(d02, d12);
-
         vec e12 = Cross(d12, triNormal);
         float t12 = Dot(s[1], e12);
         if (t12 < 0.f) {
@@ -75,6 +77,7 @@ vec UpdateSimplex(vec *s, int &n)
             n = 2;
             return newDir;
         }
+
         vec e02 = Cross(triNormal, d02);
         float t02 = Dot(s[0], e02);
         if (t02 < 0.f) {
@@ -84,6 +87,7 @@ vec UpdateSimplex(vec *s, int &n)
             n = 2;
             return newDir;
         }
+
         // Cases 6)-8):
         float scaledSignedDistToTriangle = triNormal.Dot(s[2]);
         float distSq = scaledSignedDistToTriangle*scaledSignedDistToTriangle;
@@ -205,6 +209,57 @@ vec UpdateSimplex(vec *s, int &n)
         n = 0;
         return vec::zero;
     }
+}
+
+/**
+ * @brief   Test if two objects are intersect.
+ * @param   [const A &] A - object A.
+ * @param   [const B &] B - object B.
+ * @return  intersect or not.
+ */
+template<typename A, typename B>
+bool GJKIntersect(const A &a, const B &b)
+{
+    vec support[4];
+    // Start with an arbitrary point in the Minkowski set shape.
+    support[0] = a.AnyPointFast() - b.AnyPointFast();
+    if (support[0].LengthSq() < 1e-7f) // Robustness check: Test if the first arbitrary point we guessed produced the zero vector we are looking for!
+        return true;
+    vec d = -support[0]; // First search direction is straight toward the origin from the found point.
+    int n = 1; // Stores the current number of points in the search simplex.
+    int nIterations = 50; // Robustness check: Limit the maximum number of iterations to perform to avoid infinite loop if types A or B are buggy!
+    while (nIterations-- > 0) {
+        // Compute the extreme point to the direction d in the Minkowski set shape.
+        float maxS, minS;
+        vec newSupport = SUPPORT(d, minS, maxS);
+        // If the most extreme point in that search direction did not walk past the origin, then the origin cannot be contained in the Minkowski
+        // convex shape, and the two convex objects a and b do not share a common point - no intersection!
+        if (minS + maxS < 0.f)
+            return false;
+        // Add the newly evaluated point to the search simplex.
+        assert(n < 4);
+        support[n++] = newSupport;
+        // Examine the current simplex, prune a redundant part of it, and produce the next search direction.
+        d = UpdateSimplex(support, n);
+        if (n == 0) // Was the origin contained in the current simplex? If so, then the convex shapes a and b do share a common point - intersection!
+            return true;
+    }
+    assume(false && "GJK intersection test did not converge to a result!");
+    // TODO: enable
+    //assume2(false && "GJK intersection test did not converge to a result!", a.SerializeToString(), b.SerializeToString());
+    return false; // Report no intersection.
+}
+
+// This computes GJK intersection, but by first translating both objects to a coordinate frame that is as closely
+// centered around world origin as possible, to gain floating point precision.
+template<typename A, typename B>
+bool FloatingPointOffsetedGJKIntersect(const A &a, const B &b)
+{
+    AABB ab = a.MinimalEnclosingAABB();
+    AABB bb = b.MinimalEnclosingAABB();
+    vec offset = (Min(ab.minPoint, bb.minPoint) + Max(ab.maxPoint, bb.maxPoint)) * 0.5f;
+    const vec floatingPointPrecisionOffset = -offset;
+    return GJKIntersect(a.Translated(floatingPointPrecisionOffset), b.Translated(floatingPointPrecisionOffset));
 }
 
 MATH_END_NAMESPACE

@@ -251,18 +251,6 @@ public:
 	void Transform(const float4x4 &transform);
 	void Transform(const Quat &transform);
 
-	// Returns true if the edges of this polygon self-intersect.
-//	bool IsSelfIntersecting() const;
-
-	// Projects all vertices of this polygon to the given plane.
-//	void ProjectToPlane(const Plane &plane);
-
-	// Returns true if the edges of this polygon self-intersect when viewed from the given direction.
-//	bool IsSelfIntersecting(const vec &viewDirection) const;
-
-	// Returns true if there exists edges (p_{i-1}, p_i) and (p_i, p_{i+1}) which are collinear.
-//	bool HasCollinearEdges() const;
-
 	/// Tests if the given object, expressed in global (world) space, is fully contained inside this polygon.
 	/** This test is performed in global space of this polygon, i.e. by specifying the other object in global (world)
 		space coordinates.
@@ -382,29 +370,11 @@ public:
 
 	bool Equals(const Polygon &other) const;
 	bool BitEquals(const Polygon &other) const;
-
-	// Returns true if the given vertex is a concave vertex. Otherwise the vertex is a convex vertex.
-//	bool IsConcaveVertex(int i) const;
-
-	// Computes the conves hull of this polygon.
-//	Polygon ConvexHull() const;
-
-//	bool IsSupportingPoint(int i) const;
-
-//	bool IsSupportingPoint(const vec &point) const;
-
-	// Returns true if the quadrilateral defined by the four points is convex (and not concave or bowtie).
-//	static bool IsConvexQuad(const vec &pointA, const vec &pointB, const vec &pointC, const vec &pointD);
 };
 
 Polygon operator *(const float3x3 &transform, const Polygon &polygon);
 Polygon operator *(const float3x4 &transform, const Polygon &polygon);
 Polygon operator *(const float4x4 &transform, const Polygon &polygon);
 Polygon operator *(const Quat &transform, const Polygon &polygon);
-
-// @todo Add this.
-//#ifdef MATH_ENABLE_STL_SUPPORT
-//std::ostream &operator <<(std::ostream &o, const Polygon &polygon);
-//#endif
 
 MATH_END_NAMESPACE
