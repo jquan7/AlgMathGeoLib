@@ -5,7 +5,7 @@
 #ifdef MATH_ENABLE_STL_SUPPORT
 #include <sstream>
 #endif
-#include "../Math/vec2d.h"
+#include "../Math/float2.h"
 #include "../Math/MathConstants.h"
 #include "../Math/myassert.h"
 

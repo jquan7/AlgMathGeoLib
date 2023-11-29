@@ -192,9 +192,6 @@ float Plane::Distance(const LineSegment &lineSegment) const
 float Plane::SignedDistance(const vec &point) const
 {
 	assume2(normal.IsNormalized(), normal, normal.Length());
-#ifdef MATH_VEC_IS_FLOAT4
-	assert1(normal.w == 0.f, normal.w);
-#endif
 	return normal.Dot(point) - d;
 }
 

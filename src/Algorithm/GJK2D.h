@@ -43,10 +43,6 @@ bool GJKIntersect2D(const A &a, const B &b)
 		// Compute the extreme point to the direction d in the Minkowski set shape.
 		float maxS, minS;
 		vec2d newSupport = SUPPORT2D(d, minS, maxS);
-#ifdef MATH_VEC_IS_FLOAT4
-		assume(newSupport.z == 0.f);
-		assume(newSupport.w == 0.f);
-#endif
 		// If the most extreme point in that search direction did not walk past the origin, then the origin cannot be contained in the Minkowski
 		// convex shape, and the two convex objects a and b do not share a common point - no intersection!
 		if (minS + maxS < 0.f)

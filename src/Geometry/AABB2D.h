@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 
-#include "../Math/vec2d.h"
+#include "../Math/float2.h"
 #include "../Math/float3.h"
 #include "../Math/MathConstants.h"
 #include "../Math/float3x3.h"

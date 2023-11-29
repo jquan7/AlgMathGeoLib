@@ -103,10 +103,6 @@ struct float4_storage;
 
 #ifdef MATH_AUTOMATIC_SSE
 
-#ifndef MATH_VEC_IS_FLOAT4
-#define MATH_VEC_IS_FLOAT4
-#endif
-
 typedef ALIGN16 float4 vec2d;
 typedef float4_storage vec2d_storage;
 

@@ -367,9 +367,6 @@ struct Plane_storage
 {
 	float4_storage normal;
 	float d;
-#ifdef MATH_VEC_IS_FLOAT4
-	float padding[3];
-#endif
 	Plane_storage(){}
 	Plane_storage(const Plane &rhs)
 	{

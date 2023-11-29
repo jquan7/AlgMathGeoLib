@@ -760,9 +760,6 @@ OBB OBB::FixedOrientationEnclosingOBB(const vec *pointArray, int numPoints, cons
 	float rd2 = (maxd2 - mind2) * 0.5f;
 	OBB minOBB;
 	minOBB.pos = (mind0 + rd0) * dir0 + (mind1 + rd1) * dir1 + (mind2 + rd2) * edgeC;
-#ifdef MATH_VEC_IS_FLOAT4
-	minOBB.pos.w = 1.f;
-#endif
 	minOBB.axis[0] = dir0;
 	minOBB.axis[1] = dir1;
 	minOBB.axis[2] = edgeC;

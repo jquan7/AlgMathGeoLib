@@ -218,11 +218,9 @@ public:
 	float2 yx() const { return float2(y,x); } ///< [similarOverload: xx] [hideIndex]
 	float2 yy() const { return float2(y,y); } ///< [similarOverload: xx] [hideIndex]
 
-#ifndef MATH_VEC_IS_FLOAT4
 	/// Reinterpret-casts this float4 to a vec2d, which is either a float2 if building without SSE/NEON enabled,
 	/// or a float4 if building with SSE enabled. (practically projects this 4D vector to 2D x-y part).
 	FORCE_INLINE const vec2d &ToVec2D() const { return *this; }
-#endif
 
 	/// Performs a swizzled access to this vector.
 	/** For example, Swizzled(2,1,0) return float3(z,y,x). Swizzled(2,2,2,2) returns float4(z,z,z,z).

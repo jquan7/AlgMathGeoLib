@@ -27,7 +27,6 @@
 #include "float3x4.h"
 #include "float4.h"
 #include "float4x4.h"
-#include "FloatCmp.h"
 #include "MathConstants.h"
 #include "MathFunc.h"
 #include "../MathGeoLibFwd.h"
