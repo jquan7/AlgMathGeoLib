@@ -34,17 +34,14 @@ MATH_BEGIN_NAMESPACE
 class float2
 {
 public:
-	enum
-	{
-		/// Specifies the number of elements in this vector.
+	/// Specifies the number of elements in this vector.
+	enum {
 		Size = 2
 	};
-	/// The x component.
-	/** A float2 is 8 bytes in size. This element lies in the memory offsets 0-3 of this class. */
-	float x;
-	/// The y component. [similarOverload: x]
-	/** This element is packed to the memory offsets 4-7 of this class. */
-	float y;
+
+	/// The x,y component.
+	/** float2 is 8 bytes in size. Components lies in the memory offsets 0-3 and 4-7 of this class. */
+	float x, y;
 
 	/// The default constructor does not initialize any members of this class.
 	/** This means that the values of the members x and y are both undefined after creating a new float2 using
@@ -583,33 +580,14 @@ public:
 		@return The area of the resulting rectangle. */
 	static float MinAreaRectInPlace(float2 *pointArray, int numPoints, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV);
 
-	/// Specifies a compile-time constant float2 with value (0, 0).
 	/** @note Due to static data initialization order being undefined in C++, do NOT use this
 			member to initialize other static data in other compilation units! */
-	static const float2 zero;
-	/// Specifies a compile-time constant float2 with value (1, 1). [similarOverload: zero]
-	/** @note Due to static data initialization order being undefined in C++, do NOT use this
-			member to initialize other static data in other compilation units! */
-	static const float2 one;
-	/// Specifies a compile-time constant float2 with value (1, 0).
-	/** @note Due to static data initialization order being undefined in C++, do NOT use this
-			member to initialize other static data in other compilation units! */
-	static const float2 unitX;
-	/// Specifies a compile-time constant float2 with value (0, 1). [similarOverload: unitX]
-	/** @note Due to static data initialization order being undefined in C++, do NOT use this
-			member to initialize other static data in other compilation units! */
-	static const float2 unitY;
-	/// A compile-time constant float2 with value (NaN, NaN).
-	/** For this constant, each element has the value of quiet NaN, or Not-A-Number.
-		@note Never compare a float2 to this value! Due to how IEEE floats work, "nan == nan" returns false!
-			  That is, nothing is equal to NaN, not even NaN itself!
-		@note Due to static data initialization order being undefined in C++, do NOT use this
-			member to initialize other static data in other compilation units! */
-	static const float2 nan;
-	/// A compile-time constant float2 with value (+infinity, +infinity). [similarOverload: nan]
-	/** @note Due to static data initialization order being undefined in C++, do NOT use this
-			member to initialize other static data in other compilation units! */
-	static const float2 inf;
+	static const float2 zero;  // (0, 0)
+	static const float2 one;  // (1, 1)
+	static const float2 unitX;  // (1, 0)
+	static const float2 unitY;  // (0, 1)
+	static const float2 nan;  // (NaN, NaN), Never compare a float2 to this value!
+	static const float2 inf;  // (+infinity, +infinity)
 };
 
 #ifdef MATH_ENABLE_STL_SUPPORT

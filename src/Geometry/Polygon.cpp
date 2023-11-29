@@ -35,7 +35,7 @@
 #include "../Math/Quat.h"
 #include "../Math/float2.h"
 #include "../Math/MathConstants.h"
-#include "../Algorithm/GJK.h"
+#include "../Algorithm/intersect/GJK.h"
 
 MATH_BEGIN_NAMESPACE
 

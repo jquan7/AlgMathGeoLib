@@ -4,8 +4,8 @@
 #include "../src/MathGeoLib.h"
 #include "../src/Math/myassert.h"
 #include "TestRunner.h"
-#include "../src/Algorithm/GJK.h"
-#include "../src/Algorithm/SAT.h"
+#include "../src/Algorithm/intersect/GJK.h"
+#include "../src/Algorithm/intersect/SAT.h"
 
 MATH_IGNORE_UNUSED_VARS_WARNING
 

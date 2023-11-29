@@ -12,12 +12,12 @@ Others       :
 Log          :
 *******************************************************************************/
 #include "GJK.h"
-#include "../Math/float4d.h"
-#include "../Math/float3.h"
-#include "../Geometry/AABB.h"
-#include "../Geometry/LineSegment.h"
-#include "../Geometry/Triangle.h"
-#include "../Geometry/Plane.h"
+#include "../../Math/float4d.h"
+#include "../../Math/float3.h"
+#include "../../Geometry/AABB.h"
+#include "../../Geometry/LineSegment.h"
+#include "../../Geometry/Triangle.h"
+#include "../../Geometry/Plane.h"
 
 MATH_BEGIN_NAMESPACE
 

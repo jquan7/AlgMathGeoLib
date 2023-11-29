@@ -12,11 +12,11 @@ Others       :
 Log          :
 *******************************************************************************/
 #include "GJK2D.h"
-#include "../Geometry/LineSegment2D.h"
-#include "../Geometry/Triangle2D.h"
-#include "../Math/assume.h"
-#include "../Math/MathConstants.h"
-#include "../Math/MathFunc.h"
+#include "../../Geometry/LineSegment2D.h"
+#include "../../Geometry/Triangle2D.h"
+#include "../../Math/assume.h"
+#include "../../Math/MathConstants.h"
+#include "../../Math/MathFunc.h"
 
 MATH_BEGIN_NAMESPACE
 

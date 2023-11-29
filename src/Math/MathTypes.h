@@ -30,7 +30,7 @@ typedef short s16; ///< 2 bytes: -32768 - 32767.
 typedef int s32; ///< 4 bytes signed: max 2,147,483,647 ~ 2000 million or 2e9.
 typedef long long s64; ///< 8 bytes signed. 9,223,372,036,854,775,807 ~ 9e18.
 
-// From http://stackoverflow.com/questions/3385515/static-assert-in-c
+// http://stackoverflow.com/questions/3385515/static-assert-in-c
 #define COMPILE_TIME_ASSERT4(COND,MSG) typedef char static_assertion_##MSG[(!!(COND))*2-1]
 #define COMPILE_TIME_ASSERT3(X,L) COMPILE_TIME_ASSERT4(X,static_assertion_at_line_##L)
 #define COMPILE_TIME_ASSERT2(X,L) COMPILE_TIME_ASSERT3(X,L)
@@ -45,10 +45,9 @@ STATIC_ASSERT(sizeof(s32) == 4, "Typedef for fixed-width type s32 is incorrect!"
 STATIC_ASSERT(sizeof(u64) == 8, "Typedef for fixed-width type u64 is incorrect!");
 STATIC_ASSERT(sizeof(s64) == 8, "Typedef for fixed-width type s64 is incorrect!");
 
-// Functions annotated with MUST_USE_RESULT require that the user stores the return value, or otherwise
-// a warning is printed.
+// Functions annotated with MUST_USE_RESULT require that the user stores the return value,
+// or otherwise a warning is printed.
 #if (defined(__GNUC__) && ((__GNUC__*10000+__GNUC_MINOR*100) >= 30400))
-// http://gcc.gnu.org/onlinedocs/gcc-3.4.0/gcc/Function-Attributes.html
 #define MUST_USE_RESULT __attribute__((warn_unused_result))
 #else
 #define MUST_USE_RESULT

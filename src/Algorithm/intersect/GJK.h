@@ -12,7 +12,7 @@ Log          :
 *******************************************************************************/
 #pragma once
 
-#include "../MathGeoLibFwd.h"
+#include "../../MathGeoLibFwd.h"
 
 MATH_BEGIN_NAMESPACE
 

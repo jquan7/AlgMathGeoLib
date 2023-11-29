@@ -125,13 +125,4 @@ endif()
 
 if (MATH_TESTS_EXECUTABLE)
 	add_definitions(-DMATH_TESTS_EXECUTABLE)
-
-	if (BUILD_FOR_GCOV)
-		if (IS_GCC_LIKE)
-			add_definitions(-fprofile-arcs -ftest-coverage)
-			set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs")
-			set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fprofile-arcs")
-			set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fprofile-arcs")
-		endif()
-	endif()
 endif()

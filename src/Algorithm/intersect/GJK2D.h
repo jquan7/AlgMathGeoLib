@@ -12,9 +12,9 @@ Log          :
 *******************************************************************************/
 #pragma once
 
-#include "../MathGeoLibFwd.h"
-#include "../Math/float2.h"
-#include "../Geometry/Polygon2DRef.h"
+#include "../../MathGeoLibFwd.h"
+#include "../../Math/float2.h"
+#include "../../Geometry/Polygon2DRef.h"
 
 MATH_BEGIN_NAMESPACE
 

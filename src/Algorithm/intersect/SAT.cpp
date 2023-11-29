@@ -1,5 +1,5 @@
 #include "SAT.h"
-#include "../Math/float2.inl"
+#include "../../Math/float2.inl"
 
 MATH_BEGIN_NAMESPACE
 

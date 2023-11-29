@@ -1160,57 +1160,6 @@ float4x4 &float4x4::operator =(const float3x4 &rhs)
 	return *this;
 }
 
-#if 0
-float4x4 &float4x4::operator =(const float4x4 &rhs)
-{
-	// We deliberately don't want to assume rhs is finite, it is ok
-	// to copy around uninitialized matrices.
-	// But note that when assigning through a conversion above (float3x3 -> float4x4 or float3x4 -> float4x4),
-	// we do assume the input matrix is finite.
-//	assume(rhs.IsFinite());
-
-/* // AVX path determined to be one clock cycle slower than SSE path: (6 clock cycles on AVX, 5 on SSE)
-#if defined(MATH_AUTOMATIC_SSE) && defined(MATH_AVX)
-	assert(IS32ALIGNED(this));
-	assert(IS32ALIGNED(&rhs));
-	row2[0] = rhs.row2[0];
-	row2[1] = rhs.row2[1];
-#elif defined(MATH_SSE) */
-
-#if defined(MATH_AUTOMATIC_SSE)
-
-	assert(IS16ALIGNED(this));
-	assert(IS16ALIGNED(&rhs));
-
-	row[0] = rhs.row[0];
-	row[1] = rhs.row[1];
-	row[2] = rhs.row[2];
-	row[3] = rhs.row[3];
-#else
-	v[0][0] = rhs.v[0][0];
-	v[0][1] = rhs.v[0][1];
-	v[0][2] = rhs.v[0][2];
-	v[0][3] = rhs.v[0][3];
-
-	v[1][0] = rhs.v[1][0];
-	v[1][1] = rhs.v[1][1];
-	v[1][2] = rhs.v[1][2];
-	v[1][3] = rhs.v[1][3];
-
-	v[2][0] = rhs.v[2][0];
-	v[2][1] = rhs.v[2][1];
-	v[2][2] = rhs.v[2][2];
-	v[2][3] = rhs.v[2][3];
-
-	v[3][0] = rhs.v[3][0];
-	v[3][1] = rhs.v[3][1];
-	v[3][2] = rhs.v[3][2];
-	v[3][3] = rhs.v[3][3];
-#endif
-	return *this;
-}
-#endif
-
 float4x4 &float4x4::operator =(const Quat &rhs)
 {
 	*this = rhs.ToFloat4x4();
