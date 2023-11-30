@@ -405,20 +405,4 @@ std::ostream &operator <<(std::ostream &o, const LineSegment &lineseg)
 
 #endif
 
-LineSegment LineSegment::FromString(const char *str, const char **outEndStr)
-{
-    assume(str);
-    if (!str)
-        return LineSegment(vec::nan, vec::nan);
-    LineSegment l;
-    MATH_SKIP_WORD(str, "LineSegment(");
-    MATH_SKIP_WORD(str, "a:(");
-    l.a = PointVecFromString(str, &str);
-    MATH_SKIP_WORD(str, " b:(");
-    l.b = PointVecFromString(str, &str);
-    if (outEndStr)
-        *outEndStr = str;
-    return l;
-}
-
 MATH_END_NAMESPACE

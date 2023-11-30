@@ -244,23 +244,4 @@ inline float4d operator *(const float4d &vec, double scalar)
 	return scalar * vec;
 }
 
-struct double4_storage
-{
-	double x, y, z, w;
-	double4_storage(){}
-	double4_storage(const float4d &rhs)
-	{
-		// Copy with scalar. TODO: Revisit if this is avoidable.
-		x = rhs.x;
-		y = rhs.y;
-		z = rhs.z;
-		w = rhs.w;
-		// Would like to do the following to get SSE benefit, but
-		// Visual Studio generates unaligned temporaries to this struct
-		// in debug builds, so can't do that.
-		//*reinterpret_cast<float4*>(this) = rhs;
-	}
-	operator float4d() const { return *reinterpret_cast<const float4d*>(this); }
-};
-
 MATH_END_NAMESPACE

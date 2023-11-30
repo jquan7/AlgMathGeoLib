@@ -763,22 +763,6 @@ std::string Plane::SerializeToCodeString() const
 }
 #endif
 
-Plane Plane::FromString(const char *str, const char **outEndStr)
-{
-	assume(str);
-	if (!str)
-		return Plane(vec::nan, FLOAT_NAN);
-	Plane p;
-	MATH_SKIP_WORD(str, "Plane(");
-	MATH_SKIP_WORD(str, "Normal:(");
-	p.normal = DirVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " d:");
-	p.d = DeserializeFloat(str, &str);
-	if (outEndStr)
-		*outEndStr = str;
-	return p;
-}
-
 #if defined(MATH_ENABLE_STL_SUPPORT)
 
 std::ostream &operator <<(std::ostream &o, const Plane &plane)

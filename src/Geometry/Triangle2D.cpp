@@ -1608,22 +1608,4 @@ std::ostream &operator <<(std::ostream &o, const Triangle2D &triangle)
 
 #endif
 
-Triangle2D Triangle2D::FromString(const char *str, const char **outEndStr)
-{
-	assume(str);
-	if (!str)
-		return Triangle2D(vec2d::nan, vec2d::nan, vec2d::nan);
-	Triangle2D t;
-	MATH_SKIP_WORD(str, "Triangle2D(");
-	MATH_SKIP_WORD(str, "a:(");
-	t.a = POINT_TO_FLOAT4(PointVecFromString(str, &str)).ToVec2D();
-	MATH_SKIP_WORD(str, " b:(");
-	t.b = POINT_TO_FLOAT4(PointVecFromString(str, &str)).ToVec2D();
-	MATH_SKIP_WORD(str, " c:(");
-	t.c = POINT_TO_FLOAT4(PointVecFromString(str, &str)).ToVec2D();
-	if (outEndStr)
-		*outEndStr = str;
-	return t;
-}
-
 MATH_END_NAMESPACE

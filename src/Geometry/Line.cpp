@@ -308,19 +308,4 @@ std::ostream &operator <<(std::ostream &o, const Line &line)
 
 #endif
 
-Line Line::FromString(const char *str, const char **outEndStr)
-{
-    if (!str)
-        return Line(vec::nan, vec::nan);
-    Line l;
-    MATH_SKIP_WORD(str, "Line(");
-    MATH_SKIP_WORD(str, "Pos:(");
-    l.pos = PointVecFromString(str, &str);
-    MATH_SKIP_WORD(str, " Dir:(");
-    l.dir = DirVecFromString(str, &str);
-    if (outEndStr)
-        *outEndStr = str;
-    return l;
-}
-
 MATH_END_NAMESPACE

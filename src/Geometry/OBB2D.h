@@ -427,7 +427,6 @@ public:
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
 	std::string SerializeToCodeString() const;
-	static OBB FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
 
 	bool Equals(const OBB &rhs, float epsilon = 1e-3f) const { return pos.Equals(rhs.pos, epsilon) && r.Equals(rhs.r, epsilon) && axis[0].Equals(rhs.axis[0], epsilon) && axis[1].Equals(rhs.axis[1], epsilon) && axis[2].Equals(rhs.axis[2], epsilon); }

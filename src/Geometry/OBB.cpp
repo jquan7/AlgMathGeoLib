@@ -1137,28 +1137,6 @@ std::ostream &operator <<(std::ostream &o, const OBB &obb)
 
 #endif
 
-OBB OBB::FromString(const char *str, const char **outEndStr)
-{
-	assume(str);
-	if (!str)
-		return OBB(vec::nan, vec::nan, vec::nan, vec::nan, vec::nan);
-	OBB o;
-	MATH_SKIP_WORD(str, "OBB(");
-	MATH_SKIP_WORD(str, "Pos:(");
-	o.pos = PointVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " Halfsize:(");
-	o.r = DirVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " X:(");
-	o.axis[0] = DirVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " Y:(");
-	o.axis[1] = DirVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " Z:(");
-	o.axis[2] = DirVecFromString(str, &str);
-	if (outEndStr)
-		*outEndStr = str;
-	return o;
-}
-
 OBB operator *(const float3x3 &transform, const OBB &obb)
 {
 	OBB o(obb);

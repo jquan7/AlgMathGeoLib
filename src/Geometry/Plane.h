@@ -343,22 +343,7 @@ public:
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
 	std::string SerializeToCodeString() const;
-	static Plane FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-	static Plane FromString(const char *str, const char **outEndStr = 0);
-};
-
-struct Plane_storage
-{
-	float4_storage normal;
-	float d;
-	Plane_storage(){}
-	Plane_storage(const Plane &rhs)
-	{
-		*reinterpret_cast<Plane*>(this) = rhs;
-	}
-	operator Plane() const { return *reinterpret_cast<const Plane*>(this); }
 };
 
 Plane operator *(const float3x3 &transform, const Plane &plane);

@@ -330,10 +330,7 @@ public:
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
 	std::string SerializeToCodeString() const;
-	static MUST_USE_RESULT Quat FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-	/// Parses a string that is of form "x,y,z,w" or "(x,y,z,w)" or "(x;y;z;w)" or "x y z w" to a new quaternion.
-	static MUST_USE_RESULT Quat FromString(const char *str, const char **outEndStr = 0);
 
 	/// Multiplies two quaternions together.
 	/// The product q1 * q2 returns a quaternion that concatenates the two orientation rotations. The rotation

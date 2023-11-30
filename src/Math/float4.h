@@ -517,11 +517,7 @@ public:
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
 	std::string SerializeToCodeString() const;
-	static float4 FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-	/// Parses a string that is of form "x,y,z,w" or "(x,y,z,w)" or "(x;y;z;w)" or "x y z w" to a new float4.
-	static float4 FromString(const char *str, const char **outEndStr = 0);
 
 	/// @return x + y + z + w.
 	float SumOfElements() const;
@@ -791,25 +787,6 @@ public:
 
 	inline operator simd4f() const { return v; }
 #endif
-};
-
-struct float4_storage
-{
-	float x,y,z,w;
-	float4_storage(){}
-	float4_storage(const float4 &rhs)
-	{
-		// Copy with scalar. TODO: Revisit if this is avoidable.
-		x = rhs.x;
-		y = rhs.y;
-		z = rhs.z;
-		w = rhs.w;
-		// Would like to do the following to get SSE benefit, but
-		// Visual Studio generates unaligned temporaries to this struct
-		// in debug builds, so can't do that.
-		//*reinterpret_cast<float4*>(this) = rhs;
-	}
-	operator float4() const { return *reinterpret_cast<const float4*>(this); }
 };
 
 #ifdef MATH_ENABLE_STL_SUPPORT

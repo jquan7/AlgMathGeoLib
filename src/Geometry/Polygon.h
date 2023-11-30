@@ -362,11 +362,7 @@ public:
 	std::string ToString() const;
 
 	std::string SerializeToString() const;
-
-	static Polygon FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-	static Polygon FromString(const char *str, const char **outEndStr = 0);
 
 	bool Equals(const Polygon &other) const;
 };

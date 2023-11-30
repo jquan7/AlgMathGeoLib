@@ -190,17 +190,6 @@ bool float2::Equals(float x_, float y_, float epsilon) const
 	return EqualAbs(x, x_, epsilon) && EqualAbs(y, y_, epsilon);
 }
 
-/// It is too performance-heavy to set the locale in each serialization and deserialization function call.
-/// Therefore expect the user to has a proper locale set up for the application at startup. This is assert()ed
-/// at debug runs.
-bool IsNeutralCLocale()
-{
-	lconv *lc = localeconv();
-	if (strcmp(lc->decimal_point, "."))
-		return false;
-	return true;
-}
-
 #if defined(MATH_ENABLE_STL_SUPPORT)
 std::string float2::ToString() const
 {
@@ -224,26 +213,6 @@ std::string float2::SerializeToCodeString() const
 	return "float2(" + SerializeToString() + ")";
 }
 #endif
-
-float2 float2::FromString(const char *str, const char **outEndStr)
-{
-	assert(IsNeutralCLocale());
-	assume(str);
-	if (!str)
-		return float2::nan;
-	MATH_SKIP_WORD(str, "float2");
-	MATH_SKIP_WORD(str, "(");
-	float2 f;
-	f.x = DeserializeFloat(str, &str);
-	f.y = DeserializeFloat(str, &str);
-	if (*str == ')')
-		++str;
-	if (*str == ',')
-		++str;
-	if (outEndStr)
-		*outEndStr = str;
-	return f;
-}
 
 float float2::SumOfElements() const
 {
@@ -467,134 +436,6 @@ bool float2::OrientedCCW(const float2 &a, const float2 &b, const float2 &c)
 	// | cx cy 1 |
 	// See Christer Ericson, Real-Time Collision Detection, p.32.
 	return (a.x-c.x)*(b.y-c.y) - (a.y-c.y)*(b.x-c.x) >= 0.f;
-}
-
-#ifdef MATH_ENABLE_STL_SUPPORT
-void float2::ConvexHull(const float2 *pts, int num, std::vector<float2> &convex_hull)
-{
-	convex_hull.clear();
-	if (num == 0)
-		return;
-	convex_hull.insert(convex_hull.end(), pts, pts + num);
-	int convexHullSize = ConvexHullInPlace(&convex_hull[0], (int)convex_hull.size());
-	convex_hull.resize(convexHullSize);
-}
-#endif
-
-/** This function implements the Graham's Scan algorithm for finding the convex hull of
-	a 2D point set. The running time is O(nlogn). For details, see
-	"Introduction to Algorithms, 2nd ed.", by Cormen, Leiserson, Rivest, p.824, or
-	a lecture by Shai Simonson: http://www.aduni.org/courses/algorithms/index.php?view=cw , lecture 02-13-01. */
-int float2::ConvexHullInPlace(float2 *p, int n)
-{
-	return float2_ConvexHullInPlace<float2>(p, n);
-}
-
-bool float2::ConvexHullContains(const float2 *convexHull, int numPointsInConvexHull, const float2 &point)
-{
-	int j = numPointsInConvexHull-1;
-	for(int i = 0; i < numPointsInConvexHull; ++i)
-	{
-		if (PerpDot2D(convexHull[j], convexHull[i], point) <= -1e-5f)
-			return false;
-
-		j = i;
-	}
-	return true;
-}
-
-#define NEXT_P(ptr) ((ptr)+1 < (pEnd) ? (ptr)+1 : (p))
-
-float float2::MinAreaRectInPlace(float2 *p, int n, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV)
-{
-	assume(p || n == 0);
-	if (!p || n <= 0)
-	{
-		center = uDir = vDir = float2::nan;
-		minU = maxU = minV = maxV = FLOAT_NAN;
-		return FLOAT_NAN;
-	}
-
-	// As a preparation, need to compute the convex hull so that points are CCW-oriented,
-	// and this also greatly reduces the number of points for performance.
-	n = float2::ConvexHullInPlace(p, n);
-	assert(n > 0);
-	if (n == 1)
-	{
-		center = p[0];
-		uDir = float2(1,0);
-		vDir = float2(0,1);
-		minU = maxU = center.x;
-		minV = maxV = center.y;
-		return 0.f;
-	}
-
-	// e[i] point to the antipodal point pairs: e[0] and e[2] are pairs, so are e[1] and e[3].
-	float2 *e[4] = { p, p, p, p };
-
-	// Compute the initial AABB rectangle antipodal points for the rotating calipers method.
-	// Order the initial vertices minX -> minY -> maxX -> maxY to establish
-	// a counter-clockwise orientation.
-	for(int i = 1; i < n; ++i)
-	{
-		if (p[i].x < e[0]->x) e[0] = &p[i];
-		else if (p[i].x > e[2]->x) e[2] = &p[i];
-		if (p[i].y < e[1]->y) e[1] = &p[i];
-		else if (p[i].y > e[3]->y) e[3] = &p[i];
-	}
-
-	// Direction vector of the edge that the currently tested rectangle is in contact with.
-	// This specifies the reference frame for the rectangle, and this is the direction the
-	// convex hull points toward at the antipodal point e[0].
-	float2 ed = -float2::unitY;
-	float minArea = FLOAT_INF; // Track the area of the best rectangle seen so far.
-	const float2 * const pEnd = p + n; // For wraparound testing in NEXT_P().
-
-	// These track directions the convex hull is pointing towards at each antipodal point.
-	float2 d[4];
-	d[0] = (*NEXT_P(e[0]) - *e[0]).Normalized();
-	d[1] = (*NEXT_P(e[1]) - *e[1]).Normalized();
-	d[2] = (*NEXT_P(e[2]) - *e[2]).Normalized();
-	d[3] = (*NEXT_P(e[3]) - *e[3]).Normalized();
-
-	// Rotate the calipers 90 degrees to see through each possible edge that might support
-	// the bounding rectangle.
-	while(ed.y <= 0.f)
-	{
-		// Compute how much each edge can at most rotate before hitting the next vertex in the convex hull.
-		float cosA0 =  ed.Dot(d[0]);
-		float cosA1 =  ed.PerpDot(d[1]);
-		float cosA2 = -ed.Dot(d[2]);
-		float cosA3 = -ed.PerpDot(d[3]);
-
-		float maxCos = MATH_NS::Max(MATH_NS::Max(cosA0, cosA1), MATH_NS::Max(cosA2, cosA3));
-		// Pick the smallest angle (largest cosine of that angle) and increment the antipodal point index to travel the edge.
-		if (cosA0 >= maxCos)      { ed = d[0];                e[0] = NEXT_P(e[0]); d[0] = (*NEXT_P(e[0]) - *e[0]).Normalized(); }
-		else if (cosA1 >= maxCos) { ed = d[1].Rotated90CW();  e[1] = NEXT_P(e[1]); d[1] = (*NEXT_P(e[1]) - *e[1]).Normalized(); }
-		else if (cosA2 >= maxCos) { ed = -d[2];               e[2] = NEXT_P(e[2]); d[2] = (*NEXT_P(e[2]) - *e[2]).Normalized(); }
-		else                      { ed = d[3].Rotated90CCW(); e[3] = NEXT_P(e[3]); d[3] = (*NEXT_P(e[3]) - *e[3]).Normalized(); }
-
-		// Check if the area of the new rectangle is smaller than anything seen so far.
-		float minu = ed.PerpDot(*e[0]);
-		float maxu = ed.PerpDot(*e[2]);
-		float minv = ed.Dot(*e[1]);
-		float maxv = ed.Dot(*e[3]);
-
-		float area = MATH_NS::Abs((maxu-minu) * (maxv-minv));
-		if (area < minArea)
-		{
-			vDir = ed;
-			minArea = area;
-			minU = MATH_NS::Min(minu, maxu);
-			maxU = MATH_NS::Max(minu, maxu);
-			minV = MATH_NS::Min(minv, maxv);
-			maxV = MATH_NS::Max(minv, maxv);
-		}
-	}
-	uDir = vDir.Rotated90CCW();
-	center = 0.5f * (uDir * (minU+maxU) + vDir * (minV+maxV));
-
-	return minArea;
 }
 
 float2 float2::operator +(const float2 &rhs) const

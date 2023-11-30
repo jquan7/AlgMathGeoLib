@@ -237,21 +237,7 @@ public:
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
 	std::string SerializeToCodeString() const;
-	static LineSegment2D FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-	static LineSegment2D FromString(const char *str, const char **outEndStr = 0);
-};
-
-struct LineSegment2D_storage
-{
-	vec2d_storage a,b;
-	LineSegment2D_storage(){}
-	LineSegment2D_storage(const LineSegment2D &rhs)
-	{
-		*reinterpret_cast<LineSegment2D*>(this) = rhs;
-	}
-	operator LineSegment2D() const { return *reinterpret_cast<const LineSegment2D*>(this); }
 };
 
 LineSegment2D operator *(const float3x3 &transform, const LineSegment2D &line);

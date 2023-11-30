@@ -411,11 +411,7 @@ public:
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
 	std::string SerializeToCodeString() const;
-	static MUST_USE_RESULT float3 FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-	/// Parses a string that is of form "x,y,z" or "(x,y,z)" or "(x;y;z)" or "x y z" to a new float3.
-	static MUST_USE_RESULT float3 FromString(const char *str, const char **outEndStr = 0);
 
 	/// @return x + y + z.
 	float SumOfElements() const;
@@ -748,9 +744,6 @@ inline float3 DIR_TO_FLOAT3(const vec &v)
 #define FLOAT4D_DIR_VEC_SCALAR(s) float4d::FromScalar(s)
 
 #endif
-
-vec PointVecFromString(const char *str, const char **outEndStr = 0);
-vec DirVecFromString(const char *str, const char **outEndStr = 0);
 
 /// Converts the given amount of degrees into radians.
 /// 180 degrees equals pi, 360 degrees is a full circle, and equals 2pi.

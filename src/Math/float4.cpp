@@ -497,8 +497,6 @@ bool float4::IsPerpendicular(const float4 &other, float epsilonSq) const
 	return dot*dot <= epsilonSq * LengthSq() * other.LengthSq();
 }
 
-bool IsNeutralCLocale();
-
 #if defined(MATH_ENABLE_STL_SUPPORT)
 std::string float4::ToString() const
 {
@@ -524,28 +522,6 @@ std::string float4::SerializeToCodeString() const
 	return "float4(" + SerializeToString() + ")";
 }
 #endif
-
-float4 float4::FromString(const char *str, const char **outEndStr)
-{
-	assert(IsNeutralCLocale());
-	assume(str);
-	if (!str)
-		return float4::nan;
-	MATH_SKIP_WORD(str, "float4");
-	MATH_SKIP_WORD(str, "(");
-	float4 f;
-	f.x = DeserializeFloat(str, &str);
-	f.y = DeserializeFloat(str, &str);
-	f.z = DeserializeFloat(str, &str);
-	f.w = DeserializeFloat(str, &str);
-	if (*str == ')')
-		++str;
-	if (*str == ',')
-		++str;
-	if (outEndStr)
-		*outEndStr = str;
-	return f;
-}
 
 float float4::SumOfElements() const
 {

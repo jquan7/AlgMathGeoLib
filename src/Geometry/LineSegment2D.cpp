@@ -521,20 +521,4 @@ std::ostream &operator <<(std::ostream &o, const LineSegment2D &lineseg)
 
 #endif
 
-LineSegment2D LineSegment2D::FromString(const char *str, const char **outEndStr)
-{
-	assume(str);
-	if (!str)
-		return LineSegment2D(vec2d::nan, vec2d::nan);
-	LineSegment2D l;
-	MATH_SKIP_WORD(str, "LineSegment2D(");
-	MATH_SKIP_WORD(str, "a:(");
-	l.a = POINT_TO_FLOAT4(PointVecFromString(str, &str)).ToVec2D();
-	MATH_SKIP_WORD(str, " b:(");
-	l.b = POINT_TO_FLOAT4(PointVecFromString(str, &str)).ToVec2D();
-	if (outEndStr)
-		*outEndStr = str;
-	return l;
-}
-
 MATH_END_NAMESPACE

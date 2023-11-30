@@ -412,11 +412,7 @@ public:
 
 	/// Returns a string of C++ code that can be used to construct this object. Useful for generating test cases from badly behaving objects.
 	std::string SerializeToCodeString() const;
-
-	static AABB FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-	static AABB FromString(const char *str, const char **outEndStr = 0);
 
 	/// Finds the set intersection of this and the given AABB.
 	/** @return This function returns the AABB that is contained in both this and the given AABB.  */

@@ -999,25 +999,6 @@ std::string Polygon::SerializeToString() const
 }
 #endif
 
-Polygon Polygon::FromString(const char *str, const char **outEndStr)
-{
-	MATH_SKIP_WORD(str, "Polygon");
-	MATH_SKIP_WORD(str, "(");
-	Polygon p;
-	while(*str == '(' || *str == ',')
-	{
-		MATH_SKIP_WORD(str, ",");
-		float3 pt = float3::FromString(str, &str);
-		p.p.push_back(POINT_VEC(pt));
-	}
-	MATH_SKIP_WORD(str, ")");
-
-	if (outEndStr)
-		*outEndStr = str;
-
-	return p;
-}
-
 bool Polygon::Equals(const Polygon &other) const
 {
 	if (p.size() != other.p.size())
@@ -1029,21 +1010,6 @@ bool Polygon::Equals(const Polygon &other) const
 
 	return true;
 }
-
-/*
-/// Returns true if the given vertex is a concave vertex. Otherwise the vertex is a convex vertex.
-bool IsConcaveVertex(int i) const;
-
-/// Computes the conves hull of this polygon.
-Polygon ConvexHull() const;
-
-bool IsSupportingPoint(int i) const;
-
-bool IsSupportingPoint(const vec &point) const;
-
-/// Returns true if the quadrilateral defined by the four points is convex (and not concave or bowtie).
-static bool IsConvexQuad(const vec &pointA, const vec &pointB, const vec &pointC, const vec &pointD);
-*/
 
 Polygon operator *(const float3x3 &transform, const Polygon &polygon)
 {

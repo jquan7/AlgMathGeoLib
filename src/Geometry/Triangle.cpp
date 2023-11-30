@@ -1874,22 +1874,4 @@ std::ostream &operator <<(std::ostream &o, const Triangle &triangle)
 
 #endif
 
-Triangle Triangle::FromString(const char *str, const char **outEndStr)
-{
-	assume(str);
-	if (!str)
-		return Triangle(vec::nan, vec::nan, vec::nan);
-	Triangle t;
-	MATH_SKIP_WORD(str, "Triangle(");
-	MATH_SKIP_WORD(str, "a:(");
-	t.a = PointVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " b:(");
-	t.b = PointVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " c:(");
-	t.c = PointVecFromString(str, &str);
-	if (outEndStr)
-		*outEndStr = str;
-	return t;
-}
-
 MATH_END_NAMESPACE

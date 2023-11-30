@@ -69,8 +69,6 @@ class AABB2D;
 class LineSegment2D;
 class Triangle2D;
 
-struct float4_storage;
-
 #define IS16ALIGNED(x) ((((uintptr_t)(x)) & 0xF) == 0)
 #define IS32ALIGNED(x) ((((uintptr_t)(x)) & 0x1F) == 0)
 #define IS64ALIGNED(x) ((((uintptr_t)(x)) & 0x3F) == 0)
@@ -104,18 +102,12 @@ struct float4_storage;
 #ifdef MATH_AUTOMATIC_SSE
 
 typedef ALIGN16 float4 vec2d;
-typedef float4_storage vec2d_storage;
-
 typedef ALIGN16 float4 vec;
-typedef float4_storage vec_storage;
 
 #else
 
 typedef float2 vec2d;
-typedef float2 vec2d_storage;
-
 typedef float3 vec;
-typedef float3 vec_storage;
 
 #endif
 

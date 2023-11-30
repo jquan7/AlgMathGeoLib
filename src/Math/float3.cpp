@@ -204,8 +204,6 @@ bool MUST_USE_RESULT float3::AreCollinear(const float3 &p1, const float3 &p2, co
 	return (p2-p1).Cross(p3-p1).LengthSq() <= epsilonSq;
 }
 
-bool IsNeutralCLocale();
-
 #if defined(MATH_ENABLE_STL_SUPPORT)
 std::string float3::ToString() const
 {
@@ -231,27 +229,6 @@ std::string float3::SerializeToCodeString() const
 }
 #endif
 
-float3 MUST_USE_RESULT float3::FromString(const char *str, const char **outEndStr)
-{
-	assert(IsNeutralCLocale());
-	assume(str);
-	if (!str)
-		return float3::nan;
-	MATH_SKIP_WORD(str, "float3");
-	MATH_SKIP_WORD(str, "(");
-	float3 f;
-	f.x = DeserializeFloat(str, &str);
-	f.y = DeserializeFloat(str, &str);
-	f.z = DeserializeFloat(str, &str);
-	if (*str == ')')
-		++str;
-	if (*str == ',')
-		++str;
-	if (outEndStr)
-		*outEndStr = str;
-	return f;
-}
-
 int CountCommas(const char *start, const char *end)
 {
 	int commas = 0;
@@ -274,49 +251,6 @@ const char *FindNext(const char *str, char ch)
 	return str;
 }
 
-vec PointVecFromString(const char *str, const char **outEndStr)
-{
-	if (!str)
-		return vec::nan;
-	if (MATH_NEXT_WORD_IS(str, "float3"))
-		return POINT_VEC(float3::FromString(str, outEndStr));
-	if (MATH_NEXT_WORD_IS(str, "float4"))
-		return FLOAT4_TO_POINT(float4::FromString(str, outEndStr));
-	while(*str == ' ')
-		++str;
-	if (*str == '(')
-	{
-		const char *end = FindNext(str, ')');
-		int numFields = CountCommas(str, end) + 1;
-		assume1(numFields == 3 || numFields == 4, numFields);
-		if (numFields == 4)
-			return FLOAT4_TO_POINT(float4::FromString(str, outEndStr));
-	}
-	// Default to assuming that the shorter form of serialization was used and there is three floats.
-	return POINT_VEC(float3::FromString(str, outEndStr));
-}
-
-vec DirVecFromString(const char *str, const char **outEndStr)
-{
-	if (!str)
-		return vec::nan;
-	if (MATH_NEXT_WORD_IS(str, "float3"))
-		return DIR_VEC(float3::FromString(str, outEndStr));
-	if (MATH_NEXT_WORD_IS(str, "float4"))
-		return FLOAT4_TO_DIR(float4::FromString(str, outEndStr));
-	while(*str == ' ')
-		++str;
-	if (*str == '(')
-	{
-		const char *end = FindNext(str, ')');
-		int numFields = CountCommas(str, end) + 1;
-		assume1(numFields == 3 || numFields == 4, numFields);
-		if (numFields == 4)
-			return FLOAT4_TO_DIR(float4::FromString(str, outEndStr));
-	}
-	// Default to assuming that the shorter form of serialization was used and there is three floats.
-	return DIR_VEC(float3::FromString(str, outEndStr));
-}
 
 float float3::SumOfElements() const
 {

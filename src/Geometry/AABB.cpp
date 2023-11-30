@@ -1009,22 +1009,6 @@ std::string AABB::SerializeToCodeString() const
 	return "AABB(" + minpt.SerializeToCodeString() + "," + maxpt.SerializeToCodeString() + ")";
 }
 
-AABB AABB::FromString(const char *str, const char **outEndStr)
-{
-	assume(str);
-	if (!str)
-		return AABB(vec::nan, vec::nan);
-	AABB a;
-	MATH_SKIP_WORD(str, "AABB(");
-	MATH_SKIP_WORD(str, "Min:(");
-	a.minpt = PointVecFromString(str, &str);
-	MATH_SKIP_WORD(str, " Max:(");
-	a.maxpt = PointVecFromString(str, &str);
-	if (outEndStr)
-		*outEndStr = str;
-	return a;
-}
-
 std::ostream &operator <<(std::ostream &o, const AABB &aabb)
 {
 	o << aabb.ToString();

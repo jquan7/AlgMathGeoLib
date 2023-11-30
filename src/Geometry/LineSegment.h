@@ -181,10 +181,7 @@ public:
 
     /// Returns a string of C++ code that can be used to construct this object.
     std::string SerializeToCodeString() const;
-    static LineSegment FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-    static LineSegment FromString(const char *str, const char **outEndStr = 0);
 };
 
 LineSegment operator *(const float3x3 &transform, const LineSegment &line);

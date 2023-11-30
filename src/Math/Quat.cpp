@@ -742,8 +742,6 @@ float4x4 MUST_USE_RESULT Quat::ToFloat4x4(const float4 &translation) const
 #endif
 }
 
-bool IsNeutralCLocale();
-
 #if defined(MATH_ENABLE_STL_SUPPORT)
 std::string MUST_USE_RESULT Quat::ToString() const
 {
@@ -779,28 +777,6 @@ std::string Quat::SerializeToCodeString() const
 	return "Quat(" + SerializeToString() + ")";
 }
 #endif
-
-Quat MUST_USE_RESULT Quat::FromString(const char *str, const char **outEndStr)
-{
-	assert(IsNeutralCLocale());
-	assume(str);
-	if (!str)
-		return Quat::nan;
-	MATH_SKIP_WORD(str, "Quat");
-	MATH_SKIP_WORD(str, "(");
-	Quat f;
-	f.x = DeserializeFloat(str, &str);
-	f.y = DeserializeFloat(str, &str);
-	f.z = DeserializeFloat(str, &str);
-	f.w = DeserializeFloat(str, &str);
-	if (*str == ')')
-		++str;
-	if (*str == ',')
-		++str;
-	if (outEndStr)
-		*outEndStr = str;
-	return f;
-}
 
 Quat Quat::operator +(const Quat &rhs) const
 {

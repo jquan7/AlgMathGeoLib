@@ -253,11 +253,7 @@ public:
 
     /// Returns a string of C++ code that can be used to construct this object.
     std::string SerializeToCodeString() const;
-    static float2 FromString(const std::string &str) { return FromString(str.c_str()); }
 #endif
-
-    /// Parses a string that is of form "x,y" or "(x,y)" or "(x;y)" or "x y" to a new float2.
-    static float2 FromString(const char *str, const char **outEndStr = 0);
 
     /// @return x + y.
     float SumOfElements() const;
@@ -378,48 +374,6 @@ public:
     /// Tests if the triangle a->b->c is oriented counter-clockwise.
     //  Point C lies to the left of the directed line AB.
     static bool OrientedCCW(const float2 &a, const float2 &b, const float2 &c);
-
-#ifdef MATH_ENABLE_STL_SUPPORT
-    /// Computes the 2D convex hull of the given point set.
-    /* @see ConvexHullInPlace */
-    static void ConvexHull(const float2 *pts, int num, std::vector<float2> &convex_hull);
-#endif
-
-    /// Computes the 2D convex hull of the given point set, in-place.
-    /** This version of the algorithm works in-place, meaning that when the algorithm finishes,
-        pts will contain the list of the points on the convex hull.
-        @note As a convention, the convex hull winds counter-clockwise when graphed in the xy plane where
-            +x points to the right and +y points up. That is, walking along the polylist
-            intArray[0] -> pts[1] -> pts[2] -> ... -> pts[num-1] -> pts[0] performs
-            a counter-clockwise tour.
-        @param pts [in, out] A pointer to an array of num float2 points that represent a point cloud. This
-            array will be rewritten to contain the convex hull of the original point set.
-        @return The number of points on the convex hull, i.e. the number of elements used in pts after the operation.
-        @see ConvexHull(). */
-    static int ConvexHullInPlace(float2 *pts, int num);
-
-    /// Tests whether a 2D convex hull contains the given point.
-    /** @param convexHull [in] A pointer to an array of points in the convex hull.
-        @param numPointsInConvexHull The number of elements in the array convexHull.
-        @param point The target point to test. */
-    static bool ConvexHullContains(const float2 *convexHull, int numPointsInConvexHull, const float2 &point);
-
-    /// Computes the minimum-area rectangle that bounds the given point set. [noscript]
-    /** Implementation adapted from Christer Ericson's Real-time Collision Detection, p.111.
-        @param pts [in] A pointer to an array of points to process.
-        @param num The number of elements in the array pointed to by pts.
-        @param center [out] This variable will receive the center point of the rectangle.
-        @param uDir [out] This variable will receive a normalized direction vector pointing one of the side directionss of the rectangle.
-        @param vDir [out] This variable will receive a normalized direction vector pointing the other side direction of the rectangle.
-        @param minU [out] Receives the minimum extent of the processed point set along the u direction.
-        @param maxU [out] Receives the maximum extent of the processed point set along the u direction.
-        @param minV [out] Receives the minimum extent of the processed point set along the v direction.
-        @param maxV [out] Receives the maximum extent of the processed point set along the v direction.
-        @note This algorithm runs in O(n^2) time to the number of points in the input.
-        @note For best performance, the input point array should contain only the points in the convex hull of the point set. This algorithm
-            does not compute the convex hull for you.
-        @return The area of the resulting rectangle. */
-    static float MinAreaRectInPlace(float2 *pts, int num, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV);
 
     /** @note Due to static data initialization order being undefined in C++, do NOT use this
             member to initialize other static data in other compilation units! */
