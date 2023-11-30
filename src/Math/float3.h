@@ -541,21 +541,6 @@ public:
 		@see Dot(), Cross(). */
 	static MUST_USE_RESULT float ScalarTripleProduct(const float3 &u, const float3 &v, const float3 &w);
 
-	/// Returns this vector reflected about a plane with the given normal.
-	/** By convention, both this and the reflected vector point away from the plane with the given normal
-		@see Refract(). */
-	float3 Reflect(const float3 &normal) const;
-
-	/// Refracts this vector about a plane with the given normal.
-	/** By convention, the this vector points towards the plane, and the returned vector points away from the plane.
-		When the ray is going from a denser material to a lighter one, total internal reflection can occur.
-		In this case, this function will just return a reflected vector from a call to Reflect().
-		@param normal Specifies the plane normal direction
-		@param negativeSideRefractionIndex The refraction index of the material we are exiting.
-		@param positiveSideRefractionIndex The refraction index of the material we are entering.
-		@see Reflect(). */
-	float3 Refract(const float3 &normal, float negativeSideRefractionIndex, float positiveSideRefractionIndex) const;
-
 	/// Projects this vector onto the given unnormalized direction vector.
 	/** @param direction The direction vector to project this vector onto. This function will normalize this
 			vector, so you can pass in an unnormalized vector.

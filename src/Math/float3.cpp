@@ -606,24 +606,6 @@ float MUST_USE_RESULT float3::ScalarTripleProduct(const float3 &u, const float3 
 	return u.Cross(v).Dot(w);
 }
 
-float3 float3::Reflect(const float3 &normal) const
-{
-	assume2(normal.IsNormalized(), normal.SerializeToCodeString(), normal.Length());
-	return 2.f * this->ProjectToNorm(normal) - *this;
-}
-
-/// Implementation from http://www.flipcode.com/archives/reflection_transmission.pdf .
-float3 float3::Refract(const float3 &normal, float negativeSideRefractionIndex, float positiveSideRefractionIndex) const
-{
-	// This code is duplicated in float2::Refract.
-	float n = negativeSideRefractionIndex / positiveSideRefractionIndex;
-	float cosI = this->Dot(normal);
-	float sinT2 = n*n*(1.f - cosI*cosI);
-	if (sinT2 > 1.f) // Total internal reflection occurs?
-		return (-*this).Reflect(normal);
-	return n * *this - (n + Sqrt(1.f - sinT2)) * normal;
-}
-
 float3 float3::ProjectTo(const float3 &direction) const
 {
 	assume(!direction.IsZero());

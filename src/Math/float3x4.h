@@ -385,24 +385,6 @@ public:
 	/// Returns the upper-left 3x3 part of this matrix. This part stores the rotation of this transform.
 	 float3x3 RotatePart() const;
 
-	// Returns the local right axis in the post-transformed coordinate space, according to the given convention.
-	// @note The returned vector might not be normalized if this matrix contains scaling.
-	// @note The basis returned by (Right, Up, Forward) might not be of the same handedness as the
-	//	   pre-transformed coordinate system, if the matrix contained reflection.
-//	template<typename Convention = XposRight_YposUp_ZposForward> float3 Right() const;
-
-	// Returns the local up axis in the post-transformed coordinate space, according to the given convention.
-	// @note The returned vector might not be normalized if this matrix contains scaling.
-	// @note The basis returned by (Right, Up, Forward) might not be of the same handedness as the
-	//	   pre-transformed coordinate system, if the matrix contained reflection.
-//	template<typename Convention = XposRight_YposUp_ZposForward> float3 Up() const;
-
-	// Returns the local forward axis in the post-transformed coordinate space, according to the given convention.
-	// @note The returned vector might not be normalized if this matrix contains scaling.
-	// @note The basis returned by (Right, Up, Forward) might not be of the same handedness as the
-	//	   pre-transformed coordinate system, if the matrix contained reflection.
-//	template<typename Convention = XposRight_YposUp_ZposForward> float3 Forward() const;
-
 	/// Returns the local +X/+Y/+Z axis in world space.
 	/** This is the same as transforming the vector (1,0,0) by this matrix. [indexTitle: PositiveX/Y/Z] */
 	float3 WorldX() const;

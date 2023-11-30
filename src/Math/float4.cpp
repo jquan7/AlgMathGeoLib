@@ -921,32 +921,6 @@ void float4::PerpendicularBasis(float4 &outB, float4 &outC) const
 #endif
 }
 
-float4 float4::Reflect3(const float3 &normal) const
-{
-	assume2(normal.IsNormalized(), normal.SerializeToCodeString(), normal.Length());
-	assume(EqualAbs(w, 0));
-	return 2.f * this->ProjectToNorm3(normal) - *this;
-}
-
-float4 float4::Reflect(const float4 &normal) const
-{
-	assume2(normal.IsNormalized(), normal.SerializeToCodeString(), normal.Length());
-	assume(EqualAbs(w, 0));
-	return 2.f * this->ProjectToNorm(normal) - *this;
-}
-
-/// Implementation from http://www.flipcode.com/archives/reflection_transmission.pdf .
-float4 float4::Refract(const float4 &normal, float negativeSideRefractionIndex, float positiveSideRefractionIndex) const
-{
-	// This code is duplicated in float2::Refract.
-	float n = negativeSideRefractionIndex / positiveSideRefractionIndex;
-	float cosI = this->Dot(normal);
-	float sinT2 = n*n*(1.f - cosI*cosI);
-	if (sinT2 > 1.f) // Total internal reflection occurs?
-		return (-*this).Reflect(normal);
-	return n * *this - (n + Sqrt(1.f - sinT2)) * normal;
-}
-
 float float4::AngleBetween3(const float4 &other) const
 {
 	float cosa = Dot3(other) / Sqrt(LengthSq3() * other.LengthSq3());

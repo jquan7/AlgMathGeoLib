@@ -227,20 +227,6 @@ float3x4 Plane::MirrorMatrix() const
 	return float3x4::Mirror(*this);
 }
 
-vec Plane::Mirror(const vec &point) const
-{
-	assume2(normal.IsNormalized(), normal.SerializeToCodeString(), normal.Length());
-	vec reflected = point - 2.f * (point.Dot(normal) - d) * normal;
-	mathassert(EqualAbs(signedDistance, -SignedDistance(reflected), 1e-2f));
-	mathassert(reflected.Equals(MirrorMatrix().MulPos(point)));
-	return reflected;
-}
-
-vec Plane::Refract(const vec &vec, float negativeSideRefractionIndex, float positiveSideRefractionIndex) const
-{
-	return vec.Refract(normal, negativeSideRefractionIndex, positiveSideRefractionIndex);
-}
-
 vec Plane::Project(const vec &point) const
 {
 	vec projected = point - (normal.Dot(point) - d) * normal;

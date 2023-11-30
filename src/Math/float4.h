@@ -685,14 +685,6 @@ public:
 		@note When calling this function, this vector should not be zero! */
 	void PerpendicularBasis(float4 &outB, float4 &outC) const;
 
-	/// Returns this vector reflected about a plane with the given normal.
-	/** By convention, both this and the reflected vector point away from the plane with the given normal.
-		@note This function ignores the w component of this vector (assumes w=0). */
-	float4 Reflect3(const float3 &normal) const;
-	float4 Reflect(const float4 &normal) const;
-
-	float4 Refract(const float4 &normal, float negativeSideRefractionIndex, float positiveSideRefractionIndex) const;
-
 	/// Returns the angle between this vector and the specified vector, in radians.
 	/** @note This function takes into account that this vector or the other vector can be unnormalized, and
 			normalizes the computations.

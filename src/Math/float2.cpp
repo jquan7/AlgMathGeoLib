@@ -349,30 +349,12 @@ float float2::Dot(const float2 &rhs) const
 
 float2 float2::Perp() const
 {
-	return float2(-y, x);
+	return float2(y, -x);
 }
 
 float float2::PerpDot(const float2 &rhs) const
 {
 	return x * rhs.y - y * rhs.x;
-}
-
-float2 float2::Reflect(const float2 &normal) const
-{
-	assume2(normal.IsNormalized(), normal.SerializeToCodeString(), normal.Length());
-	return 2.f * this->ProjectToNorm(normal) - *this;
-}
-
-/// Implementation from http://www.flipcode.com/archives/reflection_transmission.pdf .
-float2 float2::Refract(const float2 &normal, float negativeSideRefractionIndex, float positiveSideRefractionIndex) const
-{
-	// This code is duplicated in float3::Refract.
-	float n = negativeSideRefractionIndex / positiveSideRefractionIndex;
-	float cosI = this->Dot(normal);
-	float sinT2 = n*n*(1.f - cosI*cosI);
-	if (sinT2 > 1.f) // Total internal reflection occurs?
-		return (-*this).Reflect(normal);
-	return n * *this - (n + Sqrt(1.f - sinT2)) * normal;
 }
 
 float2 float2::ProjectTo(const float2 &direction) const

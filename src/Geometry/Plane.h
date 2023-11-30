@@ -224,16 +224,6 @@ public:
 		@see MirrorMatrix(). */
 	vec Mirror(const vec &point) const;
 
-	/// Refracts the given incident vector along this plane.
-	/** By convention, the input vector should point towards the plane, and the returned vector will point away from the plane.
-		When the ray is going from a denser material to a lighter one, total internal reflection can occur.
-		In this case, this function will just return a reflected vector from a call to Reflect().
-		@param vec Specifies the incident ray direction.
-		@param negativeSideRefractionIndex The refraction index of the material we are exiting.
-		@param positiveSideRefractionIndex The refraction index of the material we are entering.
-		@todo Add Plane::Reflect. */
-	vec Refract(const vec &vec, float negativeSideRefractionIndex, float positiveSideRefractionIndex) const;
-
 	/// Computes the closest point on this plane to the given object.
 	/** If the other object intersects this plane, this function will return an arbitrary point inside
 		the region of intersection.
