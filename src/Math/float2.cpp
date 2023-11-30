@@ -470,12 +470,12 @@ bool float2::OrientedCCW(const float2 &a, const float2 &b, const float2 &c)
 }
 
 #ifdef MATH_ENABLE_STL_SUPPORT
-void float2::ConvexHull(const float2 *pts, int npts, std::vector<float2> &convex_hull)
+void float2::ConvexHull(const float2 *pts, int num, std::vector<float2> &convex_hull)
 {
 	convex_hull.clear();
-	if (npts == 0)
+	if (num == 0)
 		return;
-	convex_hull.insert(convex_hull.end(), pts, pts + npts);
+	convex_hull.insert(convex_hull.end(), pts, pts + num);
 	int convexHullSize = ConvexHullInPlace(&convex_hull[0], (int)convex_hull.size());
 	convex_hull.resize(convexHullSize);
 }

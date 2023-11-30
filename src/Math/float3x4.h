@@ -655,8 +655,8 @@ public:
 		input vectors represent points (positions).
 		@param stride If specified, represents the distance in bytes between subsequent vector elements. If stride is not
 			specified, the vectors are assumed to be tightly packed in memory. */
-	void BatchTransformPos(float3 *pts, int npts) const;
-	void BatchTransformPos(float3 *pts, int npts, int stride) const;
+	void BatchTransformPos(float3 *pts, int num) const;
+	void BatchTransformPos(float3 *pts, int num, int stride) const;
 	void BatchTransformPos(float4 *vectorArray, int numVectors) const { BatchTransform(vectorArray, numVectors); }
 	void BatchTransformPos(float4 *vectorArray, int numVectors, int stride) const { BatchTransform(vectorArray, numVectors, stride); }
 

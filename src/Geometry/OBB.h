@@ -252,23 +252,23 @@ public:
 	/// Finds the two extreme points along the given direction vector from the given point array.
 	/** @param dir The direction vector to project the point array to. This vector does not need to be normalized.
 		@param pts [in] The list of points to process.
-		@param npts The number of elements in pts.
+		@param num The number of elements in pts.
 		@param idxSmallest [out] The index of the smallest point along the given direction will be received here.
 			This pointer may be left null, if this information is of no interest.
 		@param idxLargest [out] The index of the largest point along the given direction will be received here.
 			This pointer may be left null, if this information is of no interest. */
-	static void ExtremePointsAlongDirection(const vec &dir, const vec *pts, int npts, int &idxSmallest, int &idxLargest) { float smallestD, largestD; ExtremePointsAlongDirection(dir, pts, npts, idxSmallest, idxLargest, smallestD, largestD); }
+	static void ExtremePointsAlongDirection(const vec &dir, const vec *pts, int num, int &idxSmallest, int &idxLargest) { float smallestD, largestD; ExtremePointsAlongDirection(dir, pts, num, idxSmallest, idxLargest, smallestD, largestD); }
 	/** @param smallestD [out] Receives the minimum projection distance along the given direction.
 		@param largestD [out] Receives the maximum projection distance along the given direction. */
-	static void ExtremePointsAlongDirection(const vec &dir, const vec *pts, int npts, int &idxSmallest, int &idxLargest, float &smallestD, float &largestD);
+	static void ExtremePointsAlongDirection(const vec &dir, const vec *pts, int num, int &idxSmallest, int &idxLargest, float &smallestD, float &largestD);
 
 	/// Computes the smallest OBB by volume that encloses the given point set.
 	/** This function implements the algorithm from the paper
 		An Exact Algorithm for Finding Minimum Oriented Bounding Boxes, Jukka Jyl�nki, 2015. Available at http://clb.demon.fi/minobb/ */
-	static OBB BruteEnclosingOBB(const vec *pts, int npts);
+	static OBB BruteEnclosingOBB(const vec *pts, int num);
 
 	/// Returns an OBB that is oriented to the coordinate frame specified by vectors dir0 and dir1 and encloses the given point set.
-	static OBB FixedOrientationEnclosingOBB(const vec *pts, int npts, const vec &dir0, const vec &dir1);
+	static OBB FixedOrientationEnclosingOBB(const vec *pts, int num, const vec &dir0, const vec &dir1);
 
 	/// Translates this OBB in world space.
 	/** @param offset The amount of displacement to apply to this OBB, in world space coordinates.

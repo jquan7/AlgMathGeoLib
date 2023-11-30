@@ -1112,19 +1112,19 @@ float4 float3x3::Transform(const float4 &vector) const
 				  vector.w);
 }
 
-void float3x3::BatchTransform(float3 *pts, int npts) const
+void float3x3::BatchTransform(float3 *pts, int num) const
 {
-	assume(pts || npts == 0);
-	for(int i = 0; i < npts; ++i)
+	assume(pts || num == 0);
+	for(int i = 0; i < num; ++i)
 		pts[i] = *this * pts[i];
 }
 
-void float3x3::BatchTransform(float3 *pts, int npts, int stride) const
+void float3x3::BatchTransform(float3 *pts, int num, int stride) const
 {
-	assume(pts || npts == 0);
+	assume(pts || num == 0);
 	assume(stride >= (int)sizeof(float3));
 	u8 *data = reinterpret_cast<u8*>(pts);
-	for(int i = 0; i < npts; ++i)
+	for(int i = 0; i < num; ++i)
 	{
 		float3 *vtx = reinterpret_cast<float3*>(data + stride*i);
 		*vtx = *this * *vtx;

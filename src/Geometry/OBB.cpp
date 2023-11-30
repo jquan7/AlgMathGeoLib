@@ -348,15 +348,15 @@ void OBB::GetFacePlanes(Plane *outPlaneArray) const
 }
 
 /// See Christer Ericson's book Real-Time Collision Detection, page 83.
-void OBB::ExtremePointsAlongDirection(const vec &dir, const vec *pts, int npts, int &idxSmallest, int &idxLargest, float &smallestD, float &largestD)
+void OBB::ExtremePointsAlongDirection(const vec &dir, const vec *pts, int num, int &idxSmallest, int &idxLargest, float &smallestD, float &largestD)
 {
-	assume(pts || npts == 0);
+	assume(pts || num == 0);
 
 	idxSmallest = idxLargest = 0;
 
 	smallestD = FLOAT_INF;
 	largestD = -FLOAT_INF;
-	for(int i = 0; i < npts; ++i)
+	for(int i = 0; i < num; ++i)
 	{
 		float d = Dot(pts[i], dir);
 		if (d < smallestD)
@@ -565,7 +565,7 @@ bool SortedArrayContains(const std::vector<int> &arr, int i)
 	return false;
 }
 
-OBB OBB::FixedOrientationEnclosingOBB(const vec *pts, int npts, const vec &dir0, const vec &dir1)
+OBB OBB::FixedOrientationEnclosingOBB(const vec *pts, int num, const vec &dir0, const vec &dir1)
 {
 	assume(dir0.IsNormalized());
 	assume(dir1.IsNormalized());
@@ -573,10 +573,10 @@ OBB OBB::FixedOrientationEnclosingOBB(const vec *pts, int npts, const vec &dir0,
 
 	int d0, d1;
 	float mind0, maxd0, mind1, maxd1, mind2, maxd2;
-	OBB::ExtremePointsAlongDirection(dir0, pts, npts, d0, d1, mind0, maxd0);
-	OBB::ExtremePointsAlongDirection(dir1, pts, npts, d0, d1, mind1, maxd1);
+	OBB::ExtremePointsAlongDirection(dir0, pts, num, d0, d1, mind0, maxd0);
+	OBB::ExtremePointsAlongDirection(dir1, pts, num, d0, d1, mind1, maxd1);
 	vec edgeC = dir0.Cross(dir1).Normalized();
-	OBB::ExtremePointsAlongDirection(edgeC, pts, npts, d0, d1, mind2, maxd2);
+	OBB::ExtremePointsAlongDirection(edgeC, pts, num, d0, d1, mind2, maxd2);
 	float rd0 = (maxd0 - mind0) * 0.5f;
 	float rd1 = (maxd1 - mind1) * 0.5f;
 	float rd2 = (maxd2 - mind2) * 0.5f;

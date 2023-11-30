@@ -96,9 +96,9 @@ public:
 
 	/// Sets this AABB to enclose the given set of points.
 	/** @param pts A pointer to an array of points to enclose inside an AABB.
-		@param npts The number of elements in the pts list.
+		@param num The number of elements in the pts list.
 		@see MinimalEnclosingAABB(). */
-	void SetFrom(const vec *pts, int npts);
+	void SetFrom(const vec *pts, int num);
 
 	/// Converts this AABB to an OBB.
 	/** This function returns an OBB representation of this AABB. This conversion is exact, meaning that the returned
@@ -203,21 +203,21 @@ public:
 	/// Generates an AABB that encloses the given point set.
 	/** This function finds the smallest AABB that contains the given set of points.
 		@param pts A pointer to an array of points to enclose inside an AABB.
-		@param npts The number of elements in the pts list.
+		@param num The number of elements in the pts list.
 		@see SetFrom(). */
-	static AABB MinimalEnclosingAABB(const vec *pts, int npts);
+	static AABB MinimalEnclosingAABB(const vec *pts, int num);
 	AABB MinimalEnclosingAABB() const { return *this; }
 
 	/// Finds the most extremal points along the three world axes simultaneously.
 	/** @param pts A pointer to an array of points to process.
-		@param npts The number of elements in the pts list.
+		@param num The number of elements in the pts list.
 		@param minx [out] Receives the point that has the smallest x coordinate.
 		@param maxx [out] Receives the point that has the largest x coordinate.
 		@param miny [out] Receives the point that has the smallest y coordinate.
 		@param maxy [out] Receives the point that has the largest y coordinate.
 		@param minz [out] Receives the point that has the smallest z coordinate.
 		@param maxz [out] Receives the point that has the largest z coordinate. */
-	static void ExtremePointsAlongAABB(const vec *pts, int npts, int &minx, int &maxx, int &miny, int &maxy, int &minz, int &maxz);
+	static void ExtremePointsAlongAABB(const vec *pts, int num, int &minx, int &maxx, int &miny, int &maxy, int &minz, int &maxz);
 
 	/// Creates a new AABB given is center position and size along the X, Y and Z axes.
 	/** @see SetCenter(). */
@@ -363,7 +363,7 @@ public:
 	void Enclose(const OBB &obb);
 	void Enclose(const Triangle &triangle);
 	void Enclose(const Polygon &polygon);
-	void Enclose(const vec *pts, int npts);
+	void Enclose(const vec *pts, int num);
 
 	/// Generates an unindexed triangle mesh representation of this AABB.
 	/** @param numFacesX The number of faces to generate along the X axis. This value must be >= 1.

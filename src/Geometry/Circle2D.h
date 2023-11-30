@@ -82,9 +82,9 @@ public:
 		The running time is expected linear time, but compared to Ritter's algorithm (the FastEnclosingCircle() function),
 		this algorithm is considerably slower.
 		@param pts An array of points to compute an enclosing circle for. This pointer must not be null.
-		@param npts The number of elements in the input array pts.
+		@param num The number of elements in the input array pts.
 		@see FastEnclosingCircle(). */
-	static Circle2D OptimalEnclosingCircle(const float2 *pts, int npts);
+	static Circle2D OptimalEnclosingCircle(const float2 *pts, int num);
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Sphere. Most useful for debugging purposes.

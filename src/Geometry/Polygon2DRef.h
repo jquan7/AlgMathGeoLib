@@ -14,12 +14,12 @@ struct Polygon2DRef
 {
 public:
 	const vec2d *points;
-	int npts;
+	int num;
 
 	FORCE_INLINE vec2d AnyPointFast() const
 	{
 		assert(points);
-		assert(npts > 0);
+		assert(num > 0);
 		return points[0];
 	}
 
@@ -27,7 +27,7 @@ public:
 	{
 		vec2d mostExtreme = vec2d::nan;
 		project_dist = -FLOAT_INF;
-		for(int i = 0; i < npts; ++i)
+		for(int i = 0; i < num; ++i)
 		{
 			float d = Dot(direction, points[i]);
 			if (d > project_dist)
@@ -44,8 +44,8 @@ public:
 	{
 		std::stringstream ss;
 		ss << "(";
-		for(int i = 0; i < npts; ++i)
-			ss << "(" << points[i].SerializeToString() + (i+1 != npts ? ")," : ")");
+		for(int i = 0; i < num; ++i)
+			ss << "(" << points[i].SerializeToString() + (i+1 != num ? ")," : ")");
 		ss << ")";
 		return ss.str();
 	}

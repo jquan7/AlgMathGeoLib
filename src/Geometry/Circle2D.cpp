@@ -194,12 +194,12 @@ float Circle2D::SignedDistance(const float2 &point) const
 	return pos.Distance(point) - r;
 }
 
-Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pts, int npts)
+Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pts, int num)
 {
-	assert(pts || npts == 0);
+	assert(pts || num == 0);
 
 	// Special case handling for 0-3 points.
-	switch(npts)
+	switch(num)
 	{
 		case 0: return Circle2D(float2::nan, -FLOAT_INF);
 		case 1: return Circle2D(pts[0], 0.f);
@@ -213,15 +213,15 @@ Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pts, int npts)
 	}
 
 	// Start off by computing the convex hull of the points, which prunes many points off from the problem space.
-	float2 *pts_copy = new float2[npts];
-	for (int i = 0; i < npts; ++i)
+	float2 *pts_copy = new float2[num];
+	for (int i = 0; i < num; ++i)
 		pts_copy[i] = pts[i];
-	// memcpy(pts_copy, pts, sizeof(float2)*npts);
-	npts = float2_ConvexHullInPlace(pts_copy, npts);
+	// memcpy(pts_copy, pts, sizeof(float2)*num);
+	num = float2_ConvexHullInPlace(pts_copy, num);
 
 	// Use initial bounding box extents (min/max x and y) as fast guesses for the optimal
 	// bounding sphere extents.
-	for(int i = 0; i < npts; ++i)
+	for(int i = 0; i < num; ++i)
 	{
 		if (pts_copy[0].x < pts_copy[i].x) std::swap(pts_copy[0], pts_copy[i]);
 		if (pts_copy[1].x > pts_copy[i].x) std::swap(pts_copy[1], pts_copy[i]);
@@ -234,7 +234,7 @@ Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pts, int npts)
 	float r2 = minCircle.r*minCircle.r;
 
 	// Iteratively include the remaining points to the minimal circle.
-	for(int i = 3; i < npts; ++i)
+	for(int i = 3; i < num; ++i)
 	{
 		// If the new point is already inside the current bounding circle, it can be skipped
 		float d2 = (pts_copy[i] - minCircle.pos).LengthSq();

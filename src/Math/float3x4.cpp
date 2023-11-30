@@ -1153,19 +1153,19 @@ float4 float3x4::Transform(const float4 &vector) const
 #endif
 }
 
-void float3x4::BatchTransformPos(float3 *pts, int npts) const
+void float3x4::BatchTransformPos(float3 *pts, int num) const
 {
 	assume(pts);
-	for(int i = 0; i < npts; ++i)
+	for(int i = 0; i < num; ++i)
 		pts[i] = MulPos(pts[i]);
 }
 
-void float3x4::BatchTransformPos(float3 *pts, int npts, int stride) const
+void float3x4::BatchTransformPos(float3 *pts, int num, int stride) const
 {
 	assume(pts);
 	assume(stride >= (int)sizeof(float3));
 	u8 *data = reinterpret_cast<u8*>(pts);
-	for(int i = 0; i < npts; ++i)
+	for(int i = 0; i < num; ++i)
 	{
 		float3 *vtx = reinterpret_cast<float3*>(data + stride*i);
 		*vtx = MulPos(*vtx);
