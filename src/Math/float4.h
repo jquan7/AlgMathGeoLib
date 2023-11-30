@@ -696,7 +696,7 @@ public:
 	/** @note This vector must be normalized to call this function.
 		@note This function ignores the w component of this vector (assumes w=0).
 		@see Dot3(), AngleBetween3(), AngleBetween4(), AngleBetweenNorm4(). */
-	float AngleBetweenNorm3(const float4 &normalizedVector) const;
+	float AngleBetweenNorm3(const float4 &other) const;
 
 	/// Returns the angle between this vector and the specified vector, in radians.
 	/** @note This function takes into account that this vector or the other vector can be unnormalized, and normalizes the computations.
@@ -706,7 +706,7 @@ public:
 	/// Returns the angle between this vector and the specified normalized vector, in radians.
 	/** @note This vector must be normalized to call this function.
 		@see Dot3(), AngleBetween3(), AngleBetweenNorm3(), AngleBetween4(). */
-	float AngleBetweenNorm4(const float4 &normalizedVector) const;
+	float AngleBetweenNorm4(const float4 &other) const;
 
 	/// Projects this vector onto the given vector.
 	/** @note This function treats this and target vector as direction vectors.

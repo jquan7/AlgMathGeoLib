@@ -392,11 +392,11 @@ float2 float2::Lerp(const float2 &a, const float2 &b, float t)
 	return a.Lerp(b, t);
 }
 
-void float2::Decompose(const float2 &direction, float2 &outParallel, float2 &outPerpendicular) const
+void float2::Decompose(const float2 &direction, float2 &parallel, float2 &perpendicular) const
 {
 	assume(direction.IsNormalized());
-	outParallel = this->Dot(direction) * direction;
-	outPerpendicular = *this - outParallel;
+	parallel = this->Dot(direction) * direction;
+	perpendicular = *this - parallel;
 }
 
 void float2::Orthogonalize(const float2 &a, float2 &b)
@@ -470,14 +470,14 @@ bool float2::OrientedCCW(const float2 &a, const float2 &b, const float2 &c)
 }
 
 #ifdef MATH_ENABLE_STL_SUPPORT
-void float2::ConvexHull(const float2 *pointArray, int numPoints, std::vector<float2> &outConvexHull)
+void float2::ConvexHull(const float2 *pts, int npts, std::vector<float2> &convex_hull)
 {
-	outConvexHull.clear();
-	if (numPoints == 0)
+	convex_hull.clear();
+	if (npts == 0)
 		return;
-	outConvexHull.insert(outConvexHull.end(), pointArray, pointArray + numPoints);
-	int convexHullSize = ConvexHullInPlace(&outConvexHull[0], (int)outConvexHull.size());
-	outConvexHull.resize(convexHullSize);
+	convex_hull.insert(convex_hull.end(), pts, pts + npts);
+	int convexHullSize = ConvexHullInPlace(&convex_hull[0], (int)convex_hull.size());
+	convex_hull.resize(convexHullSize);
 }
 #endif
 

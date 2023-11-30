@@ -642,11 +642,11 @@ float float3::AngleBetweenNorm(const float3 &other) const
 		return acos(cosa);
 }
 
-void float3::Decompose(const float3 &direction, float3 &outParallel, float3 &outPerpendicular) const
+void float3::Decompose(const float3 &direction, float3 &parallel, float3 &perpendicular) const
 {
 	assume(direction.IsNormalized());
-	outParallel = this->ProjectToNorm(direction);
-	outPerpendicular = *this - outParallel;
+	parallel = this->ProjectToNorm(direction);
+	perpendicular = *this - parallel;
 }
 
 float3 float3::Lerp(const float3 &b, float t) const

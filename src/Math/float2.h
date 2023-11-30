@@ -324,8 +324,8 @@ public:
     float2 Rotated90CCW() const;
 
     /// Projects this vector onto the given unnormalized direction vector.
-    /** @param direction The direction vector to project this vector onto. This function will normalize this
-            vector, so you can pass in an unnormalized vector.
+    /** @param direction The direction vector to project this vector onto.
+            This function will normalize this vector, so you can pass in an unnormalized vector.
         @see ProjectToNorm(). */
     float2 ProjectTo(const float2 &direction) const;
 
@@ -335,37 +335,33 @@ public:
     float2 ProjectToNorm(const float2 &direction) const;
 
     /// Returns the angle between this vector and the specified vector, in radians.
-    /** @note This function takes into account that this vector or the other vector can be unnormalized, and normalizes the computations.
+    /** @note This function takes into account both vectors can be unnormalized, and normalizes the computations.
             If you are computing the angle between two normalized vectors, it is better to use AngleBetweenNorm().
         @see AngleBetweenNorm(). */
     float AngleBetween(const float2 &other) const;
 
     /// Returns the angle between this vector and the specified normalized vector, in radians.
-    /** @param normalizedVector The direction vector to compute the angle against. This vector must be normalized.
-        @note This vector must be normalized to call this function.
+    /** @param other The direction vector to compute the angle against.
+        @note Both vectors must be normalized to call this function.
         @see AngleBetween(). */
-    float AngleBetweenNorm(const float2 &normalizedVector) const;
+    float AngleBetweenNorm(const float2 &other) const;
 
     /// Breaks this vector down into parallel and perpendicular components with respect to the given direction.
     /** @param direction The direction the decomposition is to be computed. This vector must be normalized.
-        @param outParallel [out] Receives the part of this vector that is parallel to the given direction vector.
-        @param outPerpendicular [out] Receives the part of this vector that is perpendicular to the given direction vector. */
-    void Decompose(const float2 &direction, float2 &outParallel, float2 &outPerpendicular) const;
+        @param parallel [out] Receives the part of this vector that is parallel to the given direction vector.
+        @param perpendicular [out] Receives the part of this vector that is perpendicular to the given direction vector. */
+    void Decompose(const float2 &direction, float2 &parallel, float2 &perpendicular) const;
 
     /// Linearly interpolates between this and the vector b.
     /** @param b The target endpoint to lerp towards to.
         @param t The interpolation weight, in the range [0, 1].
-        @return Lerp(b, 0) returns this vector, Lerp(b, 1) returns the vector b.
-            Lerp(b, 0.5) returns the vector half-way in between the two vectors, and so on.
-            Lerp(b, t) returns (1-t)*this + t*b. */
+        @return Lerp(b, t) returns (1-t)*this + t*b. */
     float2 Lerp(const float2 &b, float t) const;
-    /// This function is the same as calling a.Lerp(b, t).
+    /// a.Lerp(b, t).
     static float2 Lerp(const float2 &a, const float2 &b, float t);
 
-    /// Makes the given vectors linearly independent.
-    /** This function directly follows the Gram-Schmidt procedure on the input vectors.
-        The vector a is kept unmodified, and vector b is modified to be perpendicular to a.
-        @note If any of the input vectors is zero, then the resulting set of vectors cannot be made orthogonal.
+    /// Makes the given vectors linearly independent. (Gram-Schmidt procedure)
+    /** @note If any of the input vectors is zero, then the resulting set of vectors cannot be made orthogonal.
         @see AreOrthogonal(), Orthonormalize(), AreOrthonormal(). */
     static void Orthogonalize(const float2 &a, float2 &b);
 
@@ -373,38 +369,34 @@ public:
     /** @see Orthogonalize(), Orthonormalize(), AreOrthonormal(). */
     static bool AreOrthogonal(const float2 &a, const float2 &b, float epsilon = 1e-3f);
 
-    /// Makes the given vectors linearly independent and normalized in length.
-    /** This function directly follows the Gram-Schmidt procedure on the input vectors.
-        The vector a is first normalized, and vector b is modified to be perpendicular to a, and also normalized.
+    /// Makes the given vectors linearly independent and normalized in length. (Gram-Schmidt procedure)
+    /** Both a and be will be normalized.
         @note If either of the input vectors is zero, then the resulting set of vectors cannot be made orthonormal.
         @see Orthogonalize(), AreOrthogonal(), AreOrthonormal(). */
     static void Orthonormalize(float2 &a, float2 &b);
 
     /// Tests if the triangle a->b->c is oriented counter-clockwise.
-    /** Returns true if the triangle a->b->c is oriented counter-clockwise, when viewed in the XY-plane
-        where x spans to the right and y spans up.
-        Another way to think of this is that this function returns true, if the point C lies to the left
-        of the directed line AB. */
+    //  Point C lies to the left of the directed line AB.
     static bool OrientedCCW(const float2 &a, const float2 &b, const float2 &c);
 
 #ifdef MATH_ENABLE_STL_SUPPORT
     /// Computes the 2D convex hull of the given point set.
     /* @see ConvexHullInPlace */
-    static void ConvexHull(const float2 *pointArray, int numPoints, std::vector<float2> &outConvexHull);
+    static void ConvexHull(const float2 *pts, int npts, std::vector<float2> &convex_hull);
 #endif
 
     /// Computes the 2D convex hull of the given point set, in-place.
     /** This version of the algorithm works in-place, meaning that when the algorithm finishes,
-        pointArray will contain the list of the points on the convex hull.
+        pts will contain the list of the points on the convex hull.
         @note As a convention, the convex hull winds counter-clockwise when graphed in the xy plane where
             +x points to the right and +y points up. That is, walking along the polylist
-            intArray[0] -> pointArray[1] -> pointArray[2] -> ... -> pointArray[numPoints-1] -> pointArray[0] performs
+            intArray[0] -> pts[1] -> pts[2] -> ... -> pts[npts-1] -> pts[0] performs
             a counter-clockwise tour.
-        @param pointArray [in, out] A pointer to an array of numPoints float2 points that represent a point cloud. This
+        @param pts [in, out] A pointer to an array of npts float2 points that represent a point cloud. This
             array will be rewritten to contain the convex hull of the original point set.
-        @return The number of points on the convex hull, i.e. the number of elements used in pointArray after the operation.
+        @return The number of points on the convex hull, i.e. the number of elements used in pts after the operation.
         @see ConvexHull(). */
-    static int ConvexHullInPlace(float2 *pointArray, int numPoints);
+    static int ConvexHullInPlace(float2 *pts, int npts);
 
     /// Tests whether a 2D convex hull contains the given point.
     /** @param convexHull [in] A pointer to an array of points in the convex hull.
@@ -414,8 +406,8 @@ public:
 
     /// Computes the minimum-area rectangle that bounds the given point set. [noscript]
     /** Implementation adapted from Christer Ericson's Real-time Collision Detection, p.111.
-        @param pointArray [in] A pointer to an array of points to process.
-        @param numPoints The number of elements in the array pointed to by pointArray.
+        @param pts [in] A pointer to an array of points to process.
+        @param npts The number of elements in the array pointed to by pts.
         @param center [out] This variable will receive the center point of the rectangle.
         @param uDir [out] This variable will receive a normalized direction vector pointing one of the side directionss of the rectangle.
         @param vDir [out] This variable will receive a normalized direction vector pointing the other side direction of the rectangle.
@@ -427,7 +419,7 @@ public:
         @note For best performance, the input point array should contain only the points in the convex hull of the point set. This algorithm
             does not compute the convex hull for you.
         @return The area of the resulting rectangle. */
-    static float MinAreaRectInPlace(float2 *pointArray, int numPoints, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV);
+    static float MinAreaRectInPlace(float2 *pts, int npts, float2 &center, float2 &uDir, float2 &vDir, float &minU, float &maxU, float &minV, float &maxV);
 
     /** @note Due to static data initialization order being undefined in C++, do NOT use this
             member to initialize other static data in other compilation units! */

@@ -194,74 +194,74 @@ float Circle2D::SignedDistance(const float2 &point) const
 	return pos.Distance(point) - r;
 }
 
-Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pointArray, int numPoints)
+Circle2D Circle2D::OptimalEnclosingCircle(const float2 *pts, int npts)
 {
-	assert(pointArray || numPoints == 0);
+	assert(pts || npts == 0);
 
 	// Special case handling for 0-3 points.
-	switch(numPoints)
+	switch(npts)
 	{
 		case 0: return Circle2D(float2::nan, -FLOAT_INF);
-		case 1: return Circle2D(pointArray[0], 0.f);
+		case 1: return Circle2D(pts[0], 0.f);
 		case 2:
 		{
-			float2 center = (pointArray[0] + pointArray[1]) * 0.5f;
-			float r = Sqrt(Max(center.DistanceSq(pointArray[0]), center.DistanceSq(pointArray[1]))) + 1e-5f;
+			float2 center = (pts[0] + pts[1]) * 0.5f;
+			float r = Sqrt(Max(center.DistanceSq(pts[0]), center.DistanceSq(pts[1]))) + 1e-5f;
 			return Circle2D(center, r);
 		}
-		case 3: return Circle2D::OptimalEnclosingCircle(pointArray[0], pointArray[1], pointArray[2]);
+		case 3: return Circle2D::OptimalEnclosingCircle(pts[0], pts[1], pts[2]);
 	}
 
 	// Start off by computing the convex hull of the points, which prunes many points off from the problem space.
-	float2 *pts = new float2[numPoints];
-	for (int i = 0; i < numPoints; ++i)
-		pts[i] = pointArray[i];
-	// memcpy(pts, pointArray, sizeof(float2)*numPoints);
-	numPoints = float2_ConvexHullInPlace(pts, numPoints);
+	float2 *pts_copy = new float2[npts];
+	for (int i = 0; i < npts; ++i)
+		pts_copy[i] = pts[i];
+	// memcpy(pts_copy, pts, sizeof(float2)*npts);
+	npts = float2_ConvexHullInPlace(pts_copy, npts);
 
 	// Use initial bounding box extents (min/max x and y) as fast guesses for the optimal
 	// bounding sphere extents.
-	for(int i = 0; i < numPoints; ++i)
+	for(int i = 0; i < npts; ++i)
 	{
-		if (pts[0].x < pts[i].x) std::swap(pts[0], pts[i]);
-		if (pts[1].x > pts[i].x) std::swap(pts[1], pts[i]);
-		if (pts[2].y < pts[i].y) std::swap(pts[2], pts[i]);
-		if (pts[3].y > pts[i].y) std::swap(pts[3], pts[i]);
+		if (pts_copy[0].x < pts_copy[i].x) std::swap(pts_copy[0], pts_copy[i]);
+		if (pts_copy[1].x > pts_copy[i].x) std::swap(pts_copy[1], pts_copy[i]);
+		if (pts_copy[2].y < pts_copy[i].y) std::swap(pts_copy[2], pts_copy[i]);
+		if (pts_copy[3].y > pts_copy[i].y) std::swap(pts_copy[3], pts_copy[i]);
 	}
 
 	// Compute the minimal enclosing circle for the first three points.
-	Circle2D minCircle = OptimalEnclosingCircle(pts[0], pts[1], pts[2]);
+	Circle2D minCircle = OptimalEnclosingCircle(pts_copy[0], pts_copy[1], pts_copy[2]);
 	float r2 = minCircle.r*minCircle.r;
 
 	// Iteratively include the remaining points to the minimal circle.
-	for(int i = 3; i < numPoints; ++i)
+	for(int i = 3; i < npts; ++i)
 	{
 		// If the new point is already inside the current bounding circle, it can be skipped
-		float d2 = (pts[i] - minCircle.pos).LengthSq();
+		float d2 = (pts_copy[i] - minCircle.pos).LengthSq();
 		if (d2 <= r2)
 			continue;
 
-		// The new point is outside the current bounding circle defined by pts[0]-pts[2].
-		// Compute a new bounding circle that encloses pts[0]-pts[2] and the new point pts[i].
+		// The new point is outside the current bounding circle defined by pts_copy[0]-pts_copy[2].
+		// Compute a new bounding circle that encloses pts_copy[0]-pts_copy[2] and the new point pts_copy[i].
 		// A circle is defined by at most three points, so one of the resulting points is redundant.
-		// Swap points around so that pts[0]-pts[2] define the new minimum circle, and pts[i] will
+		// Swap points around so that pts_copy[0]-pts_copy[2] define the new minimum circle, and pts_copy[i] will
 		// have the redundant point.
 		int redundantIndex;
-		minCircle = SmallestCircleSqEnclosing4Points(pts[i], pts[0], pts[1], pts[2], redundantIndex);
-		minCircle.pos += pts[i];
-		std::swap(pts[i], pts[redundantIndex]);
+		minCircle = SmallestCircleSqEnclosing4Points(pts_copy[i], pts_copy[0], pts_copy[1], pts_copy[2], redundantIndex);
+		minCircle.pos += pts_copy[i];
+		std::swap(pts_copy[i], pts_copy[redundantIndex]);
 		// For robustness, apply epsilon after square root.
 		minCircle.r = Sqrt(minCircle.r) + 1e-3f;
 		r2 = minCircle.r*minCircle.r;
 
-		// Start again from scratch: pts[0]-pts[2] now has the new candidate.
+		// Start again from scratch: pts_copy[0]-pts_copy[2] now has the new candidate.
 		i = 2;
 
-		mathassert1(minCircle.Contains(pts[0], 1e-3f), minCircle.SignedDistance(pts[0]));
-		mathassert1(minCircle.Contains(pts[1], 1e-3f), minCircle.SignedDistance(pts[1]));
-		mathassert1(minCircle.Contains(pts[2], 1e-3f), minCircle.SignedDistance(pts[2]));
+		mathassert1(minCircle.Contains(pts_copy[0], 1e-3f), minCircle.SignedDistance(pts_copy[0]));
+		mathassert1(minCircle.Contains(pts_copy[1], 1e-3f), minCircle.SignedDistance(pts_copy[1]));
+		mathassert1(minCircle.Contains(pts_copy[2], 1e-3f), minCircle.SignedDistance(pts_copy[2]));
 	}
-	delete[] pts;
+	delete[] pts_copy;
 	return minCircle;
 }
 

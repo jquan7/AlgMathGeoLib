@@ -259,7 +259,7 @@ public:
 	static float3x3 OrthographicProjectionXY(); ///< [similarOverload: OrthographicProjection] [hideIndex]
 
 	/// Computes the covariance matrix of the given set of data points.
-//	static float3x3 CovarianceMatrix(const float3 *pointArray, int numPoints);
+//	static float3x3 CovarianceMatrix(const float3 *pts, int npts);
 
 	/// Returns the given element. [noscript]
 	/** Returns a reference to the element at m[row][col] (or "m[y][x]").
@@ -529,10 +529,10 @@ public:
 	float4 Transform(const float4 &vector) const;
 
 	/// Performs a batch transform of the given array.
-	void BatchTransform(float3 *pointArray, int numPoints) const;
+	void BatchTransform(float3 *pts, int npts) const;
 
 	/// Performs a batch transform of the given array.
-	void BatchTransform(float3 *pointArray, int numPoints, int stride) const;
+	void BatchTransform(float3 *pts, int npts, int stride) const;
 
 	/// Performs a batch transform of the given array.
 	/// This function ignores the w component of the input vectors. These components are assumed to be either 0 or 1.

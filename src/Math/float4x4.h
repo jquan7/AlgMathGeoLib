@@ -792,8 +792,8 @@ public:
 		input vectors represent points (positions).
 		@param strideBytes If specified, represents the distance in bytes between subsequent vector elements. If stride is not
 			specified, the vectors are assumed to be tightly packed in memory. */
-	void TransformPos(float3 *pointArray, int numPoints) const;
-	void TransformPos(float3 *pointArray, int numPoints, int strideBytes) const;
+	void TransformPos(float3 *pts, int npts) const;
+	void TransformPos(float3 *pts, int npts, int strideBytes) const;
 
 	/// Performs a batch transform of the given array of direction vectors.
 	/** The suffix "Dir" in this function just means that the w components of each input vector are assumed to be 0, i.e. the

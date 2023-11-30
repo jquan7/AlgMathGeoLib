@@ -559,16 +559,16 @@ public:
 	float AngleBetween(const float3 &other) const;
 
 	/// Returns the angle between this vector and the specified normalized vector, in radians.
-	/** @param normalizedVector The direction vector to compute the angle against. This vector must be normalized.
+	/** @param other The direction vector to compute the angle against. This vector must be normalized.
 		@note This vector must be normalized to call this function.
 		@see AngleBetween(). */
-	float AngleBetweenNorm(const float3 &normalizedVector) const;
+	float AngleBetweenNorm(const float3 &other) const;
 
 	/// Breaks this vector down into parallel and perpendicular components with respect to the given direction.
 	/** @param direction The direction the decomposition is to be computed. This vector must be normalized.
-		@param outParallel [out] Receives the part of this vector that is parallel to the given direction vector.
-		@param outPerpendicular [out] Receives the part of this vector that is perpendicular to the given direction vector. */
-	void Decompose(const float3 &direction, float3 &outParallel, float3 &outPerpendicular) const;
+		@param parallel [out] Receives the part of this vector that is parallel to the given direction vector.
+		@param perpendicular [out] Receives the part of this vector that is perpendicular to the given direction vector. */
+	void Decompose(const float3 &direction, float3 &parallel, float3 &perpendicular) const;
 
 	/// Linearly interpolates between this and the vector b.
 	/** @param b The target endpoint to lerp towards to.

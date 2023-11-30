@@ -81,10 +81,10 @@ public:
 		See "Smallest enclosing disks (balls and ellipsoids)", Lecture Notes in Computer Science 555 (1991) pp. 359-370.
 		The running time is expected linear time, but compared to Ritter's algorithm (the FastEnclosingCircle() function),
 		this algorithm is considerably slower.
-		@param pointArray An array of points to compute an enclosing circle for. This pointer must not be null.
-		@param numPoints The number of elements in the input array pointArray.
+		@param pts An array of points to compute an enclosing circle for. This pointer must not be null.
+		@param npts The number of elements in the input array pts.
 		@see FastEnclosingCircle(). */
-	static Circle2D OptimalEnclosingCircle(const float2 *pointArray, int numPoints);
+	static Circle2D OptimalEnclosingCircle(const float2 *pts, int npts);
 
 #if defined(MATH_ENABLE_STL_SUPPORT)
 	/// Returns a human-readable representation of this Sphere. Most useful for debugging purposes.

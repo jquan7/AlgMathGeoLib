@@ -1529,20 +1529,20 @@ float4 float4x4::Transform(const float4 &vector) const
 #endif
 }
 
-void float4x4::TransformPos(float3 *pointArray, int numPoints) const
+void float4x4::TransformPos(float3 *pts, int npts) const
 {
 	///TODO: SSE.
-	assume(pointArray);
-	for(int i = 0; i < numPoints; ++i)
-		pointArray[i] = this->TransformPos(pointArray[i]);
+	assume(pts);
+	for(int i = 0; i < npts; ++i)
+		pts[i] = this->TransformPos(pts[i]);
 }
 
-void float4x4::TransformPos(float3 *pointArray, int numPoints, int strideBytes) const
+void float4x4::TransformPos(float3 *pts, int npts, int strideBytes) const
 {
 	///TODO: SSE.
-	assume(pointArray);
-	u8 *data = reinterpret_cast<u8*>(pointArray);
-	for(int i = 0; i < numPoints; ++i)
+	assume(pts);
+	u8 *data = reinterpret_cast<u8*>(pts);
+	for(int i = 0; i < npts; ++i)
 	{
 		float3 *vtx = reinterpret_cast<float3*>(data);
 		*vtx = this->TransformPos(*vtx);

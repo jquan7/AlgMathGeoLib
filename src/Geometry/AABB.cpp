@@ -67,14 +67,14 @@ void AABB::SetFrom(const OBB &obb)
 	SetFromCenterAndSize(obb.pos, 2.f*halfSize);
 }
 
-void AABB::SetFrom(const vec *pointArray, int numPoints)
+void AABB::SetFrom(const vec *pts, int npts)
 {
-	assume(pointArray || numPoints == 0);
+	assume(pts || npts == 0);
 	SetNegativeInfinity();
-	if (!pointArray)
+	if (!pts)
 		return;
-	for(int i = 0; i < numPoints; ++i)
-		Enclose(pointArray[i]);
+	for(int i = 0; i < npts; ++i)
+		Enclose(pts[i]);
 }
 
 OBB AABB::ToOBB() const
@@ -271,20 +271,20 @@ void AABB::GetFacePlanes(Plane *outPlaneArray) const
 		outPlaneArray[i] = FacePlane(i);
 }
 
-AABB AABB::MinimalEnclosingAABB(const vec *pointArray, int numPoints)
+AABB AABB::MinimalEnclosingAABB(const vec *pts, int npts)
 {
 	AABB aabb;
-	aabb.SetFrom(pointArray, numPoints);
+	aabb.SetFrom(pts, npts);
 	return aabb;
 }
 
-void AABB::ExtremePointsAlongAABB(const vec *pts, int numPoints, int &minx, int &maxx, int &miny, int &maxy, int &minz, int &maxz)
+void AABB::ExtremePointsAlongAABB(const vec *pts, int npts, int &minx, int &maxx, int &miny, int &maxy, int &minz, int &maxz)
 {
-	assume(pts || numPoints == 0);
+	assume(pts || npts == 0);
 	if (!pts)
 		return;
 	minx = maxx = miny = maxy = minz = maxz = 0;
-	for(int i = 1; i < numPoints; ++i)
+	for(int i = 1; i < npts; ++i)
 	{
 		if (pts[i].x < pts[minx].x) minx = i;
 		if (pts[i].x > pts[maxx].x) maxx = i;
@@ -885,13 +885,13 @@ void AABB::Enclose(const Polygon &polygon)
 	Enclose(polygon.MinimalEnclosingAABB());
 }
 
-void AABB::Enclose(const vec *pointArray, int numPoints)
+void AABB::Enclose(const vec *pts, int npts)
 {
-	assume(pointArray || numPoints == 0);
-	if (!pointArray)
+	assume(pts || npts == 0);
+	if (!pts)
 		return;
-	for(int i = 0; i < numPoints; ++i)
-		Enclose(pointArray[i]);
+	for(int i = 0; i < npts; ++i)
+		Enclose(pts[i]);
 }
 
 void AABB::Triangulate(int numFacesX, int numFacesY, int numFacesZ,
