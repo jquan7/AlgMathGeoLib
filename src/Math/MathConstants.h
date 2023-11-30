@@ -60,7 +60,8 @@ const float NOT_NECESSARILY_USED pi =           (float)3.14159265358979323846264
 /// \f$e^2\f$
 const float NOT_NECESSARILY_USED euler2 =       (float)7.3890560989306502272304274605750078131803155705518473240871278225225737960790577633843124850791217948;
 /// A very small epsilon value to use in floating point equality comparisons.
-const float NOT_NECESSARILY_USED c_eps =       (float)1e-5f;
+const float NOT_NECESSARILY_USED f_eps =       (float)1e-6f;
+const double NOT_NECESSARILY_USED d_eps =      (double)1e-9f;
 /// The floating point representation for +\f$\inf\f$.
 const float NOT_NECESSARILY_USED inf =          FLOAT_INF;
 /// The floating point representation for -\f$\inf\f$.

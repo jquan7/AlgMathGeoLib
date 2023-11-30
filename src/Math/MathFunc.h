@@ -444,9 +444,18 @@ FORCE_INLINE bool Equal(const T &a, const T &b)
 }
 
 /** Compares the two values for equality up to a small epsilon. */
-template<> bool FORCE_INLINE Equal(const float &a, const float &b) { return Abs(a-b) <= c_eps; }
-template<> bool FORCE_INLINE Equal(const double &a, const double &b) { return Abs(a-b) <= c_eps; }
-template<> bool FORCE_INLINE Equal(const long double &a, const long double &b) { return Abs(a-b) <= c_eps; }
+template<> bool FORCE_INLINE Equal(const float &a, const float &b) { return Abs(a-b) <= f_eps; }
+template<> bool FORCE_INLINE Equal(const double &a, const double &b) { return Abs(a-b) <= d_eps; }
+template<> bool FORCE_INLINE Equal(const long double &a, const long double &b) { return Abs(a-b) <= d_eps; }
+
+template<typename T>
+FORCE_INLINE bool IsZero(const T &a)
+{
+	return a == 0;
+}
+template<> bool FORCE_INLINE IsZero(const float &a) { return Abs(a) <= f_eps; }
+template<> bool FORCE_INLINE IsZero(const double &a) { return Abs(a) <= d_eps; }
+template<> bool FORCE_INLINE IsZero(const long double &a) { return Abs(a) <= d_eps; }
 
 /** Compares the two values for equality, allowing the given amount of absolute error. */
 bool EqualAbs(float a, float b, float epsilon = 1e-4f);
