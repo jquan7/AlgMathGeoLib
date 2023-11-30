@@ -39,14 +39,9 @@ static vec UpdateSimplex(vec *s, int &n)
         // 2) closest to line segment s[0]->s[1]. XX
         // 3) contained in the line segment s[0]->s[1], and our search is over and the algorithm is now finished. XX
         vec d01 = s[1] - s[0];
-        vec newSearchDir = Cross(d01, Cross(d01, s[1]));
-        if (newSearchDir.LengthSq() > 1e-7f)
-            return newSearchDir; // Case 2)
-        else {
-            // Case 3)
-            n = 0;
-            return vec::zero;
-        }
+        vec new_search_dir = Cross(d01, Cross(d01, s[1]));
+        if (new_search_dir.LengthSq() > 1e-7f)
+            return new_search_dir; // Case 2)
     }
     else if (n == 3) {
         // Nine voronoi regions:
@@ -66,48 +61,44 @@ static vec UpdateSimplex(vec *s, int &n)
         // a case which has been checked for already before. Therefore the cases 0)-3) can never occur. Only the cases marked with XX need to be checked.
         vec d12 = s[2]-s[1];
         vec d02 = s[2]-s[0];
-        vec triNormal = Cross(d02, d12);
-        vec e12 = Cross(d12, triNormal);
+        vec tri_normal = Cross(d02, d12);
+        vec e12 = Cross(d12, tri_normal);
         float t12 = Dot(s[1], e12);
         if (t12 < 0.f) {
             // Case 4: Edge 1->2 is closest.
-            vec newDir = Cross(d12, Cross(d12, s[1]));
+            vec new_dir = Cross(d12, Cross(d12, s[1]));
             s[0] = s[1];
             s[1] = s[2];
             n = 2;
-            return newDir;
+            return new_dir;
         }
 
-        vec e02 = Cross(triNormal, d02);
+        vec e02 = Cross(tri_normal, d02);
         float t02 = Dot(s[0], e02);
         if (t02 < 0.f) {
             // Case 5: Edge 0->2 is closest.
-            vec newDir = Cross(d02, Cross(d02, s[0]));
+            vec new_dir = Cross(d02, Cross(d02, s[0]));
             s[1] = s[2];
             n = 2;
-            return newDir;
+            return new_dir;
         }
 
         // Cases 6)-8):
-        float scaledSignedDistToTriangle = triNormal.Dot(s[2]);
-        float distSq = scaledSignedDistToTriangle*scaledSignedDistToTriangle;
-        float scaledEpsilonSq = 1e-6f*triNormal.LengthSq();
+        float scaled_signed_dist_2triangle = tri_normal.Dot(s[2]);
+        float dist_sq = scaled_signed_dist_2triangle * scaled_signed_dist_2triangle;
+        float scaled_eps_sq = 1e-6f * tri_normal.LengthSq();
 
-        if (distSq > scaledEpsilonSq) {
+        if (dist_sq > scaled_eps_sq) {
             // The origin is sufficiently far away from the triangle.
-            if (scaledSignedDistToTriangle <= 0.f)
-                return triNormal; // Case 6)
+            if (scaled_signed_dist_2triangle <= 0.f)
+                return tri_normal; // Case 6)
             else {
                 // Case 7) Swap s[0] and s[1] so that the normal of Triangle(s[0],s[1],s[2]).PlaneCCW() will always point towards the new search direction.
                 std::swap(s[0], s[1]);
-                return -triNormal;
+                return -tri_normal;
             }
-        } else {
-            // Case 8) The origin lies directly inside the triangle. For robustness, terminate the search here immediately with success.
-            n = 0;
-            return vec::zero;
         }
-    } else /* n == 4 */ {
+    } else if (n == 4) {
         // A tetrahedron defines fifteen voronoi regions:
         //  0) closest to vertex s[0].
         //  1) closest to vertex s[1].
@@ -134,81 +125,87 @@ static vec UpdateSimplex(vec *s, int &n)
         vec d01 = s[1] - s[0];
         vec d02 = s[2] - s[0];
         vec d03 = s[3] - s[0];
-        vec tri013Normal = Cross(d01, d03); // Normal of triangle 0->1->3 pointing outwards from the simplex.
-        vec tri023Normal = Cross(d03, d02); // Normal of triangle 0->2->3 pointing outwards from the simplex.
-        vec e03_1 = Cross(tri013Normal, d03); // The normal of edge 0->3 on triangle 013.
-        vec e03_2 = Cross(d03, tri023Normal); // The normal of edge 0->3 on triangle 023.
-        float inE03_1 = Dot(e03_1, s[3]);
-        float inE03_2 = Dot(e03_2, s[3]);
-        if (inE03_1 <= 0.f && inE03_2 <= 0.f) {
+        vec tri013_normal = Cross(d01, d03); // Normal of triangle 0->1->3 pointing outwards from the simplex.
+        vec tri023_normal = Cross(d03, d02); // Normal of triangle 0->2->3 pointing outwards from the simplex.
+        vec e03_1 = Cross(tri013_normal, d03); // The normal of edge 0->3 on triangle 013.
+        vec e03_2 = Cross(d03, tri023_normal); // The normal of edge 0->3 on triangle 023.
+        float in_e03_1 = Dot(e03_1, s[3]);
+        float in_e03_2 = Dot(e03_2, s[3]);
+        if (in_e03_1 <= 0.f && in_e03_2 <= 0.f) {
             // Case 6) Edge 0->3 is closest. Simplex degenerates to a line segment.
-            vec newDir = Cross(d03, Cross(d03, s[3]));
+            vec new_dir = Cross(d03, Cross(d03, s[3]));
             s[1] = s[3];
             n = 2;
-            return newDir;
+            return new_dir;
         }
 
         vec d12 = s[2] - s[1];
         vec d13 = s[3] - s[1];
-        vec tri123Normal = Cross(d12, d13);
-        assert(Dot(tri123Normal, -d02) <= 0.f);
-        vec e13_0 = Cross(d13, tri013Normal);
-        vec e13_2 = Cross(tri123Normal, d13);
-        float inE13_0 = Dot(e13_0, s[3]);
-        float inE13_2 = Dot(e13_2, s[3]);
-        if (inE13_0 <= 0.f && inE13_2 <= 0.f) {
+        vec tri123_normal = Cross(d12, d13);
+        if (Dot(tri123_normal, -d02) > 0.f) {
+            n = 0;
+            return vec::zero;
+        }
+        vec e13_0 = Cross(d13, tri013_normal);
+        vec e13_2 = Cross(tri123_normal, d13);
+        float in_e13_0 = Dot(e13_0, s[3]);
+        float in_e13_2 = Dot(e13_2, s[3]);
+        if (in_e13_0 <= 0.f && in_e13_2 <= 0.f) {
             // Case 8) Edge 1->3 is closest. Simplex degenerates to a line segment.
-            vec newDir = Cross(d13, Cross(d13, s[3]));
+            vec new_dir = Cross(d13, Cross(d13, s[3]));
             s[0] = s[1];
             s[1] = s[3];
             n = 2;
-            return newDir;
+            return new_dir;
         }
 
         vec d23 = s[3] - s[2];
-        vec e23_0 = Cross(tri023Normal, d23);
-        vec e23_1 = Cross(d23, tri123Normal);
-        float inE23_0 = Dot(e23_0, s[3]);
-        float inE23_1 = Dot(e23_1, s[3]);
-        if (inE23_0 <= 0.f && inE23_1 <= 0.f) {
+        vec e23_0 = Cross(tri023_normal, d23);
+        vec e23_1 = Cross(d23, tri123_normal);
+        float in_e23_0 = Dot(e23_0, s[3]);
+        float in_e23_1 = Dot(e23_1, s[3]);
+        if (in_e23_0 <= 0.f && in_e23_1 <= 0.f) {
             // Case 9) Edge 2->3 is closest. Simplex degenerates to a line segment.
-            vec newDir = Cross(d23, Cross(d23, s[3]));
+            vec new_dir = Cross(d23, Cross(d23, s[3]));
             s[0] = s[2];
             s[1] = s[3];
             n = 2;
-            return newDir;
+            return new_dir;
         }
 
-        float inTri013 = Dot(s[3], tri013Normal);
-        if (inTri013 < 0.f && inE13_0 >= 0.f && inE03_1 >= 0.f) {
+        float in_tri013 = Dot(s[3], tri013_normal);
+        if (in_tri013 < 0.f && in_e13_0 >= 0.f && in_e03_1 >= 0.f) {
             // Case 11) Triangle 0->1->3 is closest.
             s[2] = s[3];
             n = 3;
-            return tri013Normal;
+            return tri013_normal;
         }
-        float inTri023 = Dot(s[3], tri023Normal);
-        if (inTri023 < 0.f && inE23_0 >= 0.f && inE03_2 >= 0.f) {
+        float in_eri023 = Dot(s[3], tri023_normal);
+        if (in_eri023 < 0.f && in_e23_0 >= 0.f && in_e03_2 >= 0.f) {
             // Case 12) Triangle 0->2->3 is closest.
             s[1] = s[0];
             s[0] = s[2];
             s[2] = s[3];
             n = 3;
-            return tri023Normal;
+            return tri023_normal;
         }
-        float inTri123 = Dot(s[3], tri123Normal);
-        if (inTri123 < 0.f && inE13_2 >= 0.f && inE23_1 >= 0.f) {
+        float in_tri123 = Dot(s[3], tri123_normal);
+        if (in_tri123 < 0.f && in_e13_2 >= 0.f && in_e23_1 >= 0.f) {
             // Case 13) Triangle 1->2->3 is closest.
             s[0] = s[1];
             s[1] = s[2];
             s[2] = s[3];
             n = 3;
-            return tri123Normal;
+            return tri123_normal;
         }
-
-        // Case 14) Not in the voronoi region of any triangle or edge. The origin is contained in the simplex, the search is finished.
-        n = 0;
-        return vec::zero;
     }
+
+    // n:2 Case 3)
+    // n:3 Case 8) The origin lies directly inside the triangle. For robustness, terminate the search here immediately with success.
+    // n:4 Case 14) Not in the voronoi region of any triangle or edge. The origin is contained in the simplex, the search is finished.
+    // n:other
+    n = 0;
+    return vec::zero;
 }
 
 /**
@@ -227,26 +224,26 @@ bool GJKIntersect(const A &a, const B &b)
         return true;
     vec d = -support[0]; // First search direction is straight toward the origin from the found point.
     int n = 1; // Stores the current number of points in the search simplex.
-    int nIterations = 50; // Robustness check: Limit the maximum number of iterations to perform to avoid infinite loop if types A or B are buggy!
-    while (nIterations-- > 0) {
+    int n_iters = 50; // Robustness check: Limit the maximum number of iterations to perform to avoid infinite loop if types A or B are buggy!
+    while (n_iters-- > 0) {
         // Compute the extreme point to the direction d in the Minkowski set shape.
-        float maxS, minS;
-        vec newSupport = SUPPORT(d, minS, maxS);
+        float max_sup, min_sup;
+        vec new_sup = SUPPORT(d, min_sup, max_sup);
         // If the most extreme point in that search direction did not walk past the origin, then the origin cannot be contained in the Minkowski
         // convex shape, and the two convex objects a and b do not share a common point - no intersection!
-        if (minS + maxS < 0.f)
+        if (min_sup + max_sup < 0.f)
             return false;
         // Add the newly evaluated point to the search simplex.
-        assert(n < 4);
-        support[n++] = newSupport;
+        if (n >= 4)
+            return true;
+        support[n++] = new_sup;
         // Examine the current simplex, prune a redundant part of it, and produce the next search direction.
         d = UpdateSimplex(support, n);
         if (n == 0) // Was the origin contained in the current simplex? If so, then the convex shapes a and b do share a common point - intersection!
             return true;
     }
-    assume(false && "GJK intersection test did not converge to a result!");
     // TODO: enable
-    //assume2(false && "GJK intersection test did not converge to a result!", a.SerializeToString(), b.SerializeToString());
+    // assume2(false && "GJK intersection test did not converge to a result!", a.SerializeToString(), b.SerializeToString());
     return false; // Report no intersection.
 }
 
@@ -258,8 +255,8 @@ bool FloatingPointOffsetedGJKIntersect(const A &a, const B &b)
     AABB ab = a.MinimalEnclosingAABB();
     AABB bb = b.MinimalEnclosingAABB();
     vec offset = (Min(ab.minpt, bb.minpt) + Max(ab.maxpt, bb.maxpt)) * 0.5f;
-    const vec floatingPointPrecisionOffset = -offset;
-    return GJKIntersect(a.Translated(floatingPointPrecisionOffset), b.Translated(floatingPointPrecisionOffset));
+    const vec fp_precision_offset = -offset;
+    return GJKIntersect(a.Translated(fp_precision_offset), b.Translated(fp_precision_offset));
 }
 
 MATH_END_NAMESPACE

@@ -16,6 +16,12 @@ Log          :
 
 MATH_BEGIN_NAMESPACE
 
+/**
+ * @brief   Test if two objects are intersect.
+ * @param   [const A &] A - object A.
+ * @param   [const B &] B - object B.
+ * @return  intersect or not.
+ */
 template<typename A, typename B>
 bool GJKIntersect(const A &a, const B &b);
 

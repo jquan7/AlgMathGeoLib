@@ -1,20 +1,15 @@
-/* Copyright Jukka Jylanki
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License. */
-
-/** @file SAT.h
-	@author Jukka Jylanki
-	@brief Implementation of the Separating Axis Theorem -based convex object intersection test. */
+/*******************************************************************************
+Copyright © Toramon Co., Ltd. 2017-2023. All Rights Reserved.
+File name    : SAT.h
+Author       : qijianquan qijq@toramon.com
+Version      :
+Date         : 2023-11-27 15:15:15
+LastEditors  :
+LastEditTime :
+Description  : Separating Axis Theorem -based convex object intersection test.
+Others       :
+Log          :
+*******************************************************************************/
 #pragma once
 
 #include "../../MathGeoLibFwd.h"
@@ -23,51 +18,20 @@
 
 MATH_BEGIN_NAMESPACE
 
-template<typename A, typename B>
-bool SATIntersect(const A &a, const B &b)
-{
-	vec normals[16];
-	int n = a.UniqueFaceNormals(normals);
-	assert(n <= 16); ///TODO: Make this API safe.
-	for(int i = 0; i < n; ++i)
-	{
-		float amin, amax, bmin, bmax;
-		a.ProjectToAxis(normals[i], amin, amax);
-		b.ProjectToAxis(normals[i], bmin, bmax);
-		if (amax < bmin || bmax < amin)
-			return false;
-	}
-	n = b.UniqueFaceNormals(normals);
-	assert(n <= 16); ///TODO: Make this API safe.
-	for(int i = 0; i < n; ++i)
-	{
-		float amin, amax, bmin, bmax;
-		a.ProjectToAxis(normals[i], amin, amax);
-		b.ProjectToAxis(normals[i], bmin, bmax);
-		if (amax < bmin || bmax < amin)
-			return false;
-	}
-	vec normals2[16];
-	n = a.UniqueEdgeDirections(normals);
-	int m = b.UniqueEdgeDirections(normals2);
-	for(int i = 0; i < n; ++i)
-		for(int j = 0; j < m; ++j)
-		{
-			float amin, amax, bmin, bmax;
-			vec normal = Cross(normals[i], normals2[j]);
-			a.ProjectToAxis(normal, amin, amax);
-			b.ProjectToAxis(normal, bmin, bmax);
-			if (amax < bmin || bmax < amin)
-				return false;
-		}
-	return true;
-}
-
-bool SATCollide2D(const float2 *a, int numA, const float2 *b, int numB);
+bool SATCollide2D(const float2 *a, int na, const float2 *b, int nb);
 
 // Returns the penetration distance between the two objects. If > 0, the objects are not colliding.
 // If < 0, then the objects penetrate that deep along outCollisionNormal vector.
-float SATCollide2D_CollisionPoint(const float2 *a, int numA, const float2 *b, int numB,
-                                 float2 &outCollisionPoint, float2 &outCollisionNormal);
+float SATCollide2dCollisionPoint(const float2 *a, int na, const float2 *b, int nb,
+    float2 &collision_point, float2 &collision_normal);
+
+/**
+ * @brief   Test if two objects are intersect.
+ * @param   [const A &] A - object A.
+ * @param   [const B &] B - object B.
+ * @return  intersect or not.
+ */
+template<typename A, typename B>
+bool SATIntersect(const A &a, const B &b);
 
 MATH_END_NAMESPACE

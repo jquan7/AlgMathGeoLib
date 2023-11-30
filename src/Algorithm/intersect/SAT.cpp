@@ -1,147 +1,181 @@
+/*******************************************************************************
+Copyright © Toramon Co., Ltd. 2017-2023. All Rights Reserved.
+File name    : SAT.cpp
+Author       : qijianquan qijq@toramon.com
+Version      :
+Date         : 2023-11-27 15:15:15
+LastEditors  :
+LastEditTime :
+Description  : Separating Axis Theorem -based convex object intersection test.
+Others       :
+Log          :
+*******************************************************************************/
+
 #include "SAT.h"
 #include "../../Math/float2.inl"
 
 MATH_BEGIN_NAMESPACE
 
-bool HasCcwWindingOrder(const float2 *poly, int numVertices)
+bool HasCcwWindingOrder(const float2 *poly, int num_vertices)
 {
-	int prev2 = numVertices - 2;
-	int prev1 = numVertices - 1;
-	for(int i = 0; i < numVertices; ++i)
-	{
-		if (PerpDot2D(poly[prev2], poly[prev1], poly[i]) < -1e-2f)
-			return false;
-		prev2 = prev1;
-		prev1 = i;
-	}
-	return true;
+    int prev2 = num_vertices - 2;
+    int prev1 = num_vertices - 1;
+    for (int i = 0; i < num_vertices; ++i) {
+        if (PerpDot2D(poly[prev2], poly[prev1], poly[i]) < -1e-2f)
+            return false;
+        prev2 = prev1;
+        prev1 = i;
+    }
+    return true;
 }
 
-bool SATCollide2D(const float2 *a, int numA, const float2 *b, int numB)
+bool SATCollide2D(const float2 *a, int na, const float2 *b, int nb)
 {
-	assert(numA > 0 && a);
-	assert(numB > 0 && b);
-	assert(HasCcwWindingOrder(a, numA));
-	assert(HasCcwWindingOrder(b, numB));
+    if (na <= 0 || nb <= 0 || !a || !b ||
+        !HasCcwWindingOrder(a, na) || !HasCcwWindingOrder(b, nb))
+        return false;
 
-	float2 edge;
+    float2 edge;
+    int prev = na - 1;
+    for (int i = 0; i < na; ++i) {
+        edge = a[i] - a[prev];
 
-	int prev = numA-1;
-	for(int i = 0; i < numA; ++i)
-	{
-		edge = a[i] - a[prev];
+        // N.b. for improved numerical stability, could do
+        /*  float minDistance = (b[0] - a[i]).PerpDot(edge);
+             for(int j = 1; j < nb; ++j)
+             minDistance = Min(minDistance, (b[j] - a[i]).PerpDot(edge));
+             if (minDistance > 0)
+             return false;
+           but uncertain how much that will improve. */
 
-		// N.b. for improved numerical stability, could do
-		/*  float minDistance = (b[0] - a[i]).PerpDot(edge);
-		 	for(int j = 1; j < numB; ++j)
-		 	minDistance = Min(minDistance, (b[j] - a[i]).PerpDot(edge));
-		 	if (minDistance > 0)
-		 	return false;
-		   but uncertain how much that will improve. */
+        float max_this = a[i].PerpDot(edge);
+        float min_other = b[0].PerpDot(edge);
+        for(int j = 1; j < nb; ++j)
+            min_other = Min(min_other, b[j].PerpDot(edge));
+        if (min_other > max_this)
+            return false;
+        prev = i;
+    }
 
-		float maxThis = a[i].PerpDot(edge);
-		float minOther = b[0].PerpDot(edge);
-		for(int j = 1; j < numB; ++j)
-			minOther = Min(minOther, b[j].PerpDot(edge));
-		if (minOther > maxThis)
-			return false;
-		prev = i;
-	}
+    prev = nb - 1;
+    for (int i = 0; i < nb; ++i) {
+        edge = b[i] - b[prev];
+        float max_this = b[i].PerpDot(edge);
+        float min_other = a[0].PerpDot(edge);
+        for(int j = 1; j < na; ++j)
+            min_other = Min(min_other, a[j].PerpDot(edge));
+        if (min_other > max_this)
+            return false;
+        prev = i;
+    }
 
-	prev = numB-1;
-	for(int i = 0; i < numB; ++i)
-	{
-		edge = b[i] - b[prev];
-		float maxThis = b[i].PerpDot(edge);
-		float minOther = a[0].PerpDot(edge);
-		for(int j = 1; j < numA; ++j)
-			minOther = Min(minOther, a[j].PerpDot(edge));
-		if (minOther > maxThis)
-			return false;
-		prev = i;
-	}
-
-	return true;
+    return true;
 }
 
-float SATCollide2D_CollisionPoint(const float2 *a, int numA, const float2 *b, int numB,
-                                 float2 &outCollisionPoint, float2 &outCollisionNormal)
+float SATCollide2dCollisionPoint(const float2 *a, int na, const float2 *b, int nb,
+    float2 &collision_point, float2 &collision_normal)
 {
-	assert(numA > 0 && a);
-	assert(numB > 0 && b);
-	assert(HasCcwWindingOrder(a, numA));
-	assert(HasCcwWindingOrder(b, numB));
+    if (na <= 0 || nb <= 0 || !a || !b ||
+        !HasCcwWindingOrder(a, na) || !HasCcwWindingOrder(b, nb))
+        return false;
 
-	float2 edge;
+    float2 edge;
+    float min_penetration_distance = -FLOAT_INF;
+    int prev = na - 1;
+    for (int i = 0; i < na; ++i) {
+        edge = (a[i] - a[prev]).Normalized();
+        float max_this = a[i].PerpDot(edge);
+        float min_other = b[0].PerpDot(edge);
+        int index = 0;
+        for (int j = 1; j < nb; ++j) {
+            float penetration_distance = b[j].PerpDot(edge);
+            if (penetration_distance < min_other) {
+                min_other = penetration_distance;
+                index = j;
+            }
+        }
 
-	float minimumPenetrationDistance = -FLOAT_INF;
+        float dist = min_other - max_this;
+        if (dist > 0.f)
+            return dist;
+        if (dist > min_penetration_distance) {
+            min_penetration_distance = dist;
+            collision_normal = edge.Perp();
+            collision_point = b[index];
+        }
 
-	int prev = numA-1;
-	for(int i = 0; i < numA; ++i)
-	{
-		edge = (a[i] - a[prev]).Normalized(); // TODO: Allow caching these normalized direction vectors?
-		float maxThis = a[i].PerpDot(edge);
-		float minOther = b[0].PerpDot(edge);
-		int minPenetrationIndex = 0;
-		for(int j = 1; j < numB; ++j)
-		{
-			float penetrationDistance = b[j].PerpDot(edge);
-			if (penetrationDistance < minOther)
-			{
-				minOther = penetrationDistance;
-				minPenetrationIndex = j;
-			}
-		}
-		float dist = minOther - maxThis;
+        prev = i;
+    }
 
-		if (dist > 0.f)
-			return dist;
+    prev = nb - 1;
+    for (int i = 0; i < nb; ++i) {
+        edge = (b[i] - b[prev]).Normalized();
 
-		if (dist > minimumPenetrationDistance)
-		{
-			minimumPenetrationDistance = dist;
-			outCollisionNormal = edge.Perp();
-			outCollisionPoint = b[minPenetrationIndex];
-		}
+        float max_this = b[i].PerpDot(edge);
+        float min_other = a[0].PerpDot(edge);
+        int index = 0;
+        for (int j = 1; j < na; ++j) {
+            float penetration_distance = a[j].PerpDot(edge);
+            if (penetration_distance < min_other) {
+                min_other = penetration_distance;
+                index = j;
+            }
+        }
 
-		prev = i;
-	}
+        float dist = min_other - max_this;
+        if (dist > 0.f)
+            return dist;
+        if (dist > min_penetration_distance) {
+            min_penetration_distance = dist;
+            collision_normal = -edge.Perp();
+            collision_point = a[index];
+        }
 
-	prev = numB-1;
-	for(int i = 0; i < numB; ++i)
-	{
-		edge = (b[i] - b[prev]).Normalized(); // TODO: Allow caching these normalized direction vectors?
+        prev = i;
+    }
 
-		float maxThis = b[i].PerpDot(edge);
-		float minOther = a[0].PerpDot(edge);
-		int minPenetrationIndex = 0;
+    return min_penetration_distance;
+}
 
-		for(int j = 1; j < numA; ++j)
-		{
-			float penetrationDistance = a[j].PerpDot(edge);
-			if (penetrationDistance < minOther)
-			{
-				minOther = penetrationDistance;
-				minPenetrationIndex = j;
-			}
-		}
+template<typename A, typename B>
+bool SATIntersect(const A &a, const B &b)
+{
+    vec normals[16];
+    int n = a.UniqueFaceNormals(normals);
+    if (n > 16) return false;
+    for (int i = 0; i < n; ++i) {
+        float amin, amax, bmin, bmax;
+        a.ProjectToAxis(normals[i], amin, amax);
+        b.ProjectToAxis(normals[i], bmin, bmax);
+        if (amax < bmin || bmax < amin)
+            return false;
+    }
 
-		float dist = minOther - maxThis;
+    n = b.UniqueFaceNormals(normals);
+    if (n > 16) return false;
+    for (int i = 0; i < n; ++i) {
+        float amin, amax, bmin, bmax;
+        a.ProjectToAxis(normals[i], amin, amax);
+        b.ProjectToAxis(normals[i], bmin, bmax);
+        if (amax < bmin || bmax < amin)
+            return false;
+    }
 
-		if (dist > 0.f)
-			return dist;
+    vec normals2[16];
+    n = a.UniqueEdgeDirections(normals);
+    int m = b.UniqueEdgeDirections(normals2);
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            float amin, amax, bmin, bmax;
+            vec normal = Cross(normals[i], normals2[j]);
+            a.ProjectToAxis(normal, amin, amax);
+            b.ProjectToAxis(normal, bmin, bmax);
+            if (amax < bmin || bmax < amin)
+                return false;
+        }
+    }
 
-		if (dist > minimumPenetrationDistance)
-		{
-			minimumPenetrationDistance = dist;
-			outCollisionNormal = -edge.Perp();
-			outCollisionPoint = a[minPenetrationIndex];
-		}
-
-		prev = i;
-	}
-
-	return minimumPenetrationDistance;
+    return true;
 }
 
 MATH_END_NAMESPACE
