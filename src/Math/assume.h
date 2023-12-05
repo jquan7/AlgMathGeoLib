@@ -56,7 +56,6 @@
 // The assume() macro is used to check preconditions on the math-related functions, e.g. whether vectors are normalized, check that division by zero doesn't occur, orthonormal bases, and so on.
 
 // The assume() macro operates differently depending on which #defines are present:
-// #define FAIL_USING_EXCEPTIONS - the assume() macro throws an exception
 // #define BREAK_ON_ERROR_PRINTS - if an error message is printed (with LOGE()), it is treated as if an assume() had failed, breaking to debugger.
 // #define BREAK_ON_WARNING_PRINTS - if a warning message is printed (with LOGW()), it is treated as if an assume() had failed, breaking to debugger.
 //                                   Implies BREAK_ON_ERROR_PRINTS.

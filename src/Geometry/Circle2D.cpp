@@ -16,6 +16,7 @@
 	   @author Jukka Jyl�nki
 	   @brief Implementation for the Circle2D geometry object. */
 #include "Circle2D.h"
+#include "../Math/float2.inl"
 #include "../Math/MathFunc.h"
 
 MATH_BEGIN_NAMESPACE

@@ -10,8 +10,8 @@
 
 std::vector<Test> &Tests()
 {
-	static std::vector<Test> tests;
-	return tests;
+    static std::vector<Test> tests;
+    return tests;
 }
 
 static int numTestsPassed = 0;
@@ -26,62 +26,67 @@ volatile int globalPokedData = 0;
 // 1 - expected to fail, issue LOGI diagnostics.
 // 2 - expected to fail, issue LOGW diagnostics.
 int globalTestExpectedToFail = 0;
-std::string globalTestFailureDescription = ""; // A custom optional message describing why this test is expected to fail.
 
-void AddTest(std::string name, TestFunctionPtr function, std::string file, std::string description, bool runOnlyOnce)
+// A custom optional message describing why this test is expected to fail.
+std::string globalTestFailureDescription = "";
+
+void AddTest(std::string name, TestFunctionPtr function, std::string file,
+    std::string description, bool runOnlyOnce)
 {
-	Test t;
-	t.name = name;
-	t.description = description;
-	t.function = function;
-	t.isRandomized = false;
-	t.runOnlyOnce = runOnlyOnce;
-	t.isBenchmark = false;
-	t.file = file;
-	Tests().push_back(t);
+    Test t;
+    t.name = name;
+    t.description = description;
+    t.function = function;
+    t.isRandomized = false;
+    t.runOnlyOnce = runOnlyOnce;
+    t.isBenchmark = false;
+    t.file = file;
+    Tests().push_back(t);
 }
 
-void AddRandomizedTest(std::string name, TestFunctionPtr function, std::string file, std::string description)
+void AddRandomizedTest(std::string name, TestFunctionPtr function,
+    std::string file, std::string description)
 {
-	Test t;
-	t.name = name;
-	t.description = description;
-	t.function = function;
-	t.isRandomized = true;
-	t.runOnlyOnce = false;
-	t.isBenchmark = false;
-	t.file = file;
-	Tests().push_back(t);
+    Test t;
+    t.name = name;
+    t.description = description;
+    t.function = function;
+    t.isRandomized = true;
+    t.runOnlyOnce = false;
+    t.isBenchmark = false;
+    t.file = file;
+    Tests().push_back(t);
 }
 
-void AddBenchmark(std::string name, TestFunctionPtr function, std::string file, std::string description)
+void AddBenchmark(std::string name, TestFunctionPtr function, std::string file,
+    std::string description)
 {
-	Test t;
-	t.name = name;
-	t.description = description;
-	t.function = function;
-	t.isRandomized = false;
-	t.runOnlyOnce = true;
-	t.isBenchmark = true;
-	t.file = file;
-	Tests().push_back(t);
+    Test t;
+    t.name = name;
+    t.description = description;
+    t.function = function;
+    t.isRandomized = false;
+    t.runOnlyOnce = true;
+    t.isBenchmark = true;
+    t.file = file;
+    Tests().push_back(t);
 }
 
 std::string FormatTime(double ticks)
 {
-	double msecs = ticks * 1000.0 / Clock::TicksPerSec();
-	double secs = msecs / 1000.0;
-	double usecs = msecs * 1000.0;
-	char str[256];
-	if (secs >= 1.0)
-		sprintf(str, "%.3f secs", (float)secs);
-	else if (msecs >= 1.0)
-		sprintf(str, "%.3f msecs", (float)msecs);
-	else if(usecs >= 1.0)
-		sprintf(str, "%.3f usecs", (float)usecs);
-	else
-		sprintf(str, "%.3f nsecs", (float)(usecs*1000.0));
-	return str;
+    double msecs = ticks * 1000.0 / Clock::TicksPerSec();
+    double secs = msecs / 1000.0;
+    double usecs = msecs * 1000.0;
+    char str[256];
+    if (secs >= 1.0)
+        sprintf(str, "%.3f secs", (float)secs);
+    else if (msecs >= 1.0)
+        sprintf(str, "%.3f msecs", (float)msecs);
+    else if(usecs >= 1.0)
+        sprintf(str, "%.3f usecs", (float)usecs);
+    else
+        sprintf(str, "%.3f nsecs", (float)(usecs*1000.0));
+    return str;
 }
 
 // Print text to log without appending a newline to the end, if possible.
@@ -92,214 +97,208 @@ std::string FormatTime(double ticks)
 /// Returns 0: passed, 1: passed with warnings, -1: failed.
 int RunTest(Test &t, int numTimesToRun, int numTrialsPerRun)
 {
-	if (t.runOnlyOnce)
-		numTimesToRun = numTrialsPerRun = 1;
-	if (!t.isRandomized)
-		numTimesToRun = 1;
-	if (t.isBenchmark)
-	{
-		numTimesToRun = numTrialsPerRun = 1;
-		LOGI_NL("Benchmark '%s': %s", t.name.c_str(), t.description.c_str());
-	}
-	else
-		LOGI_NL("Testing '%s': ", t.name.c_str());
+    if (t.runOnlyOnce)
+        numTimesToRun = numTrialsPerRun = 1;
+    if (!t.isRandomized)
+        numTimesToRun = 1;
+    if (t.isBenchmark) {
+        numTimesToRun = numTrialsPerRun = 1;
+        LOGI_NL("Benchmark '%s': %s", t.name.c_str(), t.description.c_str());
+    }
+    else
+        LOGI_NL("Testing '%s': ", t.name.c_str());
 
-	std::vector<tick_t> times;
-	times.reserve(numTimesToRun);
+    std::vector<tick_t> times;
+    times.reserve(numTimesToRun);
 
-	t.numFails = 0;
-	t.numPasses = 0;
-	std::string failReason; // Stores the failure reason of the first failure.
-	std::vector<std::string> failReasons;
-	globalTestExpectedToFail = 0;
-	globalTestFailureDescription = std::string();
+    t.numFails = 0;
+    t.numPasses = 0;
+    std::string failReason; // Stores the failure reason of the first failure.
+    std::vector<std::string> failReasons;
+    globalTestExpectedToFail = 0;
+    globalTestFailureDescription = std::string();
 
-	for(int j = 0; j < numTimesToRun; ++j)
-	{
-		tick_t start = Clock::Tick();
-		for(int k = 0; k < numTrialsPerRun; ++k)
-//			for(int k = 0; k < (t.isRandomized ? numTrials : 1); ++k)
-		{
-			t.function(t);
-			if (globalTestExpectedToFail)
-			{
-				globalTestExpectedToFail = 0; // Signal that the following exception reports a failure of this test, and not an expected failure.
-				throw std::runtime_error(std::string("This test should have failed due to reason '") + globalTestFailureDescription + "', but it didn't fail!");
-			}
-		}
-		tick_t end = Clock::Tick();
-		times.push_back(end - start);
-	}
+    for(int j = 0; j < numTimesToRun; ++j) {
+        tick_t start = Clock::Tick();
+        for(int k = 0; k < numTrialsPerRun; ++k)
+        // for(int k = 0; k < (t.isRandomized ? numTrials : 1); ++k)
+        {
+            t.function(t);
+            if (globalTestExpectedToFail) {
+                // Signal that the following exception reports a failure of this test, and not an expected failure.
+                globalTestExpectedToFail = 0;
+                throw std::runtime_error(std::string("This test should have failed due to reason '")
+                    + globalTestFailureDescription + "', but it didn't fail!");
+            }
+        }
+        tick_t end = Clock::Tick();
+        times.push_back(end - start);
+    }
 
-	t.numPasses = numTimesToRun*numTrialsPerRun - t.numFails;
-	std::sort(times.begin(), times.end());
+    t.numPasses = numTimesToRun*numTrialsPerRun - t.numFails;
+    std::sort(times.begin(), times.end());
 
-	// Erase outliers. (x% slowest)
-	const float rateSlowestToDiscard = 0.05f;
-	int numSlowestToDiscard = (int)(times.size() * rateSlowestToDiscard);
-	times.erase(times.end() - numSlowestToDiscard, times.end());
+    // Erase outliers. (x% slowest)
+    const float rateSlowestToDiscard = 0.05f;
+    int numSlowestToDiscard = (int)(times.size() * rateSlowestToDiscard);
+    times.erase(times.end() - numSlowestToDiscard, times.end());
 
-	tick_t total = 0;
-	for(size_t j = 0; j < times.size(); ++j)
-		total += times[j];
+    tick_t total = 0;
+    for (size_t j = 0; j < times.size(); ++j)
+        total += times[j];
 
-	if (!t.isBenchmark)
-	{
-		if (!times.empty())
-		{
-			t.fastestTime = (double)times[0] / numTrialsPerRun;
-			t.averageTime = (double)total / times.size() / numTrialsPerRun;
-			t.worstTime = (double)times.back() / numTrialsPerRun;
-			t.numTimesRun = numTimesToRun;
-			t.numTrialsPerRun = numTrialsPerRun;
-		}
-		else
-		{
-			t.fastestTime = t.averageTime = t.worstTime = -1.0;
-			t.numTimesRun = t.numTrialsPerRun = 0;
-		}
-	}
-	float successRate = (t.numPasses + t.numFails > 0) ? (float)t.numPasses * 100.f / (t.numPasses + t.numFails) : 0.f;
+    if (!t.isBenchmark) {
+        if (!times.empty()) {
+            t.fastestTime = (double)times[0] / numTrialsPerRun;
+            t.averageTime = (double)total / times.size() / numTrialsPerRun;
+            t.worstTime = (double)times.back() / numTrialsPerRun;
+            t.numTimesRun = numTimesToRun;
+            t.numTrialsPerRun = numTrialsPerRun;
+        } else {
+            t.fastestTime = t.averageTime = t.worstTime = -1.0;
+            t.numTimesRun = t.numTrialsPerRun = 0;
+        }
+    }
+    float successRate = (t.numPasses + t.numFails > 0)
+        ? (float)t.numPasses * 100.f / (t.numPasses + t.numFails)
+        : 0.f;
 
-	if (t.isBenchmark && t.numFails == 0) // Benchmarks print themselves.
-		return 0; // 0: Success
+    // Benchmarks print themselves.
+    if (t.isBenchmark && t.numFails == 0)
+        return 0; // 0: Success
 
-	int ret = 0; // 0: Success
-
-	if (t.numFails == 0)
-	{
-		if (t.isRandomized)
-			LOGI(" ok (%d passes, 100%%)", t.numPasses);
-		else
-			LOGI(" ok ");
-//		++numTestsPassed;
-		t.result = TestPassed;
-	}
-	else if (successRate >= 95.0f)
-	{
-		LOGI_NL(" ok ");
-		LOGW("Some failures with '%s' (%d passes, %.2f%% of all tries)", failReason.c_str(), t.numPasses, successRate);
+    int ret = 0; // 0: Success
+    if (t.numFails == 0) {
+        if (t.isRandomized)
+            LOGI(" ok (%d passes, 100%%)", t.numPasses);
+        else
+            LOGI(" ok ");
+		// ++numTestsPassed;
+        t.result = TestPassed;
+    } else if (successRate >= 95.0f) {
+        LOGI_NL(" ok ");
+        LOGW("Some failures with '%s' (%d passes, %.2f%% of all tries)",
+            failReason.c_str(), t.numPasses, successRate);
 //		++numTestsPassed;
 //		++numWarnings;
-		ret = 1; // Success with warnings
-		t.result = TestPassedWithWarnings;
-	}
-	else
-	{
-		if (t.isRandomized)
-			LOGE("FAILED: '%s' (%d passes, %.2f%% of all tries)", failReason.c_str(), t.numPasses, successRate);
-		else
-			LOGE("FAILED: '%s'", failReason.c_str());
-		ret = -1; // Failed
-		t.result = TestFailed;
-	}
+        ret = 1; // Success with warnings
+        t.result = TestPassedWithWarnings;
+    } else {
+        if (t.isRandomized)
+            LOGE("FAILED: '%s' (%d passes, %.2f%% of all tries)",
+                failReason.c_str(), t.numPasses, successRate);
+        else
+            LOGE("FAILED: '%s'", failReason.c_str());
+        ret = -1; // Failed
+        t.result = TestFailed;
+    }
 
-	if (!times.empty())
-	{
-		if (t.runOnlyOnce)
-			LOGI("   Elapsed: %s", FormatTime((double)times[0]).c_str());
-		else
-			LOGI("   Fastest: %s, Average: %s, Slowest: %s", FormatTime(t.fastestTime).c_str(), FormatTime(t.averageTime).c_str(), FormatTime(t.worstTime).c_str());
-	}
+    if (!times.empty()) {
+        if (t.runOnlyOnce)
+            LOGI("   Elapsed: %s", FormatTime((double)times[0]).c_str());
+        else
+            LOGI("   Fastest: %s, Average: %s, Slowest: %s",
+                FormatTime(t.fastestTime).c_str(),
+                FormatTime(t.averageTime).c_str(),
+                FormatTime(t.worstTime).c_str());
+    }
 
-	return ret;
+    return ret;
 }
 
 static int nextTestToRun = 0;
 
 bool StringBeginsWithOneOf(const char *str, const char * const *prefixes)
 {
-	for(const char * const *prefix = prefixes; *prefix; ++prefix)
-		if (!strncmp(str, *prefix, strlen(*prefix)))
-			return true;
-
-	return false;
+    for (const char * const *prefix = prefixes; *prefix; ++prefix)
+        if (!strncmp(str, *prefix, strlen(*prefix)))
+            return true;
+    return false;
 }
 
 bool StringContainsOneOf(const char *str, const char * const *prefixes)
 {
-	for(const char * const *prefix = prefixes; *prefix; ++prefix)
-		if (strstr(str, *prefix) != 0)
-			return true;
-
-	return false;
+    for (const char * const *prefix = prefixes; *prefix; ++prefix)
+        if (strstr(str, *prefix) != 0)
+            return true;
+    return false;
 }
 
 int RunOneTest(int numTimes, int numTrials, const char * const *prefixes)
 {
-	std::vector<Test> &tests = Tests();
-	while(nextTestToRun < (int)tests.size())
-	{
-		if (StringBeginsWithOneOf(tests[nextTestToRun].name.c_str(), prefixes) || StringContainsOneOf(tests[nextTestToRun].description.c_str(), prefixes)
-			|| StringContainsOneOf(tests[nextTestToRun].file.c_str(), prefixes))
-		{
-			int ret = RunTest(tests[nextTestToRun], numTimes, numTrials);
+    std::vector<Test> &tests = Tests();
+    while (nextTestToRun < (int)tests.size()) {
+        if (StringBeginsWithOneOf(tests[nextTestToRun].name.c_str(), prefixes)
+            || StringContainsOneOf(tests[nextTestToRun].description.c_str(), prefixes)
+            || StringContainsOneOf(tests[nextTestToRun].file.c_str(), prefixes)) {
+            int ret = RunTest(tests[nextTestToRun], numTimes, numTrials);
 
-			if (ret == 0 || ret == 1)
-				++numTestsPassed;
-			if (ret == 1)
-				++numTestsWarnings;
-			if (ret == -1)
-				++numTestsFailed;
+            if (ret == 0 || ret == 1)
+                ++numTestsPassed;
+            if (ret == 1)
+                ++numTestsWarnings;
+            if (ret == -1)
+                ++numTestsFailed;
+            ++nextTestToRun;
+            ++numTestsRun;
+            return ret;
+        }
+        ++nextTestToRun;
+    }
 
-			++nextTestToRun;
-			++numTestsRun;
-			return ret;
-		}
-		++nextTestToRun;
-	}
-
-	return -2; // No tests left to run
+    return -2; // No tests left to run
 }
 
 void PrintTestRunSummary()
 {
-	LOGI("Done. %d tests run. %d passed, of which %d succeeded with warnings. %d failed.", numTestsRun, numTestsPassed, numTestsWarnings, numTestsFailed);
-	if (numTestsFailed > 0)
-	{
-		LOGE_NS("The following tests failed:");
-		std::vector<Test> &tests = Tests();
-		for (size_t i = 0; i < tests.size(); ++i)
-		{
-			if (tests[i].result == TestFailed)
-				LOGE_NS("   %s", tests[i].name.c_str());
-		}
-	}
-	if (numTestsWarnings > 0)
-	{
-		LOGW_NS("The following tests had some failures:");
-		std::vector<Test> &tests = Tests();
-		int totalFailureCount = 0;
-		int totalPassCount = 0;
-		for (size_t i = 0; i < tests.size(); ++i)
-		{
-			Test &t = tests[i];
-			if (t.numFails > 0 && tests[i].result != TestFailed)
-			{
-				float successRate = (t.numPasses + t.numFails > 0) ? (float)t.numPasses * 100.f / (t.numPasses + t.numFails) : 0.f;
-				LOGW_NS("   %s: %d failures, %d passes (%.2f%% success rate).", tests[i].name.c_str(), tests[i].numFails, tests[i].numPasses, successRate);
-				totalFailureCount += t.numFails;
-			}
-			totalPassCount += t.numPasses;
-		}
-		LOGW_NS("Total failure count: %d/%d (%f%% of all iterations)", totalFailureCount, totalFailureCount + totalPassCount, totalFailureCount * 100.0 / (totalFailureCount+totalPassCount));
-	}
+    LOGI("Done. %d tests run. %d passed, of which %d succeeded with warnings. %d failed.",
+        numTestsRun, numTestsPassed, numTestsWarnings, numTestsFailed);
+
+    if (numTestsFailed > 0) {
+        LOGE_NS("The following tests failed:");
+        std::vector<Test> &tests = Tests();
+        for (size_t i = 0; i < tests.size(); ++i) {
+            if (tests[i].result == TestFailed)
+                LOGE_NS("   %s", tests[i].name.c_str());
+        }
+    }
+    if (numTestsWarnings > 0) {
+        LOGW_NS("The following tests had some failures:");
+        std::vector<Test> &tests = Tests();
+        int totalFailureCount = 0;
+        int totalPassCount = 0;
+        for (size_t i = 0; i < tests.size(); ++i) {
+            Test &t = tests[i];
+            if (t.numFails > 0 && tests[i].result != TestFailed) {
+                float successRate = (t.numPasses + t.numFails > 0)
+                    ? (float)t.numPasses * 100.f / (t.numPasses + t.numFails)
+                    : 0.f;
+                LOGW_NS("   %s: %d failures, %d passes (%.2f%% success rate).",
+                    tests[i].name.c_str(), tests[i].numFails, tests[i].numPasses, successRate);
+                totalFailureCount += t.numFails;
+            }
+            totalPassCount += t.numPasses;
+        }
+        LOGW_NS("Total failure count: %d/%d (%f%% of all iterations)",
+            totalFailureCount, totalFailureCount + totalPassCount,
+            totalFailureCount * 100.0 / (totalFailureCount+totalPassCount));
+    }
 }
 
 int argc_;
 char **argv_;
 void TestsFinished()
 {
-	PrintTestRunSummary();
+    PrintTestRunSummary();
 
-	LOGI("%d", globalPokedData);
+    LOGI("%d", globalPokedData);
 
-	// When --exit0 is passed, we forcibly return 0 and not the number of failed tests.
-	// Used by buildbot in valgrind runs to ignore any failures - the failures are detected
-	// in a "real" run instead that carry more randomized trial runs.
-	for(int i = 1; i < argc_; ++i)
-		if (!strcmp(argv_[i], "--exit0"))
-			exit(0);
+    // When --exit0 is passed, we forcibly return 0 and not the number of failed tests.
+    // Used by buildbot in valgrind runs to ignore any failures - the failures are detected
+    // in a "real" run instead that carry more randomized trial runs.
+    for(int i = 1; i < argc_; ++i)
+        if (!strcmp(argv_[i], "--exit0"))
+            exit(0);
 }
 
 int numTotalRuns = 0;
@@ -309,48 +308,39 @@ std::vector<const char *> prefixes;
 
 void RunNextTest()
 {
-	RunOneTest(numTotalRuns, numTrialsPerTimedBlock, &prefixes[0]);
+    RunOneTest(numTotalRuns, numTrialsPerTimedBlock, &prefixes[0]);
 }
 
-#ifdef MATH_TESTS_EXECUTABLE
+// #ifdef MATH_TESTS_EXECUTABLE
 int main(int argc, char **argv)
 {
-	argc_ = argc;
-	argv_ = argv;
+    argc_ = argc;
+    argv_ = argv;
 
-	numTotalRuns = (argc >= 2) ? atoi(argv[1]) : 100;
-	numTrialsPerTimedBlock = (argc >= 3) ? atoi(argv[2]) : 100;
+    numTotalRuns = (argc >= 2) ? atoi(argv[1]) : 100;
+    numTrialsPerTimedBlock = (argc >= 3) ? atoi(argv[2]) : 100;
 
-	for(int i = 3; i < argc; ++i)
-	{
-		if (argv[i][0] != '-' && argv[i][0] != '/')
-			prefixes.push_back(argv[i]);
-	}
-	if (prefixes.empty())
-		prefixes.push_back(""); // Empty prefix runs all tests.
-	prefixes.push_back(0); // Sentinel to terminate prefix string list.
+    for (int i = 3; i < argc; ++i) {
+        if (argv[i][0] != '-' && argv[i][0] != '/')
+            prefixes.push_back(argv[i]);
+    }
+    if (prefixes.empty())
+        prefixes.push_back(""); // Empty prefix runs all tests.
+    prefixes.push_back(0); // Sentinel to terminate prefix string list.
 
-	if (numTotalRuns == 0 || numTrialsPerTimedBlock == 0)
-	{
-		LOGI("Usage: %s <numTotalRuns> <numTrialsPerTimedBlock>", argv[0]);
-		LOGI("   Runs all tests.");
-		LOGI("       %s <numTotalRuns> <numTrialsPerTimedBlock> prefix1 prefix2 prefix3...", argv[0]);
-		LOGI("   Runs all tests starting with one of the given prefixes, or residing in one of the named code files.");
-		return 0;
-	}
+    if (numTotalRuns == 0 || numTrialsPerTimedBlock == 0) {
+        LOGI("Usage: %s <numTotalRuns> <numTrialsPerTimedBlock>", argv[0]);
+        LOGI("   Runs all tests.");
+        LOGI("       %s <numTotalRuns> <numTrialsPerTimedBlock> prefix1 prefix2 prefix3...", argv[0]);
+        LOGI("   Runs all tests starting with one of the given prefixes, or residing in one of the named code files.");
+        return 0;
+    }
 
-	{
-		std::string jsonFilename = "test_results.json";
-		for(int i = 1; i+1 < argc; ++i)
-			if (!strcmp(argv[i], "--json"))
-				jsonFilename = argv[i+1]; // Allow overriding the output file name from command line.
-	}
+    numTestsRun = numTestsPassed = numTestsWarnings = numTestsFailed = 0;
 
-	numTestsRun = numTestsPassed = numTestsWarnings = numTestsFailed = 0;
-
-	while(nextTestToRun < (int)Tests().size())
-		RunNextTest();
-	TestsFinished();
-	return numTestsFailed; // exit code of 0 denotes a successful run.
+    while (nextTestToRun < (int)Tests().size())
+        RunNextTest();
+    TestsFinished();
+    return numTestsFailed; // exit code of 0 denotes a successful run.
 }
-#endif
+// #endif

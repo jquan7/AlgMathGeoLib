@@ -137,45 +137,4 @@ float SATCollide2dCollisionPoint(const float2 *a, int na, const float2 *b, int n
     return min_penetration_distance;
 }
 
-template<typename A, typename B>
-bool SATIntersect(const A &a, const B &b)
-{
-    vec normals[16];
-    int n = a.UniqueFaceNormals(normals);
-    if (n > 16) return false;
-    for (int i = 0; i < n; ++i) {
-        float amin, amax, bmin, bmax;
-        a.ProjectToAxis(normals[i], amin, amax);
-        b.ProjectToAxis(normals[i], bmin, bmax);
-        if (amax < bmin || bmax < amin)
-            return false;
-    }
-
-    n = b.UniqueFaceNormals(normals);
-    if (n > 16) return false;
-    for (int i = 0; i < n; ++i) {
-        float amin, amax, bmin, bmax;
-        a.ProjectToAxis(normals[i], amin, amax);
-        b.ProjectToAxis(normals[i], bmin, bmax);
-        if (amax < bmin || bmax < amin)
-            return false;
-    }
-
-    vec normals2[16];
-    n = a.UniqueEdgeDirections(normals);
-    int m = b.UniqueEdgeDirections(normals2);
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            float amin, amax, bmin, bmax;
-            vec normal = Cross(normals[i], normals2[j]);
-            a.ProjectToAxis(normal, amin, amax);
-            b.ProjectToAxis(normal, bmin, bmax);
-            if (amax < bmin || bmax < amin)
-                return false;
-        }
-    }
-
-    return true;
-}
-
 MATH_END_NAMESPACE

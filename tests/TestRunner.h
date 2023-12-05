@@ -6,7 +6,6 @@
 #include "../src/Time/Clock.h"
 
 #define SCALE 1e2f
-
 #define GUARDBAND 1e-2f
 
 #ifdef MATH_ENABLE_NAMESPACE
@@ -15,10 +14,10 @@ using namespace MATH_NS;
 
 enum TestResult
 {
-	TestNotRun,
-	TestPassed,
-	TestPassedWithWarnings,
-	TestFailed
+    TestNotRun,
+    TestPassed,
+    TestPassedWithWarnings,
+    TestFailed
 };
 
 // The test function can read test info and write test result to t.
@@ -26,36 +25,36 @@ struct Test;
 typedef void (*TestFunctionPtr)(Test &t);
 struct Test
 {
-	Test()
-	{
-		isBenchmark = isRandomized = runOnlyOnce = false;
-		function = 0;
-		numTimesRun = numTrialsPerRun = numPasses = numFails = 0;
-		fastestTime = averageTime = worstTime = fastestCycles = 0.0;
-		result = TestNotRun;
-	}
-	std::string name;
-	std::string file;
-	std::string description;
-	bool isBenchmark;
-	bool isRandomized;
-	/// If true, this function should not be trialled multiple times (for performance benchmarks), but should
-	/// be called only exactly once. Used mostly for very slow tests that would take too long to run multiple times.
-	bool runOnlyOnce;
-	TestFunctionPtr function;
+    Test()
+    {
+        isBenchmark = isRandomized = runOnlyOnce = false;
+        function = 0;
+        numTimesRun = numTrialsPerRun = numPasses = numFails = 0;
+        fastestTime = averageTime = worstTime = fastestCycles = 0.0;
+        result = TestNotRun;
+    }
+    std::string name;
+    std::string file;
+    std::string description;
+    bool isBenchmark;
+    bool isRandomized;
+    /// If true, this function should not be trialled multiple times (for performance benchmarks), but should
+    /// be called only exactly once. Used mostly for very slow tests that would take too long to run multiple times.
+    bool runOnlyOnce;
+    TestFunctionPtr function;
 
-	TestResult result;
+    TestResult result;
 
-	// Results:
-	int numTimesRun; ///< The total number of times this test was executed.
-	int numTrialsPerRun; ///< Each time this test was run, how many trials of it were performed (for benchmarking).
-	int numPasses;
-	int numFails;
-	double fastestTime;
-	double averageTime;
-	double worstTime;
+    // Results:
+    int numTimesRun; ///< The total number of times this test was executed.
+    int numTrialsPerRun; ///< Each time this test was run, how many trials of it were performed (for benchmarking).
+    int numPasses;
+    int numFails;
+    double fastestTime;
+    double averageTime;
+    double worstTime;
 
-	double fastestCycles; ///< Raw clock cycles/high-resolution counter times.
+    double fastestCycles; ///< Raw clock cycles/high-resolution counter times.
 };
 
 extern volatile int globalPokedData;
@@ -74,133 +73,134 @@ std::string FormatTime(double ticks);
 class AddTestOp
 {
 public:
-	AddTestOp(const char *name, const char *file, const char *description, bool isRandomized, bool runOnlyOnce, bool isBenchmark, TestFunctionPtr function)
-	{
-		if (isBenchmark)
-			AddBenchmark(name, function, file, description);
-		else if (isRandomized)
-			AddRandomizedTest(name, function, file, description);
-		else
-			AddTest(name, function, description, file, runOnlyOnce);
-	}
+    AddTestOp(const char *name, const char *file, const char *description,
+        bool isRandomized, bool runOnlyOnce, bool isBenchmark, TestFunctionPtr function)
+    {
+        if (isBenchmark)
+            AddBenchmark(name, function, file, description);
+        else if (isRandomized)
+            AddRandomizedTest(name, function, file, description);
+        else
+            AddTest(name, function, description, file, runOnlyOnce);
+    }
 };
 
 #define TEST(name) \
-	void TestFunc_##name(Test &test); \
-	AddTestOp addtestop_##name(#name, __FILE__, "", false, false, false, TestFunc_##name); \
-	void TestFunc_##name(Test & /*test*/)
+    void TestFunc_##name(Test &test); \
+    AddTestOp addtestop_##name(#name, __FILE__, "", false, false, false, TestFunc_##name); \
+    void TestFunc_##name(Test & /*test*/)
 
 #define RANDOMIZED_TEST(name) \
-	void TestFunc_##name(Test &test); \
-	AddTestOp addtestop_##name(#name, __FILE__, "", true, false, false, TestFunc_##name); \
-	void TestFunc_##name(Test & /*test*/)
+    void TestFunc_##name(Test &test); \
+    AddTestOp addtestop_##name(#name, __FILE__, "", true, false, false, TestFunc_##name); \
+    void TestFunc_##name(Test & /*test*/)
 
 #define UNIQUE_TEST(name) \
-	void TestFunc_##name(Test &test); \
-	AddTestOp addtestop_##name(#name, __FILE__, "", false, true, false, TestFunc_##name); \
-	void TestFunc_##name(Test & /*test*/)
+    void TestFunc_##name(Test &test); \
+    AddTestOp addtestop_##name(#name, __FILE__, "", false, true, false, TestFunc_##name); \
+    void TestFunc_##name(Test & /*test*/)
 
 #define RDTSC() Clock::Rdtsc()
 
 #define MGL_PRAGMA_NO_AUTOVECTORIZE
 
 #define BENCHMARK(name, description) \
-	void BenchmarkFunc_##name(Test &test); \
-	AddTestOp addbenchmarkop_##name(#name, __FILE__, description, false, false, true, BenchmarkFunc_##name); \
-	void BenchmarkFunc_##name(Test &test) \
-	{ \
-		unsigned long long bestTsc = (unsigned long long)-1; \
-		tick_t bestTicks = TICK_INF; \
-		tick_t accumTicks = 0; \
-		tick_t worstTicks = 0; \
-		int numWarmupTicks = 1; /* Run a warmup for JIT environments */ \
-		MGL_PRAGMA_NO_AUTOVECTORIZE for(int xx = -numWarmupTicks; xx < testrunner_numTimerTests; ++xx) \
-		{ \
-			tick_t start = Clock::Tick(); \
-			unsigned long long startTsc = RDTSC(); \
-			MGL_PRAGMA_NO_AUTOVECTORIZE for(int i = 0; i < testrunner_numItersPerTest; ++i) \
-			{
+    void BenchmarkFunc_##name(Test &test); \
+    AddTestOp addbenchmarkop_##name(#name, __FILE__, description, false, false, true, BenchmarkFunc_##name); \
+    void BenchmarkFunc_##name(Test &test) \
+    { \
+        unsigned long long bestTsc = (unsigned long long)-1; \
+        tick_t bestTicks = TICK_INF; \
+        tick_t accumTicks = 0; \
+        tick_t worstTicks = 0; \
+        int numWarmupTicks = 1; /* Run a warmup for JIT environments */ \
+        MGL_PRAGMA_NO_AUTOVECTORIZE for(int xx = -numWarmupTicks; xx < testrunner_numTimerTests; ++xx) \
+        { \
+            tick_t start = Clock::Tick(); \
+            unsigned long long startTsc = RDTSC(); \
+            MGL_PRAGMA_NO_AUTOVECTORIZE for(int i = 0; i < testrunner_numItersPerTest; ++i) \
+            {
 
 #define BENCHMARK_END \
-			} \
-			unsigned long long endTsc = RDTSC(); \
-			tick_t end = Clock::Tick(); \
-			tick_t elapsedTicks = end - start; \
-			unsigned long long elapsedTsc = (unsigned long long)((startTsc != 0 || endTsc != 0) ? (endTsc - startTsc) : elapsedTicks); \
-			/*LOGI("Took %f ticks %s", (float)elapsedTicks, (xx < 0) ? "Ignored (warmup)" : "");*/ \
-			if (xx < 0) continue; /* Skip recording measures when warming up. */ \
-			bestTsc = Min(bestTsc, elapsedTsc); \
-			bestTicks = Min(bestTicks, elapsedTicks); \
-			worstTicks = Max(worstTicks, elapsedTicks); \
-			accumTicks += elapsedTicks; \
-		} \
-		test.numTimesRun = testrunner_numTimerTests; \
-		test.numTrialsPerRun = testrunner_numItersPerTest; \
-		test.fastestCycles = (double)bestTsc / testrunner_numItersPerTest; \
-		test.fastestTime = (double)bestTicks / testrunner_numItersPerTest; \
-		test.averageTime = (double)accumTicks / (testrunner_numTimerTests * testrunner_numItersPerTest); \
-		test.worstTime = (double)worstTicks / testrunner_numItersPerTest; \
-		LOGI("\n   Best: %s / %g ticks, Avg: %s, Worst: %s", FormatTime(test.fastestTime).c_str(), test.fastestCycles, \
-			FormatTime(test.averageTime).c_str(), FormatTime(test.worstTime).c_str()); \
+            } \
+            unsigned long long endTsc = RDTSC(); \
+            tick_t end = Clock::Tick(); \
+            tick_t elapsedTicks = end - start; \
+            unsigned long long elapsedTsc = (unsigned long long)((startTsc != 0 || endTsc != 0) ? (endTsc - startTsc) : elapsedTicks); \
+            /*LOGI("Took %f ticks %s", (float)elapsedTicks, (xx < 0) ? "Ignored (warmup)" : "");*/ \
+            if (xx < 0) continue; /* Skip recording measures when warming up. */ \
+            bestTsc = Min(bestTsc, elapsedTsc); \
+            bestTicks = Min(bestTicks, elapsedTicks); \
+            worstTicks = Max(worstTicks, elapsedTicks); \
+            accumTicks += elapsedTicks; \
+        } \
+        test.numTimesRun = testrunner_numTimerTests; \
+        test.numTrialsPerRun = testrunner_numItersPerTest; \
+        test.fastestCycles = (double)bestTsc / testrunner_numItersPerTest; \
+        test.fastestTime = (double)bestTicks / testrunner_numItersPerTest; \
+        test.averageTime = (double)accumTicks / (testrunner_numTimerTests * testrunner_numItersPerTest); \
+        test.worstTime = (double)worstTicks / testrunner_numItersPerTest; \
+        LOGI("\n   Best: %s / %g ticks, Avg: %s, Worst: %s", FormatTime(test.fastestTime).c_str(), test.fastestCycles, \
+            FormatTime(test.averageTime).c_str(), FormatTime(test.worstTime).c_str()); \
 }
 
 #define BENCHMARK_ITERS(name, numTests_, numIters_, description) \
-	void BenchmarkFunc_##name(Test &test); \
-	AddTestOp addbenchmarkop_##name(#name, __FILE__, description, false, false, true, BenchmarkFunc_##name); \
-	void BenchmarkFunc_##name(Test &test) \
-	{ \
-		const int numTests = numTests_; \
-		const int numIters = numIters_; \
-		unsigned long long bestTsc = (unsigned long long)-1; \
-		tick_t bestTicks = (tick_t)-1; \
-		tick_t accumTicks = 0; \
-		tick_t worstTicks = 0; \
-		MGL_PRAGMA_NO_AUTOVECTORIZE for(int xx = 0; xx < numTests; ++xx) \
-		{ \
-			tick_t start = Clock::Tick(); \
-			unsigned long long startTsc = Clock::Rdtsc(); \
-			MGL_PRAGMA_NO_AUTOVECTORIZE for(int i = 0; i < numIters; ++i) \
-			{
+    void BenchmarkFunc_##name(Test &test); \
+    AddTestOp addbenchmarkop_##name(#name, __FILE__, description, false, false, true, BenchmarkFunc_##name); \
+    void BenchmarkFunc_##name(Test &test) \
+    { \
+        const int numTests = numTests_; \
+        const int numIters = numIters_; \
+        unsigned long long bestTsc = (unsigned long long)-1; \
+        tick_t bestTicks = (tick_t)-1; \
+        tick_t accumTicks = 0; \
+        tick_t worstTicks = 0; \
+        MGL_PRAGMA_NO_AUTOVECTORIZE for(int xx = 0; xx < numTests; ++xx) \
+        { \
+            tick_t start = Clock::Tick(); \
+            unsigned long long startTsc = Clock::Rdtsc(); \
+            MGL_PRAGMA_NO_AUTOVECTORIZE for(int i = 0; i < numIters; ++i) \
+            {
 
 #define BENCHMARK_ITERS_END \
-		} \
-		unsigned long long endTsc = Clock::Rdtsc(); \
-		tick_t end = Clock::Tick(); \
-		tick_t elapsedTicks = end - start; \
-		tick_t elapsedTsc = endTsc - startTsc; \
-		bestTsc = Min(bestTsc, elapsedTsc); \
-		bestTicks = Min(bestTicks, elapsedTicks); \
-		worstTicks = Max(worstTicks, elapsedTicks); \
-		accumTicks += elapsedTicks; \
-	} \
-	test.numTimesRun = numTests; \
-	test.numTrialsPerRun = numIters; \
-	test.fastestCycles = (double)bestTsc / numIters; \
-	test.fastestTime = (double)bestTicks / numIters; \
-	test.averageTime = (double)accumTicks / (numTests * numIters); \
-	test.worstTime = (double)worstTicks / numIters; \
-	LOGI("\n   Best: %s / %g ticks, Avg: %s, Worst: %s", FormatTime(test.fastestTime).c_str(), test.fastestCycles, \
-		FormatTime(test.averageTime).c_str(), FormatTime(test.worstTime).c_str()); \
+        } \
+        unsigned long long endTsc = Clock::Rdtsc(); \
+        tick_t end = Clock::Tick(); \
+        tick_t elapsedTicks = end - start; \
+        tick_t elapsedTsc = endTsc - startTsc; \
+        bestTsc = Min(bestTsc, elapsedTsc); \
+        bestTicks = Min(bestTicks, elapsedTicks); \
+        worstTicks = Max(worstTicks, elapsedTicks); \
+        accumTicks += elapsedTicks; \
+    } \
+    test.numTimesRun = numTests; \
+    test.numTrialsPerRun = numIters; \
+    test.fastestCycles = (double)bestTsc / numIters; \
+    test.fastestTime = (double)bestTicks / numIters; \
+    test.averageTime = (double)accumTicks / (numTests * numIters); \
+    test.worstTime = (double)worstTicks / numIters; \
+    LOGI("\n   Best: %s / %g ticks, Avg: %s, Worst: %s", FormatTime(test.fastestTime).c_str(), test.fastestCycles, \
+        FormatTime(test.averageTime).c_str(), FormatTime(test.worstTime).c_str()); \
 }
 
 class TestSkippedException : public std::exception
 {
 public:
-	explicit TestSkippedException(const char *reason_)
-	:reason(reason_)
-	{
-	}
+    explicit TestSkippedException(const char *reason_)
+    :reason(reason_)
+    {
+    }
 
-	virtual ~TestSkippedException() throw()
-	{
-	}
+    virtual ~TestSkippedException() throw()
+    {
+    }
 
-	std::string reason;
+    std::string reason;
 
-	virtual const char* what() const throw()
-	{
-		return reason.c_str();
-	}
+    virtual const char* what() const throw()
+    {
+        return reason.c_str();
+    }
 };
 
 #define SKIP_TEST(reason) throw TestSkippedException(reason)
